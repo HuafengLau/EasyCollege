@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block title %}
+个人中心 - 大学易
+{% endblock %}
+
+
+{% block mainbody %}
+<div id='center_left_div'>
+    <div id='my_Storedata_div' class='panel panel-info'>
+        <div id='heading_my_Storedata' class="panel-heading">我的收藏</div>                              
+        <div class="panel-body">
+            {% if my_storeEot %}                
+                <table class='table table-bordered'>
+                    <tr>
+                        <th></th>
+                        <th>课程</th>
+                        <th>任课老师</th>
+                        <th>课程评分</th>
+                        <th>教师评分</th>
+                        <th>期末平均分</th>
+                    </tr>
+                    {% for eot in my_storeEot %}
+                        <tr>
+                            <td>
+                                <a data-toggle="tooltip" title="取消收藏，不可恢复！" href='/center/delStore/{{eot.id}}/'>
+                                <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href='/eot/showeot/{{eot.id}}/'>{{eot.course}}</a>
+                            </td>
+                            <td>
+                                {{eot.teacher}}
+                            </td>
+                            <td>
+                                {{eot.course_avg_score|floatformat}}
+                            </td>
+                            <td>
+                                {{eot.teacher_avg_score|floatformat}}
+                            </td>
+                            <td>
+                                {{eot.history_avg_score|floatformat}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class='pull-right'>
+                   <ul class="pagination">
+                    {% if my_storeEot.has_previous %}                           
+                        <li><a href="?page={{ my_storeEot.previous_page_number }}#heading_my_Storedata">&lt; 上一页</a></li>                           
+                    {% endif %}                           
+                        {% for p in my_storeEot_page_range %}
+                            
+                            {% ifequal p my_storeEot.number %}
+                                 <li><span class="current">{{p}}</span></li>
+                            {% else %}
+                                <li><a href="?page={{p}}#heading_my_Storedata" title="第{{p}}页">{{p}}</a></li>
+                            {% endifequal %}
+                            
+                        {% endfor %}
+                        
+                    {% if my_storeEot.has_next %}
+                        <li><a href="?page={{ my_storeEot.next_page_number }}#heading_my_Storedata">下一页 &gt; </a></li>
+                    {% endif %}
+                        <li><a >[第{{ my_storeEot.number }}/{{ my_storeEot.paginator.num_pages }}页]</a></li>
+                  </ul>
+              </div>
+            
+            {% else %}
+                <p class='text-info text-center'>你还没有收藏任何课程。没到选课时间，看到喜欢课程，收藏先！</p>
+            {% endif %}
+            
+        </div>       
+    </div>
+    <div id='my_data_div' class='panel panel-info'>
+        <div id='heading_my_data' class="panel-heading">我的资产</div>                              
+        <div class="panel-body">
+            {% if my_Eotdata %}                
+                <table class='table table-bordered'>
+                    <tr>
+                        <th>资料主题</th>
+                        <th>相关课程</th>
+                        <th>定价</th>
+                        <th>上传时间</th>
+                        <th>累计收益</th>
+                    </tr>
+                    {% for data in my_Eotdata %}
+                        <tr>
+                            <td>
+                                <a href='/eot/showcomment/{{data.id}}/'>{{data.title}}</a>
+                            </td>
+                            <td>
+                                <a href='/eot/showeot/{{data.eot.id}}/'>{{data.eot.course}}</a>
+                            </td>
+                            <td>
+                                {{data.price_num}}
+                            </td>
+                            <td>
+                                {{data.upload_time|date:'Y-m-d'}}
+                            </td>
+                            <td>
+                                {{data.profit}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class='pull-right'>
+                   <ul class="pagination">
+                    {% if my_Eotdata.has_previous %}                           
+                        <li><a href="?page={{ my_Eotdata.previous_page_number }}#heading_my_data">&lt; 上一页</a></li>                           
+                    {% endif %}                           
+                        {% for p in my_Eotdata_page_range %}
+                            
+                            {% ifequal p my_Eotdata.number %}
+                                 <li><span class="current">{{p}}</span></li>
+                            {% else %}
+                                <li><a href="?page={{p}}#heading_my_data" title="第{{p}}页">{{p}}</a></li>
+                            {% endifequal %}
+                            
+                        {% endfor %}
+                        
+                    {% if my_Eotdata.has_next %}
+                        <li><a href="?page={{ my_Eotdata.next_page_number }}#heading_my_data">下一页 &gt; </a></li>
+                    {% endif %}
+                        <li><a >[第{{ my_Eotdata.number }}/{{ my_Eotdata.paginator.num_pages }}页]</a></li>
+                  </ul>
+              </div>
+            
+            {% else %}
+                <p class='text-info text-center'>你还没有上传任何资料。马上上传，坐等收益，变身土豪！</p>
+            {% endif %}
+            
+        </div>       
+    </div>
+    <div id='my_download_div' class='panel panel-info'>
+        <div id='heading_my_download' class="panel-heading">我的下载</div>
+        <div class="panel-body">
+        {% if download_Eotdata %}
+            <table class='table table-bordered'>
+                <tr>
+                    <th>资料主题</th>
+                    <th>相关课程</th>
+                    <th>花费</th>                         
+                </tr>
+                {% for data in download_Eotdata %}
+                <tr>
+                    <td><a href='/eot/showcomment/{{data.id}}/'>{{data.title}}</a></td>
+                    <td><a href='/eot/showeot/{{data.eot.id}}/'>{{data.eot.course}}</a></td>
+                    <td>{{data.price_num}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class='pull-right'>
+               <ul class="pagination">
+                {% if download_Eotdata.has_previous %}                           
+                    <li><a href="?page={{ download_Eotdata.previous_page_number }}#heading_my_download">&lt; 上一页</a></li>                           
+                {% endif %}                           
+                    {% for p in download_Eotdata_page_range %}                              
+                        {% ifequal p download_Eotdata.number %}
+                             <li><span class="current">{{p}}</span></li>
+                        {% else %}
+                            <li><a href="?page={{p}}#heading_my_download" title="第{{p}}页">{{p}}</a></li>
+                        {% endifequal %}
+                        
+                    {% endfor %}
+                    
+                {% if download_Eotdata.has_next %}
+                    <li><a href="?page={{ download_Eotdata.next_page_number }}#heading_my_download">下一页 &gt; </a></li>
+                {% endif %}
+                    <li><a >[第{{ download_Eotdata.number }}/{{ download_Eotdata.paginator.num_pages }}页]</a></li>
+              </ul>
+          </div>
+            
+        {% else %}
+            <p class='text-info text-center'>你还没有下载任何资料。去找找，复习考试 So easy！</p>
+        {% endif %}
+       </div>       
+    </div>
+</div>
+<div id='center_right_div'>
+</div>
+{% endblock %}

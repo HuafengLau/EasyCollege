@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+账号激活 - 大学易
+{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block welcome %}
+{% endblock %}
+
+{% block mainbody %}
+<p class='text-center'>感谢您注册大学易，我们已经发了一封激活邮件至您的邮箱{{email}}，点击对应链接后即可激活</p>
+<p class='text-center'>
+    {% if email_add %}
+    <a href='{{email_add}}'>点击此处</a>进入邮箱&nbsp;&nbsp;&nbsp;
+    {% endif %}
+    ps.一周内未激活的账户将被自动删除
+</p>
+{% endblock %}
+
+{% block botoom_bav %}
+{% endblock %}
+

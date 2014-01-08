@@ -1,0 +1,312 @@
+{% extends 'eotbase.html' %}
+{% load my_tags %}
+
+{% block title %}
+选课 - 大学易
+{% endblock %}
+
+
+{% block eotleftup %}
+<div>
+    <h3> 搜索</h3>
+    <table class='table'>                
+        <tr class='pull-left'>
+            <td>
+                <select id='list_search_item' class='form-control' name='search_item'>
+                  <option value='course'>课&nbsp;程</option>
+                  <option value='teacher'>老&nbsp;师</option>
+                  <option value='major'>专&nbsp;业</option>
+                  <option value='college'>学&nbsp;院</option>                
+                </select>
+            </td>
+            <td>
+                <input id='list_search_content' type="text"  class="form-control" id='search_content' name='search_content' placeholder="请输入要查找的内容" required>
+            </td>
+            <td>
+                &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+                 &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+            </td>
+            <td>
+                <button id='search_btn' class='btn btn-default'>
+                    <span class="glyphicon glyphicon-search"></span> 立&nbsp;  即&nbsp;  搜&nbsp;  索&nbsp; &nbsp; 
+                </button>
+            </td>
+         </tr>              
+        <tr>
+            <td clospan='3'>
+                <h4>高级搜索（可选）</h4>
+            </td>
+        </tr>
+        <tr>
+            <td class='pull-left one_of_three'>
+                <span>课程评分</span>
+                <select id='list_search_coursescore' name='course_more'>
+                  <option value='1.0'>1</option>
+                  <option value='2.0'>2</option>
+                  <option value='3.0'>3</option>
+                  <option value='4.0'>4</option>
+                  <option value='5.0'>5</option>
+                  <option value='6.0'>6</option>
+                  <option value='7.0'>7</option>
+                  <option value='8.0'>8</option>
+                  <option value='9.0'>9</option>
+                  <option value='10.0'>10</option>
+                </select>
+                <span>~</span>
+                <select>
+                  <option>10</option>
+              </select>
+            </td>
+            <td class='pull-left one_of_three'>
+                <span>教师评分</span>
+                <select id='list_search_teacherscore' name='teacher_more'>
+                  <option value='1.0'>1</option>
+                  <option value='2.0'>2</option>
+                  <option value='3.0'>3</option>
+                  <option value='4.0'>4</option>
+                  <option value='5.0'>5</option>
+                  <option value='6.0'>6</option>
+                  <option value='7.0'>7</option>
+                  <option value='8.0'>8</option>
+                  <option value='9.0'>9</option>
+                  <option value='10.0'>10</option>
+                </select>
+                <span>~</span>
+                <select class="">
+                  <option>10</option>                         
+              </select>
+            </td>
+            <td class='pull-left one_of_three'>
+                <span>历史平均分</span>
+                <select id='list_search_historyscore' name='history_more'>
+                  <option value='60.0'>60</option>
+                  <option value='65.0'>65</option>
+                  <option value='70.0'>70</option>
+                  <option value='75.0'>75</option>
+                  <option value='80.0'>80</option>
+                  <option value='85.0'>85</option>
+                  <option value='90.0'>90</option>
+                  <option value='95.0'>95</option>
+                  <option value='100.0'>100</option>
+                </select>
+                <span>~</span>
+                <select>
+                  <option>100</option>                         
+              </select>
+            </td>
+        </tr>
+        <tr class='pull-left'>
+            <td>
+                &nbsp; &nbsp; &nbsp;&nbsp;
+            </td>
+            <td>
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-default btn-myui">
+                    <input name='mid_test' type="checkbox" value='no'> 没有期中考
+                  </label>
+                </div>
+            </td>
+            <td>
+                &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-default btn-myui">
+                    <input name='final_test_degree' type="checkbox" value='nohard'> 期末不难
+                  </label>
+                </div>
+            </td>
+            <td>
+                &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-default btn-myui">
+                    <input name='naming' type="checkbox" value='nooften'> 不常点名
+                  </label>
+                </div>
+            </td>
+            <td>
+                &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-default btn-myui">
+                    <input name='usual_work' type="checkbox" value='nomore'> 平时作业不多
+                  </label>
+                </div>
+            </td>
+        </tr>                                  
+    </table>
+</div>
+{% endblock %}
+
+{% block eotleftdown %}
+<div id='eotleftdown_div'>
+    <div id='major_course_div' class='panel panel-success'>
+        <div id='heading_major_course' class="panel-heading">本专业课程</div>
+        <div class="panel-body">            
+            <div>
+                {% if message_majorcourse %}
+                    {{ message_majorcourse }}
+                {% else %}
+                    <div id='list_major_div'>
+                    {% for eot in major_eot %}
+                        <div class='list_div pull-left'>
+                            <table class='table table-bordered'>
+                                <tr>
+                                    <td><a href='/eot/showeot/{{eot.id}}/'>{{eot.course}}</a></td>
+                                    <td rowspan='2'>
+                                        <p>课程评分</p><p>{{eot.course_avg_score|floatformat }}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{eot.teacher}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class='pull-right'>
+               <ul class="pagination">
+                {% if major_eot.has_previous %}                           
+                    <li><a href="?page={{ major_eot.previous_page_number }}#major_course_div">&lt; 上一页</a></li>                           
+                {% endif %}                           
+                    {% for p in major_eot_page_range %}
+                        
+                        {% ifequal p major_eot.number %}
+                             <li><span class="current">{{p}}</span></li>
+                        {% else %}
+                            <li><a href="?page={{p}}#major_course_div" title="第{{p}}页">{{p}}</a></li>
+                        {% endifequal %}
+                        
+                    {% endfor %}
+                    
+                {% if major_eot.has_next %}
+                    <li><a href="?page={{ major_eot.next_page_number }}#major_course_div">下一页 &gt; </a></li>
+                {% endif %}
+                    <li><a >[第{{ major_eot.number }}/{{ major_eot.paginator.num_pages }}页]</a></li>
+              </ul>
+          </div>
+        </div>       
+    </div>
+    <div id='recommend_collegecourse_div' class='panel panel-success'>
+        <div id='heading_recomend_collegecourse' class="panel-heading">学姐学长力荐</div>
+        <div class="panel-body">
+            <div>
+                {% if message_collegerecomend %}
+                    {{ message_collegerecomend }}
+                {% else %}
+                    {% for eot in recommend_collegecourse %}
+                        <div class='list_div pull-left'>
+                            <table class='table table-bordered'>
+                                <tr>
+                                    <td><a href='/eot/showeot/{{eot.id}}/'>{{eot.course}}</a></td>
+                                    <td rowspan='2'>
+                                        <p>推荐人数：</p><p>{{eot.recommend_num}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{eot.teacher}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class='pull-right'>
+               <ul class="pagination">
+                {% if recommend_collegecourse.has_previous %}                           
+                    <li><a href="?page={{ recommend_collegecourse.previous_page_number }}#recommend_collegecourse_div">&lt; 上一页</a></li>                           
+                {% endif %}                           
+                    {% for p in recommend_collegecourse_page_range %}
+                        
+                        {% ifequal p recommend_collegecourse.number %}
+                             <li><span class="current">{{p}}</span></li>
+                        {% else %}
+                            <li><a href="?page={{p}}#recommend_collegecourse_div" title="第{{p}}页">{{p}}</a></li>
+                        {% endifequal %}
+                        
+                    {% endfor %}
+                    
+                {% if recommend_collegecourse.has_next %}
+                    <li><a href="?page={{ recommend_collegecourse.next_page_number }}#recommend_collegecourse_div">下一页 &gt; </a></li>
+                {% endif %}
+                    <li><a >[第{{ recommend_collegecourse.number }}/{{ recommend_collegecourse.paginator.num_pages }}页]</a></li>
+              </ul>
+          </div>
+        </div>       
+    </div>
+</div>
+{% endblock %}
+            
+{% block eotright %}
+<div class=''>
+    <div id='high_history_div' class='panel panel-danger'>
+        <div id='heading_high_history' class="panel-heading">期末高分课程</div>
+        <div class="panel-body">
+            <div>
+                {% if message_highhistory %}
+                    {{ message_highhistory }}
+                {% else %}                   
+                        <ul type='1' start='1'>
+                        {% for eot in highhistory %}
+                            <li><a href='/eot/showeot/{{eot.id}}/'>
+                            「{{eot.history_avg_score|floatformat }}」&nbsp;
+                            <span class='text-danger'>{{eot.course}}&nbsp;&nbsp;&nbsp;<small>{{eot.teacher}}</small></span>
+                            </a></li>
+                        {% endfor %}
+                        </ul>
+                {% endif %}
+            </div>            
+        </div>
+        <div class='panel-footer'>
+            <small>注：「期末历史平均分」</small>
+        </div>
+    </div>
+    <div id='high_teacher_div' class='panel panel-danger'>
+        <div id='heading_high_teacher' class="panel-heading">人气教师</div>
+        <div class="panel-body">
+            <div>
+                {% if message_highteacher %}
+                    {{ message_highteacher }}
+                {% else %}                   
+                        <ul type='1' start='1'>
+                        {% for teacher in highteacher %}
+                            <li><a id='{{teacher.name}}' class='search_teacher_a'>「{{teacher.avg_score|floatformat }}」&nbsp;{{teacher.name}}</a></li>
+                        {% endfor %}
+                        </ul>    
+                {% endif %}
+            </div>            
+        </div>
+        <div class='panel-footer'>
+            <small>注：「教师得分」，点击结果显示在左侧</small>
+        </div>
+    </div>
+    <div id='high_course_div' class='panel panel-danger'>
+        <div id='heading_high_course' class="panel-heading">人气课程</div>
+        <div class="panel-body">
+            <div>
+                {% if message_highcourse %}
+                    {{ message_highcourse }}
+                {% else %}                   
+                        <ul type='1' start='1'>
+                        {% for eot in highcourse %}
+                            <li><a href='/eot/showeot/{{eot.id}}/'>
+                                「{{eot.course_avg_score|floatformat }}」&nbsp;
+                                <span class='text-danger'>{{eot.course}}&nbsp;&nbsp;&nbsp;<small>{{eot.teacher}}</small></span>
+                            </a></li>
+                        {% endfor %}
+                        </ul>    
+                {% endif %}
+            </div>          
+        </div>
+        <div class='panel-footer'>
+            <small>注：「课程得分」</small>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

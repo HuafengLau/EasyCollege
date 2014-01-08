@@ -1,0 +1,770 @@
+{% extends 'eotbase.html' %}
+{% load my_tags %}
+
+{% block title %}
+ {{this_course}} - 课程信息 - 大学易
+{% endblock %}
+
+
+{% block eotleftup %}
+    <div id='back_btn_div'>
+        <a href="{{ last_url }}"><button class='btn btn-default'><<返回</button></a>
+    </div>
+    {% if money_message %}
+    {% ifequal lucky 1 %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <div>               
+            <p class='text-primary'>亲爱的{{ user.nic_name }}：</p>
+            <p>&nbsp;</p>
+            <p class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Surprise！</strong>运气来了，连门板也挡不住！
+                恭喜您名留青史！在前100位评价此课程的用户中，只有不到6%的用户能获此殊荣！</p>           
+        </div>
+        <div>
+            <div class='pull-left'>
+                <p>&nbsp;</p>
+                <p id='show_money_honour' class="text-success">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您获得了{{money_message}}个易币奖励，感谢您评价此课程！
+                    <span id='my_honour_info' >
+                        <a data-toggle="modal" data-target="#my_honour_Modal">查看我的荣誉</a>
+                    </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span id='my_money_info' >
+                        <a data-toggle="modal" data-target="#my_money_Modal">查看我的钱包</a>
+                    </span>
+                </p>
+            </div>
+            <div id='share_div'>
+                <img height='27%' width='27%' src='{{STATIC_URL}}img/laugh.png' alt='快炫耀下！'/>
+            </div>
+        </div>
+    </div>
+    {% else %}    
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> 
+        <p class='text-primary'>亲爱的{{ user.nic_name }}：</p>
+        <p>&nbsp;</p>
+        <p id='show_money_honour' class="text-success">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您获得了{{money_message}}个易币奖励，感谢您评价此课程！
+            <span id='my_honour_info' >
+                <a data-toggle="modal" data-target="#my_honour_Modal">查看我的荣誉</a>
+            </span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span id='my_money_info' >
+                <a data-toggle="modal" data-target="#my_money_Modal">查看我的钱包</a>
+            </span>
+        </p>
+    </div>
+    {% endifequal %}
+    {% endif %}
+    {% if no_eot %}
+        <div id='show_no_value_div' class='container'>
+            <h4 id='show_no_eot_message'>
+                暂时还没有人评价此课程，立刻去评价就有机会「名垂青史」！&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;<span id='show_luck_why'><a data-toggle="modal" data-target="#what_honour_Modal">什么是名垂青史？</a></span>
+            </h4>
+        </div>
+    {% else %}
+       
+        <div class="alert alert-info alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+             <span class="glyphicon glyphicon-hand-right"></span>  你可能想知道
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以下信息基于&nbsp;{{this_eot.value_num}}&nbsp;位学长学姐的评价，
+               大学易已为您统计出最佳答案。对于主观性较强的选项，括号内为赞同此选项的比例。
+            </p>
+        </div>
+        
+        <div id='show_baseinfo_div' class='panel panel-danger'>
+            <div id='heading_baseinfo' class="panel-heading">基础信息
+                {% if store_message %}
+                    <a id='{{this_eot.id}}' class='delStore pull-right hand_over'>取消收藏</a>
+                {% else %}
+                     <a id='{{this_eot.id}}' class='store pull-right hand_over'>收藏</a>
+                {% endif %}
+            </div>
+            <div class="panel-body">
+                <div>
+                    <table class='table table-bordered'>
+                        <tr>                               
+                            <td>
+                                <button type="button" class="btn btn-link">
+                                    <span class='font-black'>课程名：&nbsp;</span><span>{{this_eot.course}}</span>
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-link">
+                                    <span class='font-black'>任课老师：&nbsp;</span><span>{{this_eot.teacher}}</span>
+                                </button>
+                            </td><td></td>
+                        </tr>
+                        <tr>
+                            <td>                                   
+                                <button type="button" class="btn btn-link">
+                                    <span class='font-black'>课程评分：&nbsp;</span><span>{{this_eot.course_avg_score|floatformat }}</span>
+                                </button>
+                            </td>
+                            <td>                                   
+                                <button type="button" class="btn btn-link">
+                                    <span class='font-black'>老师评分：&nbsp;</span><span>{{this_eot.teacher_avg_score|floatformat }}</span>
+                                </button>
+                            </td>
+                            <td>                                   
+                                <button type="button" class="btn btn-link">
+                                    <span class='font-black'>期末历史平均分：&nbsp;</span><span>{{this_eot.history_avg_score|floatformat}}</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>            
+        </div>
+        <div id='show_lucky_div' class='panel panel-danger'>
+            <div id='heading_luck' class="panel-heading">永载史册</div>
+            <div class="panel-body">
+                <div>
+                    <table class='table'>
+                        {% if luckies_message %}                                
+                            <tr>{{ lucky_message }}：</tr>                            
+                            <tr class='pull-left'>
+                                {% for luck in luckies %}
+                                    <td>
+                                        <button type="button" class="btn btn-link">
+                                            <span>{{ luck.user.nic_name }}</span>
+                                        </button>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% else %}
+                            <tr>暂时还没有幸运儿被历史记住，赶快去评教吧！</tr>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>            
+        </div>
+        <div id='show_img_div' class='panel panel-danger'>
+            <div id='heading_eotfile' class="panel-heading">图片资料</div>
+            <div class="panel-body">
+                <div> 
+                    <button class='btn' id='img_btn'>上传图片</button>                   
+                    <form role="form" id='img_form' class='form-group' action='/eot/uploadImg/{{this_eot.id}}/' enctype="multipart/form-data" method='POST'> 
+                        {% csrf_token %}
+                        <table class='table'>
+                            {% for field in imgForm %}
+                                <tr>                                  
+                                    <td  class="form-group">
+                                        {% if field.errors %}
+                                        <span id='error_img_mao'></span>
+                                        <div class="alert alert-danger">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> 
+                                            {{field.errors}}
+                                        </div>
+                                        {% endif %}
+                                        <div class='pull-left'>
+                                            {{field.label_tag}}<span class='font-red'>*</span>
+                                        </div>
+                                        <div class='pull-left'>
+                                        {{field}}
+                                        </div>
+                                    </td>
+                                    <td><p class='text-left'>{{field.help_text}}</p></td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>                           
+                        <button class="btn btn-default" id='' type="submit">提交</button>
+                    </form>
+                    
+                    <button class='btn' id='reportImg_btn'>举报图片</button> 
+                    <table id='reportImg_table' class='table table-bordered'>
+                        <tr><th>图片标题</th><th>状态</th></tr>
+                        {% for img in imgs %}
+                        <tr>
+                            <td>{{img.title}}</td>
+                            <td>
+                            {% ifequal img.if_safe '0' %}
+                            <a href='/affair/report/eotImg/{{img.id}}/'>举报此图片</a>
+                            {% endifequal %}
+                            {% ifequal img.if_safe '-1' %}
+                            审核中
+                            {% endifequal %}
+                            {% ifequal img.if_safe '1' %}
+                            已通过审核
+                            {% endifequal %}                          
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan='2'>
+                                <p>ps.未通过审核的图片已删除<p>
+                                <p>尊重劳动成果，请勿恶意举报！&nbsp;&nbsp;
+                                <a data-toggle="modal" data-target="#reportImg_Modal" class='hand_over'>什么情况下可以举报？</a></p>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                </div>
+                <div>
+                {% if imgs %}              
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                  <!-- Indicators -->
+                  <ol class="carousel-indicators">
+                    {% for img in imgs %}
+                       {% if forloop.first %}
+                        <li data-target="#carousel-example-generic" data-slide-to="{{forloop.counter0}}" class="active"></li>
+                       {% else %}
+                        <li data-target="#carousel-example-generic" data-slide-to="{{forloop.counter0}}"></li>
+                       {% endif %}
+                    {% endfor %}
+                  </ol>
+
+                  <!-- Wrapper for slides -->
+                  <div class="carousel-inner">
+                    {% for img in imgs %}
+                    {% if forloop.first %} 
+                    <div class="item active">
+                    {% else %}
+                    <div class="item">
+                    {% endif %}
+                      <img src="{{MEDIA_URL}}{{img.img}}" alt="{{img.title}}">
+                      <div class="carousel-caption">
+                        <h3>{{img.title}}</h3>
+                        <p>{{img.description}}</p>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+
+                  <!-- Controls -->
+                  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                  </a>
+                  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                  </a>
+                </div>    
+                {% else %}
+                    <div class="alert alert-info"> 
+                        暂时还没有人为本课程上传图片资料。快去上传吧！
+                    </div>
+                {% endif %}
+                </div>
+            </div>            
+        </div>
+        <div id='show_renqi_div' class='panel panel-danger'>
+            <div id='heading_renqi' class="panel-heading">课程人气</div>
+            <div class="panel-body">
+                <div>
+                    <table class='table table-bordered'>
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-link">
+                                    <span>{{this_eot.like_num}}</span><span class='font-black'>&nbsp;&nbsp;赞</span>
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                </button>
+                                
+                                 
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-link">
+                                    <span>{{this_eot.hate_num}}</span><span class='font-black'>&nbsp;&nbsp;踩</span>
+                                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                                </button>
+                            </td>
+                            <td>
+                                {% ifequal this_eot.recommend_num 0 %}
+                                    暂时还没有人真心推荐该课程
+                                {% else %}
+                                    <button type="button" class="btn btn-link">
+                                        <span>{{this_eot.recommend_num}}</span><span class='font-black'>&nbsp;&nbsp;人真心推荐该课程</span>
+                                    </button>
+                                {% endifequal %}
+                            </td>
+                        </tr>                            
+                    </table>
+                </div>
+            </div>            
+        </div>
+        <div id='show_style_div' class='panel panel-danger'>
+            <div id='heading_style' class="panel-heading">上课风格</div>
+            <div class="panel-body">
+                <div>
+                    <table class='table table-bordered'>
+                        <tr>
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>点名情况</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{naming_message}}</p>
+                                </div>                                                                                                                                                      
+                            </td>
+                            {% if naming_way_message %}
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>点名方式</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{naming_way_message}}</p>
+                                </div>                                   
+                            </td>
+                            {% endif %}
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>课堂气氛</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{atmosphere_message}}</p>
+                                </div>                                   
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>上课形式</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{teach_way_message}}</p>
+                                </div>                                    
+                            </td>
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>上课人气</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{popularity_message}}</p>
+                                </div>                                   
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>            
+        </div>
+        <div id='show_exam_div' class='panel panel-danger'>
+            <div id='heading_exam' class="panel-heading">考试与作业</div>
+            <div class="panel-body">
+                <div>
+                    <table class='table table-bordered'>
+                        <tr>
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>期中考试</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{mid_test_message}}</p>
+                                </div>                                   
+                            </td>
+                            
+                            {% if mid_test_way_message %}
+                                <td>
+                                    <div class="alert alert-warning show_div">
+                                        <p class="text-left show_p"><span>期中考方式</span><span class='font-red'>*</span></p>
+                                    </div>
+                                    <div class="alert alert-info show_div">
+                                        <p class='text-center'>{{mid_test_way_message}}</p>
+                                    </div>                                        
+                                </td>
+                            {% endif %}
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>平时作业</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{usual_work_message}}</p>
+                                </div>                                   
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>期末考方式</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{final_test_way_message}}</p>
+                                </div>                                     
+                            </td>
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>期末考难度</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{final_test_degree_message}}</p>
+                                </div>                                   
+                            </td>
+                            <td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>是否透题</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{reveal_message}}</p>
+                                </div>                                    
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>            
+        </div>
+        <div id='show_file_div' class='panel panel-danger'>
+            <div id='heading_eotfile' class="panel-heading">资料上传与下载</div>
+            <div class="panel-body">
+                <div> 
+                    <button class='btn' id='file_btn'>上传资料</button>
+                    <form role="form" id='file_form' class='form-group' action='/eot/uploadfile/{{this_eot.id}}/' enctype="multipart/form-data" method='POST'> 
+                        {% csrf_token %}
+                        <table class='table'>
+                            {% for field in fileForm %}
+                                <tr>                                  
+                                    <td  class="form-group">
+                                        {% if field.errors %}
+                                        <span id='error_file_mao'></span>
+                                        <div class="alert alert-danger">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> 
+                                            {{field.errors}}
+                                        </div>
+                                        {% endif %}
+                                        <div class='pull-left'>
+                                            {{field.label_tag}}<span class='font-red'>*</span>
+                                        </div>
+                                        <div class='pull-left'>
+                                        {{field}}
+                                        </div>
+                                    </td>
+                                    <td><p class='text-left'>{{field.help_text}}</p></td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>                           
+                        <button class="btn btn-default" id='' type="submit">提交</button>
+                    </form>
+                </div>
+                <div>
+                {% if datas %}
+                    <table class='table table-bordered'>
+                        <tr>
+                            <th>主题</th>                          
+                            <th>价格</th>                                                                                                                 
+                            <th>上传时间</th>
+                            <th></th>
+                        </tr>
+                        {% for data in datas %}
+                        <tr>
+                            <td><a href='/eot/showcomment/{{data.id}}/'><span data-toggle="tooltip" title="{{data.description}}">{{data.title}}</span></a></td>
+                            <td>{{data.price_num}}</td>
+                            
+                            <td>{{data.upload_time|date:'Y-m-d'}}</td>
+                            <td>
+                                {% ifequal user.money 0 %}
+                                    囊中羞涩
+                                {% else %}
+                                <button class='btn'>
+                                    <a href='/eot/downloadfile/{{data.id}}/{{data.file}}/' target='_blank'>
+                                        <span class="glyphicon glyphicon-download-alt"></span>下载（{{data.download_num}}次）
+                                    </a>
+                                </button>
+                                {% endifequal %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <div class="alert alert-info"> 
+                        暂时还没有人为本课程上传资料。马上上传资料，赚易币，变土豪！
+                    </div>
+                {% endif %}
+                </div>
+            </div>            
+        </div>
+        
+        <!--
+        <div class='pull-left'><p>分享本课程到&nbsp;&nbsp;</p></div>
+        
+        <div id='share_qq'  class='pull-left'>         
+            <script type="text/javascript">
+            (function(){
+            var p = {
+                url:location.href,
+                showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
+                desc:'',/*默认分享理由(可选)*/
+                summary:'课程名：{{this_eot.course}}         任课老师:{{this_eot.teacher}}\
+                        \
+                        \
+                         课程评分：{{this_eot.course_avg_score|floatformat }}     教师评分：{{this_eot.teacher_avg_score|floatformat }}    期末历史平均分：{{this_eot.history_avg_score|floatformat}}',/*分享摘要(可选)*/
+                         
+                title:'课程信息：{{this_eot.teacher}} 《{{this_eot.course}}》——来自大学易',/*分享标题(可选)*/
+                site:'大学易',/*分享来源 如：腾讯网(可选)*/
+                pics:'', /*分享图片的路径(可选)*/
+                style:'202',
+                width:55,
+                height:26
+            };
+            var s = [];
+            for(var i in p){
+            s.push(i + '=' + encodeURIComponent(p[i]||''));
+            }
+            document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
+            })();
+            </script>
+            <script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
+        </div>
+        
+        <div id='share_douban' class='pull-left'>
+        <a href="javascript:void(function(){
+            var d=document,
+            e=encodeURIComponent,
+            s1=window.getSelection,
+            s2=d.getSelection,
+            s3=d.selection,
+            s=s1?s1():s2?s2():s3?s3.createRange().text:'',
+            r='http://www.douban.com/recommend/?url='+e(d.location.href)+'&title='+e(d.title)+'&sel='+e(s)+'&v=1',
+            w=450,
+            h=330,
+            x=function(){
+                if(!window.open(r,'douban','toolbar=0,resizable=1,scrollbars=yes,status=1,width='+w+',height='+h+',left='+(screen.width-w)/2+',top='+(screen.height-h)/2))
+                    location.href=r+'&r=1'
+            };
+            if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}
+        })()">
+            <img width='20' height='20' src="http://img2.douban.com/pics/fw2douban_s.png" alt="推荐到豆瓣" />
+        </a>
+        </div>
+        
+        <div id='share_renren'>
+        <script type="text/javascript" src="http://widget.renren.com/js/rrshare.js"></script>
+        <a name="xn_share" onclick="shareClick()" type="icon_medium" href="javascript:;"></a>
+        <script type="text/javascript">
+            function shareClick() {
+                var rrShareParam = {
+                    resourceUrl : '',	//分享的资源Url
+                    srcUrl : '',	//分享的资源来源Url,默认为header中的Referer,如果分享失败可以调整此值为resourceUrl试试
+                    pic : '',		//分享的主题图片Url
+                    title : '课程信息：{{this_eot.teacher}} 《{{this_eot.course}}》——来自大学易',		//分享的标题
+                    description : '课程名：{{this_eot.course}}         任课老师:{{this_eot.teacher}}\
+                        \
+                        \
+                         课程评分：{{this_eot.course_avg_score|floatformat }}     教师评分：{{this_eot.teacher_avg_score|floatformat }}    期末历史平均分：{{this_eot.history_avg_score|floatformat}}'	//分享的详细描述
+                };
+                rrShareOnclick(rrShareParam);
+            }
+        </script>
+        </div>
+        
+        -->
+        <div id='show_comment_div' class='panel panel-danger'>
+            <div id='heading_comment' class="panel-heading">评论</div>
+            <div class="panel-body">
+                <div>
+                    <table class='table table-bordered'>
+                        {% if comments_message %}
+                            <tr>{{ comments_message }}</tr>
+                        {% else %}
+                            {% for comment in comments %}
+                                <tr>
+                                    <div>
+                                        {% ifequal comment.user.avatar 'img/avatar.png' %}
+                                            <div class='pull-left show_comment_img_div'>
+                                                <img src='{{STATIC_URL}}img/avatar.png/' width='35px' height='35px' class="img-responsive img-circle" alt='用户头像' />
+                                            </div>
+                                        {% else %}
+                                            <div class='pull-left show_comment_img_div'>
+                                                <img src='{{MEDIA_URL}}{{comment.user.avatar}}' width='35px' height='35px' class="img-responsive img-circle" alt='用户头像'/>
+                                            </div>
+                                        {% endifequal %}
+                                        <div class='show_comment_user_div'>
+                                            <a>{{comment.user.nic_name}}</a>&nbsp;&nbsp;
+                                            <span class='show_comment_time_span'>评论于&nbsp;{{comment.time|date:'Y-m-d'}}</span>
+                                        </div>
+                                    </div>
+                                    <div class='show_coment_content_div'>
+                                        <p class='font-black'>&nbsp;&nbsp;&nbsp;&nbsp;{{comment.comment}}</p>
+                                    </div>
+                                    <div class='show_comment_like_div'>                                            
+                                        <button type="button" class="btn btn-link poll">
+                                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                                            <span class='font-black'>
+                                            （<span id='{{comment.id}}-1' class='btn-num'>{{comment.agree_num}}</span>）
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-link poll">
+                                            <span class="glyphicon glyphicon-thumbs-down"></span>
+                                            <span class='font-black'>
+                                            （<span id='{{comment.id}}-0' class='btn-num'>{{comment.disagree_num}}</span>）
+                                            </span>
+                                        </button> 
+                                    </div>
+                                    <div class='show_comment_textline'>
+                                        <span class='text-muted'>-----------------------------------------------------------
+                                        -----------------------------------------------------------
+                                        </span>
+                                    </div>
+                                </tr> 
+                            {% endfor %}
+                        {% endif %}
+                   </table>                     
+                    <div class='pull-right'>
+                       <ul class="pagination">
+                        {% if comments.has_previous %}                           
+                            <li><a href="?page={{ comments.previous_page_number }}#show_comment_div">&lt; 上一页</a></li>                           
+                        {% endif %}                           
+                            {% for p in page_range %}
+                                
+                                {% ifequal p comments.number %}
+                                     <li><span class="current">{{p}}</span></li>
+                                {% else %}
+                                    <li><a href="?page={{p}}#show_comment_div" title="第{{p}}页">{{p}}</a></li>
+                                {% endifequal %}
+                                
+                            {% endfor %}
+                            
+                        {% if comments.has_next %}
+                            <li><a href="?page={{ comments.next_page_number }}#show_comment_div">下一页 &gt; </a></li>
+                        {% endif %}
+                            <li><a >[第{{ comments.number }}/{{ comments.paginator.num_pages }}页]</a></li>
+                      </ul>
+                  </div>
+
+                    
+                </div>
+            </div>            
+        </div>
+    {% endif %}
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="my_money_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id='' class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">我的钱包</h4>
+          </div>
+          <div class="modal-body">
+             <div>
+                <p class="text-primary">&nbsp;&nbsp;&nbsp;亲爱的{{ user.nic_name }}，你钱包里共有{{ user.money }}个易币！</p>
+               
+             </div>
+             <div class='modal_sure_btn'>
+                <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >我知道了</button>
+             </div>
+          </div>         
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="my_honour_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id='' class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">我的荣誉</h4>
+          </div>
+          <div class="modal-body">
+             <div>
+                <p class="text-primary">&nbsp;&nbsp;&nbsp;亲爱的{{ user.nic_name }}，截止目前，您一共{{user.first_value}}次名留青史！</p>             
+             </div>
+             <div class='modal_sure_btn'>
+                <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >我知道了</button>
+             </div>
+          </div>          
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="what_honour_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id='' class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">名留青史</h4>
+          </div>
+          <div class="modal-body">
+             <div>
+                <p class="text-primary">&nbsp;&nbsp;&nbsp;名留青史是大学易为了鼓励点评课程而设的一个奖励机制。当
+                您评价一门课程的时候，如果您是此课程的前100位评价者之一，你将有一定的概率被系统选中，
+                从而被铭记于此课程的荣誉榜上。</p>
+                <p class="text-danger">&nbsp;&nbsp;&nbsp;往后的每一名查看此课程的学子都将看到您的大名！</p>
+               
+             </div>
+             <div class='modal_sure_btn'>
+                <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >确定</button>
+             </div>
+          </div>         
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="reportImg_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id='' class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">图片举报机制</h4>
+          </div>
+          <div class="modal-body">
+             <div>
+                <p>如果图片存在下述情况：</p>
+                <p>
+                    <ul>
+                        <li>图片中含有不良信息，如色情、广告等</li>
+                        <li>图片与课程毫无关系，或者关系不大</li>
+                        <li>标题或描述与图片严重不符，产生了误导</li>
+                        <li>其他类似情况</li>
+                    </ul>
+                </p>
+                <p>
+                   请立即举报！我们将尽快审核，感谢您对大学易做出的贡献
+                </p>
+               
+             </div>
+             <div class='modal_sure_btn'>
+                <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >谢谢提醒</button>
+             </div>
+          </div>         
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+{% endblock %}
+
+{% block eotright %}
+<div class=''>
+    <div id='same_teacher_div' class='panel panel-danger'>
+        <div id='heading_same_teacher' class="panel-heading">「{{this_teacher}}」老师教的其他课程</div>
+        <div class="panel-body">
+            <div>
+                {% if message_sameteacher %}
+                    {{ message_sameteacher }}
+                {% else %}                   
+                        <ul type='1' start='1'>
+                        {% for eot in sameteacher %}
+                            <li><a href='/eot/showeot/{{eot.id}}/'>
+                            {{eot.course}}&nbsp;&nbsp;<span class='font-black'>(
+                            </span>{{eot.course_avg_score|floatformat}}&nbsp;<span class='font-black'>)</span></a></li>
+                        {% endfor %}
+                        </ul>
+                {% endif %}
+            </div>            
+        </div>
+        {% if message_samecourse %}
+        {% else %}
+            <div class="panel-footer">注：括号内为对应的课程评分</div>
+        {% endif %}
+    </div>
+    <div id='same_course_div' class='panel panel-danger'>
+        <div id='heading_same_course' class="panel-heading">其他老师教的「{{this_course}}」</div>
+        <div class="panel-body">
+            <div>
+                {% if message_samecourse %}
+                    {{ message_samecourse }}
+                {% else %}                   
+                        <ul >
+                        {% for eot in samecourse %}
+                            <li><a href='/eot/showeot/{{eot.id}}/'>
+                            {{eot.teacher}}&nbsp;&nbsp;<span class='font-black'>(</span>
+                            {{eot.teacher_avg_score|floatformat}}&nbsp;<span class='font-black'>)</span></a></li>
+                        {% endfor %}
+                        </ul>
+                        
+                {% endif %}
+            </div>            
+        </div>
+        {% if message_samecourse %}
+        {% else %}
+            <div class="panel-footer">注：括号内为对应的教师评分</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

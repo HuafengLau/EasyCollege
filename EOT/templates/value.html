@@ -1,0 +1,457 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block title %}
+{{credit.course_name}} - 点评课程 - 大学易
+{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block mainbody %}
+{% if no_teacher_message %}
+    <div id='no_teacher_div' class='container pull-left'>
+        <div id='back_btn_div'>
+            <a href='/index/'><button class='btn btn-default'><<返回</button></a>
+        </div>
+        <div class="alert alert-success">
+            <p class='text-danger'>非常抱歉，您还没有为「{{credit.course_name}}」添加任课老师。请添加教师后再点评</p>
+        </div>
+    </div>
+{% else %}
+<div id='value_main_div' class='container pull-left'>
+    <div id='back_btn_div'>
+        <a href='/index/'><button class='btn btn-default'><<返回</button></a>
+    </div>
+    {% if value_wrong_message %}
+        <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <strong>Warning!</strong> &nbsp;&nbsp;{{ value_wrong_message }}&nbsp;
+            很抱歉，您可能需要重新填写此表单
+        </div>
+    {% else %}
+        <div class="alert alert-success">
+            <p>亲爱的{{ user.nic_name }}：</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感谢您来点评，请认真选择每一项，因为您的每一个评价都将影响到无数学弟学妹的选择，带星号*的均为必填项！</p>
+                
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;祝您点评愉快！</p>
+        </div>
+    {% endif %}
+    <form class='form-group' action='/eot/value/{{credit_id}}/' method='POST' autocomplete="on"> 
+    {% csrf_token %}
+        <div id='base_info_div'>
+            <table class='table table-bordered table-hover'>
+                <tr>
+                    <td clospan='3'>
+                        <button id='base_info_btn' class='btn btn-danger pull-left'>基础信息*（必填）</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='one_of_three'><label class='pull-left'>课程名</label>{{ credit.course_name }}</td>
+                    <td class='one_of_three'><label class='pull-left'>任课老师</label>{{ credit.course_teacher }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class='pull-left'>课程评分<span class='font-red'>*</span></label>
+                        <select class='one_of_three' name='course_score'>
+                          <option value='1'>1</option>
+                          <option value='2'>2</option>
+                          <option value='3'>3</option>
+                          <option value='4'>4</option>
+                          <option value='5'>5</option>
+                          <option value='6'>6</option>
+                          <option value='7'>7</option>
+                          <option value='8'>8</option>
+                          <option value='9'>9</option>
+                          <option value='10'>10</option>
+                        </select>
+                    </td>
+                    <td>
+                    <label class='pull-left'>教师评分<span class='font-red'>*</span></label>
+                    <select class='one_of_three' name='teacher_score'>
+                          <option value='1'>1</option>
+                          <option value='2'>2</option>
+                          <option value='3'>3</option>
+                          <option value='4'>4</option>
+                          <option value='5'>5</option>
+                          <option value='6'>6</option>
+                          <option value='7'>7</option>
+                          <option value='8'>8</option>
+                          <option value='9'>9</option>
+                          <option value='10'>10</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label class='pull-left'>对于该课程，你想<span class='font-red'>*</span></label>
+                        <div class='btn-group' data-toggle='buttons'>
+                            <label class='btn btn-default btn-myui'>
+                                <input type='radio' name='like_or_hate' id='' value='like'>赞
+                            </label>
+                            <label class='btn btn-default btn-myui'>
+                                <input type='radio' name='like_or_hate' id='' value='middle'>中立
+                            </label>
+                            <label class='btn btn-default btn-myui'>
+                                <input type='radio' name='like_or_hate' id='' value='hate'>踩
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id='teaching_style_div'>
+             <table class='table table-hover'>
+                <tr>
+                    <td clospan='3'>
+                        <button id='base_info_btn' class='btn btn-danger pull-left'>上课风格*（必填）</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class='pull-left'>
+                            <label>点名<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='naming' id='' value='never_num'>
+                                很少或几乎不点名
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='naming' id='' value='sometimes_num'>
+                                有时点名
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='naming' id='' value='often_num'>
+                                较多或经常点名
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class='pull-left'>
+                            <label>点名方式<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>                      
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='naming_way' id='' value='no_num'>
+                                基本不点名
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='naming_way' id='' value='sign_num'>
+                                主要通过签到或念名单
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='naming_way' id='' value='answer_num'>
+                                主要通过点名回答问题
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='naming_way' id='' value='hybrid_num'>
+                                多种方式混合点名
+                            </label>
+                        </div>               
+                    </td>
+                    <td>
+                    </td>
+                </tr>                
+                <tr>
+                    <td>
+                        <div class='pull-left'>
+                            <label>课堂气氛<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>                          
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='atmosphere' id='' value='dead_num'>
+                                死气沉沉
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='atmosphere' id='' value='normal_num'>
+                                有时活跃有时沉闷
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='atmosphere' id='' value='active_num'>
+                                较活跃或非常活跃
+                            </label>
+                        </div> 
+                    </td>
+                    <td>
+                        <div class='pull-left'>
+                           <label>上课形式<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>                          
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='teach_way' id='' value='PPT_num'>
+                                主要讲PPT
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='teach_way' id='' value='book_num'>
+                                主要讲课本
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='teach_way' id='' value='teacher_num'>
+                                主要讲义或老师自己发挥
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='teach_way' id='' value='hybrid_num'>
+                                采用多种方式教学
+                            </label>
+                        </div>                        
+                        
+                    </td>
+                    <td>
+                        <div class='pull-left'>
+                           <label>上课人气<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>  
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='popularity' id='' value='most_num'>
+                                学生基本都去上课
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='popularity' id='' value='more_num'>
+                                大部分人去上课
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='popularity' id='' value='less_num'>
+                                少部分人去上课
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='popularity' id='' value='nobody_num'>
+                                基本没人去上课
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id='exam_work_div'>
+            <table class='table table-hover'>
+                <tr>
+                    <td clospan='3'>
+                        <button id='base_info_btn' class='btn btn-danger pull-left'>考试与作业*（必填）</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class='pull-left'>
+                           <label>期中考试<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>  
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='mid_test' id='' value='no_num'>
+                                &nbsp;&nbsp;没有期中考&nbsp;&nbsp;
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='mid_test' id='' value='yes_num'>
+                                &nbsp;&nbsp;有期中考&nbsp;&nbsp;
+                            </label>                           
+                        </div>                    
+                    </td>
+                    <td>
+                        <div class='pull-left'>
+                           <label>期中考方式<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>  
+                            
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='mid_test_way' id='' value='no_num'>
+                                没有期中考
+                            </label><label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='mid_test_way' id='' value='paper_num'>
+                                闭卷考试
+                            </label>
+                            </label><label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='mid_test_way' id='' value='open_num'>
+                                开卷考试
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='mid_test_way' id='' value='pravite_num'>
+                                布置任务，私下完成后提交
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='mid_test_way' id='' value='inspect_num'>
+                                其他考察方式
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class='pull-left'>
+                           <label>平时作业<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>  
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='usual_work' id='' value='less_num'>
+                                很少或没有作业
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='usual_work' id='' value='some_num'>
+                                有一些或适当的作业
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='usual_work' id='' value='more_num'>
+                                较多或非常多作业
+                            </label>
+                        </div>                 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class='pull-left'>
+                           <label>期末考方式<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>  
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='final_test_way' id='' value='paper_num'>
+                                闭卷考试
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='final_test_way' id='' value='open_num'>
+                                开卷考试
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='final_test_way' id='' value='pravite_num'>
+                                布置任务，私下完成后提交
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='final_test_way' id='' value='inspect_num'>
+                                其他考察方式
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class='pull-left'>
+                           <label>期末考难度<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>  
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='final_test_degree' id='' value='hard_num'>
+                               较难或很难
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='final_test_degree' id='' value='soso_num'>
+                                难度一般
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='final_test_degree' id='' value='easy_num'>
+                                &nbsp;较简单&nbsp;
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class='pull-left'>
+                           <label>是否透题<span class='font-red'>*</span></label>
+                        </div>
+                        <div class='btn-group' data-toggle='buttons'>  
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='reveal' id='' value='draw_importence_num'>
+                                通过划重点
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='reveal' id='' value='give_paper_num'>
+                                通过给‘模拟题’
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='reveal' id='' value='others_num'>
+                                其他透题方式
+                            </label>
+                            <label class='btn btn-default form-control btn-myui'>
+                                <input type='radio' name='reveal' id='' value='nothing_num'>
+                                基本不透题
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+        <div id='comment_div'>
+            <table class='table'>
+                <tr>
+                    <td clospan='3'>
+                        <button class='btn btn-danger pull-left'>&nbsp;真&nbsp;心&nbsp;话&nbsp;</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='pull-left'>
+                        <label>对于此课，你是否想要</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='pull-left one_of_three'>
+                        <div class='btn-group' data-toggle='buttons'>
+                            <label class='btn btn-default btn-myui'>
+                                <input type='checkbox' name='recommend_num'>&nbsp;&nbsp;真&nbsp;心&nbsp;推&nbsp;荐&nbsp;&nbsp;
+                            </label>
+                        </div>
+                    </td>
+                    <td colspan='2' class='pull-left'>
+                        <span>需要消耗5个易币&nbsp;&nbsp;</span>
+                        <span id='spend_5_info' >
+                            <a data-toggle="modal" data-target="#why_5_Modal">为什么要花费易币推荐？</a>
+                        </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span id='my_money_info' >
+                            <a data-toggle="modal" data-target="#my_money_Modal">查看我的钱包</a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='3' class='pull-left'>
+                        <label>谈谈你的感受</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan='3'>
+                        <textarea rows='3' name='comment' id='comment_area' value='' placeholder='对于这门课或老师，我想说…'></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div id='submit_div'>
+            <button class='btn btn-danger btn-block' type="submit">马上提交</button>
+        </div>
+    </form>
+    
+</div>
+<!-- Modal -->
+<div class="modal fade" id="why_5_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">真心推荐</h4>
+      </div>
+      <div class="modal-body">
+         <div>
+            <p class="text-primary">&nbsp;&nbsp;&nbsp;「真心推荐」是<strong>大学易</strong>精心推出的一项功能，旨在筛选出真正让学生喜爱，真正
+            有价值的课程。消耗的5个易币意在防止学生随意推荐。</p>
+            <p class="text-danger">如果你真的喜欢这门课，那就勇敢地推荐吧！</p>
+         </div>
+      </div>
+      <div class="modal-footer">
+        <button  type="button" data-dismiss="modal" class="btn btn-danger" >确定</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Modal -->
+<div class="modal fade" id="my_money_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">我的钱包</h4>
+      </div>
+      <div class="modal-body">
+         <div>
+            <p class="text-primary">&nbsp;&nbsp;&nbsp;亲爱的{{ user.nic_name }}，你钱包里共有{{ user.money }}个易币！</p>
+           
+         </div>
+      </div>
+      <div class="modal-footer">
+        <button  type="button" data-dismiss="modal" class="btn btn-danger" >确定</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->      
+
+{% endif %}
+{% endblock %}

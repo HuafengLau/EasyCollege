@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+跳转说明 - 大学易
+{% endblock %}
+
+{% block meta %}
+<META http-equiv=refresh content="{{ refreshTime }};url={{ next }}"/>
+{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block mainbody %}
+<div id='refreshMessage_div'>
+    <p class='text-center'>{{ moreMessage }}</p>
+    <p class='text-center'>{{ refreshMessage }}</p>
+</div>
+{% endblock %}
+
+{% block botoom_bav %}
+{% endblock %}

@@ -1,0 +1,9 @@
+基础信息<a id='{{id}}' class='delStore pull-right hand_over'>取消收藏</a>
+<script>
+    $('.delStore').on('click', function(){
+        id = $(this).attr('id');
+        $.get('/eot/delStore/', {'eot_id':id}, function(data){
+            $('#heading_baseinfo').html(data);
+        });
+    });
+</script>

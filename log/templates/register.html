@@ -1,0 +1,65 @@
+{% extends 'log.html' %}
+
+{% block title %}
+注册 - 大学易
+{% endblock %}
+
+{% block log_or_register %}
+
+<div id='' class="panel-heading">
+    <h4>注册
+        <a href='/log/'><span class='pull-right'><span class="glyphicon glyphicon-hand-right"></span> 登录</span></a>
+    </h4> 
+</div>
+<div class="panel-body">
+    <div  id="register">
+        {% if register_message %}
+        <div id='duplicate_email_div' class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Warning!</strong> &nbsp;&nbsp;你可能需要重新填写此表单!<span class='font-red'></br>{{ register_message }}</span>
+        </div>
+        {% endif %}
+        <form class='form-group' action='/log/register/' method='POST' autocomplete="on">                
+            {% csrf_token %}
+            <div id='LogHTML_div_SchoolInfo'>
+                <div>
+                    <label class='label_group'>学校（全称）</label>
+                    <label class='label_group'>学院（全称）</label>
+                    <label>专业（全称）</label>
+                </div>
+                <div class= 'form-inline'>
+                    <input type="text"  class='form-control one_of_three' id ='register_university' name='school' placeholder="" required>                                                            
+                    <input type="text"  class='form-control one_of_three' id ='register_college' name='college' placeholder="" required>                                                       
+                    <input type="text"  class='form-control one_of_three' id ='register_major' name='major' placeholder="" required>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label>邮箱</label>                  
+                <input type="email"  class='form-control' id ='register_email' name='email' placeholder="作为登录账号" required>
+            </div>
+            <!--<div class='form-group'>
+                <label>昵称</label>
+                <input type="text"  class='form-control' id='register_nic_name' name='nic_name' placeholder="取一个响当当的名字哦！" required>
+            </div>-->               
+            <div class='form-group'>
+                <label>学生系统账号</label>
+                <input type="text"  class='form-control' id='register_stu_ID' name='stu_ID' placeholder="" required>
+                
+            </div>
+            <div class='form-group'>
+                <label>学生系统密码</label>
+                <input type="password"  class='form-control' id='register_stu_pwd' name='stu_pwd' placeholder="作为登录密码" required>
+            </div>
+            <div>
+                <div><label>验证码</label></div>
+                <input type="text"  class='form-control pull-left' id='register_verify' name='verify' placeholder="" required>
+                <img src='/verify/'>
+            </div>
+            <div>
+                <button class="btn btn-block btn-info" id='register_btn' type="submit">立即注册</button>
+            </div>
+                
+        </form>
+    </div>
+</div>
+{% endblock %}

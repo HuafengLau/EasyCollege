@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block mainbody %} 
+<div class='width_100'>
+    <div id='eotbase_left_div' class='container pull-left'>
+        <div id='eotbase_leftup_div'> 
+            {% block eotleftup %}
+            {% endblock %}
+        </div>
+        <div id='eotbase_leftdown_div'>
+            {% block eotleftdown %}
+            {% endblock %}
+        </div>
+    </div>
+    <div id='eotbase_right_div' class='pull-right'>
+        {% block eotright %}
+        {% endblock %}
+    </div>
+    
+</div>
+{% endblock %}
+

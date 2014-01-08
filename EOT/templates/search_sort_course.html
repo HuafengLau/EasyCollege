@@ -1,0 +1,16 @@
+{% for eot in answer %}
+    <div id='{{eot.id}}' class='list_div pull-left'>
+        <table class='table table-bordered'>
+            <tr>
+                <td><a target='_blank' href='/eot/showeot/{{eot.id}}/'>{{eot.course}}</a></td>
+                <td rowspan='2'>
+                    <p>{{sort_message}}</p><p>{{eot.course_avg_score|floatformat}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>{{eot.teacher}}</td>
+            </tr>
+        </table>
+    </div>
+{% endfor %}
+

@@ -1,0 +1,115 @@
+{% if message %}
+    <div class='container'>
+        <p class='font-red'>{{ message }}</p>
+    </div>
+{% else %}
+    <table id='modal_table_wise' class='table table-bordered table-hover'>
+
+        <tr class='success'>
+          <th >学期</th>
+          <th class='tooltip_th' data-toggle="tooltip" title="请填写全称">课程名</th>
+          <th class='tooltip_th' data-toggle="tooltip" title="请填写全称">任课老师</th>
+          <th class='tooltip_th' data-toggle="tooltip" title="必修、选修或任选">课程属性</th>
+          <th class='tooltip_th' data-toggle="tooltip" title="填数字，如 3 或 0.5">学分</th>
+          <th class='tooltip_th' data-toggle="tooltip" title="保留一位小数，如 85.0">成绩</th>
+          <th></th>
+        </tr>
+    {% for major_course in major_courses %}
+      
+      <tr> 
+          <td>
+          <select name='grade' autofocus required>
+            {% ifequal major_course.course.grade '大一上' %} 
+            <option value='大一上' selected>大一上</option>
+            {% else %}
+            <option value='大一上'>大一上</option>
+            {% endifequal %}
+            {% ifequal major_course.course.grade '大一下' %} 
+            <option value='大一下' selected>大一下</option>
+            {% else %}
+            <option value='大一下'>大一下</option>
+            {% endifequal %}
+            {% ifequal major_course.course.grade '大二上' %} 
+            <option value='大二上' selected>大二上</option>
+            {% else %}
+            <option value='大二上'>大二上</option>
+            {% endifequal %}
+            {% ifequal major_course.course.grade '大二下' %} 
+            <option value='大二下' selected>大二下</option>
+            {% else %}
+            <option value='大二下'>大二下</option>
+            {% endifequal %}
+            {% ifequal major_course.course.grade '大三上' %} 
+            <option value='大三上' selected>大三上</option>
+            {% else %}
+            <option value='大三上'>大三上</option>
+            {% endifequal %}
+            {% ifequal major_course.course.grade '大三下' %} 
+            <option value='大三下' selected>大三下</option>
+            {% else %}
+            <option value='大三下'>大三下</option>
+            {% endifequal %}
+            {% ifequal major_course.course.grade '大四上' %} 
+            <option value='大四上' selected>大四上</option>
+            {% else %}
+            <option value='大四上'>大四上</option>
+            {% endifequal %}
+            {% ifequal major_course.course.grade '大四下' %} 
+            <option value='大四下' selected>大四下</option>
+            {% else %}
+            <option value='大四下'>大四下</option>
+            {% endifequal %}
+          </select>
+          </td>
+          <td id='{{ major_course.course.course_name }}{{ major_course.id }}'>              
+              <button class='btn btn_edit_item'>
+                {{ major_course.course.course_name }}
+              </button>
+          </td>
+          <td id='{{ major_course.course.course_teacher }}{{ major_course.id }}'>
+              <button class='btn btn_edit_item'>
+                {{ major_course.course.course_teacher }}
+              </button>
+          </td>          
+          <td>
+          <select name='attr' autofocus required>
+            {% ifequal major_course.course.course_attr '必修' %} 
+            <option value='必修' selected>必修</option>
+            {% else %}
+            <option value='必修'>必修</option>
+            {% endifequal %}
+            {% ifequal major_course.course.course_attr '非必修' %} 
+            <option value='非必修' selected>非必修</option>
+            {% else %}
+            <option value='非必修'>非必修</option>
+            {% endifequal %}
+          </td>
+          <td id='credit{{ major_course.id }}'>
+              <select name='credit' autofocus required>
+              {% for credit in select_credit %}
+                {% ifequal major_course.course.course_credit credit %}
+                    <option value='{{credit}}' selected>{{credit}}</option>
+                {% else %}
+                    <option value='{{credit}}'>{{credit}}</option>
+                {% endifequal %}
+              {% endfor %}
+              </select>
+              <!--<button class='btn btn_edit_item'>
+                {{ major_course.course.course_credit }}
+              </button>-->
+              
+          </td>
+          <td id='score{{ major_course.id }}'>
+              <button class='btn btn_edit_item'>
+                +
+              </button>
+          </td>
+          <td>
+              <button class='btn btn-success btn_wise_save'>
+                保存
+              </button>
+          </td>
+     </tr>
+   {% endfor %}
+   </table>
+{% endif %}

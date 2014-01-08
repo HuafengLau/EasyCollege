@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ {{this_Eotdata.eot.course}} - {{this_Eotdata.title}} - 资料评论 - 大学易
+{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block mainbody %}
+<div class='container'>
+    <div id='back_btn_div'>
+        <a href="{{ last_url }}"><button class='btn btn-default'><<返回</button></a>
+    </div>
+    
+    <div id='report_or_not'>
+        {% ifequal condition 'no' %}
+        <button type="button" data-toggle="modal" data-target="#report_eotData_modal" class="btn btn-link pull-right">
+            <span class='font-blue'>举报本资料</span>
+        </button>
+        {% endifequal %}
+        {% ifequal condition '0' %}
+        <button type="button" data-toggle="modal" data-target="#verifying_eotData_modal" class="btn btn-link pull-right">
+            <span class='font-red'>资料审核中</span>
+        </button>
+        {% endifequal %}
+        {% ifequal condition '-1' %}
+        <button type="button" data-toggle="modal" data-target="#green_eotData_modal" class="btn btn-link pull-right">
+            <span class='font-green'>本资料已经通过审核</span>
+        </button>
+        {% endifequal %}
+    </div>
+    <table class='table table-bordered'>
+        <tr>
+            <th>主题</th>
+            <th>价格</th>
+            <th>上传时间</th>
+            <th>资料说明</th>
+        </tr>
+        <tr>
+            <td>{{this_Eotdata.title}}</td>
+            <td>{{this_Eotdata.price_num}}</td>
+            <td>{{this_Eotdata.upload_time|date:'Y-m-d'}}</td>
+            <td>{{this_Eotdata.description}}</td>
+        </tr>
+    </table>
+    <div>
+        {% if can_comment %}
+            <form class='form-group' action='/eot/commentdata/{{this_Eotdata.id}}/' method='POST' autocomplete="on">                
+            {% csrf_token %}
+                <div><p>评论</p></div>
+                <textarea rows='3' name='comment' id='comment_area' value='' placeholder='我觉得这个资料……' required></textarea>
+                <div><button class="btn form-control btn-info" id='' type="submit">提交</button></div>
+            </form>
+        {% else %}
+            <p class='text-danger text-left'>你不能评价本资料，可能是你还没有下载本资料或者已经评论过了</p>
+        {% endif %}
+    </div>
+    <div id='report_response_div'>      
+    </div>
+    <div id='comment_div' class='panel panel-danger'>
+            <div id='heading_baseinfo' class="panel-heading">评论</div>
+            <div class="panel-body">
+                <div>
+                    <table class='table table-bordered'>
+                        {% if comments %}
+                            {% for comment in comments %}
+                                <tr>
+                                    <div>
+                                        {% ifequal comment.user.avatar 'img/avatar.png' %}
+                                            <div class='pull-left show_comment_img_div'>
+                                                <img src='{{STATIC_URL}}img/avatar.png/' width='35px' height='35px' class="img-responsive img-circle" alt='用户头像' />
+                                            </div>
+                                        {% else %}
+                                            <div class='pull-left show_comment_img_div'>
+                                                <img src='{{MEDIA_URL}}{{comment.user.avatar}}' width='35px' height='35px' class="img-responsive img-circle" alt='用户头像'/>
+                                            </div>
+                                        {% endifequal %}
+                                        <div class='show_comment_user_div'>
+                                            <a>{{comment.user.nic_name}}</a>&nbsp;&nbsp;
+                                            <span class='show_comment_time_span'>评论于&nbsp;{{comment.time|date:'Y-m-d'}}</span>
+                                        </div>
+                                    </div>
+                                    <div class='show_coment_content_div'>
+                                        <p class='font-black'>&nbsp;&nbsp;&nbsp;&nbsp;{{comment.comment}}</p>
+                                    </div>
+                                    <div class='show_comment_textline'>
+                                        <span class='text-muted'>-----------------------------------------------------------
+                                        ------------------------------------------------------------------------
+                                        </span>
+                                    </div>
+                                </tr> 
+                            {% endfor %}
+                        {% else %}
+                            <tr><p class='text-info text-center'>暂时还没有人评价本资料</p>
+                        {% endif %}
+                   </table>
+                   {% if comments %}
+                    <div class='pull-right'>
+                       <ul class="pagination">
+                        {% if comments.has_previous %}                           
+                            <li><a href="?page={{ comments.previous_page_number }}#show_comment_div">&lt; 上一页</a></li>                           
+                        {% endif %}                           
+                            {% for p in page_range %}
+                                
+                                {% ifequal p comments.number %}
+                                     <li><span class="current">{{p}}</span></li>
+                                {% else %}
+                                    <li><a href="?page={{p}}#show_comment_div" title="第{{p}}页">{{p}}</a></li>
+                                {% endifequal %}
+                                
+                            {% endfor %}
+                            
+                        {% if comments.has_next %}
+                            <li><a href="?page={{ comments.next_page_number }}#show_comment_div">下一页 &gt; </a></li>
+                        {% endif %}
+                            <li><a >[第{{ comments.number }}/{{ comments.paginator.num_pages }}页]</a></li>
+                      </ul>
+                  </div>
+                   {% endif %}                
+                </div>
+         </div>            
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="report_eotData_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">举报课程资料<span id='wise_modal_header'></span></h4>
+      </div>
+      <div class="modal-body">
+          <div>
+          <p class="text-primary">如果本课程资料符合如下条件之一，您可以举报该资料：</p>
+          <p>
+            <ul>
+                <li>资料与课程毫无关系，或者关联性极小</li>
+                <li>存在广告、不良图片等不良信息</li>
+                <li>资料与描述严重不符，产生了误导</li>
+                <li>与课程其他资料极为相似，有很大的抄袭嫌疑</li>
+                <li>其他与上述条件相似的情况</li>
+            </ul>
+          </p>
+          <p class="text-primary">举报后，本资料将以最快的速度审核。如果审核通过，您将获得打假勋章！</p>
+          <p class="text-success">遵守大学易公约，请勿恶意举报</p>
+          </div>
+          <div class='modal_sure_btn'>
+             <button  id='report_eotData_btn' type="button" class="btn btn-danger" >
+             <span id='{{this_Eotdata.eot.id}};{{this_Eotdata.id}};{{this_Eotdata.owner.id}}'>确认举报</span></button>
+             <button  type="button" data-dismiss="modal" class="btn btn-success" >取消</button>            
+          </div>
+      </div>
+      
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="verifying_eotData_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">课程资料审核<span id='wise_modal_header'></span></h4>
+      </div>
+      <div class="modal-body">
+          <div>
+          <p class="text-primary text-center">本资料已被举报，目前正在审核中，请谨慎下载……</p>
+          
+          <p class="text-success text-left">遵守大学易公约，请勿恶意举报</p>
+          </div>
+          <div class='modal_sure_btn'>
+             
+             <button  type="button" data-dismiss="modal" class="btn btn-success" >我知道了</button>            
+          </div>
+      </div>
+      
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="green_eotData_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">课程资料<span id='wise_modal_header'></span></h4>
+      </div>
+      <div class="modal-body">
+          <div>
+          <p class="text-primary text-center">本资料已经通过审核，请放心下载！</p>
+          
+          <p class="text-success text-left">遵守大学易公约，请勿恶意举报</p>
+          </div>
+          <div class='modal_sure_btn'>        
+             <button  type="button" data-dismiss="modal" class="btn btn-success" >我知道了</button>            
+          </div>
+      </div>
+      
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endblock %}

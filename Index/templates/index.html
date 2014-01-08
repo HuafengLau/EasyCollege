@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block title %}
+个人中心 - 大学易
+{% endblock %}
+
+
+{% block mainbody %}
+<div class='last_right_div'>
+    <div id='index_up'>
+        <div id='index_upleft'>
+            <table>
+                <tr> 
+                    <td id='avtar_td'>
+                        {% ifequal user.avatar 'img/avatar.png'%}
+                             <img src='{{STATIC_URL}}img/avatar.png'  height="200" class="img-circle" alt='用户头像'/>                         
+                        {% else %}
+                             <img src='{{MEDIA_URL}}{{user.avatar}}'  height="200" class="img-circle" alt='用户头像'/>
+                        {% endifequal %}
+                    </td>
+                    <td>
+                        <table class='table'>
+                          <tr>
+                            <td>昵称</td>
+                            <td>
+                                <div class='pull-left'>
+                                <a class='hand_over' data-toggle="modal" data-target="#change_nicname_modal">{{user.nic_name}}</a>
+                                </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>等级</td><td><div class='pull-left'>贫民</div></td>
+                          </tr>
+                          <tr>
+                            <td>永载史册</td><td><div class='pull-left'>{{user.first_value}}次</div></td>
+                          </tr>
+                          <tr>
+                            <td><img src='{{STATIC_URL}}img/moneybag2.png' height="32" alt='易币图片'/></td>
+                            <td><div class='pull-left'>{{user.money}}易币</div></td>
+                          </tr>                   
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <button class='btn' id='avatar_btn'>更改头像</button>
+                        <form id='avatar_form' class='form-group' action='/index/uploadavatar/' enctype="multipart/form-data" method='POST'> 
+                            {% csrf_token %}
+                            <table>
+                                {{ form.as_table }}
+                            </table>                           
+                            <button class="btn btn-default" id='' type="submit">提交</button>
+                        </form>                       
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        <div id='index_upright'>
+        </div>
+    </div>
+    <div class='' id='index_down'>
+        <div id='index_downleft' class='pull-left'>
+            <div>            
+                <div id='index_credit_head' class="alert alert-info">                                
+                    <p class='text-center'>历年成绩</p>
+                </div>
+                {% if credits %}
+                    {% if message %}
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <strong>智能添加：</strong><span class='font-red'>{{ message}}</span>
+                        </div>
+                    {% endif %}
+                    <div id='index_credit_div' >
+                        <table class='table table-bordered table-hover'>
+                            <tr>
+                                <th>课程名</th>
+                                <th>任课老师</th>
+                                <th>课程属性</th>
+                                <th>学分</th>
+                                <th>成绩</th>
+                                <th>是否评价</th>
+                            </tr>
+                            {% for credit in credits %}
+                            <tr>
+                                <td><a href='/eot/showcredit/{{credit.id}}/'>{{ credit.course_name }}</a></td>
+                                <td class='td_teacher' id='{{credit.id}}'>
+                                    {% ifequal credit.add_money 0 %}
+                                    <button class='btn btn_edit_teacher'>                           
+                                        {% if credit.course_teacher %}
+                                            {{ credit.course_teacher }}
+                                        {% else %}
+                                            +
+                                        {% endif %}
+                                    </button>
+                                    {% else %}
+                                        {{ credit.course_teacher }}
+                                    {% endifequal %}
+                                </td>
+                                <td>{{ credit.course_attr }}</td>
+                                <td class='num_credit_1'>{{ credit.course_credit }}</td>
+                                <td>{{ credit.course_score }}</td>
+                                <td>
+                                    {% ifequal credit.add_money 0 %}
+                                        <a  href='/eot/value/{{ credit.id }}/'><span class="glyphicon glyphicon-hand-right"></span> 去评价</a>
+                                    {% else %}                           
+                                        +{{ credit.add_money }}
+                                        <img src='{{STATIC_URL}}img/moneybag2.png' height="27" alt='易币图片'/>
+                                    {% endifequal %}
+                                </td>
+                            </tr>
+                           {% endfor %}
+                        </table>
+                    </div>
+                {% else %}
+                 <p class='text-info text-center'>暂时没有发现相关数据，这可能是由于你刚上大一。如果不是此原因，请联系管理员
+                 collegeyi@sina.com</p>
+                {% endif %}
+            </div>
+            {% if credits %}
+            <div class='pull-right'>
+               <ul class="pagination">
+                {% if credits.has_previous %}                           
+                    <li><a href="?page={{ credits.previous_page_number }}#index_downleft">&lt; 上一页</a></li>                           
+                {% endif %}                           
+                    {% for p in credits_page_range %}
+                        
+                        {% ifequal p credits.number %}
+                             <li><span class="current">{{p}}</span></li>
+                        {% else %}
+                            <li><a href="?page={{p}}#index_downleft" title="第{{p}}页">{{p}}</a></li>
+                        {% endifequal %}
+                        
+                    {% endfor %}
+                    
+                {% if credits.has_next %}
+                    <li><a href="?page={{ credits.next_page_number }}#index_downleft">下一页 &gt; </a></li>
+                {% endif %}
+                    <li><a >[第{{ credits.number }}/{{ credits.paginator.num_pages }}页]</a></li>
+              </ul>
+            </div>
+            {% endif %}
+            
+        </div>
+        <div id='index_downright' class='pull-right'>
+            <div class='panel panel-danger'>
+                <div id='heading_wise_add' class="panel-heading">添加任课老师</div>
+                <div class="panel-body">
+                    {% if credits %}
+                    <div>
+                        <button id='add_course' data-toggle="modal" data-target="#hand_add_explain" class= 'btn btn-success'>
+                            手工添加
+                        </button>
+                        
+                    </div>
+                    <div id='wise_add_teacher_div'>
+                        <a id='wise_add_button_link' href='/index/wise_teacher/'>
+                           <button class='btn btn-success'>
+                               智能添加
+                           </button>
+                        </a>
+                        <button type="button" data-toggle="modal" data-target="#what_wise_add" class="btn btn-link add_button_info">
+                            什么是智能添加？
+                        </button>
+                    </div>
+                    {% else %}
+                    <p class='text-info text-center'>你还没有课程数据，不能进行此项操作</p>
+                    {% endif %}
+                </div>       
+            </div>
+            <div class='panel panel-danger'>
+                <div id='heading_value_eot' class="panel-heading">点评课程</div>
+                <div class="panel-body">
+                    {% if credits %}
+                    <div>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您需要填写完任课教师后，才可以去评教~</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;评教不但可以获得<span class='font-red'>易币奖励</span>，更有机会<span class='font-red'>名留青史</span>哦！</p>
+                    </div>
+                    <div>
+                        <button type="button" data-toggle="modal" data-target="#value_info_modal" class="btn btn-link add_button_info">
+                            查看详情
+                        </button>
+                    </div>
+                    {% else %}
+                    <p class='text-info text-center'>你还没有课程数据，不能进行此项操作</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>    
+    
+  
+<!-- Modal -->
+<div class="modal fade" id="hand_add_explain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">手工添加课程<span id='wise_modal_header'></span></h4>
+      </div>
+      <div class="modal-body">
+          <div id='modal_table_wise_div'>
+               <p class="text-primary">
+                    &nbsp;&nbsp;&nbsp;&nbsp;点击对应课程中的+号项即可为课程添加任课老师。                   
+                    如果您误写了任课老师的名字，在未评教前，您可以点击对应的老师来更改。
+                    在评教后，您将无法再更改任课老师。
+               </p>
+               <p class="text-danger">
+                  &nbsp;&nbsp;&nbsp;&nbsp;手工添加可以精确的添加任课老师，当需要添加少量任课老师时，大学易推荐你使用此方法。  
+               </p>
+          </div>
+          <div class='modal_sure_btn'>
+             <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >我知道了</button>
+          </div>
+      </div>         
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+   
+<!-- Modal -->
+<div class="modal fade" id="what_wise_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">智能添加教师<span id='wise_modal_header'></span></h4>
+      </div>
+      <div class="modal-body">
+          <div id='modal_table_wise_div'>
+               <p class="text-primary">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;智能添加可以便捷地添加任课老师，当您点击此按钮时，大学易将会查找
+                    往届学长学姐提供的数据，并自动为您添加。由于时间关系，您的情况可能和往届学长学姐的提供的数据有所不同，您可以点击对应的
+                  任课老师来进一步修改。
+               </p>
+               <p class="text-danger">
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  当需要添加大量任课老师时，大学易推荐你使用此方法。  
+               </p>
+          </div>
+          <div class='modal_sure_btn'>
+             <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >我知道了</button>
+          </div>
+      </div>
+      
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+   
+<!-- Modal -->
+<div class="modal fade" id="value_info_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">点评课程<span id='wise_modal_header'></span></h4>
+      </div>
+      <div class="modal-body">
+          <div id='modal_table_wise_div'>
+               <p class="text-primary">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;确保课程信息正确后，点击对应的“去评价”即可点评课程。
+               </p>
+               <p class="text-danger">
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  成功点评课程即可获得易币奖励。您在帮助无数学弟学妹选择课程的同时，更有机会被永载史册，赶快尝试一下吧 ！ 
+               </p>
+          </div>
+          <div class='modal_sure_btn'>
+             <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >马上去试试</button>
+          </div>
+      </div>
+      
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Modal -->
+<div class="modal fade" id="change_nicname_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">更改昵称<span id='wise_modal_header'></span></h4>
+      </div>
+      <div class="modal-body">
+         <div>
+            <p class='text-info'>基于唯一性和辨识性的考虑，大学易倡导使用真实姓名，当然，你也可以随心所欲的取昵称：）</p>
+         </div>
+         <div class='container'>
+            <p>您现在的昵称为：{{user.nic_name}}</p>
+            <label>请输入您想要的昵称（10字以内）：</label>
+            <div class='form-group'>
+                <p>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span class='font-red' id='wrong_nicname'></span>
+                </p>
+                <input id='nic_name_input' type="text"  class='form-control' id ='nic_name' name='nic_name' placeholder="" required>
+            </div>
+         </div>
+         <div class='modal_sure_btn'>
+             <button  id='change_nicname_btn' type="button" class="btn btn-success " >确认更改</button>
+             <button  type="button" data-dismiss="modal" class="btn btn-danger" >取消</button>
+         </div>
+      </div>
+      
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+    
+    
+   
+{% endblock %}

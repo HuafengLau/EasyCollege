@@ -1,0 +1,69 @@
+<div id='major_course_div' class='panel panel-success'>
+    <div id='heading_major_course' class="panel-heading">搜索结果</div>
+    <div class="panel-body">            
+        <div id='search_body'>
+            <div>
+                <div id='search_up_div'>
+                    <label>排序</label>
+                    <div id='sort_div' class="btn-group" data-toggle="buttons">                     
+                      <label class="btn btn-default btn-myui">
+                        <input type="radio" value='coursescore'> 按课程评分
+                      </label>
+                      <label class="btn btn-default btn-myui">
+                        <input type="radio" value='teacherscore'> 按教师评分
+                      </label>
+                      <label class="btn btn-default btn-myui">
+                        <input type="radio" value='qimoscore'> 按期末平均成绩
+                      </label>
+                      <label class="btn btn-default btn-myui">
+                        <input type="radio" value='recommendnum'> 按推荐人数
+                      </label>
+                      <label class="btn btn-default btn-myui">
+                        <input type="radio" value='likenum'> 按点赞人数
+                      </label>
+                    </div>
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            找到{{num}}门相关课程，您可以通过排序按钮更好地筛选！
+                    </div>
+                </div>
+                <div id='search_down_div'>
+                    {% for eot in answer %}
+                        <div id='{{eot.id}}' class='list_div pull-left'>
+                            <table class='table table-bordered'>
+                                <tr>
+                                    <td><a target='_blank' href='/eot/showeot/{{eot.id}}/'>{{eot.course}}</a></td>
+                                    <td rowspan='2'>
+                                        <p>课程评分</p><p>{{eot.course_avg_score|floatformat}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{eot.teacher}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+    </div>       
+</div>
+
+<script>
+    (function(){
+        $.each($('#sort_div').find('label'),function(){
+            $(this).on('click', function(){
+                var sort = $(this).find('input').val();
+                var ids = '';
+                $('#search_down_div').children().each( function(){
+                    ids = ids + $(this).attr('id') + ';'
+                });
+                $.get('/eot/search/sort/', {'sort': sort, 'ids':ids}, function(data){
+                    $('#search_down_div').html(data);
+                });
+            });
+            
+        });
+    })($);
+</script>

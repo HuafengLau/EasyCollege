@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}
+事物处理 - 大学易
+{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block mainbody %}
+<div class='container'>
+    <h3 class='text-center'>举报课程资料处理</h3>
+    {% if notSolved_Report_eotDatas %}
+    <p class='text-left'>未处理</p>
+    <div id='notSolved_report_eotData'>
+        <table class='table table-bordered'>
+            <tr>
+                <th>处理状态</th>
+                <th>举报时间</th>
+                <th>举报人</th>
+                <th>相关课程</th>
+                <th>相关资料</th>
+                <th>被举报人</th>
+                <th>处理</th>
+            </tr>
+            {% for report in notSolved_Report_eotDatas %}
+            <tr>
+                <td>{{report.result}}</td>
+                <td>{{report.report_time}}</td>
+                <td>{{report.reporter.university_info_id}};
+                    {{report.reporter.nic_name}};
+                    {{report.reporter.id}}</td>
+                <td><a target='_blank' href='/eot/showeot/{{eot.id}}/'>{{report.eot.course}}</a></td>
+                <td>{{report.eot_data.title}}</td>
+                <td>{{report.suspect.university_info_id}};
+                    {{report.suspect.nic_name}};
+                    {{report.suspect.id}}</td>
+                <td>
+                    {% ifequal report.result '0' %}
+                    <a href='/affair/handle/report/Report_eotDatas/{{report.id}}/1/' class='hand_over'>通过</a>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <a href='/affair/handle/report/Report_eotDatas/{{report.id}}/-1/' class='hand_over'>否决</a>
+                    {% else %}
+                    <p>已处理</p>
+                    {% endifequal %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div  class='pull-right'>
+           <ul class="pagination">
+            {% if notSolved_Report_eotDatas.has_previous %}                           
+                <li><a href="?page={{ notSolved_Report_eotDatas.previous_page_number }}#notSolved_report_eotData">&lt; 上一页</a></li>                           
+            {% endif %}                           
+                {% for p in notSolved_Report_eotDatas_page_range %}
+                    
+                    {% ifequal p notSolved_Report_eotDatas.number %}
+                         <li><span class="current">{{p}}</span></li>
+                    {% else %}
+                        <li><a href="?page={{p}}#notSolved_report_eotData" title="第{{p}}页">{{p}}</a></li>
+                    {% endifequal %}
+                    
+                {% endfor %}
+                
+            {% if notSolved_Report_eotDatas.has_next %}
+                <li><a href="?page={{ notSolved_Report_eotDatas.next_page_number }}#notSolved_report_eotData">下一页 &gt; </a></li>
+            {% endif %}
+                <li><a >[第{{ notSolved_Report_eotDatas.number }}/{{ notSolved_Report_eotDatas.paginator.num_pages }}页]</a></li>
+            </ul>
+        </div>
+    </div>
+    {% else %}
+    <div>
+        <p class='text-left'>暂时还没有未处理举报</p>
+    </div>    
+    {% endif %}
+
+    {% if Solved_Report_eotDatas %}
+    <div id='affair_special_p'>
+        <p>已处理</p>
+    </div>
+    <div id='Solved_report_eotData'>
+        <table class='table table-bordered'>
+            <tr>
+                <th>处理状态</th>
+                <th>举报时间</th>
+                <th>举报人</th>
+                <th>相关课程</th>
+                <th>相关资料</th>
+                <th>被举报人</th>
+                <th>处理时间</th>   
+                <th>处理</th>
+            </tr>
+            {% for report in Solved_Report_eotDatas %}
+            <tr>
+                <td>{{report.result}}</td>
+                <td>{{report.report_time}}</td>
+                <td>{{report.reporter.university_info_id}};
+                    {{report.reporter.nic_name}};
+                    {{report.reporter.id}}</td>
+                <td>{{report.eot.course}}</td>
+                {% ifequal report.result '1' %}
+                <td>已删除</td>
+                {% else %}
+                <td>{{report.eot_data.title}}</td>
+                {% endifequal %}
+                <td>{{report.suspect.university_info_id}};
+                    {{report.suspect.nic_name}};
+                    {{report.suspect.id}}</td>
+                <td>{{report.solve_time}}</td>
+                <td>
+                    {% ifequal report.result '0' %}
+                    <a href='/affair/handle/Report_eotDatas/{{report.id}}/1/' class='hand_over'>通过</a>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <a href='/affair/handle/Report_eotDatas/{{report.id}}/-1/' class='hand_over'>否决</a>
+                    {% else %}
+                        {% ifequal report.result '-1' %}
+                        <p>已否决</p>
+                        {% endifequal %}
+                        {% ifequal report.result '1' %}
+                        <p>已通过</p>
+                        {% endifequal %}
+                    {% endifequal %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class='pull-right'>
+           <ul class="pagination">
+            {% if Solved_Report_eotDatas.has_previous %}                           
+                <li><a href="?page={{ Solved_Report_eotDatas.previous_page_number }}#Solved_report_eotData">&lt; 上一页</a></li>                           
+            {% endif %}                           
+                {% for p in Solved_Report_eotDatas_page_range %}
+                    
+                    {% ifequal p Solved_Report_eotDatas.number %}
+                         <li><span class="current">{{p}}</span></li>
+                    {% else %}
+                        <li><a href="?page={{p}}#Solved_report_eotData" title="第{{p}}页">{{p}}</a></li>
+                    {% endifequal %}
+                    
+                {% endfor %}
+                
+            {% if Solved_Report_eotDatas.has_next %}
+                <li><a href="?page={{ Solved_Report_eotDatas.next_page_number }}#Solved_report_eotData">下一页 &gt; </a></li>
+            {% endif %}
+                <li><a >[第{{ Solved_Report_eotDatas.number }}/{{ Solved_Report_eotDatas.paginator.num_pages }}页]</a></li>
+            </ul>
+        </div>
+    </div>
+    {% else %}
+    <div>
+        <p class='text-left'>暂时还没有已处理举报</p>
+    </div>    
+    {% endif %}
+    
+    <h3 class='text-center clear_both'>举报课程图片处理</h3>
+    <table class='table table-bordered'>
+        <tr>
+            <th>图片标题</th>
+            <th>处理</th>
+        </tr>
+        {% for img in notSolved_eotImg %}
+        <tr>
+            <td><a target='_blank' href='/eot/showeot/{{img.eot.id}}/'>{{img.title}}</a></td>
+            <td>
+                <a href='/affair/handle/report/Report_eotImg/{{img.id}}/1'>通过审核</a>&nbsp;&nbsp;
+                <a href='/affair/handle/report/Report_eotImg/{{img.id}}/-1'>否决</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
