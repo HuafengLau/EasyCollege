@@ -201,7 +201,7 @@
                 </div>
                 <div>
                 {% if imgs %}              
-                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <div id="carousel-example-generic" class="carousel slide">
                   <!-- Indicators -->
                   <ol class="carousel-indicators">
                     {% for img in imgs %}
@@ -424,7 +424,15 @@
                                         {{field}}
                                         </div>
                                     </td>
-                                    <td><p class='text-left'>{{field.help_text}}</p></td>
+                                    <td>
+                                        <p class='text-left'>
+                                        {{field.help_text}}
+                                        {% ifequal forloop.counter0 2 %}
+                                            <a class='hand_over' data-toggle="modal" data-target="#guide_to_price">
+                                            定价规范（必读）</a>
+                                        {% endifequal %}
+                                        </p>
+                                    </td>
                                 </tr>
                             {% endfor %}
 
@@ -715,6 +723,36 @@
           </div>         
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="guide_to_price" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div id='' class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="">定价规范</h4>
+          </div>
+          <div class="modal-body">
+             <div>
+                <p class='text-info'>请务必遵守一下定价规范（否则将不予通过）：</p>
+                <p>
+                    <ul>
+                        <li>老师给的资料，如课件包、复习PPT等，定价应<20</li>
+                        <li>自己整理的资料，如复习资料、实验报告等，定价应<40</li>
+                        <li>自己整理的资料+考试标注，定价应<70</li>
+                        <li>对于考试真题（无论是不是老师给的），定价<100</li>
+                    </ul>
+                </p>
+                <P class='text-danger'>ps:考试标注即为在考试后将考到的知识点标在资料上，格式为红色字体，年级+题型，题型缩写为T（填空）、P（判断）……依次类推。
+                如2011 T(意为该知识点在2011级考题的填空题出现）</p>
+             </div>
+             <div class='modal_button_alone'>                
+                 <button  type="button" data-dismiss="modal" class="btn btn-block btn-success" >同意</button>
+             </div>
+          </div>
+          
+       </div><!-- /.modal-content -->
+     </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 {% endblock %}
 

@@ -152,9 +152,9 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
         elif reveal_num == this_eot.reveal.give_paper_num:
             reveal_message = u"通过给‘模拟题’"
         elif reveal_num == this_eot.reveal.nothing_num:
-            reveal_message = u'基本不透题'
+            reveal_message = u'不透题或透题非常不给力'
         else:
-            reveal_message = u'其他泄题方式'
+            reveal_message = u'其他给力透题方式'
         
         usual_work_num = compare_3(this_eot.usual_work.less_num, 
             this_eot.usual_work.some_num, this_eot.usual_work.more_num)

@@ -28,9 +28,9 @@ class Eot_dataForm(forms.ModelForm):
     price_num = forms.IntegerField(
         required=True,
         label=u'资料定价',
-        max_value=40,
+        max_value=100,
         min_value=0,
-        help_text=u'填整数。对于单个文件，不推荐价格超过10易币；对于内涵多个文件如课件包，推荐价格超过35易币',
+        help_text=u'填整数。',
         widget=forms.TextInput(attrs={'size':'3'}),
         error_messages={
             'required': u'你还没有为资料定价，如果你希望资料免费，你可以填0',
