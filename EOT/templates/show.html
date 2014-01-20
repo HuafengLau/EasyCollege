@@ -383,7 +383,15 @@
                                     <p class="text-left show_p"><span>期末考难度</span><span class='font-red'>*</span></p>
                                 </div>
                                 <div class="alert alert-info show_div">
-                                    <p class='text-center'>{{final_test_degree_message}}</p>
+                                    <p class='text-center'>{{final_test_degree_percent|floatformat}}</p>
+                                </div>                                   
+                            </td>
+							<td>
+                                <div class="alert alert-warning show_div">
+                                    <p class="text-left show_p"><span>挂科统计</span><span class='font-red'>*</span></p>
+                                </div>
+                                <div class="alert alert-info show_div">
+                                    <p class='text-center'>{{dead_message}}&nbsp;（{{this_eot.dead_num}}&nbsp;/&nbsp;{{this_eot.value_num}}）</p>
                                 </div>                                   
                             </td>
                             <td>

@@ -81,7 +81,10 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
         else:
             percent = float(this_eot.atmosphere.active_num) / num_all
             atmosphere_message = u'较活跃或很活跃（%.0f%%）'% (percent*100)
-            
+                  
+        percent = this_eot.dead_num / float(this_eot.value_num)
+        dead_message = u'%.0f%%'% (percent*100)
+        
         teach_way_num = compare_4(this_eot.teach_way.PPT_num,this_eot.teach_way.book_num,
             this_eot.teach_way.teacher_num, this_eot.teach_way.hybrid_num)
         if teach_way_num == this_eot.teach_way.PPT_num:
@@ -131,19 +134,9 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
             final_test_way_message = u'布置任务，私下完成后提交'
         else:
             final_test_way_message = u'其他考察方式' 
-        
-        final_test_degree_num = compare_3(this_eot.final_test_degree.hard_num,
-            this_eot.final_test_degree.soso_num, this_eot.final_test_degree.easy_num)
-        num_all = this_eot.final_test_degree.hard_num+this_eot.final_test_degree.soso_num+this_eot.final_test_degree.easy_num
-        if final_test_degree_num == this_eot.final_test_degree.hard_num:
-            percent = float(this_eot.final_test_degree.hard_num) / num_all
-            final_test_degree_message = u'较难或很难（%.0f%%）'% (percent*100) 
-        elif final_test_degree_num == this_eot.final_test_degree.soso_num:
-            percent = float(this_eot.final_test_degree.soso_num) / num_all
-            final_test_degree_message = u'难度一般（%.0f%%）'% (percent*100)
-        else:
-            percent = float(this_eot.final_test_degree.easy_num) / num_all
-            final_test_degree_message = u'较简单（%.0f%%）'% (percent*100)
+
+        final_test_degree_percent = this_eot.final_test_degree / float(this_eot.value_num)
+
             
         reveal_num = compare_4(this_eot.reveal.draw_importence_num, this_eot.reveal.others_num,
             this_eot.reveal.give_paper_num, this_eot.reveal.nothing_num)
@@ -373,7 +366,7 @@ def value(request, credit_id):
     elif request.method == 'POST':
         lists = ['course_score','teacher_score', 'like_or_hate','naming','naming_way',
             'atmosphere','teach_way','popularity','mid_test','mid_test_way',
-            'usual_work','final_test_way','final_test_degree','reveal']
+            'usual_work','final_test_way','final_test_degree','reveal','if_dead']
         for list in lists:
             if not list in request.POST:
                 value_wrong_message = u'存在未填项，请填写完整后再提交！'
@@ -499,6 +492,10 @@ def value(request, credit_id):
                 this_eot.mid_test_way.inspect_num += 1
             this_eot.mid_test_way.save()
             
+            dead_choose = request.POST.get('if_dead')
+            if dead_choose == 'yes':
+                this_eot.dead_num += 1
+            
             final_test_way_choose = request.POST.get('final_test_way')
             if final_test_way_choose == 'paper_num':
                 this_eot.final_test_way.paper_num += 1
@@ -511,13 +508,7 @@ def value(request, credit_id):
             this_eot.final_test_way.save()
             
             final_test_degree_choose = request.POST.get('final_test_degree')
-            if final_test_degree_choose == 'hard_num':
-                this_eot.final_test_degree.hard_num += 1
-            elif final_test_degree_choose == 'soso_num':
-                this_eot.final_test_degree.soso_num += 1
-            else:
-                this_eot.final_test_degree.easy_num += 1
-            this_eot.final_test_degree.save()
+            this_eot.final_test_degree += int(final_test_degree_choose)
             
             reveal_choose = request.POST.get('reveal')
             if reveal_choose == 'draw_importence_num':
@@ -788,26 +779,7 @@ def value(request, credit_id):
                     inspect_num =1
                 )
             this_Eot_final_test_way.save()
-            final_test_degree_choose = request.POST.get('final_test_degree')
-            if final_test_degree_choose == 'hard_num':
-                this_Eot_final_test_degree = Eot_final_test_degree(
-                    hard_num = 1,
-                    soso_num = 0,
-                    easy_num = 0
-                )
-            elif final_test_degree_choose == 'soso_num':
-                this_Eot_final_test_degree = Eot_final_test_degree(
-                    hard_num = 0,
-                    soso_num = 1,
-                    easy_num = 0
-                )
-            else:
-                this_Eot_final_test_degree = Eot_final_test_degree(
-                    hard_num = 0,
-                    soso_num = 0,
-                    easy_num = 1
-                )
-            this_Eot_final_test_degree.save()
+            
             reveal_choose = request.POST.get('reveal')
             if reveal_choose == 'draw_importence_num':
                 this_Eot_reveal = Eot_reveal(
@@ -862,6 +834,12 @@ def value(request, credit_id):
                 this_college = university_info.college
             else:
                 this_college = u'选修学院'
+            
+            dead_choose = request.POST.get('if_dead')
+            if dead_choose == 'yes':
+                this_dead_num = 1
+            else:
+                this_dead_num = 0
             this_eot = Eot(
                 course = credit.course_name,
                 teacher = credit.course_teacher,
@@ -876,6 +854,7 @@ def value(request, credit_id):
                 hate_num = hate,
                 middle_num = middle,
                 recommend_num = recommend,
+                dead_num = this_dead_num,
                 
                 naming = this_Eot_naming,
                 naming_way = this_Eot_naming_way,
@@ -886,7 +865,7 @@ def value(request, credit_id):
                 mid_test = this_Eot_mid_test,
                 mid_test_way = this_Eot_mid_test_way,
                 final_test_way = this_Eot_final_test_way,
-                final_test_degree = this_Eot_final_test_degree,
+                final_test_degree = request.POST.get('final_test_degree'),
                 reveal = this_Eot_reveal,
                 usual_work = this_Eot_usual_work,
             )

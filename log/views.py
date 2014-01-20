@@ -125,14 +125,19 @@ def deal_register(request):
         
     
 def register(request):
-     if request.method == 'POST': 
+    if request.method == 'POST': 
         if 'stu_ID' in request.POST:
             if request.POST['school'] == u'四川大学':
-                if not judge(request.POST['stu_ID'],request.POST['stu_pwd']):              
-                    register_message = u'学生系统账号或密码错误！抱歉，您可能需要重新填写注册表单'
-                    return render_to_response('register.html',locals(),context_instance=RequestContext(request))                   
-                else:
-                    return deal_register(request)
+                try:
+                    test_answer = judge(request.POST['stu_ID'],request.POST['stu_pwd'])
+                    if not test_answer:
+                        register_message = u'学生系统账号或密码错误！抱歉，您可能需要重新填写注册表单'
+                        return render_to_response('register.html',locals(),context_instance=RequestContext(request))
+                    else:
+                        return deal_register(request)
+                except:
+                    register_message = u'运气太差！访问川大教务系统被拒绝，建议使用校园网或者攒人品稍候再试。'
+                    return render_to_response('register.html',locals(),context_instance=RequestContext(request))               
             else:
                 return deal_register(request)
     

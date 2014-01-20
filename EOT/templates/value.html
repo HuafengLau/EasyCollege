@@ -317,22 +317,36 @@
                         </div>
                     </td>
                     <td>
-                        <div class='pull-left'>
-                           <label>期末考难度<span class='font-red'>*</span></label>
+                        <div>
+                           <label class='pull-left'>期末考难度（10分为艰难）<span class='font-red'>*</span></label>                        
+                           <div class='clear_both'>
+                            <select class='two_of_three' name='final_test_degree'>
+                              <option value='1'>1</option>
+                              <option value='2'>2</option>
+                              <option value='3'>3</option>
+                              <option value='4'>4</option>
+                              <option value='5'>5</option>
+                              <option value='6'>6</option>
+                              <option value='7'>7</option>
+                              <option value='8'>8</option>
+                              <option value='9'>9</option>
+                              <option value='10'>10</option>
+                            </select>
+                            </div>
+                            <p>&nbsp;</p>
                         </div>
-                        <div class='btn-group' data-toggle='buttons'>  
-                            <label class='btn btn-default form-control btn-myui'>
-                                <input type='radio' name='final_test_degree' id='' value='hard_num'>
-                               较难或很难
-                            </label>
-                            <label class='btn btn-default form-control btn-myui'>
-                                <input type='radio' name='final_test_degree' id='' value='soso_num'>
-                                难度一般
-                            </label>
-                            <label class='btn btn-default form-control btn-myui'>
-                                <input type='radio' name='final_test_degree' id='' value='easy_num'>
-                                &nbsp;较简单&nbsp;
-                            </label>
+                        <div>
+                            <label class='pull-left'>是否挂科(仅做统计使用）<span class='font-red'>*</span></label>
+                            <div class='btn-group' data-toggle='buttons'>  
+                                <label class='btn btn-default form-control btn-myui'>
+                                    <input type='radio' name='if_dead' id='' value='yes'>
+                                    不幸躺枪
+                                </label>
+                                <label class='btn btn-default form-control btn-myui'>
+                                    <input type='radio' name='if_dead' id='' value='no'>
+                                    顺利通过
+                                </label>
+                            </div>
                         </div>
                     </td>
                     <td>

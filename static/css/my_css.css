@@ -112,6 +112,11 @@ div.transp { /* make the div translucent */
     width: 25%;
     margin-right: 2%;
 }
+
+ .two_of_three{
+    width: 35%;
+
+}
  
 .label_group { padding-right: 10%; }
 

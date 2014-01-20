@@ -13,7 +13,7 @@ class TeacherAdmin(admin.ModelAdmin):
 class EotAdmin(admin.ModelAdmin):
     """docstring for EotAdmin"""
     list_display = ('university','college','course', 'teacher', 'value_num',
-        'course_avg_score','teacher_avg_score','history_avg_score','like_num','middle_num',
+        'course_avg_score','teacher_avg_score','history_avg_score','like_num','middle_num','dead_num',
         'hate_num','recommend_num')
     list_filter = ('university',)
     ordering = ('university', )
@@ -64,10 +64,6 @@ class Eot_final_test_wayAdmin(admin.ModelAdmin):
     """docstring for Eot_final_test_wayAdmin"""
     list_display = ('paper_num', 'pravite_num', 'inspect_num')
 
-class Eot_final_test_degreeAdmin(admin.ModelAdmin):
-    """docstring for Eot_final_test_degreeAdmin"""
-    list_display = ('hard_num', 'soso_num', 'easy_num')
-
 class Eot_revealAdmin(admin.ModelAdmin):
     """docstring for Eot_revealAdmin"""
     list_display = ('draw_importence_num', 'give_paper_num', 'others_num','nothing_num') 
@@ -106,7 +102,6 @@ admin.site.register(Eot_teach_way, Eot_teach_wayAdmin)
 admin.site.register(Eot_popularity, Eot_popularityAdmin)
 admin.site.register(Eot_mid_test_way, Eot_mid_test_wayAdmin)
 admin.site.register(Eot_final_test_way, Eot_final_test_wayAdmin)
-admin.site.register(Eot_final_test_degree, Eot_final_test_degreeAdmin)
 admin.site.register(Eot_reveal, Eot_revealAdmin)
 admin.site.register(Eot_usual_work, Eot_usual_workAdmin)
 admin.site.register(Eot_mid_test, Eot_mid_testAdmin)

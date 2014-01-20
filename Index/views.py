@@ -18,6 +18,7 @@ import random
 from datetime import datetime
 from EOT.models import Eot_data
 import time
+import urllib2
 
 
 def display(request,user,message,HTML):                  
