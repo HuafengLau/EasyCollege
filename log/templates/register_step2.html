@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}大学易 —— 注册{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block welcome %}
+{% endblock %} 
+
+{% block mainbody %}
+<div class='container'>
+	<h2>只需3步，选课、期末 So easy!</h2>
+	<div>
+		<table class='table table-bordered'>
+			<tr>
+				<th>&nbsp;&nbsp;&nbsp;&nbsp;完善基本资料&nbsp;<span class='glyphicon glyphicon-ok font-green'></span></th>
+				<th bgcolor='#f9c62c'><span class='glyphicon glyphicon-hand-right font-green'></span>&nbsp;&nbsp;&nbsp;&nbsp;激活账号</th>
+				<th><span class='glyphicon glyphicon-hand-right'></span>&nbsp;&nbsp;&nbsp;&nbsp;添加课程信息</th>							
+			</tr>
+		</table>
+		<p>---------------------------------------------------------------------------------------------------
+		----------------------------------------------------------------</p>
+	</div>
+	<div>
+		<p class='text-center'>感谢您注册大学易，我们已经发了一封激活邮件至您的邮箱 <strong>{{email}}</strong>，点击对应链接后即可激活账号</p>
+		<p class='text-center'>
+			ps.一周内未激活的账户将被自动删除
+		</p>
+	</div>
+	<div>
+		{% if email_add %}
+		<a href='{{email_add}}'><button class='btn btn-success register-next-btn'>进入邮箱</button></a>
+		{% endif %}
+	</div>
+{% endblock %}

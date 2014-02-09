@@ -9,7 +9,7 @@
 {% block mainbody %}
 <div class='last_right_div'>
     <div id='index_up'>
-        <div id='index_upleft'>
+        <div id='index_upleft' class='pull-left' >
             <table>
                 <tr> 
                     <td id='avtar_td'>
@@ -30,7 +30,10 @@
                             </td>
                           </tr>
                           <tr>
-                            <td>等级</td><td><div class='pull-left'>平民</div></td>
+                            <td>等级</td><td><div class='pull-left'>
+								{% for info in user.user_info_set.all %}
+									{{ info.grade }}
+								{% endfor %}</div></td>
                           </tr>
                           <tr>
                             <td>永载史册</td><td><div class='pull-left'>{{user.first_value}}次</div></td>
@@ -58,10 +61,15 @@
                 </tr>
             </table>
         </div>
-        <div id='index_upright'>
+        <div id='index_upright' class='pull-left'>
+			{% if user.honour_set.all %}
+				{% for honour in user.honour_set.all %}
+					<img width='55px' src='{{STATIC_URL}}img/honour/{{honour.img}}'/>
+				{% endfor %}
+			{% endif %}
         </div>
     </div>
-    <div class='' id='index_down'>
+    <div class='clear_both' id='index_down'>
         <div id='index_downleft' class='pull-left'>
             <div>            
                 <div id='index_credit_head' class="alert alert-info">                                
@@ -71,7 +79,12 @@
                     {% if message %}
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <strong>智能添加：</strong><span class='font-red'>{{ message}}</span>
+                            <strong>Message：</strong><span class='font-red'>{{ message}}</span>
+							{% if no_refresh %}
+								<p><strong>Warning：</strong>
+								当前请不要刷新页面或者点击下一页，否者会造成数据的重复提交而引发错误！转到任意页面并返回后可恢复正常。
+								</p>
+							{% endif %}
                         </div>
                     {% endif %}
                     <div id='index_credit_div' >
@@ -87,9 +100,9 @@
                             {% for credit in credits %}
                             <tr>
                                 <td><a href='/eot/showcredit/{{credit.id}}/'>{{ credit.course_name }}</a></td>
-                                <td class='td_teacher' id='{{credit.id}}'>
+                                <td id='{{credit.id}}'>
                                     {% ifequal credit.add_money 0 %}
-                                    <button class='btn btn_edit_teacher'>                           
+                                    <button class=' btn btn_edit_teacher'>                           
                                         {% if credit.course_teacher %}
                                             {{ credit.course_teacher }}
                                         {% else %}
@@ -99,8 +112,24 @@
                                     {% else %}
                                         {{ credit.course_teacher }}
                                     {% endifequal %}
-                                </td>
-                                <td>{{ credit.course_attr }}</td>
+                                </td>                               
+								{% ifequal this_school_code 'jxufe' %}
+									{% ifequal credit.add_money 0 %}
+										<td id='{{credit.id}}a' data-toggle="tooltip" title="填必修或非必修" class='tooltip_th'>
+											<button class='btn btn_edit_attr'>                           
+												{% ifequal credit.course_attr '' %}
+													+
+												{% else %}
+													{{ credit.course_attr }}
+												{% endifequal %}
+											</button>
+										</td>
+									{% else %}
+										<td>{{ credit.course_attr }}</td>
+									{% endifequal %}
+								{% else %}
+									<td>{{ credit.course_attr }}</td>
+								{% endifequal %}
                                 <td class='num_credit_1'>{{ credit.course_credit }}</td>
                                 <td>{{ credit.course_score }}</td>
                                 <td>
@@ -116,8 +145,8 @@
                         </table>
                     </div>
                 {% else %}
-                 <p class='text-info text-center'>暂时没有发现相关数据，这可能是由于你刚上大一。如果不是此原因，请联系管理员
-                 collegeyi@sina.com</p>
+				 <p>&nbsp;<p/>
+                 <p class='text-info text-center'>你还没有添加课程数据，赶快添加吧！</p>
                 {% endif %}
             </div>
             {% if credits %}
@@ -143,6 +172,52 @@
               </ul>
             </div>
             {% endif %}
+			{% ifequal school_type 'URP' %}
+			<div class='clear_both'>
+				<button class='btn' id='URP_btn'>访问数据库，更新课程信息</button>				
+				<div id='URP_form'>
+					<p class='text-danger'>如果您是大一上学期，数据库中还没有您的数据，请勿使用此功能。</p>
+					<p>输入您学生教务系统的账号和密码，大学易将为您抓取新的课程数据。ps.大学易不会保存您的账号和密码</p>
+					<form class='form-group' action='/index/URP_getCredit/' method='POST' autocomplete="on"> 
+						{% csrf_token %}
+						<div class='form-group'>
+							<label>账号</label>
+							<input type="text"  class='form-control width_20' id='getCredit_zh' name='zh' placeholder="" required>
+						</div>
+						<div class='form-group'>
+							<label>密码</label>
+								<input type="password"  class='form-control width_20' id='getCredit_mm' name='mm' placeholder="" required>
+							<span id='register_check_URP'></span>
+						</div>			
+						<div class='form-inline'>
+							<button class="btn btn-block btn-success register-next-btn" id='register_btn' type="submit">提交</button>
+							
+						</div>
+						
+					</form>
+				</div>
+			</div>
+			{% endifequal %}			
+			{% ifequal school_type 'wise' %}
+			<div class='clear_both'>
+				<button class='btn' id='wise_btn'>上传源代码文件，更新课程信息</button>
+				<div id='wise_form'>
+					<p>上传符合要求的带有期末成绩的源代码页面，大学易即会分析获取新的课程数据。</p>
+					<p>&nbsp;</p>
+					<h4>上传网页源代码文件</h4>
+					<div>
+						<form role="form" id='' class='' action='/index/wise_getCredit/{{this_school_code}}/' enctype="multipart/form-data" method='POST'> 
+							{% csrf_token %}
+							<input type="file"  class='pull-left' id='getCredit_file' name='credit_file' required>
+							<button class="pull-left" id='uploadCreditFile_btn' type="submit">提交</button>
+						</form>				
+					</div>
+					<div class='clear_both' id='div_guideToCreditFile'>
+						<p><a target='_blank' href='/business/guide/getCreditFile/{{this_school_code}}/'>『{{school}}』的学生如何获取符合要求的源代码文件？（新手必读）</a></p>
+					</div>
+				</div>
+			</div>
+			{% endifequal %}
             
         </div>
         <div id='index_downright' class='pull-right'>
@@ -206,7 +281,7 @@
       <div class="modal-body">
           <div id='modal_table_wise_div'>
                <p class="text-primary">
-                    &nbsp;&nbsp;&nbsp;&nbsp;点击对应课程中的+号项即可为课程添加任课老师。                   
+                    &nbsp;&nbsp;&nbsp;&nbsp;点击对应课程中的+号项即可为课程添加任课老师，对于外籍教师，除非有公认的中文名，否则应该填写英文名全称。                   
                     如果您误写了任课老师的名字，在未评教前，您可以点击对应的老师来更改。
                     在评教后，您将无法再更改任课老师。
                </p>

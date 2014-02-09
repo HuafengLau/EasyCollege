@@ -6,7 +6,7 @@ from Business.models import Credit, Major_course
 
 class CreditAdmin(admin.ModelAdmin):
     """docstring for CreditAdmin"""
-    list_display = ('user', 'grade', 'course_name', 'add_money')
+    list_display = ('user', 'university_info_id', 'course_name', 'add_money')
     list_filter = ('user', 'grade')
     ordering = ('user', 'grade')
     

@@ -5,6 +5,14 @@
  {{this_course}} - 课程信息 - 大学易
 {% endblock %}
 
+{% block moreStyle %}
+<meta name = "viewport" content = "initial-scale = 1, user-scalable = no">
+<script src="{{STATIC_URL}}js/Chart.min.js"></script>
+<style>
+	canvas{
+	}
+</style>
+{% endblock %}
 
 {% block eotleftup %}
     <div id='back_btn_div'>
@@ -106,10 +114,64 @@
                             </td>
                             <td>                                   
                                 <button type="button" class="btn btn-link">
-                                    <span class='font-black'>期末历史平均分：&nbsp;</span><span>{{this_eot.history_avg_score|floatformat}}</span>
+                                    <span class='font-black'>期末历年平均分：&nbsp;</span><span>{{this_eot.history_avg_score|floatformat}}</span>
                                 </button>
                             </td>
                         </tr>
+						<tr>
+							<td colspan='3'>
+								<div>
+									<p><strong>历年期末成绩分布图</strong></p>
+									<p><span><a class='pull-right' target='_blank' href='http://www.zhihu.com/question/22481393'>
+										<small>大学成绩要求正态分布合理吗？</small></a></span>
+									</p>
+									<canvas id="canvas" height="250" width="700"></canvas>
+									<script>
+										var barChartData = {
+											labels : ["< 55","55~60","60~65","65~70","70~75","75~80","80~85","85~90","90~95","95~100"],
+											datasets : [
+												{
+													fillColor : "#2a6ef7",
+													strokeColor : "rgba(151,187,205,1)",
+													data : {{score_list}}
+												}
+											]
+											
+										}
+										
+										var option = {			
+											scaleOverlay : true,
+											scaleOverride : true,
+											scaleSteps : {{steps}},
+											scaleStepWidth : 1,
+											scaleStartValue : 0,
+											scaleLineColor : '#f70707',
+											scaleLineWidth : 3,
+											scaleShowLabels : true,			
+											scaleLabel : "<%=value%>",
+											scaleFontFamily : "'Arial'",
+											scaleFontSize : 15,
+											scaleFontStyle : "normal",
+											scaleFontColor : "red",
+											scaleShowGridLines : true,
+											scaleGridLineColor : "#bab8b8",
+											scaleGridLineWidth : 1,	
+											barShowStroke : true,
+											barStrokeWidth : 2,			
+											barValueSpacing : 61,			
+											barDatasetSpacing : 0,			
+											animation : true,
+											animationSteps : 360,
+											animationEasing : "easeOutQuart",
+											onAnimationComplete : null,
+
+										}
+
+									var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Bar(barChartData,option);
+								</script>
+								</div>
+							</td>
+						</tr>
                     </table>
                 </div>
             </div>            
@@ -199,7 +261,7 @@
                     </table>
                     
                 </div>
-                <div>
+            </div>
                 {% if imgs %}              
                 <div id="carousel-example-generic" class="carousel slide">
                   <!-- Indicators -->
@@ -244,7 +306,7 @@
                     </div>
                 {% endif %}
                 </div>
-            </div>            
+                       
         </div>
         <div id='show_renqi_div' class='panel panel-danger'>
             <div id='heading_renqi' class="panel-heading">课程人气</div>
@@ -573,16 +635,26 @@
                                     <div>
                                         {% ifequal comment.user.avatar 'img/avatar.png' %}
                                             <div class='pull-left show_comment_img_div'>
-                                                <img src='{{STATIC_URL}}img/avatar.png/' width='35px' height='35px' class="img-responsive img-circle" alt='用户头像' />
-                                            </div>
+                                                <img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='35px' class="img-responsive img-circle" alt='用户头像' />
+												{% for info in user.user_info_set.all %}<span>{{ info.grade }}</span>{% endfor %}
+											</div>
                                         {% else %}
                                             <div class='pull-left show_comment_img_div'>
-                                                <img src='{{MEDIA_URL}}{{comment.user.avatar}}' width='35px' height='35px' class="img-responsive img-circle" alt='用户头像'/>
-                                            </div>
+                                                <img src='{{MEDIA_URL}}{{comment.user.avatar}}' width='40px' height='35px' class="img-responsive img-circle" alt='用户头像'/>
+												
+											</div>
                                         {% endifequal %}
+										
+											
+										
                                         <div class='show_comment_user_div'>
                                             <a>{{comment.user.nic_name}}</a>&nbsp;&nbsp;
                                             <span class='show_comment_time_span'>评论于&nbsp;{{comment.time|date:'Y-m-d'}}</span>
+											{% if user.honour_set.all %}
+												{% for honour in user.honour_set.all %}
+													<img width='35px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
+												{% endfor %}
+											{% endif %}
                                         </div>
                                     </div>
                                     <div class='show_coment_content_div'>

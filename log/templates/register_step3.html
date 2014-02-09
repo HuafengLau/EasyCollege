@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}大学易 —— 注册{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block welcome %}
+<ul class="nav navbar-nav navbar-right">
+</ul>
+{% endblock %} 
+
+{% block mainbody %}
+<div class='container'>
+	<h2>只需3步，选课、期末 So easy!</h2>
+	<div>
+		<table class='table table-bordered'>
+			<tr>
+				<th>&nbsp;&nbsp;&nbsp;&nbsp;完善基本资料&nbsp;<span class='glyphicon glyphicon-ok font-green'></span></th>
+				<th>&nbsp;&nbsp;&nbsp;&nbsp;激活账号&nbsp;<span class='glyphicon glyphicon-ok font-green'></span></th>
+				<th bgcolor='#f9c62c'><span class='glyphicon glyphicon-hand-right font-green'></span>&nbsp;&nbsp;&nbsp;&nbsp;添加课程信息</th>
+			</tr>
+		</table>
+		<p>------------------------------------------------------------------------------------------------------------------</p>
+	</div>
+	<div>
+		<p class='text-success'>您已经成功激活了账户！</p>
+		{% ifequal school_type 'URP' %}
+			<p>！我们已经为『{{school}}』开通了智能添加课程信息！</p>
+			<p>输入您学生教务系统的账号和密码，大学易将为您抓取相关数据。ps.大学易不会保存您的账号和密码</p>
+			<form class='form-group' action='/index/URP_getCredit/' method='POST' autocomplete="on"> 
+				{% csrf_token %}
+				<div class='form-group'>
+					<label>账号</label>
+					<input type="text"  class='form-control width_20' id='getCredit_zh' name='zh' placeholder="" required>
+				</div>
+				<div class='form-group'>
+					<label>密码</label>
+						<input type="password"  class='form-control width_20' id='getCredit_mm' name='mm' placeholder="" required>
+					<span id='register_check_URP'></span>
+				</div>			
+				<div class='form-inline'>
+					<button class="btn btn-block btn-success register-next-btn" id='register_btn' type="submit">提交</button>
+					<span><a href='/index/'>跳过此步骤（不推荐）</a></span>
+				</div>
+				
+			</form>
+		{% endifequal %}
+		{% ifequal school_type 'wise' %}
+			<p>恭喜！我们已经为『{{school}}』开通了半智能添加课程信息！</p>
+			<p>上传符合要求的带有期末成绩的源代码页面，大学易即会分析获取相关数据，从而免去了手工添加课程的麻烦。</p>
+			<p>&nbsp;</p>
+			<h4>上传网页源代码文件</h4>
+			<div>
+				<form role="form" id='' class='' action='/index/wise_getCredit/{{this_school_code}}/' enctype="multipart/form-data" method='POST'> 
+					{% csrf_token %}
+					<input type="file"  class='pull-left' id='getCredit_file' name='credit_file' required>
+					<button class="pull-left" id='uploadCreditFile_btn' type="submit">提交</button>
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/index/'>跳过此步骤（不推荐）</a></span>
+				</form>				
+			</div>
+			<div class='clear_both' id='div_guideToCreditFile'>
+				<p><a target='_blank' href='/business/guide/getCreditFile/{{this_school_code}}/'>『{{school}}』的学生如何获取符合要求的源代码文件？（新手必读）</a></p>
+			</div>
+		{% endifequal %}
+		{% ifequal school_type 'others' %}
+			<p>抱歉，{{school}}暂时不支持智能添加课程。进入大学易后，你可以『手工添加』课程信息。</p>
+			<p>纳尼？！你嫌麻烦不愿手工添加课程？</p>
+			<h4 class='font-red'>为你的学校开通『（半）智能』添加课程信息服务！</h4>
+			<p><strong>开通『智能』添加的条件：</strong></p>
+			<p class='text-info'>当前仅有URP学生教务系统（似下图）才能开通此服务，开通后提供账号和密码，大学易即可智能抓取课程信息。</p>
+			<img src='{{STATIC_URL}}img/URP.png' alt='URP学生教务系统'/>
+			<p>&nbsp;</p>
+			<p><strong>开通『半智能』添加：</strong></p>
+			<p class='text-info'>理论上说任何学校均可开通此服务（只是难易问题），开通后按要求上传带有期末成绩的页面，大学易即可分析获取课程信息。</p>
+			<p>&nbsp;</p>
+			<p>只要你的学校教务系统满足上述任一条件，即可发送邮件至 <strong>collegeyi@sina.com</strong>，邮件中须包括贵校的<strong>学生系统登录网址，您的账号和密码</strong>（作为测试）。</p>
+			
+			<p>智能添加服务将在一个工作日内完成测试，半智能服务将在1~3个工作日内完成测试。</p>
+			<p>&nbsp;</p>
+			<h4 class='font-red'>测试成功后不仅您的账户等级将从『平民』跃升至终极<strong>『开国功臣』</strong>，大学易还将奖励您<strong>200个易币</strong>用于下载各类期末、课程资料！</h4>
+			<div>
+				<a href='/index/'><button class='btn btn-success register-next-btn'>进入大学易</button></a>
+			</div>
+		{% endifequal %}
+	</div>
+{% endblock %}

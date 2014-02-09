@@ -11,7 +11,6 @@ from EOT.models import *
 from Center.models import User_info
 from University.models import University_info
 from Index.models import Avatar
-from Center.models import User_info
 from Affair.models import Report_eotData
 import random
 from django.core.urlresolvers import reverse 
@@ -39,6 +38,29 @@ def compare_3(a,b,c):
 def compare_4(a,b,c,d):
     temp = compare_3(a,b,c)
     return compare_2(temp, d)
+
+def judge_score(score):
+    if score < 55.0:
+        return 0
+    elif score < 60.0:
+        return 1
+    elif score < 65.0:
+        return 2
+    elif score < 70.0:
+        return 3
+    elif score < 75.0:
+        return 4
+    elif score < 80.0:
+        return 5
+    elif score < 85.0:
+        return 6
+    elif score < 90.0:
+        return 7
+    elif score < 95.0:
+        return 8
+    else:
+        return 9
+    
     
 def show(request,this_eot,no_eot, credit_id, **kwargs):
     if not no_eot:
@@ -218,13 +240,20 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
         
         imgs = Eot_img.objects.filter(eot=this_eot)
         
+        score_string = this_eot.score_list
+        score_list = score_string.split(';')
+        for index, item in enumerate(score_list):
+            score_list[index] = int(item)
+
+        max_num = max(score_list)
+        
+        steps = (max_num/5+1)* 5
+        
         user = request.user
         try: 
             this_user_info = User_info.objects.get(user=user)
             if this_user_info.store_eot:       
                 storeEot_list = this_user_info.store_eot.split(';')[:-1]
-                print storeEot_list
-                print this_eot.id
                 if u'%s' % this_eot.id in storeEot_list:
                     store_message = True
                 else:
@@ -234,11 +263,13 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
         except:
              this_user_info = User_info(
                 store_eot = '',
+                download_Eotdata = '',
+                nocomment_Eotdata = '',
+                grade = u'公民',
                 user = user
              )
              this_user_info.save()
              store_message = False
-        print store_message
         
     else:
         store_message = False
@@ -315,6 +346,7 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
     except:
         request.session['last_url'] = request.META['HTTP_REFERER']
         last_url = request.session['last_url']
+    
     
     return render_to_response('show.html',locals(),
         context_instance=RequestContext(request))
@@ -404,6 +436,15 @@ def value(request, credit_id):
                     this_eot.college = university_info.college
             
             value_num = this_eot.value_num
+            
+            list_string = this_eot.score_list
+            list = list_string.split(';')
+            index = judge_score(credit.course_score)
+            list[index] = '%s' % (int(list[index])+1)
+            list_string = ';'.join(list)
+            this_eot.score_list = list_string
+            
+            
             
             this_eot.value_num = value_num + 1
             
@@ -855,6 +896,7 @@ def value(request, credit_id):
                 middle_num = middle,
                 recommend_num = recommend,
                 dead_num = this_dead_num,
+                score_list = '0;0;0;0;0;0;0;0;0;0',
                 
                 naming = this_Eot_naming,
                 naming_way = this_Eot_naming_way,
@@ -869,6 +911,14 @@ def value(request, credit_id):
                 reveal = this_Eot_reveal,
                 usual_work = this_Eot_usual_work,
             )
+            this_eot.save()
+            
+            list_string = this_eot.score_list
+            list = list_string.split(';')
+            index = judge_score(credit.course_score)
+            list[index] = '%s' % (int(list[index])+1)
+            list_string = ';'.join(list)
+            this_eot.score_list = list_string
             this_eot.save()
                 
 
@@ -887,9 +937,9 @@ def value(request, credit_id):
             
         
         if First_3.objects.filter(eot=this_eot).count() < 100:
-            if First_3.objects.filter(eot=this_eot,lucky=1).count() < 6:
+            if First_3.objects.filter(eot=this_eot,lucky=1).count() < 10:
                 choice = random.randrange(1,100,1)
-                if choice < 7:
+                if choice < 10:
                     lucky = 1
                     user.first_value += 1
                 else:
@@ -1211,7 +1261,8 @@ def downloadfile(request,data_id,path):
             store_eot = '',
             user = user,
             download_Eotdata = '',
-            nocomment_Eotdata = ''
+            nocomment_Eotdata = '',
+            grade = u'公民'
         )
         this_user_info.save()
         
@@ -1273,7 +1324,8 @@ def showcomment(request,Eotdata_id):
             store_eot = '',
             user = user,
             download_Eotdata = '',
-            nocomment_Eotdata = ''
+            nocomment_Eotdata = '',
+            grade = u'公民'
         )
         this_user_info.save()
     
@@ -1358,11 +1410,14 @@ def store_eot(request):
             try: 
                 this_user_info = User_info.objects.get(user=user)
             except:
-                 this_user_info = User_info(
+                this_user_info = User_info(
                     store_eot = '',
-                    user = user
-                 )
-                 this_user_info.save()
+                    user = user,
+                    download_Eotdata = '',
+                    nocomment_Eotdata = '',
+                    grade = u'公民'
+                )
+                this_user_info.save()
             this_user_info.store_eot += '%s;' % id
             this_user_info.save()
             return render_to_response('store_eot.html',locals(),

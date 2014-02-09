@@ -14,7 +14,7 @@ class EotAdmin(admin.ModelAdmin):
     """docstring for EotAdmin"""
     list_display = ('university','college','course', 'teacher', 'value_num',
         'course_avg_score','teacher_avg_score','history_avg_score','like_num','middle_num','dead_num',
-        'hate_num','recommend_num')
+        'hate_num','recommend_num','score_list')
     list_filter = ('university',)
     ordering = ('university', )
     

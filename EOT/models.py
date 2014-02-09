@@ -151,14 +151,17 @@ class Eot(models.Model):
     university = models.CharField(max_length=30,null=True,verbose_name=u'学校')
     college = models.CharField(max_length=30,null=True,verbose_name=u'学院')
     value_num = models.IntegerField(default=0,null=True,verbose_name=u'评价人数')
-    course_avg_score = models.FloatField(verbose_name=u'课程评分',null=True,blank=True,)
-    teacher_avg_score = models.FloatField(verbose_name=u'老师评分',null=True,blank=True,)
+    course_avg_score = models.FloatField(verbose_name=u'课程评分',null=True,blank=True)
+    teacher_avg_score = models.FloatField(verbose_name=u'老师评分',null=True,blank=True)
     history_avg_score = models.FloatField(null=True, verbose_name=u'历史平均分')
     like_num = models.IntegerField(default=0,null=True,blank=True,verbose_name=u'好评')
     hate_num = models.IntegerField(default=0,null=True,blank=True,verbose_name=u'差评')
     middle_num = models.IntegerField(default=0,null=True,blank=True,verbose_name=u'中评')
     recommend_num = models.IntegerField(default=0,null=True,blank=True,verbose_name=u'推荐')
     dead_num = models.IntegerField(default=0,null=True,blank=True,verbose_name=u'挂科人数')
+    
+    #attr = models.CharField(max_length=30,null=True,verbose_name=u'课程属性')
+    score_list = models.CharField(max_length=200,null=True,verbose_name=u'历年成绩数据')
     
     
     naming = models.ForeignKey(Eot_naming, null=True,blank=True,verbose_name=u'点名')

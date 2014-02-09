@@ -6,7 +6,85 @@ $(document).ready(function(){
     // JS for log.html
     
     // JS for register.html
-    
+    $("#register_sure_pwd").on('blur', function(){	
+		var pwd1 = $("#register_stu_pwd").val();
+		var pwd2 = $("#register_sure_pwd").val();
+		if (pwd2 != pwd1){
+			$('#register_check_pwd').html("<span class='glyphicon glyphicon-remove font-red'> 两次密码不一致！</span>");
+		}else{
+			$('#register_check_pwd').html("<span class='glyphicon glyphicon-ok font-green'> 两次密码一致</span>");
+		}
+	});
+	
+	$("#getCredit_mm").on('blur', function(){	
+		var zh = $("#getCredit_zh").val();
+		var mm = $("#getCredit_mm").val();
+		if (zh != '' && mm != ''){
+			$.get('/index/loading_gif/', {'loading':'true'}, function(data){
+                $('#register_check_URP').html(data);
+				$('#register_check_URP').append('<span>正在检测账号和密码</span>')
+			});
+			$.get('/index/verify_URP/', {'zh': zh,'mm':mm}, function(data){
+               $('#register_check_URP').html(data);
+            });
+		}
+		if (zh == '' && mm == ''){
+			$('#register_check_URP').html('');
+		}
+	});
+	
+	$("#getCredit_zh").on('blur', function(){	
+		var zh = $("#getCredit_zh").val();
+		var mm = $("#getCredit_mm").val();
+		if (zh != '' && mm != ''){
+			$.get('/index/loading_gif/', {'loading':'true'}, function(data){
+                $('#register_check_URP').html(data);
+				$('#register_check_URP').append('<span>正在检测账号和密码</span>')
+			});
+			$.get('/index/verify_URP/', {'zh': zh,'mm':mm}, function(data){
+                $('#register_check_URP').html(data);
+            });
+		}
+		if (zh == '' && mm == ''){
+			$('#register_check_URP').html('');
+		}
+	});
+	
+	$("#getCredit_mm").on('focus', function(){	
+		var zh = $("#getCredit_zh").val();
+		var mm = $("#getCredit_mm").val();
+		if (zh != '' || mm != ''){
+			$.get('/index/loading_gif/', {'loading':'true'}, function(data){
+                $('#register_check_URP').html(data);
+				$('#register_check_URP').append('<span>准备检测账号和密码</span>')
+			});
+		}
+	});
+	
+	$("#getCredit_zh").on('focus', function(){	
+		var zh = $("#getCredit_zh").val();
+		var mm = $("#getCredit_mm").val();
+		if (zh != '' || mm != ''){
+			$.get('/index/loading_gif/', {'loading':'true'}, function(data){
+                $('#register_check_URP').html(data);
+				$('#register_check_URP').append('<span>准备检测账号和密码</span>')
+			});
+		}
+	});
+	
+	
+	
+	$('#register_email').on('blur', function(){
+		var search_str = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+		var email_val = $("#register_email").val();
+		if(search_str.test(email_val)){
+			$.get('/log/verify_email/', {'email': email_val}, function(data){
+                $('#register_check_emial').html(data);
+            });
+		}else{
+			$('#register_check_emial').html("<span class='glyphicon glyphicon-remove font-red'> 请输入正确的邮箱地址</span>");
+		}
+	});
     // JS for center.html
     
     //JS for index.html
@@ -27,6 +105,27 @@ $(document).ready(function(){
             }
             else{             
                 $.post('/index/', {'course_id':id, 'teacher_name':name});
+                window.location.reload();   
+            }
+        });
+    });
+	
+	$('.btn_edit_attr').bind('click',function(){
+        
+        var id = $(this).parent().attr('id');     
+        html = $(this).detach();       
+        $('#'+id).html("<input class='input_add_attr' type='text' id='' name='teacher_attr' placeholder='填必修或非必修' autofocus>");
+               
+        $('#'+id).on('blur',".input_add_attr",function (){
+        
+            var name;
+            name = $(this).val();
+            if (name ==''){
+        
+                $(this).parent().html(html);
+            }
+            else{             
+                $.post('/index/', {'course_id':id, 'teacher_attr':name});
                 window.location.reload();   
             }
         });
@@ -327,6 +426,39 @@ $(document).ready(function(){
        else{
            $( "#img_form").hide();
            $(this).html('上传图片');
+       }
+    });
+	
+	$('#URP_btn').on('click', function(){
+       if ($( "#URP_form").is(":hidden")){
+           $( "#URP_form").show();
+           $(this).html("<span class='glyphicon glyphicon-arrow-up'></span>收起");
+       } 
+       else{
+           $( "#URP_form").hide();
+           $(this).html('访问数据库，更新课程信息');
+       }
+    });
+	
+	$('#wise_btn').on('click', function(){
+       if ($( "#wise_form").is(":hidden")){
+           $( "#wise_form").show();
+           $(this).html("<span class='glyphicon glyphicon-arrow-up'></span>收起");
+       } 
+       else{
+           $( "#wise_form").hide();
+           $(this).html('上传源代码文件，更新课程信息');
+       }
+    });
+	
+	$('#other_btn').on('click', function(){
+       if ($( "#other_form").is(":hidden")){
+           $( "#other_form").show();
+           $(this).html("<span class='glyphicon glyphicon-arrow-up'></span>收起");
+       } 
+       else{
+           $( "#other_form").hide();
+           $(this).html('为你的学校开通智能添加课程信息服务！');
        }
     });
     

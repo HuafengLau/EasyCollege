@@ -74,7 +74,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.stu_ID
         
     def __unicode__(self):
-        return self.stu_ID
+        return self.email
     
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"

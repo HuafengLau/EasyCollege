@@ -1,0 +1,2391 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>个人成绩查询</title>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <!-- Mimic Internet Explorer 7 -->
+      <meta http-equiv="X-UA-Compatible" content="IE=7"> <!-- IE7 mode -->
+    <link href="/academic/styles/default/css/text.css" rel="stylesheet" type="text/css">
+    <link href="/academic/styles/default/css/main.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" language="javascript" src="/academic/styles/js/jquery.js" ></script>
+    <script type="text/javascript" language="javascript" src="/academic/styles/js/function.js" ></script>
+    <script type="text/javascript" language="javascript" src="/academic/styles/js/common.js" ></script>
+    <script type="text/javascript" language="javascript" src="/academic/styles/js/selectDate.js" ></script>
+    <script type="text/javascript" language="javascript" src="/academic/styles/js/selectTime.js" ></script>
+    <script type="text/javascript" language="javascript" src="/academic/styles/default/js/page.js" ></script>
+
+    <script type="text/javascript" language="javascript" src="/academic/styles/js/selectDateTime.js" ></script>
+       <script type="text/javascript" language="javascript" src="/academic/styles/js/j_common.js" ></script>
+
+      
+
+      <!--[if lt IE 7]>
+
+      <script src="/academic/styles/js/jquery.bgiframe.min.js" type="text/javascript"></script>
+      <![endif]-->
+
+  </head>                                
+  <body>
+    <center>
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    function sort(sortColumnValue) {
+        document.form1.sortColumn.value = sortColumnValue;
+        document.form1.submit();
+    }
+
+</script>
+
+
+<div class="title"><span class="left"><em>
+
+    个人成绩查询
+
+
+</em></span> <span class="right">&nbsp;</span></div>
+
+
+<form name="form1" method="post" action="">
+    <table class="form" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                学年
+                <select name="year">
+                    <option value="">
+                        全部
+                    </option>
+                    
+                    <option value="33" selected>2013
+                    </option>
+                    
+                    <option value="28" >2008
+                    </option>
+                    
+                    <option value="29" >2009
+                    </option>
+                    
+                    <option value="30" >2010
+                    </option>
+                    
+                    <option value="31" >2011
+                    </option>
+                    
+                    <option value="32" >2012
+                    </option>
+                    
+                    <option value="34" >2014
+                    </option>
+                    
+                    <option value="35" >2015
+                    </option>
+                    
+                    <option value="36" >2016
+                    </option>
+                    
+                    <option value="37" >2017
+                    </option>
+                    
+                    <option value="38" >2018
+                    </option>
+                    
+                    <option value="39" >2019
+                    </option>
+                    
+                    <option value="40" >2020
+                    </option>
+                    
+
+                </select></td>
+            <td>
+                学期
+                <select name="term">
+                    <option value="">
+                        全部
+                    </option>
+                    
+                    <option value="3" >秋
+                    </option>
+
+                    
+                    <option value="1" >春
+                    </option>
+
+                    
+                    <option value="2" >夏
+                    </option>
+
+                    
+                </select></td>
+
+            <td><input type="checkbox" name="failedStatus" value="1" />
+                未通过课程
+            </td>
+
+            <td><input type="checkbox" name="maxStatus" value="1" />
+                最高分
+            </td>
+
+            <td>
+                <input name="para" type="hidden" id="para" value="0"/>
+
+                <input name="sortColumn" type="hidden" id="sortColumn" value=""/>
+                <input type="submit" name="Submit" class="button" value="查询">
+            </td>
+        </tr>
+    </table>
+</form>
+
+<br>
+
+<table width="100%" class="datalist">
+
+    <tr>
+        
+
+        
+        <th>
+            
+            
+            学年
+            
+        </th>
+        
+        <th>
+            
+            
+            学期
+            
+        </th>
+        
+        <th>
+            
+            
+            课程号
+            
+        </th>
+        
+        <th>
+            
+            
+            课程名
+            
+        </th>
+        
+        <th>
+            
+            
+            课序号
+            
+        </th>
+        
+        <th>
+            
+            
+            平时
+            
+        </th>
+        
+        <th>
+            
+            
+            期中
+            
+        </th>
+        
+        <th>
+            
+            
+            期末
+            
+        </th>
+        
+        <th>
+            
+            
+            实验
+            
+        </th>
+        
+        <th>
+            
+            
+            口语
+            
+        </th>
+        
+        <th>
+            
+            
+            总评
+            
+        </th>
+        
+        <th>
+            
+            
+            学分
+            
+        </th>
+        
+        <th>
+            
+            
+            学时
+            
+        </th>
+        
+        <th>
+            
+            
+            考核方式
+            
+        </th>
+        
+        <th>
+            
+            
+            选课属性
+            
+        </th>
+        
+        <th>
+            
+            
+            备注
+            
+        </th>
+        
+        <th>
+            
+            
+            考试性质
+            
+        </th>
+        
+        <th>
+            
+            
+            是否缓考
+            
+        </th>
+        
+        <th>
+            
+            
+            二学位/辅修
+            
+        </th>
+        
+        <th>
+            
+            
+            及格标志
+            
+        </th>
+        
+    </tr>
+
+
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>02063
+        </td>
+        
+        <td>植物保护学
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>93.3
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>79.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>83.0
+        </td>
+        
+        <td>2.5
+        </td>
+        
+        <td>56.0
+        </td>
+        
+        <td>考试
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>02073
+        </td>
+        
+        <td>植物保护学实习
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>90.0
+        </td>
+        
+        <td>97.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>94.0
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>03002
+        </td>
+        
+        <td>科研基本方法*
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>中等
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>16.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>03030
+        </td>
+        
+        <td>工程制图
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>80.0
+        </td>
+        
+        <td>90.0
+        </td>
+        
+        <td>85.0
+        </td>
+        
+        <td>88.33
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>87.0
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>64.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>03031
+        </td>
+        
+        <td>画法几何
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>90.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>59.0
+        </td>
+        
+        <td>89.38
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>71.0
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>64.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>03032
+        </td>
+        
+        <td>农业设施设计基础
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>97.6
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>78.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>86.0
+        </td>
+        
+        <td>5.0
+        </td>
+        
+        <td>80.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>03107
+        </td>
+        
+        <td>设施操作技能训练Ⅱ
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>优秀
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>优秀
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>16.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>05701
+        </td>
+        
+        <td>绘画
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>90.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>89.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>89.0
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>80.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>07076
+        </td>
+        
+        <td>工程测量（甲）
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>92.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>86.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>88.0
+        </td>
+        
+        <td>2.5
+        </td>
+        
+        <td>48.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>0710010239
+        </td>
+        
+        <td>测量实习(乙)
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>优秀
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>考查
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>12111
+        </td>
+        
+        <td>植物生理学实验
+        </td>
+        
+        <td>17
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>84.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>84.0
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>32.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>12144
+        </td>
+        
+        <td>植物生理学
+        </td>
+        
+        <td>5
+        </td>
+        
+        <td>95.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>72.5
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>77.0
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>48.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>14005
+        </td>
+        
+        <td>形势与政策
+        </td>
+        
+        <td>7
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>良好
+        </td>
+        
+        <td>2.0
+        </td>
+        
+        <td>32.0
+        </td>
+        
+        <td>考查
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>15010
+        </td>
+        
+        <td>大学物理实验（乙）
+        </td>
+        
+        <td>48
+        </td>
+        
+        <td>81.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>85.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>82.0
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>32.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>19004
+        </td>
+        
+        <td>大学英语4
+        </td>
+        
+        <td>19
+        </td>
+        
+        <td>92.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>70.5
+        </td>
+        
+        <td>80.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>77.0
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>64.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>24004
+        </td>
+        
+        <td>体育Ⅳ
+        </td>
+        
+        <td>46
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>90.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>90.0
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>30.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>ey009
+        </td>
+        
+        <td>当代中国社会问题透视
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td><span style=" color:#FF0000">不合格</span>
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>26.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>任选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>不及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>春
+        </td>
+        
+        <td>ey013
+        </td>
+        
+        <td>当代中国经济
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td><span style=" color:#FF0000">不合格</span>
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>38.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>任选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>不及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03005
+        </td>
+        
+        <td>试验设计与分析
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>96.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>65.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>74.0
+        </td>
+        
+        <td>2.5
+        </td>
+        
+        <td>40.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03033
+        </td>
+        
+        <td>建筑设计基础
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>92.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>82.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>85.0
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>48.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03034
+        </td>
+        
+        <td>设施环境工程学
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>100.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>78.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>85.0
+        </td>
+        
+        <td>3.5
+        </td>
+        
+        <td>64.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03036
+        </td>
+        
+        <td>构成艺术
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>100.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>90.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>93.0
+        </td>
+        
+        <td>2.5
+        </td>
+        
+        <td>48.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03042
+        </td>
+        
+        <td>休闲农业概论
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>100.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>97.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>98.0
+        </td>
+        
+        <td>2.5
+        </td>
+        
+        <td>40.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03047
+        </td>
+        
+        <td>观赏植物学
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>83.0
+        </td>
+        
+        <td>91.75
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>86.0
+        </td>
+        
+        <td>2.5
+        </td>
+        
+        <td>50.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03048
+        </td>
+        
+        <td>休闲农业建筑设计
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>83.0
+        </td>
+        
+        <td>90.0
+        </td>
+        
+        <td>86.0
+        </td>
+        
+        <td>85.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>86.0
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>72.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03049
+        </td>
+        
+        <td>休闲农业工程
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>100.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>93.0
+        </td>
+        
+        <td>86.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>92.0
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>72.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03108
+        </td>
+        
+        <td>设施环境工程实习
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>良好
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>良好
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>03121
+        </td>
+        
+        <td>休闲农业建筑设计课程设计
+        </td>
+        
+        <td>1
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>85.0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>85.0
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>1.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>秋
+        </td>
+        
+        <td>06146
+        </td>
+        
+        <td>土壤与植物营养
+        </td>
+        
+        <td>5
+        </td>
+        
+        <td>96.89
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>75.5
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>82.0
+        </td>
+        
+        <td>2.5
+        </td>
+        
+        <td>48.0
+        </td>
+        
+        <td>考试
+        </td>
+        
+        <td>限选
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>夏
+        </td>
+        
+        <td>03112
+        </td>
+        
+        <td>暑期综合教学实习Ⅰ
+        </td>
+        
+        <td>0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>良好
+        </td>
+        
+        <td>4.0
+        </td>
+        
+        <td>4.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+    <tr>
+        
+
+        
+        <td>2013
+        </td>
+        
+        <td>夏
+        </td>
+        
+        <td>14007
+        </td>
+        
+        <td>思想政治理论课实践
+        </td>
+        
+        <td>0
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>中等
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>3.0
+        </td>
+        
+        <td>未知
+        </td>
+        
+        <td>必修
+        </td>
+        
+        <td>正常
+        </td>
+        
+        <td>正常考试
+        </td>
+        
+        <td>否
+        </td>
+        
+        <td>&nbsp;
+        </td>
+        
+        <td>及格
+        </td>
+        
+    </tr>
+    
+
+</table>
+
+
+
+    </center>
+  </body>
+</html>

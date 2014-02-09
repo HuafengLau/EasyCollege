@@ -7,19 +7,45 @@ import codecs
 import urllib
 import urllib2
 import cookielib
-        
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from University.models import University_info
+
+def guide_getCreditFile(request,school_code):
+    upper_code = school_code.upper()
+    if school_code == 'ecnu':
+        name = u'*艺真同学'
+    if school_code == 'gnnu':
+        name = u'*佑鹏同学'
+    if school_code == 'imnu':
+        name = u'*纪尧同学'
+    if school_code == 'nwsuaf':
+        name = u'*隆堂同学'
+    if school_code == 'bistu':
+        name = u'*元庆同学'
+    if school_code == 'jxufe':
+        name = u'*咪同学'
+        more = True 
+        return render_to_response('CFileGuideJxufe.html',locals(),
+            context_instance=RequestContext(request))
+            
+    more_school = ['nwsuaf',]
+    if school_code in more_school:
+        more = True
+     
+    return render_to_response('CFileGuideBase.html',locals(),
+        context_instance=RequestContext(request))        
 
 def get_soup(doc):
     doc_encoding = chardet.detect(doc)['encoding']
     soup = BeautifulSoup(''.join(doc), from_encoding=doc_encoding)
     return soup
 
-def get_doc(url,user, password):
-    login_page = 'http://202.115.47.141/loginAction.do'
+def get_doc(login_page,url,zh, mm):
     cj = cookielib.CookieJar();
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         
-    data = urllib.urlencode({"zjh":user,"mm":password})
+    data = urllib.urlencode({"zjh":zh,"mm":mm})
         
     request = urllib2.Request(login_page, data)
     request.add_header('User=Agent', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0')
@@ -29,20 +55,30 @@ def get_doc(url,user, password):
     doc = next.read()
     return doc
     
-def get_url(user, password):
-    url = 'http://202.115.47.141/gradeLnAllAction.do?type=ln&oper=fa'
-    doc = get_doc(url,user, password)
+def get_url(login_page,url,zh, mm):
+    doc = get_doc(login_page,url,zh, mm)
     soup = get_soup(doc)
     href = soup.findAll('a', target="lnfaIfra")[0]
-    return 'http://202.115.47.141/' + href['href']
+    if 'http://jwcxk.aufe.edu.cn/' in url:
+        return 'http://jwcxk.aufe.edu.cn/' + href['href']
+    if 'http://202.115.47.141/' in url:
+        return 'http://202.115.47.141/' + href['href']
         
 
 def str_change(str):
     return str.strip()
 
-def GPA(user, password):
-    url = get_url(user, password)
-    doc = get_doc(url,user, password)
+def GPA(user,zh,mm):
+    university_info_id = user.university_info_id
+    school = University_info.objects.get(id=university_info_id).school
+    if school == u'安徽财经大学':
+        login_page = 'http://jwcxk.aufe.edu.cn/loginAction.do'
+        url = 'http://jwcxk.aufe.edu.cn/gradeLnAllAction.do?type=ln&oper=fa'
+    if school == u'四川大学':
+        login_page = 'http://202.115.47.141/loginAction.do'
+        url = 'http://202.115.47.141/gradeLnAllAction.do?type=ln&oper=fa'
+    url = get_url(login_page,url,zh, mm)
+    doc = get_doc(login_page,url,zh, mm)
     soup = get_soup(doc)
     TRS = soup.findAll('tr', attrs={"class" : "odd"})
     courses=[]
@@ -56,3 +92,164 @@ def GPA(user, password):
         courses.append(course)
     print len(courses)
     return courses  
+    
+def ecnu(doc):
+    points = []
+    soup = get_soup(doc)
+    all_a = soup.findAll('a',{'href':'javascript:void(0)'})
+    if all_a:
+        for a in all_a:
+            point = []
+            this_name = a.contents[0]
+            this_attr = a.parent.findNextSiblings('td')[0].string
+            this_credit = a.parent.findNextSiblings('td')[1].string
+            this_score = a.parent.findNextSiblings('td')[2].string
+            point.append(str_change(this_name))
+            point.append(str_change(this_credit))
+            point.append(str_change(this_attr))
+            point.append(str_change(this_score))
+            points.append(point)
+        return points
+    else:
+        return None
+
+def gnnu(doc):
+    points = []
+    soup = get_soup(doc)
+    try:
+        table = soup.findAll('table',{'class':'datelist'})[0]
+        TRs = table.findAll('tr')
+        for index, TR in enumerate(TRs):
+            point = []
+            if index == 0:
+                continue
+            else:
+                tds = TR.findAll('td')           
+                name = str_change(tds[3].string)
+                attr = str_change(tds[4].string)
+                credit = str_change(tds[6].string)
+                score = str_change(tds[8].string)
+                point.append(name)
+                point.append(credit)
+                point.append(attr)
+                point.append(score)
+                points.append(point)           
+        return points
+    except:
+        return None
+
+def imnu(doc):
+    points = []
+    soup = get_soup(doc)
+    TRS = soup.findAll('tr', attrs={"class" : "odd"})
+    courses=[]
+    try:
+        for index, item in enumerate(TRS):
+            course = []
+            TR = TRS[index].contents
+            course.append(str_change(TR[5].contents[0]))
+            course.append(str_change(TR[9].contents[0]))
+            course.append(str_change(TR[11].contents[0]))
+            course.append(str_change(TR[13].contents[1].contents[0]))
+            courses.append(course)
+
+        return courses 
+    except:
+        return None
+
+def nwsuaf(doc):
+    points = []
+    soup = get_soup(doc)
+    try:
+        table = soup.find('table', attrs={"class" : "datalist"})
+        TRs = table.findAll('tr')
+        for index, TR in enumerate(TRs):
+            if index == 0:
+                continue
+            else:
+                point = []
+                tds = TR.findAll('td')
+                try:
+                    name = str_change(tds[3].string)
+                    score = str_change(tds[10].string)
+                    credit = str_change(tds[11].string)
+                    attr = str_change(tds[14].string)
+                    point.append(name)
+                    point.append(credit)
+                    point.append(attr)
+                    point.append(score)
+                    
+                    points.append(point)
+                except:
+                    continue           
+        return points
+    except:
+        return None
+
+def bistu(doc):
+    points = []
+    soup = get_soup(doc)
+    try:
+        table = soup.findAll('table',{'class':'datelist'})[0]
+        TRs = table.findAll('tr')
+        for index, TR in enumerate(TRs):
+            point = []
+            if index == 0:
+                continue
+            else:
+                tds = TR.findAll('td')           
+                name = str_change(tds[1].string)
+                attr = str_change(tds[2].string)
+                score = str_change(tds[4].string)
+                credit = str_change(tds[8].string)           
+                point.append(name)
+                point.append(credit)
+                point.append(attr)
+                point.append(score)           
+                points.append(point)  
+        return points
+    except:
+        return None
+
+def jxufe(doc):
+    points = []
+    soup = get_soup(doc)
+    table = soup.find('table',{'style':'border:1px solid #CCCCCC;padding:5px;background:#F3F3F3 ;line-height : normal ;border-collapse:collapse;'})
+    tbody = table.find('tbody')
+    TRs = tbody.findAll('tr')
+    for index, TR in enumerate(TRs):  
+        point = []
+        tds = TR.findAll('td')
+        name = str_change(tds[1].string)
+        attr = ''
+        score = str_change(tds[9].string)
+        credit = str_change(tds[7].string)
+        teacher = str_change(tds[3].string)
+        
+        if teacher == 'getTeacherName': 
+            continue
+        else:
+            point.append(name)
+            point.append(credit)
+            point.append(attr)
+            point.append(score)
+            point.append(teacher)
+            points.append(point)
+    return points
+        
+def wise_analyzeCreditFile(doc,school_code):
+    if school_code == 'ecnu':
+        points = ecnu(doc)
+    if school_code == 'gnnu':
+        points = gnnu(doc)
+    if school_code == 'imnu':
+        points = imnu(doc)
+    if school_code == 'nwsuaf':
+        points = nwsuaf(doc)
+    if school_code == 'bistu':
+        points = bistu(doc) 
+    if school_code == 'jxufe':
+        points = jxufe(doc)
+    
+    return points
+    

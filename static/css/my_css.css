@@ -1,4 +1,15 @@
 /* CSS for all HTML */
+.hidden {
+	display:none;
+}
+
+.show{
+	display:inline;
+}
+
+.margin-top-6px{
+	margin-top: 6px;
+}
 .font-red{
     color: red;
 }
@@ -36,6 +47,18 @@
     margin-left:30%;
 }
 
+.width_20{
+	width:20%;
+	margin-right:15px;
+}
+
+.width_15{
+	width:15%;
+	margin-right:15px;
+}
+
+/* CSS for business.html */
+
 /* CSS for base.html */
 
 #base_brand {
@@ -53,26 +76,30 @@
    margin-top: 100px;
 }
 
-/* CSS for log.html */
+/* CSS for log.html and register.html */
 
 #LogHTML_div_register { padding-top: 16px; }
 
 #LogHTML_div_SchoolInfo { padding-bottom: 13px;}
 
-#register_email { width: 60% }
+#register_email { width: 28% }
 
-#register_nic_name { width: 50% }
+#register_stu_pwd , #register_sure_pwd{ width: 20%; margin-right: 13px; }
 
-#register_stu_ID { width: 50% }
+#getCredit_file{
+	width: 170px;
+}
 
-#register_stu_pwd { width: 50% }
+#div_guideToCreditFile{
+	margin-top: 70px;
+}
+
 
 #register_verify { 
-    width: 40%;
+    width: 20%;
     margin-right: 5px;
     margin-bottom: 8px;
 }
-
 
 #register_or_login{
     
@@ -118,7 +145,15 @@ div.transp { /* make the div translucent */
 
 }
  
-.label_group { padding-right: 10%; }
+ .register-next-btn{
+	width: 30%;
+	margin-left: 30%;
+	margin-top: 30px;
+ }
+ 
+.label_school { padding-right: 9%; padding-left:5px;}
+
+.label_college { padding-right: 14%; }
 
 /* CSS for index.html and index2.html */
 
@@ -199,6 +234,18 @@ div.transp { /* make the div translucent */
 
 /* CSS for index.html */
 
+#index_upleft{
+	width: 400px;
+	margin-left: 70px;
+
+}
+
+#index_upright{
+	margin-left:50px;
+	margin-top: 0px;
+	width: 390px;
+}
+
 #index_credit_div{
     margin-top: 0px;
     padding-top: 0px;
@@ -230,14 +277,14 @@ div.transp { /* make the div translucent */
     margin-top: 7px;
 }
 
-#index_downleft,#index_upleft{
+#index_downleft{
     width: 65%;
     padding-left: 7%;
     padding-right: 0px;
     margin-right: 0px;
 }
 
-#index_downright,#index_upright{
+#index_downright{
     margin-top: 3%;
     width: 30%;
     padding-left:0px;
@@ -390,7 +437,7 @@ div.transp { /* make the div translucent */
     margin-bottom: 10px;
 }
 
-#file_form,#img_form,#reportImg_table{
+#file_form,#img_form,#reportImg_table,#URP_form,#wise_form,#other_form{
     display: none;
 }
 

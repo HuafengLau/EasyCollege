@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from Business.models import Credit, Major_course
-from Business.views import GPA
+from Business.views import GPA, wise_analyzeCreditFile
 from University.models import University_info
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import PageNotAnInteger, Paginator, InvalidPage, EmptyPage
@@ -19,6 +19,12 @@ from datetime import datetime
 from EOT.models import Eot_data
 import time
 import urllib2
+import urllib
+import chardet 
+import cookielib
+import bs4
+from bs4 import BeautifulSoup
+from log.views import URP_school,wise_school,school_code
 
 
 def display(request,user,message,HTML):                  
@@ -34,7 +40,7 @@ def display(request,user,message,HTML):
                 page = 1
         except ValueError:
             page = 1
-        paginator = Paginator(credits,13)   
+        paginator = Paginator(credits,20)   
         try:                     
             credits_list = paginator.page(page)
         except(EmptyPage,InvalidPage,PageNotAnInteger):
@@ -46,7 +52,24 @@ def display(request,user,message,HTML):
         credits = credits_list
     
     message = message
-  
+    
+    if u'源代码' in message or u'数据库' in message:
+        no_refresh = True
+    else:
+        no_refresh = False
+    if message == 'URP':
+        school_type = 'URP'
+        message = None
+    elif message == 'wise':
+        school_type = 'wise'
+        university_info_id = user.university_info_id
+        school = University_info.objects.get(id=university_info_id).school
+        this_school_code = school_code[school]
+        message = None
+    else:
+        pass
+        
+    
     form = AvatarForm()
     indexHTML = True
     return render_to_response(HTML,locals(),
@@ -62,6 +85,16 @@ def index(request):
            id = request.POST.get('course_id')
            edit_credit = Credit.objects.get(id=id)
            edit_credit.course_teacher = teacher
+           edit_credit.save()
+           
+           response = HttpResponse()
+           return response
+         
+        if 'teacher_attr' in request.POST:
+           attr = request.POST.get('teacher_attr')
+           id = request.POST.get('course_id')[:-1]
+           edit_credit = Credit.objects.get(id=id)
+           edit_credit.course_attr = attr
            edit_credit.save()
            
            response = HttpResponse()
@@ -100,20 +133,22 @@ def index(request):
                     user = user
                 )
                 credit.save()
-                try:
-                    new_major_course = Major_course.objects.get(
-                        course_name = credit.course_name,
-                        course_teacher = credit.course_teacher,
-                        major_id = user.university_info_id
-                    )
-                except:
-                    new_major_course = Major_course(
-                        course_name = credit.course_name,
-                        course_teacher = credit.course_teacher,
-                        major_id = user.university_info_id,
-                        course = credit
-                    )
-                    new_major_course.save()
+                if attr == u'必修':
+                    try:
+                        new_major_course = Major_course.objects.get(
+                            course_name = credit.course_name,
+                            course_teacher = credit.course_teacher,
+                            major_id = user.university_info_id
+                        )
+                    except:
+                        new_major_course = Major_course(
+                            course_name = credit.course_name,
+                            course_teacher = credit.course_teacher,
+                            major_id = user.university_info_id,
+                            course = credit
+                        )
+                        new_major_course.save()
+      
                 response = HttpResponse()
                 return response
             
@@ -152,20 +187,21 @@ def index(request):
                     user = user
                 )
                 credit.save()                
-                try:
-                    new_major_course = Major_course.objects.get(
-                        course_name = credit.course_name,
-                        course_teacher = credit.course_teacher,
-                        major_id = user.university_info_id
-                    )
-                except:
-                    new_major_course = Major_course(
-                        course_name = credit.course_name,
-                        course_teacher = credit.course_teacher,
-                        major_id = user.university_info_id,
-                        course = credit
-                    )
-                    new_major_course.save()
+                if attr == u'必修':
+                    try:
+                        new_major_course = Major_course.objects.get(
+                            course_name = credit.course_name,
+                            course_teacher = credit.course_teacher,
+                            major_id = user.university_info_id
+                        )
+                    except:
+                        new_major_course = Major_course(
+                            course_name = credit.course_name,
+                            course_teacher = credit.course_teacher,
+                            major_id = user.university_info_id,
+                            course = credit
+                        )
+                        new_major_course.save()
             money = random.randrange(5,10,1)
             user.money += money
             user.save()
@@ -213,62 +249,17 @@ def index(request):
         #global user
         user = request.user
         university_info_id = user.university_info_id
-        school = University_info.objects.get(id=university_info_id).school        
-        if school == u'四川大学':           
-            if not Credit.objects.filter(user=user):     
-                year = time.strftime('%Y',time.localtime(time.time()))
-                if year != user.stu_ID[:4]:
-                    try:
-                        points = GPA(user.stu_ID,user.stu_pwd)
-                    except urllib2.URLError:
-                        time.sleep(1)
-                        try:
-                            points = GPA(user.stu_ID,user.stu_pwd)
-                        except urllib2.URLError:
-                            time.sleep(1)
-                            points = GPA(user.stu_ID,user.stu_pwd)
-                        
-                    for index, item in enumerate(points):
-                        credit = Credit(
-                            course_name = item[0],
-                            course_teacher = '',
-                            course_credit = item[1],
-                            course_attr = item[2],
-                            course_score = item[3],                
-                            add_money = '0',    
-                            grade = 'NoIdeal',  
-                            user = user,
-                            university_info_id = university_info_id
-                            
-                        )
-                        credit.save()
-                        if item[2] == u'必修':
-                            try:
-                                new_major_course = Major_course.objects.get(
-                                    course_name = credit.course_name,
-                                    course_teacher = credit.course_teacher,
-                                    major_id = user.university_info_id
-                                )
-                            except:
-                                new_major_course = Major_course(
-                                    course_name = credit.course_name,
-                                    course_teacher = credit.course_teacher,
-                                    major_id = user.university_info_id,
-                                    course = credit
-                                )
-                                new_major_course.save()
-                   
-                message = None
-                HTML= 'index.html'
-                return display(request,user,message,HTML)
-                     
+        school = University_info.objects.get(id=university_info_id).school
+        
+        if school in URP_school or school in wise_school:
+            if school in URP_school:
+                message = 'URP'
             else:
-                message = None
-                HTML = 'index.html'
-                return display(request,user,message,HTML)
-                
+                message = 'wise'
+            HTML = 'index.html'
+            return display(request,user,message,HTML)   
         else:           
-            credits = Credit.objects.filter(user=user).order_by('grade','add_money')
+            #credits = Credit.objects.filter(user=user).order_by('grade','add_money')
             message = None
             HTML = 'index2.html'
             return display(request,user,message,HTML)
@@ -337,11 +328,172 @@ def upload_avatar(request):
             user.avatar = 'avatar/%s' % name
             user.save()
         return HttpResponseRedirect('/index/')
+ 
+def loading_gif(request):
+    if request.is_ajax() and request.method == 'GET':
+        if 'loading' in request.GET:
+            print settings.STATIC_URL
+            temp = "<img src='%simg/loading.gif' alt='URP检测'/>" % settings.STATIC_URL
+            response = HttpResponse(temp)
+            return response
+ 
+@login_required(login_url='/log/') 
+def verify_URP(request):
+    if request.is_ajax() and request.method == 'GET':
+        if 'zh' in request.GET:
+            zh = request.GET.get('zh')
+            mm = request.GET.get('mm')
             
-        
+            this_user = request.user
+            university_info = University_info.objects.get(id=this_user.university_info_id)
+            school = university_info.school
+            
+            if school == u'四川大学':        
+                login_page = 'http://202.115.47.141/loginAction.do'
+            elif school == u'安徽财经大学':
+                login_page = 'http://jwcxk.aufe.edu.cn/loginAction.do'
+            else:
+                response = HttpResponse(u'警告，未知错误，请联系管理员collegeyi@sina.com')
+                return response
+            
+            cj = cookielib.CookieJar();
+            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))               
+            data = urllib.urlencode({"zjh":zh,"mm":mm})             
+            request = urllib2.Request(login_page, data)
+            request.add_header('User=Agent', 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0')
+            response = opener.open(request)
+            doc=response.read()
+            doc_encoding = chardet.detect(doc)['encoding']
+            soup = BeautifulSoup(''.join(doc), from_encoding=doc_encoding)
+            if soup.find('frameset',{'border':"0"}) == None:
+                temp = "<p class='text-danger'>该账号和密码无法登陆系统，出现此错误的原因有<ul><li>账号和密码错误，\
+                    请重新输入（常见）</li><li>网络问题，请重新输入（偶尔）</li><li>由于教师需录入成绩、系统升级等原因，\
+                    当前无法访问学生系统，您可以打开学生教务系统验证一下</li></ul></p>"
+                response = HttpResponse("<span class='glyphicon glyphicon-remove font-red'></span>%s" % temp)
+                return response
+            else:
+                response = HttpResponse("<span class='glyphicon glyphicon-ok font-green'> 账号和密码正确</span>")
+                return response
 
+            
+def add_points(university_info_id,user,points):
+    add_num = 0
+    for index, item in enumerate(points):
+        try:
+            score = float(item[3])
+            try:
+                has_credit = Credit.objects.get(user=user,course_name = item[0])
+                continue
+            except:
+                if item[2] == '':
+                    attr = u''
+                else:
+                    attr = item[2]
+                try:
+                    teacher = item[4]
+                except:
+                    teacher = ''
+                credit = Credit(
+                    course_name = item[0],
+                    course_teacher = teacher,
+                    course_credit = item[1],
+                    course_attr = attr,
+                    course_score = score,                
+                    add_money = '0',    
+                    grade = 'NoIdeal',  
+                    user = user,
+                    university_info_id = university_info_id
+                    
+                )
+                credit.save()
+                add_num += 1
+                
+                if u'必修' in item[2] or u'专业' in item[2]:
+                    try:
+                        new_major_course = Major_course.objects.get(
+                            course_name = credit.course_name,
+                            course_teacher = credit.course_teacher,
+                            major_id = user.university_info_id
+                        )
+                    except:
+                        new_major_course = Major_course(
+                            course_name = credit.course_name,
+                            course_teacher = credit.course_teacher,
+                            major_id = user.university_info_id,
+                            course = credit
+                        )
+                        new_major_course.save()
+        except:
+            continue
+    return add_num
         
-          
+@login_required(login_url='/log/')             
+def URP_getCredit(request):
+    user = request.user
+    
+    zh = request.POST['zh']
+    mm = request.POST['mm']
+        
+    try:
+        points = GPA(user,zh,mm)
+        add_num = add_points(user.university_info_id,user,points)
+        if add_num == 0:
+            message = u'本次访问数据库没有发现新的课程数据！'
+        else:
+            message = u'本次访问数据库为您添加了%s门课程的数据！' % add_num
+        HTML = 'index.html'
+        return display(request,user,message,HTML)
+    except urllib2.URLError:
+        time.sleep(1)
+        try:
+            points = GPA(user,zh,mm)
+            add_num = add_points(user.university_info_id,user,points)
+            if add_num == 0:
+                message = u'本次访问数据库没有发现新的课程数据！'
+            else:
+                message = u'本次访问数据库为您添加了%s门课程的数据！' % add_num
+            HTML = 'index.html'
+            return display(request,user,message,HTML)
+        except urllib2.URLError:
+            time.sleep(1)
+            try:
+                points = GPA(user,zh,mm)
+                add_num = add_points(user.university_info_id,user,points)
+                if add_num == 0:
+                    message = u'本次访问数据库没有发现新的课程数据！'
+                else:
+                    message = u'本次访问数据库为您添加了%s项新的数据！' % add_num
+                HTML = 'index.html'
+                return display(request,user,message,HTML)
+            except urllib2.URLError:
+                message = u'当前无法访问教务系统，请稍候再试'
+                HTML = 'index.html'
+                return display(request,user,message,HTML)
+
+@login_required(login_url='/log/')                
+def wise_getCredit(request,school_code):
+    user = request.user
+    f = request.FILES['credit_file']
+    doc = f.read()
+    if doc:
+        points = wise_analyzeCreditFile(doc,school_code)
+        if points:
+            add_num = add_points(user.university_info_id,user,points)
+            if add_num == 0:
+                message = u'未在您本次提交的源代码页面中发现新的数据！'
+            else:
+                message = u'在您本次提交的源代码页面中，大学易发现了%s项新的数据！' % add_num
+            HTML = 'index.html'
+            return display(request,user,message,HTML)
+        else:
+            message = u'上传的源代码文件有误！如果您确定上传了正确的文件，请联系管理员'
+            HTML = 'index.html'
+            return display(request,user,message,HTML)
+    else:
+        message = u'上传的源代码文件有误！如果您确定上传了正确的文件，请联系管理员'
+        HTML = 'index.html'
+        return display(request,user,message,HTML)
+        
     
         
         

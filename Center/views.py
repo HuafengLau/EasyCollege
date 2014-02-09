@@ -39,22 +39,19 @@ def center(request):
     
     try: 
         this_user_info = User_info.objects.get(user=user)
-        print 'has info'
     except:       
         this_user_info = User_info(
             store_eot = '',
             user = user,
             download_Eotdata = '',
-            nocomment_Eotdata = ''
+            nocomment_Eotdata = '',
+            grade = u'公民'
         )
         this_user_info.save()
          
     if this_user_info.store_eot:
-        print 'has store'
         storeEot_list = this_user_info.store_eot.split(';')[:-1]
-        print storeEot_list
         my_storeEot = Eot.objects.filter(id__in=storeEot_list)
-        print my_storeEot
         my_storeEot_after_range_num = 5        
         my_storeEot_befor_range_num = 4       
         try:                     

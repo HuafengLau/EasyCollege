@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}大学易 —— 保存网页源文件{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block welcome %}
+{% endblock %} 
+
+{% block mainbody %}
+<div class='container'>
+	
+	<div class="page-header">
+	  <h1>保存网页源代码文件<small>&nbsp;&nbsp;&nbsp;for {{upper_code}}</small></h1>
+	</div>
+	
+	<h3>Easy三步法：</h3><h4><a href='#1'>Step 1:&nbsp;进入指定页面，打开【开发人员工具】</a>&nbsp;&nbsp;<span class='glyphicon glyphicon-hand-right'></span>&nbsp;&nbsp;
+	<a href='#2'>Step 2:&nbsp;捕获目标页面</a>&nbsp;&nbsp;<span class='glyphicon glyphicon-hand-right'></span>&nbsp;&nbsp;
+	<a href='#3'>Step 3:&nbsp;保存源文件</a></h4>
+	<p id='1'>----------------------------------------------------------------------------
+	<small>我是步骤分割线</small>----------------------------------------------------------------</p>
+	<p>&nbsp;</p>
+	<img id='school_logo' width='288px' height='70px' src='{{STATIC_URL}}img/guide/{{school_code}}/{{school_code}}_0.png' alt='img for logo'/>
+	
+	<h4 class='font-blue'>Step 1:&nbsp;进入指定页面，打开【开发人员工具】</h4>
+	<p>用<strong class='font-red'>IE浏览器</strong>登录学生教务系统，进入指定页面</p>
+	<img width='80%' src='{{STATIC_URL}}img/guide/{{school_code}}/{{school_code}}_1.png' alt='img for step1'/>
+	<p>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<small>我是图片分割线</small>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+	
+	<p>点击右上角的工具图标，点击【F12开发人员工具】，选择【网络】——>点击【开始捕获】</p>
+	<img width='80%' src='{{STATIC_URL}}img/guide/{{school_code}}/{{school_code}}_2.png' alt='img for step2'/>
+	<p>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<small>我是图片分割线</small>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+	<img width='80%' src='{{STATIC_URL}}img/guide/{{school_code}}/{{school_code}}_3.png' alt='img for step3'/>
+	<p id='2'>----------------------------------------------------------------------------
+	<small>我是步骤分割线</small>--------------------------------------------------------</p>
+	
+	<h4 class='font-blue'>Step 2:&nbsp;捕获目标页面</h4>
+	<p>按图示操作，载入目标页面</p>
+	<img width='80%' src='{{STATIC_URL}}img/guide/{{school_code}}/{{school_code}}_4.png' alt='img for step4'/>
+	<p id='3'>----------------------------------------------------------------------------
+	<small>我是步骤分割线</small>--------------------------------------------------------</p>
+	
+	<h4 class='font-blue'>Step 3:&nbsp;保存源文件</h4>
+	<p>选中网址，点击【转到详细视图】，选择【响应正文】，将源代码另存为，选择任意位置，保存即可</p>
+	<img width='80%' src='{{STATIC_URL}}img/guide/{{school_code}}/{{school_code}}_5.png' alt='img for step5'/>
+	<p>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<small>我是图片分割线</small>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+	<img width='65%' src='{{STATIC_URL}}img/guide/{{school_code}}/{{school_code}}_6.png' alt='img for step6'/>
+	<p>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<small>我是图片分割线</small>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+	<img width='65%' src='{{STATIC_URL}}img/guide/{{school_code}}/{{school_code}}_7.png' alt='img for step7'/>
+	<p id='5'>----------------------------------------------------------------------------
+	<small>我是步骤结束线</small>----------------------------------------------------------------</p>
+	<p>很easy吧！快去试试吧！</p>
+	{% if more %}
+		<p>如果你想继续保存其他学年的成绩源代码文件，关闭开发人员工具后（按F12或者点击工具右上角的关闭），重复执行三步法即可。</p>
+	{% endif %}
+	<p>&nbsp;</p>
+	<h4>感谢&nbsp;<strong>{{name}}</strong>&nbsp;为测试本服务提供的学生账号和密码，历史将铭记你！</h4>
+</div>
+{% endblock %}
