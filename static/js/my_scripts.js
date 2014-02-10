@@ -90,47 +90,72 @@ $(document).ready(function(){
     //JS for index.html
     //Edit the course_teacher
     $('.btn_edit_teacher').bind('click',function(){
-        
         var id = $(this).parent().attr('id');     
         html = $(this).detach();       
-        $('#'+id).html("<input class='input_add_teacher' type='text' id='' name='teacher_name' placeholder='输入后点击框外即可添加' autofocus>");
-               
-        $('#'+id).on('blur',".input_add_teacher",function (){
-        
-            var name;
-            name = $(this).val();
-            if (name ==''){
-        
-                $(this).parent().html(html);
-            }
-            else{             
-                $.post('/index/', {'course_id':id, 'teacher_name':name});
-                window.location.reload();   
-            }
+        $('#'+id).html("<input class='input_add_teacher' type='text' id='' name='teacher_name' placeholder='输入后回车即可' autofocus>");
+
+		$('#'+id).on('keypress', ".input_add_teacher", function (e) { 
+			var name;
+			name = $(this).val();
+			
+			var key = e.which; 
+			if (key == 13) {
+				if (name ==''){
+			
+					$(this).parent().html(html);
+				}else{             
+					$.post('/index/', {'course_id':id, 'teacher_name':name});
+					var script;
+					script = "<script>$('.click_info').on('click',function(){alert('你已经编辑过此项，刷新页面后可再次编辑')});</script>"
+					$(this).parent().html("<button class='btn click_info' data-toggle='tooltip' title='刷新页面后可再次编辑此项' class='tooltip_th'>"+name+"</button>"+script)    
+				}
+			}
         });
-    });
+	   
+	    $('#'+id).on('blur',".input_add_teacher",function (){     
+           var name;
+		   name = $(this).val();
+		   if (name ==''){	
+		    	$(this).parent().html(html);
+		   }
+        });
+	});
 	
+    
 	$('.btn_edit_attr').bind('click',function(){
-        
         var id = $(this).parent().attr('id');     
         html = $(this).detach();       
-        $('#'+id).html("<input class='input_add_attr' type='text' id='' name='teacher_attr' placeholder='填必修或非必修' autofocus>");
-               
-        $('#'+id).on('blur',".input_add_attr",function (){
-        
-            var name;
-            name = $(this).val();
-            if (name ==''){
-        
-                $(this).parent().html(html);
-            }
-            else{             
-                $.post('/index/', {'course_id':id, 'teacher_attr':name});
-                window.location.reload();   
-            }
+        $('#'+id).html("<input class='input_add_attr' type='text' id='' name='teacher_attr' placeholder='必修或非必修，回车即可' autofocus>");
+
+		$('#'+id).on('keypress', ".input_add_attr", function (e) { 
+			var name;
+			name = $(this).val();
+			
+			var key = e.which; 
+			if (key == 13) {
+				if (name ==''){
+			
+					$(this).parent().html(html);
+				}else{             
+					$.post('/index/', {'course_id':id, 'teacher_attr':name});
+					var script;
+					script = "<script>$('.click_info').on('click',function(){alert('你已经编辑过此项，刷新页面后可再次编辑')});</script>"
+					$(this).parent().html("<button class='btn click_info' data-toggle='tooltip' title='刷新页面后可再次编辑此项' class='tooltip_th'>"+name+"</button>"+script)    
+				}
+			}
         });
-    });
-    
+	   
+	    $('#'+id).on('blur',".input_add_attr",function (){     
+           var name;
+		   name = $(this).val();
+		   if (name ==''){	
+		    	$(this).parent().html(html);
+		   }
+        });
+	});
+	
+	
+	
     $('#avatar_btn').on('click', function(){
        if ($( "#avatar_form").is(":hidden")){
            $( "#avatar_form").show();

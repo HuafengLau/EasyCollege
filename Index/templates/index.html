@@ -82,7 +82,7 @@
                             <strong>Message：</strong><span class='font-red'>{{ message}}</span>
 							{% if no_refresh %}
 								<p><strong>Warning：</strong>
-								当前请不要刷新页面或者点击下一页，否者会造成数据的重复提交而引发错误！转到任意页面并返回后可恢复正常。
+								当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！转到任意页面并返回后可恢复正常。
 								</p>
 							{% endif %}
                         </div>
@@ -102,7 +102,7 @@
                                 <td><a href='/eot/showcredit/{{credit.id}}/'>{{ credit.course_name }}</a></td>
                                 <td id='{{credit.id}}'>
                                     {% ifequal credit.add_money 0 %}
-                                    <button class=' btn btn_edit_teacher' data-toggle="tooltip" title="点击输入，输入完成后点击输入框外部即可" class='tooltip_th'>                           
+                                    <button class=' btn btn_edit_teacher' data-toggle="tooltip" title="点击编辑" class='tooltip_th'>                           
                                         {% if credit.course_teacher %}
                                             {{ credit.course_teacher }}
                                         {% else %}
@@ -115,7 +115,7 @@
                                 </td>                               
 								{% ifequal this_school_code 'jxufe' %}
 									{% ifequal credit.add_money 0 %}
-										<td id='{{credit.id}}a' data-toggle="tooltip" title="填必修或非必修" class='tooltip_th'>
+										<td id='{{credit.id}}a' data-toggle="tooltip" title="点击编辑，填必修或非必修" class='tooltip_th'>
 											<button class='btn btn_edit_attr'>                           
 												{% ifequal credit.course_attr '' %}
 													+
@@ -178,7 +178,7 @@
 					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					{% if no_refresh %}
 						<strong>Warning：</strong>
-						当前请不要刷新页面或者点击下一页，否者会造成数据的重复提交而引发错误！转到任意页面并返回后可恢复正常。
+						当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！转到任意页面并返回后可恢复正常。
 						
 					{% endif %}
 				</div>
@@ -307,7 +307,7 @@
 			   <p class='text-success'>A1：大学易只收录那些采用百分制打分的课程，不收录采用ABC或者优良标准的课程</p>
 			   <p>----------------------------------------------------------------------------------------------------</p>
 			   <p class='text-danger'>Q2：这个成绩表采用什么方式排序？</p>
-			   <p class='text-success'>A2：已添加任课老师的、没有评教的、期末成绩高的将优先放置在表格前排</p>
+			   <p class='text-success'>A2：按照您所上传的网页源代码，或者学生教务系统中的成绩顺序</p>
 			   <p>----------------------------------------------------------------------------------------------------</p>
 			   <p class='text-danger'>Q3：为什么我需要添加任课老师后才能点评？</p>
 			   <p class='text-success'>A3：因为课程和任课老师是紧密联系的，两者都是点评的对象，无法分割</p>
@@ -319,20 +319,14 @@
 			   <p class='text-danger'>Q5：为什么我使用『智能添加任课老师』没有获得数据？</p>
 			   <p class='text-success'>A5：当使用该功能时，数据来源是和您同学校同专业的其他用户，如果没有获得数据，说明其他用户还没有添加数据，或者他们添加的数据你已经有了</p>
 			   <p>----------------------------------------------------------------------------------------------------</p>
-			   <p class='text-danger'>Q6：我输入了任课老师，按回车没反应！</p>
-			   <p class='text-success'>A6：当您输入完任课老师后，直接点击框外任意位置即可完成添加。这样设计主要是为了防止刷新页面</p>
-			   <p>----------------------------------------------------------------------------------------------------</p>				
-			   <p class='text-danger'>Q7：为什么我点评完某个课程后，它就“不见了”？</p>
-			   <p class='text-success'>A7：已经点评的课程将被放在最后一页，排序方式见Q2</p>
-			   <p>----------------------------------------------------------------------------------------------------</p>
-			   <p class='text-danger'>Q8：我已经点评了某个课程，但是发现任课老师写错了怎么办？</p>
-			   <p class='text-success'>A8：在没有点评前，任课老师是可以修改的，点评后无法直接修改。您的点评数据将视为无效，请务必联系管理员 <strong>collegeyi@sina.com</strong>协助更改，谢谢！</p>
+			   <p class='text-danger'>Q6：我已经点评了某个课程，但是发现任课老师写错了怎么办？</p>
+			   <p class='text-success'>A6：在没有点评前，任课老师是可以修改的，点评后无法直接修改。您的点评数据将视为无效，请务必联系管理员 <strong>collegeyi@sina.com</strong>协助更改，谢谢！</p>
 			   <p>----------------------------------------------------------------------------------------------------</p>		   
-			   <p class='text-danger'>Q9：为什么每次更新了数据就不能『刷新』或者点『下一页』？</p>
-			   <p class='text-success'>A9：这个是由网站的机制决定的，大部分的网站在提交完表单后都不能『刷新』，『下一页』的原理和『刷新』类似
+			   <p class='text-danger'>Q7：为什么每次更新了数据就不能『刷新』或者点『下一页』？</p>
+			   <p class='text-success'>A7：这个是由网站的机制决定的，大部分的网站在提交完表单后都不能『刷新』，『下一页』的原理和『刷新』类似
 			   <p>----------------------------------------------------------------------------------------------------</p>			  			   
-			   <p class='text-danger'>Q10：你说了这么多，根本就没有我的问题！</p>
-			   <p class='text-success'>A10：非常抱歉没有解决您的问题，您可以致信管理员 <strong>collegeyi@sina.com</strong> ，如果您觉得有必要，也可以直接联系大学易的作者 you_xiang_123@sina.com ：）</p>
+			   <p class='text-danger'>Q8：你说了这么多，根本就没有我的问题！</p>
+			   <p class='text-success'>A8：非常抱歉没有解决您的问题，您可以致信管理员 <strong>collegeyi@sina.com</strong> ，如果您觉得有必要，也可以直接联系大学易的作者 you_xiang_123@sina.com ：）</p>
 			   <p>----------------------------------------------------------------------------------------------------</p>
 			   <p>Enjoy it !</p>
           </div>

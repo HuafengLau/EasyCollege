@@ -28,7 +28,7 @@ from log.views import URP_school,wise_school,school_code
 
 
 def display(request,user,message,HTML):                  
-    credits = Credit.objects.filter(user=user).order_by('grade','-course_teacher','-course_score')
+    credits = Credit.objects.filter(user=user)
     if not credits:
         credits = None
     else:
