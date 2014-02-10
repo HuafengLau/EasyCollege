@@ -171,14 +171,23 @@
                     <li><a >[第{{ credits.number }}/{{ credits.paginator.num_pages }}页]</a></li>
               </ul>
             </div>
-            {% endif %}
+            {% endif %}	
+			{% if no_refresh %}
+			<div class='clear_both'>
+				<div class="alert alert-danger alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					{% if no_refresh %}
+						<strong>Warning：</strong>
+						当前请不要刷新页面或者点击下一页，否者会造成数据的重复提交而引发错误！转到任意页面并返回后可恢复正常。
+						
+					{% endif %}
+				</div>
+			</div>
+			{% endif %}
+			
 			{% ifequal school_type 'URP' %}
 			<div class='clear_both'>
-				{% if no_refresh %}
-					<h4><strong>Warning：</strong>
-					当前请不要刷新页面或者点击下一页，否者会造成数据的重复提交而引发错误！转到任意页面并返回后可恢复正常。
-					</h4>
-				{% endif %}
+				
 				<button class='btn' id='URP_btn'>访问数据库，更新课程信息</button>				
 				<div id='URP_form'>
 					<p class='text-danger'>如果您是大一上学期，数据库中还没有您的数据，请勿使用此功能。</p>
@@ -193,7 +202,12 @@
 							<label>密码</label>
 								<input type="password"  class='form-control width_20' id='getCredit_mm' name='mm' placeholder="" required>
 							<span id='register_check_URP'></span>
-						</div>			
+						</div>
+						<div class="checkbox">
+							<label>
+							  <input type="checkbox" required> 确认授权大学易使用我的学生系统账号密码抓取课程数据
+							</label>
+						</div>
 						<div class='form-inline'>
 							<button class="btn btn-block btn-success register-next-btn" id='register_btn' type="submit">提交</button>
 							
