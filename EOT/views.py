@@ -391,10 +391,16 @@ def value(request, credit_id):
     if request.method == 'GET':
         user = request.user
         credit = Credit.objects.get(id=credit_id)
-        if credit.course_teacher == '':
+        if credit.course_teacher == '':           
+            cannot_message = True
             no_teacher_message = True
-        return render_to_response('value.html',locals(),
-            context_instance=RequestContext(request)) 
+            return render_to_response('value.html',locals(),
+                context_instance=RequestContext(request))
+        if credit.course_attr == '':
+            cannot_message = True
+            no_attr_message = True
+            return render_to_response('value.html',locals(),
+                context_instance=RequestContext(request))
     elif request.method == 'POST':
         lists = ['course_score','teacher_score', 'like_or_hate','naming','naming_way',
             'atmosphere','teach_way','popularity','mid_test','mid_test_way',

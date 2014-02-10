@@ -9,16 +9,21 @@
 {% endblock %}
 
 {% block mainbody %}
-{% if no_teacher_message %}
-    <div id='no_teacher_div' class='container pull-left'>
-        <div id='back_btn_div'>
-            <a href='/index/'><button class='btn btn-default'><<返回</button></a>
-        </div>
-        <div class="alert alert-success">
-            <p class='text-danger'>非常抱歉，您还没有为「{{credit.course_name}}」添加任课老师。请添加教师后再点评</p>
-        </div>
-    </div>
+{% if cannot_message %}
+	
+		<div id='no_teacher_div' class='container pull-left'>
+			<div id='back_btn_div'>
+				<a href='/index/'><button class='btn btn-default'><<返回</button></a>
+			</div>
+			<div class="alert alert-success">
+				<p class='text-danger'>
+					{% if no_teacher_message %}非常抱歉，您还没有为「{{credit.course_name}}」添加任课老师。请添加教师后再点评{% endif %}
+					{% if no_attr_message %}非常抱歉，您还没有为「{{credit.course_name}}」添加课程属性。请添加属性后再点评{% endif %}
+				</p>
+			</div>
+		</div>
 {% else %}
+
 <div id='value_main_div' class='container pull-left'>
     <div id='back_btn_div'>
         <a href='/index/'><button class='btn btn-default'><<返回</button></a>
