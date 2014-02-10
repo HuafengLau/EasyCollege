@@ -396,9 +396,12 @@ def value(request, credit_id):
             no_teacher_message = True
             return render_to_response('value.html',locals(),
                 context_instance=RequestContext(request))
-        if credit.course_attr == '':
+        elif credit.course_attr == '':
             cannot_message = True
             no_attr_message = True
+            return render_to_response('value.html',locals(),
+                context_instance=RequestContext(request))
+        else:
             return render_to_response('value.html',locals(),
                 context_instance=RequestContext(request))
     elif request.method == 'POST':
