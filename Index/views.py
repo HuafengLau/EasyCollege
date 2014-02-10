@@ -287,7 +287,8 @@ def wise_teacher(request):
                 add_num += 1
         if add_num == 0:
             message = u'暂时没有发现新的可以添加的任课老师！'
-            return display(request,user,message)
+            HTML = 'index.html'
+            return display(request,user,message,HTML)
             
         else:
             message = u'学长学姐为您添加了%s位任课老师！' % add_num

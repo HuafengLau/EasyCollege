@@ -26,17 +26,17 @@
 	<div>
 		<p class='text-success'>您已经成功激活了账户！</p>
 		{% ifequal school_type 'URP' %}
-			<p>！我们已经为『{{school}}』开通了智能添加课程信息！</p>
-			<p>输入您学生教务系统的账号和密码，大学易将为您抓取相关数据。ps.大学易不会保存您的账号和密码</p>
+			<p>我们已经为『{{school}}』开通了智能添加课程信息！</p>
+			<p>输入您<strong>学生教务系统的账号和密码</strong>，大学易将为您抓取相关数据。ps.大学易不会保存您的账号和密码</p>
 			<form class='form-group' action='/index/URP_getCredit/' method='POST' autocomplete="on"> 
 				{% csrf_token %}
 				<div class='form-group'>
-					<label>账号</label>
-					<input type="text"  class='form-control width_20' id='getCredit_zh' name='zh' placeholder="" required>
+					<label>学生教务系统账号</label>
+					<input type="text"  class='form-control width_20' id='getCredit_zh' name='zh' placeholder="不是填注册邮箱哦！" required>
 				</div>
 				<div class='form-group'>
-					<label>密码</label>
-						<input type="password"  class='form-control width_20' id='getCredit_mm' name='mm' placeholder="" required>
+					<label>学生教务系统密码</label>
+						<input type="password"  class='form-control width_20' id='getCredit_mm' name='mm' placeholder="学生教务系统密码" required>
 					<span id='register_check_URP'></span>
 				</div>			
 				<div class='form-inline'>
