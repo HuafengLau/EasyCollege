@@ -93,7 +93,7 @@ $(document).ready(function(){
         
         var id = $(this).parent().attr('id');     
         html = $(this).detach();       
-        $('#'+id).html("<input class='input_add_teacher' type='text' id='' name='teacher_name' placeholder='请输入教师姓名' autofocus>");
+        $('#'+id).html("<input class='input_add_teacher' type='text' id='' name='teacher_name' placeholder='输入后点击框外即可添加' autofocus>");
                
         $('#'+id).on('blur',".input_add_teacher",function (){
         

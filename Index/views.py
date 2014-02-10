@@ -286,7 +286,7 @@ def wise_teacher(request):
                 credit.save()
                 add_num += 1
         if add_num == 0:
-            message = u'暂时没有发现新的可以添加的任课老师！'
+            message = u'暂时没有发现新的可以添加的任课老师。试试手工添加吧！'
             HTML = 'index.html'
             return display(request,user,message,HTML)
             
