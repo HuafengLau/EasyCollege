@@ -205,7 +205,8 @@ def verify_email(request):
         print e
         return render_to_response('500.html',locals(),
             context_instance=RequestContext(request))
-   
+
+@login_required(login_url='/log/')            
 def quit(request):
     logout(request)   
     return HttpResponseRedirect('/log/')

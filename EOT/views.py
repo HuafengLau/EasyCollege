@@ -1175,6 +1175,7 @@ def search(request):
             return render_to_response('search_answer.html',locals(),
                 context_instance=RequestContext(request)) 
 
+@login_required(login_url='/log/')                  
 def search_sort(request):
     if request.is_ajax() and request.method == 'GET':
         if 'sort' in request.GET:
