@@ -184,10 +184,15 @@
 				</div>
 			</div>
 			{% endif %}
+			<div class='clear_both'>
+				<button type="button" data-toggle="modal" data-target="#question_table" class="btn btn-link add_button_info">
+					关于上述成绩表的一些常见问题 Q&A
+				</button>
+			</div>
 			
 			{% ifequal school_type 'URP' %}
 			<div class='clear_both'>
-				
+				<p>&nbsp;</p>
 				<button class='btn' id='URP_btn'>访问数据库，更新课程信息</button>				
 				<div id='URP_form'>
 					<p class='text-danger'>如果您是大一上学期，数据库中还没有您的数据，请勿使用此功能。</p>
@@ -288,7 +293,55 @@
 
 </div>    
     
-  
+<!-- Modal -->
+<div class="modal fade" id="question_table" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">关于成绩表的常见问题</h4>
+      </div>
+      <div class="modal-body">
+          <div id=''>
+               <p class='text-danger'>Q1：为什么我还有几门成绩没有被收录？</p>
+			   <p class='text-success'>A1：大学易只收录那些采用百分制打分的课程，不收录采用ABC或者优良标准的课程</p>
+			   <p>----------------------------------------------------------------------------------------------------</p>
+			   <p class='text-danger'>Q2：这个成绩表采用什么方式排序？</p>
+			   <p class='text-success'>A2：已添加任课老师的、没有评教的、期末成绩高的将优先放置在表格前排</p>
+			   <p>----------------------------------------------------------------------------------------------------</p>
+			   <p class='text-danger'>Q3：为什么我需要添加任课老师后才能点评？</p>
+			   <p class='text-success'>A3：因为课程和任课老师是紧密联系的，两者都是点评的对象，无法分割</p>
+			   <p>----------------------------------------------------------------------------------------------------</p>
+			   <p class='text-danger'>Q4：为什么抓数据的时候不连同教师一起抓，手工填好麻烦</p>
+			   <p class='text-success'>A4：这个主要是因为无法直接从教务系统中直接获取教师的数据，或者您提交的页面中并没有包含教师的数据。
+				你可以通过『智能添加任课老师』来快速添加任课老师</p>
+			   <p>----------------------------------------------------------------------------------------------------</p>
+			   <p class='text-danger'>Q5：为什么我使用『智能添加任课老师』没有获得数据？</p>
+			   <p class='text-success'>A5：当使用该功能时，数据来源是和您同学校同专业的其他用户，如果没有获得数据，说明其他用户还没有添加数据，或者他们添加的数据你已经有了</p>
+				<p>----------------------------------------------------------------------------------------------------</p>				
+			   <p class='text-danger'>Q6：为什么我点评完某个课程后，它就“不见了”？</p>
+			   <p class='text-success'>A6：已经点评的课程将被放在最后一页，排序方式见Q2</p>
+			   <p>----------------------------------------------------------------------------------------------------</p>
+			   <p class='text-danger'>Q7：我已经点评了某个课程，但是发现任课老师写错了怎么办？</p>
+			   <p class='text-success'>A7：在没有点评前，任课老师是可以修改的，点评后无法直接修改。您的点评数据将视为无效，请务必联系管理员 <strong>collegeyi@sina.com</strong>协助更改，谢谢！</p>
+			   <p>----------------------------------------------------------------------------------------------------</p>		   
+			   <p class='text-danger'>Q8：为什么每次更新了数据就不能『刷新』或者点『下一页』？</p>
+			   <p class='text-success'>A8：这个是由网站的机制决定的，大部分的网站在提交完表单后都不能『刷新』，『下一页』的原理和『刷新』类似
+			   <p>----------------------------------------------------------------------------------------------------</p>
+			   <p class='text-danger'>Q9：你说了这么多，根本就没有我的问题！</p>
+			   <p class='text-success'>A9：非常抱歉没有解决您的问题，您可以致信管理员 <strong>collegeyi@sina.com</strong> ，如果您觉得有必要，也可以直接联系大学易的作者 you_xiang_123@sina.com ：）</p>
+			   <p>----------------------------------------------------------------------------------------------------</p>
+			   <p>Enjoy it !</p>
+          </div>
+          <div class='modal_sure_btn'>
+             <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >谢谢解答</button>
+          </div>
+      </div>
+      
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+	
 <!-- Modal -->
 <div class="modal fade" id="hand_add_explain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div id='modal_1' class="modal-dialog">
