@@ -18,6 +18,7 @@ from DjangoCaptcha import Captcha
 from Affair.views import send_mail
 import PIL 
 from Center.models import User_info
+from django.contrib.auth.decorators import login_required
 
 school_code = {u'华东师范大学':'ecnu',u'赣南师范学院':'gnnu',u'内蒙古师范大学':'imnu',
     u'西北农林科技大学':'nwsuaf',u'北京信息科技大学':'bistu',u'江西财经大学':'jxufe'}
