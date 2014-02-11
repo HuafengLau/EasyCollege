@@ -146,7 +146,7 @@
                     </div>
                 {% else %}
 				 <p>&nbsp;<p/>
-                 <p class='text-info text-center'>你还没有添加课程数据，赶快添加吧！</p>
+                 <p class='text-center'>你还没有添加课程数据，赶快添加吧！</p>
                 {% endif %}
             </div>
             {% if credits %}
@@ -184,16 +184,18 @@
 				</div>
 			</div>
 			{% endif %}
+			{% if credits %}
 			<div class='clear_both'>
+				
 				<button type="button" data-toggle="modal" data-target="#question_table" class="btn btn-link add_button_info">
-					关于上述成绩表的一些常见问题 Q&A
+					关于上述成绩表的一些常见问题 Q&A 
 				</button>
 			</div>
-			
+			{% endif %}
 			{% ifequal school_type 'URP' %}
 			<div class='clear_both'>
 				<p>&nbsp;</p>
-				<button class='btn' id='URP_btn'>访问数据库，更新课程信息</button>				
+				<button class='btn btn-link add_button_info' id='URP_btn'>访问数据库，更新课程信息</button>				
 				<div id='URP_form'>
 					<p class='text-danger'>如果您是大一上学期，数据库中还没有您的数据，请勿使用此功能。</p>
 					<p>输入您学生教务系统的账号和密码，大学易将为您抓取新的课程数据。ps.大学易不会保存您的账号和密码</p>
