@@ -53,13 +53,17 @@ def display(request,user,message,HTML):
     
     message = message
     
-    if u'源代码' in message or u'数据库' in message:
-        no_refresh = True
-    else:
+    try:
+        if u'源代码' in message or u'数据库' in message:
+            no_refresh = True
+        else:
+            no_refresh = False       
+    except:
         no_refresh = False
+        
     if message == 'URP':
-        school_type = 'URP'
-        message = None
+            school_type = 'URP'
+            message = None
     elif message == 'wise':
         school_type = 'wise'
         university_info_id = user.university_info_id
