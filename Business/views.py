@@ -25,6 +25,8 @@ def guide_getCreditFile(request,school_code):
         name = u'*元庆同学'
     if school_code == 'xcc':
         name = u'*盈盈同学'
+    if school_code == 'xhu':
+        name = u'*思梦同学'
     if school_code == 'jxufe':
         name = u'*咪同学'
         more = True 
@@ -216,52 +218,83 @@ def bistu(doc):
 def jxufe(doc):
     points = []
     soup = get_soup(doc)
-    table = soup.find('table',{'style':'border:1px solid #CCCCCC;padding:5px;background:#F3F3F3 ;line-height : normal ;border-collapse:collapse;'})
-    tbody = table.find('tbody')
-    TRs = tbody.findAll('tr')
-    for index, TR in enumerate(TRs):  
-        point = []
-        tds = TR.findAll('td')
-        name = str_change(tds[1].string)
-        attr = ''
-        score = str_change(tds[9].string)
-        credit = str_change(tds[7].string)
-        teacher = str_change(tds[3].string)
-        
-        if teacher == 'getTeacherName': 
-            continue
-        else:
-            point.append(name)
-            point.append(credit)
-            point.append(attr)
-            point.append(score)
-            point.append(teacher)
-            points.append(point)
-    return points
+    try:
+        table = soup.find('table',{'style':'border:1px solid #CCCCCC;padding:5px;background:#F3F3F3 ;line-height : normal ;border-collapse:collapse;'})
+        tbody = table.find('tbody')
+        TRs = tbody.findAll('tr')
+        for index, TR in enumerate(TRs):  
+            point = []
+            tds = TR.findAll('td')
+            name = str_change(tds[1].string)
+            attr = ''
+            score = str_change(tds[9].string)
+            credit = str_change(tds[7].string)
+            teacher = str_change(tds[3].string)
+            
+            if teacher == 'getTeacherName': 
+                continue
+            else:
+                point.append(name)
+                point.append(credit)
+                point.append(attr)
+                point.append(score)
+                point.append(teacher)
+                points.append(point)
+        return points
+    except:
+        return None
 
 def xcc(doc):
     points = []
     soup = get_soup(doc)
-    table = soup.findAll('table',{'class':'datelist'})[0]
-    TRs = table.findAll('tr')
-    for index, TR in enumerate(TRs):
-        point = []
-        if index == 0:
-            continue
-        else:
-            tds = TR.findAll('td')           
-            name = str_change(tds[3].string)
-            sttr = str_change(tds[4].string)
-            credit = str_change(tds[6].string)
-            score = str_change(tds[8].string)
-            point.append(name)
-            point.append(credit)
-            point.append(sttr)
-            point.append(score)
+    try:
+        table = soup.findAll('table',{'class':'datelist'})[0]
+        TRs = table.findAll('tr')
+        for index, TR in enumerate(TRs):
+            point = []
+            if index == 0:
+                continue
+            else:
+                tds = TR.findAll('td')           
+                name = str_change(tds[3].string)
+                sttr = str_change(tds[4].string)
+                credit = str_change(tds[6].string)
+                score = str_change(tds[8].string)
+                point.append(name)
+                point.append(credit)
+                point.append(sttr)
+                point.append(score)
 
-            points.append(point)
-    return points
+                points.append(point)
+        return points
+    except:
+        return None
 
+def xhu(doc):
+    points = []
+    soup = get_soup(doc)
+    try:
+        table = soup.findAll('table',{'class':'datelist'})[0]
+        TRs = table.findAll('tr')
+        for index, TR in enumerate(TRs):
+            point = []
+            if index == 0:
+                continue
+            else:
+                tds = TR.findAll('td')           
+                name = str_change(tds[3].string)
+                sttr = str_change(tds[4].string)
+                credit = str_change(tds[6].string)
+                score = str_change(tds[8].string)
+                point.append(name)
+                point.append(credit)
+                point.append(sttr)
+                point.append(score)
+
+                points.append(point)
+        return points
+    except:
+        return None
     
 def wise_analyzeCreditFile(doc,school_code):
     if school_code == 'ecnu':
@@ -278,6 +311,7 @@ def wise_analyzeCreditFile(doc,school_code):
         points = jxufe(doc)
     if school_code == 'xcc':
         points = xcc(doc)
-    
+    if school_code == 'xhu':
+        points  = xhu(doc)
     return points
     
