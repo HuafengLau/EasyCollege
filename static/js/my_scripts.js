@@ -408,6 +408,69 @@ $(document).ready(function(){
     // JS for value.html
     $('.choose_group').button('toggle','btn-primary');
     
+	$('#check_over').on('click', function(){
+		var iflike = $('input:radio[name="like_or_hate"]:checked').val();
+		var naming = $('input:radio[name="naming"]:checked').val();
+		var naming_way = $('input:radio[name="naming_way"]:checked').val();
+		var atmosphere = $('input:radio[name="atmosphere"]:checked').val();
+		var teach_way = $('input:radio[name="teach_way"]:checked').val();
+		var popularity = $('input:radio[name="popularity"]:checked').val();
+		var mid_test = $('input:radio[name="mid_test"]:checked').val();
+		var mid_test_way = $('input:radio[name="mid_test_way"]:checked').val();
+		var usual_work = $('input:radio[name="usual_work"]:checked').val();
+		var final_test_way = $('input:radio[name="final_test_way"]:checked').val();
+		var if_dead = $('input:radio[name="if_dead"]:checked').val(); 
+		var reveal = $('input:radio[name="reveal"]:checked').val();
+		
+		var list = [iflike,naming,naming_way,atmosphere,teach_way,popularity,mid_test,mid_test_way,usual_work,final_test_way,if_dead,reveal]
+		var n = 0
+		var message = ''
+		$.each(list, function (i,value) {
+			if (typeof(value) == 'undefined'){
+				n=n+1
+				if (i==0){
+					message +='      【赞\\中立\\踩】项未填\r'
+				}else if (i == 1){
+					message +='      【点名】项未填\r'
+				}else if (i == 2){
+					message +='      【点名方式】项未填\r'
+				}else if (i == 3){
+					message +='      【课堂气氛】项未填\r'
+				}else if (i == 4){
+					message +='      【上课形式】项未填\r'
+				}else if (i == 5){
+					message +='      【上课人气】项未填\r'
+				}else if (i == 6){
+					message +='      【期中考试】项未填\r'
+				}else if (i == 7){
+					message +='      【期中考试方式】项未填\r'
+				}else if (i == 8){
+					message +='      【平时作业】项未填\r'
+				}else if (i == 9){
+					message +='      【期末考试方式】项未填\r'
+				}else if (i == 10){
+					message +='      【期末考难度】项未填\r'
+				}else if (i == 11){
+					message +='      【是否透题】项未填\r'
+				}
+			}
+		});
+		
+		var Cscore = $('#select_Cscore option:selected').text();
+		var Tscore = $('#select_Tscore option:selected').text();
+		var degree = $('#select_degree option:selected').text();
+		
+		sure_message = '请确认评分：\r'+'      课程评分：'+Cscore+'分\r'+'      教师评分：'+Tscore+'分\r'+'      期末考难度：'+degree+'分（10分为艰难）\r\r'
+		
+		if (n==0){
+			alert(sure_message+'如果确认无误，就可以提交了：）')
+		}else if (n==1){
+			alert(sure_message+'另外，发现有一项未填哦！'+message)
+		}else{
+			alert(sure_message+'另外，发现有'+n+'项未填：\r'+message)
+		}
+	});
+	
     //  JS for show.html
     $(document).on('click', '.poll', function(){       
         var num = $(this).children().eq(1).children().text();

@@ -59,7 +59,7 @@
                 <tr>
                     <td>
                         <label class='pull-left'>课程评分<span class='font-red'>*</span></label>
-                        <select class='one_of_three' name='course_score'>
+                        <select id='select_Cscore' class='one_of_three' name='course_score'>
                           <option value='1'>1</option>
                           <option value='2'>2</option>
                           <option value='3'>3</option>
@@ -74,7 +74,7 @@
                     </td>
                     <td>
                     <label class='pull-left'>教师评分<span class='font-red'>*</span></label>
-                    <select class='one_of_three' name='teacher_score'>
+                    <select id='select_Tscore' class='one_of_three' name='teacher_score'>
                           <option value='1'>1</option>
                           <option value='2'>2</option>
                           <option value='3'>3</option>
@@ -325,7 +325,7 @@
                         <div>
                            <label class='pull-left'>期末考难度（10分为艰难）<span class='font-red'>*</span></label>                        
                            <div class='clear_both'>
-                            <select class='two_of_three' name='final_test_degree'>
+                            <select id='select_degree' class='two_of_three' name='final_test_degree'>
                               <option value='1'>1</option>
                               <option value='2'>2</option>
                               <option value='3'>3</option>
@@ -424,8 +424,10 @@
             </table>
         </div>
         
-        <div id='submit_div'>
-            <button class='btn btn-danger btn-block' type="submit">马上提交</button>
+        <div id='submit_div' class='form-inline'>
+            <span id='check_over' data-toggle="tooltip" title="在漏填状态下提交需要重新填写表单！" class='tooltip_th font-color-link hand_over'>看看漏填没？</span>
+			<button id='value_submit_btn' class='btn btn-success' type="submit">马上提交</button>
+			
         </div>
     </form>
     
