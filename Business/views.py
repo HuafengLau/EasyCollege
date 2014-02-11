@@ -23,6 +23,8 @@ def guide_getCreditFile(request,school_code):
         name = u'*隆堂同学'
     if school_code == 'bistu':
         name = u'*元庆同学'
+    if school_code == 'xcc':
+        name = u'*盈盈同学'
     if school_code == 'jxufe':
         name = u'*咪同学'
         more = True 
@@ -236,7 +238,31 @@ def jxufe(doc):
             point.append(teacher)
             points.append(point)
     return points
-        
+
+def xcc(doc):
+    points = []
+    soup = get_soup(doc)
+    table = soup.findAll('table',{'class':'datelist'})[0]
+    TRs = table.findAll('tr')
+    for index, TR in enumerate(TRs):
+        point = []
+        if index == 0:
+            continue
+        else:
+            tds = TR.findAll('td')           
+            name = str_change(tds[3].string)
+            sttr = str_change(tds[4].string)
+            credit = str_change(tds[6].string)
+            score = str_change(tds[8].string)
+            point.append(name)
+            point.append(credit)
+            point.append(sttr)
+            point.append(score)
+
+            points.append(point)
+    return points
+
+    
 def wise_analyzeCreditFile(doc,school_code):
     if school_code == 'ecnu':
         points = ecnu(doc)
@@ -250,6 +276,8 @@ def wise_analyzeCreditFile(doc,school_code):
         points = bistu(doc) 
     if school_code == 'jxufe':
         points = jxufe(doc)
+    if school_code == 'xcc':
+        points = xcc(doc)
     
     return points
     
