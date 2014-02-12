@@ -460,10 +460,10 @@ $(document).ready(function(){
 		var Tscore = $('#select_Tscore option:selected').text();
 		var degree = $('#select_degree option:selected').text();
 		
-		sure_message = '请确认评分：\r'+'      课程评分：'+Cscore+'分\r'+'      教师评分：'+Tscore+'分\r'+'      期末考难度：'+degree+'分（10分为艰难）\r\r'
+		sure_message = '您的评分项为：\r'+'      课程评分：'+Cscore+'分\r'+'      教师评分：'+Tscore+'分\r'+'      期末考难度：'+degree+'分（10分为艰难）\r\r'
 		
 		if (n==0){
-			alert(sure_message+'如果确认无误，就可以提交了：）')
+			alert(sure_message+'如果确认这些评分无误，就可以提交了：）')
 		}else if (n==1){
 			alert(sure_message+'另外，发现有一项未填哦！'+message)
 		}else{
