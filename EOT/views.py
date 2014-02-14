@@ -141,7 +141,7 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
             elif mid_test_way_num == this_eot.mid_test_way.pravite_num:
                 mid_test_way_message = u'布置任务，私下完成后提交'
             else:
-                mid_test_way_message = u'其他考察方式'
+                mid_test_way_message = u'堂上作业等其他考察方式'
         else:
             mid_test_message = u'没有期中考试'
             mid_test_way_message = False
@@ -169,7 +169,7 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
         elif reveal_num == this_eot.reveal.nothing_num:
             reveal_message = u'不透题或透题非常不给力'
         else:
-            reveal_message = u'其他给力透题方式'
+            reveal_message = u'其他给力透题方式或无需透题'
         
         usual_work_num = compare_3(this_eot.usual_work.less_num, 
             this_eot.usual_work.some_num, this_eot.usual_work.more_num)
