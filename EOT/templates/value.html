@@ -30,9 +30,11 @@
     </div>
     {% if value_wrong_message %}
         <div class="alert alert-danger alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          
             <strong>Warning!</strong> &nbsp;&nbsp;{{ value_wrong_message }}&nbsp;
             很抱歉，您可能需要重新填写此表单
+			<p>&nbsp;</p>
+			<p><span class='font-red'>提交前，点击按钮左边的【看看漏填没？】，就不怕会漏填啦！</span></p>
         </div>
     {% else %}
         <div class="alert alert-success">

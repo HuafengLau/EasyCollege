@@ -1,6 +1,10 @@
 $(document).ready(function(){   
-    
-    
+    	
+	$('.tooltip_p').each( function(){
+        
+        $(this).tooltip();
+    });
+	
     // JS for base.html   
     
     // JS for log.html

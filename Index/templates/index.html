@@ -78,11 +78,12 @@
                 {% if credits %}
                     {% if message %}
                         <div class="alert alert-danger alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            
                             <strong>Message：</strong><span class='font-red'>{{ message}}</span>
 							{% if no_refresh %}
 								<p><strong>Warning：</strong>
-								当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！转到任意页面并返回后可恢复正常。
+								当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！
+								
 								</p>
 							{% endif %}
                         </div>
@@ -175,10 +176,11 @@
 			{% if no_refresh %}
 			<div class='clear_both'>
 				<div class="alert alert-danger alert-dismissable">
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					
 					{% if no_refresh %}
 						<strong>Warning：</strong>
-						当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！转到任意页面并返回后可恢复正常。
+						当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！
+						点击<a href='/eot/list/'>此处</a>或者其他任意页面并返回后即可恢复正常。
 						
 					{% endif %}
 				</div>

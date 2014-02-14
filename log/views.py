@@ -155,6 +155,8 @@ def judge(zh,mm):
         return False
     
 def log(request):     
+    URP_list = URP_school
+    wise_list = school_code
     if request.method == 'POST':    
         username = request.POST['email']
         password = request.POST['stu_pwd']
@@ -181,6 +183,8 @@ def log(request):
                 context_instance=RequestContext(request))
     else:
         next = request.GET.get('next')
+        
+        
         return render_to_response('log.html',locals(),
             context_instance=RequestContext(request))
 

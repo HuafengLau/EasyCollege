@@ -36,7 +36,11 @@ def guide_getCreditFile(request,school_code):
         more = True 
         return render_to_response('CFileGuideJxufe.html',locals(),
             context_instance=RequestContext(request))
-            
+    if school_code == 'ncu':
+        name = u'*健民同学'
+        more = True 
+        return render_to_response('CFileGuideNcu.html',locals(),
+            context_instance=RequestContext(request))        
     more_school = ['nwsuaf',]
     if school_code in more_school:
         more = True
@@ -104,8 +108,8 @@ def GPA(user,zh,mm):
 def ecnu(doc):
     points = []
     soup = get_soup(doc)
-    all_a = soup.findAll('a',{'href':'javascript:void(0)'})
-    if all_a:
+    try:
+        all_a = soup.findAll('a',{'href':'javascript:void(0)'})
         for a in all_a:
             point = []
             this_name = a.contents[0]
@@ -118,7 +122,7 @@ def ecnu(doc):
             point.append(str_change(this_score))
             points.append(point)
         return points
-    else:
+    except:
         return None
 
 def gnnu(doc):
@@ -149,9 +153,9 @@ def gnnu(doc):
 def imnu(doc):
     points = []
     soup = get_soup(doc)
-    TRS = soup.findAll('tr', attrs={"class" : "odd"})
-    courses=[]
     try:
+        TRS = soup.findAll('tr', attrs={"class" : "odd"})
+        courses=[]
         for index, item in enumerate(TRS):
             course = []
             TR = TRS[index].contents

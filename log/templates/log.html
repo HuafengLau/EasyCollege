@@ -3,6 +3,8 @@
   <head lang='zh-CN'>
     <title>{% block title %}登录 - 大学易{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="大学易--帮助大学生掌控大学生活，为大学生提供课程资料、考试资料的下载，提供课程的详尽信息包括课程评分、教师评分、课程期末平均分、是否点名、是否有期中考等等。分享学长学姐的大学经历，为大学生活提供参考。大学生活，从大学易开始。" />
+    <meta name="keywords" content="大学易,大学选课,评教,课程评教,课程资料,大学生活,大学" />
     <!-- Bootstrap -->
     <link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="{{STATIC_URL}}css/my_css.css" rel="stylesheet" media="screen">
@@ -20,7 +22,7 @@
     <![endif]-->
   </head>
   <body background="{{STATIC_URL}}img/background-img1.jpg">
-    <div id='log_div' class="">       
+    <div id='log_div' class="" >       
         <div id='slogan_div' class='pull-left'>
             <h1>大学易</h1>
             <p class="lead">分享学长学姐的经验、知识和见解</p>
@@ -87,6 +89,36 @@
         </div>
             
     </div>
+	<div id='log_bottom_div' class='clear_both'>
+		<div id='log_info_div'>
+		<p class='text-left'>大学易当前支持的：</p>
+		<p class='text-left'>
+			<span data-toggle="tooltip" title="可通过提供学生系统的账号和密码来上传课程数据" class='tooltip_p'>URP_school</span>
+		</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% for item in URP_list %}<span>{{item}}&nbsp;&nbsp;&nbsp;</span>{% endfor %}</p>
+		<p class='text-left'>
+			<span data-toggle="tooltip" title="可通过提供成绩页面源代码来上传课程数据" class='tooltip_p'>Wise_school</span>
+		</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% for key,value in wise_list.items %} 
+			<span><a target='_blank' href='business/guide/getCreditFile/{{value}}'>{{key}}</a>&nbsp;&nbsp;</span>{% endfor %}
+		</p>
+		<p class='text-left'>
+			<span data-toggle="tooltip" title="需要手工添加课程数据" class='tooltip_p'>Other_school</span>
+		</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所有中国高校</p>
+		</div>
+		<div id='log_bottom_nav'>
+		<p class='text-center'>
+			<a class='hand_over' data-toggle="modal" data-target="#nothing_for_version">
+			关于大学易</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a class='hand_over' data-toggle="modal" data-target="#nothing_for_version">
+			隐私政策</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a class='hand_over' data-toggle="modal" data-target="#nothing_for_version">
+			社区规范</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+			<a class='hand_over' data-toggle="modal" data-target="#nothing_for_version">联系我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://www.miitbeian.gov.cn/'>蜀ICP备13028752号-1</a>
+		</p>
+		<p class='text-center'>Copyright © 2014 collegeyi.com&nbsp;&nbsp;保留所有权利</p>
+		<h4 id='' class='text-center'>大学易，为自由而生！</h4>		
+		</div>
+	</div>
     
         <!-- Modal -->
     <div class="modal fade" id="nothing_for_version" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
