@@ -448,6 +448,12 @@ div.transp { /* make the div translucent */
 
 
 /* CSS for show.html */
+.img-show{
+	margin-left: 15%;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
 #img_btn,#file_btn,#reportImg_btn{
     margin-bottom: 6px;
 }

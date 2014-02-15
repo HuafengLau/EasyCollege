@@ -273,7 +273,7 @@
                     </table>
                     
                 </div>
-            </div>
+            
                 {% if imgs %}              
                 <div id="carousel-example-generic" class="carousel slide">
                   <!-- Indicators -->
@@ -295,20 +295,20 @@
                     {% else %}
                     <div class="item">
                     {% endif %}
-                      <img src="{{MEDIA_URL}}{{img.img}}" alt="{{img.title}}">
+                      <img src="{{MEDIA_URL}}{{img.img}}" alt="{{img.title}}" width='75%' class='img-show'>
                       <div class="carousel-caption">
-                        <h3>{{img.title}}</h3>
-                        <p>{{img.description}}</p>
+                        <h3 class='font-blue'>{{img.title}}</h3>
+                        <p class='font-blue'>{{img.description}}</p>
                       </div>
                     </div>
                     {% endfor %}
                   </div>
 
                   <!-- Controls -->
-                  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                  <a class="left carousel-control font-blue" href="#carousel-example-generic" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                   </a>
-                  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                  <a class="right carousel-control font-blue" href="#carousel-example-generic" data-slide="next">
                     <span class="glyphicon glyphicon-chevron-right"></span>
                   </a>
                 </div>    
@@ -318,7 +318,7 @@
                     </div>
                 {% endif %}
                 </div>
-                       
+             </div>          
         </div>
         <div id='show_renqi_div' class='panel panel-danger'>
             <div id='heading_renqi' class="panel-heading">课程人气</div>
