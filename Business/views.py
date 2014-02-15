@@ -41,6 +41,12 @@ def guide_getCreditFile(request,school_code):
         more = True 
         return render_to_response('CFileGuideNcu.html',locals(),
             context_instance=RequestContext(request))        
+    if school_code == 'nenu':
+        name = u'*秀红同学'
+        more = True 
+        return render_to_response('CFileGuideNenu.html',locals(),
+            context_instance=RequestContext(request))
+    
     more_school = ['nwsuaf',]
     if school_code in more_school:
         more = True
@@ -356,6 +362,28 @@ def hbue(doc):
     except:
         return None
 
+def nenu(doc):
+    points = []
+    soup = get_soup(doc)
+    try:
+        TRs = soup.findAll('tr',{'class':"smartTr"})
+        for TR in TRs:
+            point = []
+            tds = TR.findAll('td')
+              
+            name = str_change(tds[4].string)
+            attr = ''
+            credit = str_change(tds[10].string)
+            score = str_change(tds[5].string)
+            point.append(name)
+            point.append(credit)
+            point.append(attr)
+            point.append(score)
+            
+            points.append(point)
+        return points
+    except:
+        return None
         
 def wise_analyzeCreditFile(doc,school_code):
     if school_code == 'ecnu':
@@ -378,5 +406,7 @@ def wise_analyzeCreditFile(doc,school_code):
         points = dlmedu(doc)
     if school_code == 'hbue':
         points = hbue(doc)
+    if school_code == 'nenu':
+        points = nenu(doc)
     return points
     

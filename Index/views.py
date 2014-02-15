@@ -68,7 +68,10 @@ def display(request,user,message,HTML):
         school_type = 'wise'
         university_info_id = user.university_info_id
         school = University_info.objects.get(id=university_info_id).school
+        attr_need_list = ['nenu','jxufe']
         this_school_code = school_code[school]
+        if this_school_code in attr_need_list:
+            attr_need = True
         message = None
     else:
         pass

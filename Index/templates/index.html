@@ -82,9 +82,9 @@
                             <strong>Message：</strong><span class='font-red'>{{ message}}</span>
 							{% if no_refresh %}
 								<p><strong>Warning：</strong>
-								当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！
-								
-								</p>
+								当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！	</p>
+								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								点击<a href='/index/'>此处</a>即可恢复正常。</p>
 							{% endif %}
                         </div>
                     {% endif %}
@@ -114,10 +114,10 @@
                                         {{ credit.course_teacher }}
                                     {% endifequal %}
                                 </td>                               
-								{% ifequal this_school_code 'jxufe' %}
+								{% if attr_need %}
 									{% ifequal credit.add_money 0 %}
-										<td id='{{credit.id}}a' data-toggle="tooltip" title="点击编辑，填必修或非必修" class='tooltip_th'>
-											<button class='btn btn_edit_attr'>                           
+										<td id='{{credit.id}}a'>
+											<button class='btn btn_edit_attr' data-toggle="tooltip" title="点击编辑，填必修或非必修" class='tooltip_th'>                           
 												{% ifequal credit.course_attr '' %}
 													+
 												{% else %}
@@ -130,7 +130,7 @@
 									{% endifequal %}
 								{% else %}
 									<td>{{ credit.course_attr }}</td>
-								{% endifequal %}
+								{% endif %}
                                 <td class='num_credit_1'>{{ credit.course_credit }}</td>
                                 <td>{{ credit.course_score }}</td>
                                 <td>
@@ -178,9 +178,10 @@
 				<div class="alert alert-danger alert-dismissable">
 					
 					{% if no_refresh %}
-						<strong>Warning：</strong>
-						当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！
-						点击<a href='/eot/list/'>此处</a>或者其他任意页面并返回后即可恢复正常。
+						<p><strong>Warning：</strong>
+						当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							点击<a href='/index/'>此处</a>即可恢复正常。</p>
 						
 					{% endif %}
 				</div>
@@ -228,7 +229,7 @@
 			{% endifequal %}			
 			{% ifequal school_type 'wise' %}
 			<div class='clear_both'>
-				<button class='btn' id='wise_btn'>上传源代码文件，更新课程信息</button>
+				<button class='btn btn-link add_button_info' id='wise_btn'>上传源代码文件，更新课程信息</button>
 				<div id='wise_form'>
 					<p>上传符合要求的带有期末成绩的源代码页面，大学易即会分析获取新的课程数据。</p>
 					<p>&nbsp;</p>
@@ -317,7 +318,7 @@
 			   <p class='text-success'>A3：因为课程和任课老师是紧密联系的，两者都是点评的对象，无法分割</p>
 			   <p>----------------------------------------------------------------------------------------------------</p>
 			   <p class='text-danger'>Q4：为什么抓数据的时候不连同教师一起抓，手工填好麻烦</p>
-			   <p class='text-success'>A4：这个主要是因为无法直接从教务系统中直接获取教师的数据，或者您提交的页面中并没有包含教师的数据。
+			   <p class='text-success'>A4：这个主要是因为无法直接从教务系统中获取教师的数据，或者您提交的页面中并没有包含教师的数据。
 				你可以通过『智能添加任课老师』来快速添加任课老师</p>
 			   <p>----------------------------------------------------------------------------------------------------</p>
 			   <p class='text-danger'>Q5：为什么我使用『智能添加任课老师』没有获得数据？</p>
