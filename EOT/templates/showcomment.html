@@ -9,9 +9,11 @@
 
 {% block mainbody %}
 <div class='container'>
-    <div id='back_btn_div'>
+    {% if user.is_authenticated %}
+	<div id='back_btn_div'>
         <a href="{{ last_url }}"><button class='btn btn-default'><<返回</button></a>
     </div>
+	{% endif %}
     
     <div id='report_or_not'>
         {% ifequal condition 'no' %}
@@ -45,16 +47,20 @@
         </tr>
     </table>
     <div>
-        {% if can_comment %}
-            <form class='form-group' action='/eot/commentdata/{{this_Eotdata.id}}/' method='POST' autocomplete="on">                
-            {% csrf_token %}
-                <div><p>评论</p></div>
-                <textarea rows='3' name='comment' id='comment_area' value='' placeholder='我觉得这个资料……' required></textarea>
-                <div><button class="btn form-control btn-info" id='' type="submit">提交</button></div>
-            </form>
-        {% else %}
-            <p class='text-danger text-left'>你不能评价本资料，可能是你还没有下载本资料或者已经评论过了</p>
-        {% endif %}
+        {% if user.is_authenticated %}
+			{% if can_comment %}
+				<form class='form-group' action='/eot/commentdata/{{this_Eotdata.id}}/' method='POST' autocomplete="on">                
+				{% csrf_token %}
+					<div><p>评论</p></div>
+					<textarea rows='3' name='comment' id='comment_area' value='' placeholder='我觉得这个资料……' required></textarea>
+					<div><button class="btn form-control btn-info" id='' type="submit">提交</button></div>
+				</form>
+			{% else %}
+				<p class='text-danger text-left'>你不能评价本资料，可能是你还没有下载本资料或者已经评论过了</p>
+			{% endif %}
+		{% else %}
+			<p class='text-danger text-left'>你不能评价本资料，因为你还没有登陆</p>
+		{% endif %}
     </div>
     <div id='report_response_div'>      
     </div>
@@ -147,8 +153,13 @@
           <p class="text-success">遵守大学易公约，请勿恶意举报</p>
           </div>
           <div class='modal_sure_btn'>
-             <button  id='report_eotData_btn' type="button" class="btn btn-danger" >
+             {% if user.is_authenticated %}
+			 <button  id='report_eotData_btn' type="button" class="btn btn-danger" >
              <span id='{{this_Eotdata.eot.id}};{{this_Eotdata.id}};{{this_Eotdata.owner.id}}'>确认举报</span></button>
+			 {% else %}
+			 <button  id='' type="button" class="btn btn-danger need_login" >
+             <span id=''>确认举报</span></button>
+			 {% endif %}
              <button  type="button" data-dismiss="modal" class="btn btn-success" >取消</button>            
           </div>
       </div>

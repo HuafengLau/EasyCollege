@@ -15,9 +15,11 @@
 {% endblock %}
 
 {% block eotleftup %}
-    <div id='back_btn_div'>
+    {% if user.is_authenticated %}
+	<div id='back_btn_div'>
         <a href="{{ last_url }}"><button class='btn btn-default'><<返回</button></a>
     </div>
+	{% endif %}
     {% if money_message %}
     {% ifequal lucky 1 %}
     <div class="alert alert-success">
@@ -80,11 +82,13 @@
         
         <div id='show_baseinfo_div' class='panel panel-danger'>
             <div id='heading_baseinfo' class="panel-heading">基础信息
-                {% if store_message %}
-                    <a id='{{this_eot.id}}' class='delStore pull-right hand_over'>取消收藏</a>
-                {% else %}
-                     <a id='{{this_eot.id}}' class='store pull-right hand_over'>收藏</a>
-                {% endif %}
+                {% if user.is_authenticated %}
+					{% if store_message %}
+						<a id='{{this_eot.id}}' class='delStore pull-right hand_over'>取消收藏</a>
+					{% else %}
+						 <a id='{{this_eot.id}}' class='store pull-right hand_over'>收藏</a>
+					{% endif %}
+				{% endif %}
             </div>
             <div class="panel-body">
                 <div>
@@ -203,7 +207,11 @@
             <div id='heading_eotfile' class="panel-heading">图片资料</div>
             <div class="panel-body">
                 <div> 
-                    <button class='btn' id='img_btn'>上传图片</button>                   
+                    {% if user.is_authenticated %}
+					<button class='btn' id='img_btn'>上传图片</button>
+					{% else %}
+					<button class='btn need_login' id=''>上传图片</button>
+					{% endif %}
                     <form role="form" id='img_form' class='form-group' action='/eot/uploadImg/{{this_eot.id}}/' enctype="multipart/form-data" method='POST'> 
                         {% csrf_token %}
                         <table class='table'>
@@ -232,7 +240,11 @@
                         <button class="btn btn-default" id='' type="submit">提交</button>
                     </form>
                     
-                    <button class='btn' id='reportImg_btn'>举报图片</button> 
+					{% if user.is_authenticated %}
+                    <button class='btn' id='reportImg_btn'>举报图片</button>
+					{% else %}
+					<button class='btn need_login' id=''>举报图片</button>
+					{% endif %}
                     <table id='reportImg_table' class='table table-bordered'>
                         <tr><th>图片标题</th><th>状态</th></tr>
                         {% for img in imgs %}
@@ -315,16 +327,16 @@
                     <table class='table table-bordered'>
                         <tr>
                             <td>
-                                <button type="button" class="btn btn-link">
-                                    <span>{{this_eot.like_num}}</span><span class='font-black'>&nbsp;&nbsp;赞</span>
+                                <button type="button" class="btn btn-link font-black">
+                                    <span>{{this_eot.like_num}}</span><span>&nbsp;&nbsp;赞</span>
                                     <span class="glyphicon glyphicon-thumbs-up"></span>
                                 </button>
                                 
                                  
                             </td>
                             <td>
-                                <button type="button" class="btn btn-link">
-                                    <span>{{this_eot.hate_num}}</span><span class='font-black'>&nbsp;&nbsp;踩</span>
+                                <button type="button" class="btn btn-link font-black">
+                                    <span>{{this_eot.hate_num}}</span><span>&nbsp;&nbsp;踩</span>
                                     <span class="glyphicon glyphicon-thumbs-down"></span>
                                 </button>
                             </td>
@@ -473,7 +485,11 @@
             <div id='heading_eotfile' class="panel-heading">资料上传与下载</div>
             <div class="panel-body">
                 <div> 
-                    <button class='btn' id='file_btn'>上传资料</button>
+                    {% if user.is_authenticated %}
+					<button class='btn' id='file_btn'>上传资料</button>
+					{% else %}
+					<button class='btn need_login' id=''>上传资料</button>
+					{% endif %}
                     <form role="form" id='file_form' class='form-group' action='/eot/uploadfile/{{this_eot.id}}/' enctype="multipart/form-data" method='POST'> 
                         {% csrf_token %}
                         <table class='table'>
@@ -521,20 +537,28 @@
                         </tr>
                         {% for data in datas %}
                         <tr>
-                            <td><a href='/eot/showcomment/{{data.id}}/'><span data-toggle="tooltip" title="{{data.description}}">{{data.title}}</span></a></td>
+                            <td>
+								<a target='_blank' href='/eot/showcomment/{{data.id}}/'><span data-toggle="tooltip" title="{{data.description}}">{{data.title}}</span></a>
+							</td>
                             <td>{{data.price_num}}</td>
                             
                             <td>{{data.upload_time|date:'Y-m-d'}}</td>
                             <td>
-                                {% ifequal user.money 0 %}
-                                    囊中羞涩
-                                {% else %}
-                                <button class='btn'>
-                                    <a href='/eot/downloadfile/{{data.id}}/{{data.file}}/' target='_blank'>
-                                        <span class="glyphicon glyphicon-download-alt"></span>下载（{{data.download_num}}次）
-                                    </a>
-                                </button>
-                                {% endifequal %}
+                                {% if user.is_authenticated %}
+									{% ifequal user.money 0 %}
+										囊中羞涩
+									{% else %}
+									<button class='btn'>
+										<a href='/eot/downloadfile/{{data.id}}/{{data.file}}/' target='_blank'>
+											<span class="glyphicon glyphicon-download-alt"></span>下载（{{data.download_num}}次）
+										</a>
+									</button>
+									{% endifequal %}
+								{% else %}
+									<button class='btn need_login'>										
+										<span class="glyphicon glyphicon-download-alt"></span>下载（{{data.download_num}}次）										
+									</button>
+								{% endif %}
                             </td>
                         </tr>
                         {% endfor %}
@@ -661,18 +685,33 @@
                                         <p class='font-black'>&nbsp;&nbsp;&nbsp;&nbsp;{{comment.comment}}</p>
                                     </div>
                                     <div class='show_comment_like_div'>                                            
-                                        <button type="button" class="btn btn-link poll">
-                                            <span class="glyphicon glyphicon-thumbs-up"></span>
-                                            <span class='font-black'>
-                                            （<span id='{{comment.id}}-1' class='btn-num'>{{comment.agree_num}}</span>）
-                                            </span>
-                                        </button>
-                                        <button type="button" class="btn btn-link poll">
-                                            <span class="glyphicon glyphicon-thumbs-down"></span>
-                                            <span class='font-black'>
-                                            （<span id='{{comment.id}}-0' class='btn-num'>{{comment.disagree_num}}</span>）
-                                            </span>
-                                        </button> 
+                                        {% if user.is_authenticated %}
+											<button type="button" class="btn btn-link poll">
+												<span class="glyphicon glyphicon-thumbs-up"></span>
+												<span class='font-black'>
+												（<span id='{{comment.id}}-1' class='btn-num'>{{comment.agree_num}}</span>）
+												</span>
+											</button>
+											<button type="button" class="btn btn-link poll">
+												<span class="glyphicon glyphicon-thumbs-down"></span>
+												<span class='font-black'>
+												（<span id='{{comment.id}}-0' class='btn-num'>{{comment.disagree_num}}</span>）
+												</span>
+											</button> 
+										{% else %}
+											<button type="button" class="btn btn-link need_login font-black">
+												<span class="glyphicon glyphicon-thumbs-up"></span>
+												<span>
+												（<span id='' class='btn-num'>{{comment.agree_num}}</span>）
+												</span>
+											</button>
+											<button type="button" class="btn btn-link need_login font-black">
+												<span class="glyphicon glyphicon-thumbs-down"></span>
+												<span>
+												（<span id='' class='btn-num'>{{comment.disagree_num}}</span>）
+												</span>
+											</button>
+										{% endif %}
                                     </div>
                                     <div class='show_comment_textline'>
                                         <span class='text-muted'>-----------------------------------------------------------

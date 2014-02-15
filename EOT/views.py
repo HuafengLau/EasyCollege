@@ -63,6 +63,7 @@ def judge_score(score):
     
     
 def show(request,this_eot,no_eot, credit_id, **kwargs):
+    user = request.user
     if not no_eot:
         naming_num = compare_3(this_eot.naming.never_num,
             this_eot.naming.sometimes_num, this_eot.naming.often_num)
@@ -249,27 +250,28 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
         
         steps = (max_num/5+1)* 5
         
-        user = request.user
-        try: 
-            this_user_info = User_info.objects.get(user=user)
-            if this_user_info.store_eot:       
-                storeEot_list = this_user_info.store_eot.split(';')[:-1]
-                if u'%s' % this_eot.id in storeEot_list:
-                    store_message = True
+        if request.user.is_authenticated():
+            user = request.user
+            try: 
+                this_user_info = User_info.objects.get(user=user)
+                if this_user_info.store_eot:       
+                    storeEot_list = this_user_info.store_eot.split(';')[:-1]
+                    if u'%s' % this_eot.id in storeEot_list:
+                        store_message = True
+                    else:
+                        store_message = False
                 else:
                     store_message = False
-            else:
-                store_message = False
-        except:
-             this_user_info = User_info(
-                store_eot = '',
-                download_Eotdata = '',
-                nocomment_Eotdata = '',
-                grade = u'公民',
-                user = user
-             )
-             this_user_info.save()
-             store_message = False
+            except:
+                 this_user_info = User_info(
+                    store_eot = '',
+                    download_Eotdata = '',
+                    nocomment_Eotdata = '',
+                    grade = u'公民',
+                    user = user
+                 )
+                 this_user_info.save()
+                 store_message = False
         
     else:
         store_message = False
@@ -280,9 +282,8 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
             message_sameteacher = u'抱歉，暂时没有发现相关的数据'
             message_samecourse = u'抱歉，暂时没有发现相关的数据'
         else:      
-            user = request.user
             credit = Credit.objects.get(id=credit_id)
-            university_info = University_info.objects.get(id=user.university_info_id)
+            university_info = University_info.objects.get(id=credit.university_info_id)
             sameteacher = Eot.objects.filter(
                 teacher = credit.course_teacher,
                 university = university_info.school
@@ -329,33 +330,36 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
         imgForm = Eot_imgForm()
     
     try:
-        last_url = request.session['last_url']
-        path = 'http://' + request.META['HTTP_HOST'] + request.path
-        if request.META['HTTP_REFERER'] != path:
-            if '/eot/showcredit/' in request.META['HTTP_REFERER'] and '/eot/showeot/' in request.path:
-                pass
-            elif '/eot/showcomment/' in request.META['HTTP_REFERER'] and '/eot/showcredit/' in request.path:
-                request.session['last_url'] = '/index/'
-                last_url = request.session['last_url']
-            elif '/eot/showcomment/' in request.META['HTTP_REFERER'] and '/eot/showeot/' in request.path:
-                request.session['last_url'] = '/list/'
-                last_url = request.session['last_url']
-            else:    
-                request.session['last_url'] = request.META['HTTP_REFERER']
-                last_url = request.session['last_url']       
+        can = request.META['HTTP_REFERER']
+        try:
+            last_url = request.session['last_url']
+            path = 'http://' + request.META['HTTP_HOST'] + request.path
+            if request.META['HTTP_REFERER'] != path:
+                if '/eot/showcredit/' in request.META['HTTP_REFERER'] and '/eot/showeot/' in request.path:
+                    pass
+                elif '/eot/showcomment/' in request.META['HTTP_REFERER'] and '/eot/showcredit/' in request.path:
+                    request.session['last_url'] = '/index/'
+                    last_url = request.session['last_url']
+                elif '/eot/showcomment/' in request.META['HTTP_REFERER'] and '/eot/showeot/' in request.path:
+                    request.session['last_url'] = '/list/'
+                    last_url = request.session['last_url']
+                else:    
+                    request.session['last_url'] = request.META['HTTP_REFERER']
+                    last_url = request.session['last_url']       
+        except:
+            request.session['last_url'] = request.META['HTTP_REFERER']
+            last_url = request.session['last_url']
     except:
-        request.session['last_url'] = request.META['HTTP_REFERER']
-        last_url = request.session['last_url']
+        pass
     
     
     return render_to_response('show.html',locals(),
         context_instance=RequestContext(request))
 
-@login_required(login_url='/log/')        
-def showcredit(request, credit_id):   
-    user = request.user
-    university_info = University_info.objects.get(id=user.university_info_id)
+      
+def showcredit(request, credit_id):     
     credit = Credit.objects.get(id=credit_id)
+    university_info = University_info.objects.get(id=credit.university_info_id)
     try:
         this_eot = Eot.objects.get(
             course = credit.course_name,
@@ -368,9 +372,8 @@ def showcredit(request, credit_id):
         this_eot = None   
     return show(request,this_eot,no_eot,credit_id)
 
-@login_required(login_url='/log/')    
+   
 def showeot(request, eot_id,**kwargs):
-    user = request.user
     if kwargs:
         lucky = kwargs['lucky']
         money_message = kwargs['money_message']
@@ -1059,7 +1062,6 @@ def poll(request):
         if 'poll_info' in request.POST:
             id, num = request.POST.get('poll_info').split('-')
             id=int(id)
-            print request.POST.get('poll_info')
             try:
                 this_comment = Eot_comment.objects.get(id=id)
                 user = request.user
@@ -1075,7 +1077,6 @@ def poll(request):
                     response = HttpResponse()
                     return response
             except:
-                print 'poll ,something wrong!'
                 response = HttpResponse()
                 return response
 
@@ -1085,7 +1086,6 @@ def search(request):
         if 'search' in request.GET:
             user = request.user
             university_info = University_info.objects.get(id=user.university_info_id)
-            print request.GET.get('search')
             items = request.GET.get('search').split(';')
             for index,text in enumerate(items):
                  items[index] = text.strip()               
@@ -1189,9 +1189,7 @@ def search_sort(request):
     if request.is_ajax() and request.method == 'GET':
         if 'sort' in request.GET:
             ids = request.GET.get('ids')
-            print ids
             ids_list = ids.split(';')[:-1]
-            print ids_list
             sort = request.GET.get('sort')            
             if sort == 'coursescore':               
                 sort_message = u'课程评分'              
@@ -1251,7 +1249,6 @@ def downloadfile(request,data_id,path):
     archive = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED) 
     src = settings.MEDIA_ROOT  
     filename = path.split('/')[1]
-    print filename
     zipname = filename.split('.')[1]
     archive.write(src+'/'+path, filename) 
     archive.close() 
@@ -1265,7 +1262,6 @@ def downloadfile(request,data_id,path):
     
     try: 
         this_user_info = User_info.objects.get(user=user)
-        print 'has info'
     except:       
         this_user_info = User_info(
             store_eot = '',
@@ -1320,33 +1316,31 @@ def uploadImg(request,eot_id):
             credit_id = ''
             this_eot = Eot.objects.get(id=eot_id)
             return show(request,this_eot,no_eot, credit_id,imgForm=form)    
-    
-@login_required(login_url='/log/')    
+       
 def showcomment(request,Eotdata_id):
     user = request.user
     this_Eotdata = Eot_data.objects.get(id=Eotdata_id)
-    
-    try: 
-        this_user_info = User_info.objects.get(user=user)
-        print 'has info'
-    except:       
-        this_user_info = User_info(
-            store_eot = '',
-            user = user,
-            download_Eotdata = '',
-            nocomment_Eotdata = '',
-            grade = u'公民'
-        )
-        this_user_info.save()
-    
-    if this_user_info.nocomment_Eotdata:
-        nocomment_list = this_user_info.nocomment_Eotdata.split(';')[:-1]
-        if Eotdata_id in nocomment_list:
-            can_comment = True
+    if user.is_authenticated():
+        try: 
+            this_user_info = User_info.objects.get(user=user)
+        except:       
+            this_user_info = User_info(
+                store_eot = '',
+                user = user,
+                download_Eotdata = '',
+                nocomment_Eotdata = '',
+                grade = u'公民'
+            )
+            this_user_info.save()
+        
+        if this_user_info.nocomment_Eotdata:
+            nocomment_list = this_user_info.nocomment_Eotdata.split(';')[:-1]
+            if Eotdata_id in nocomment_list:
+                can_comment = True
+            else:
+                can_comment = False
         else:
             can_comment = False
-    else:
-        can_comment = False
         
     comments = Eotdata_comment.objects.filter(eot_data=this_Eotdata)
     if not comments:
@@ -1372,15 +1366,19 @@ def showcomment(request,Eotdata_id):
         comments = comments_list
     
     try:
-        last_url = request.session['last_url']
+        can = request.META['HTTP_REFERER']
+        try:
+            last_url = request.session['last_url']
 
-        path = 'http://' + request.META['HTTP_HOST'] + request.path
-        if request.META['HTTP_REFERER'] != path:
+            path = 'http://' + request.META['HTTP_HOST'] + request.path
+            if request.META['HTTP_REFERER'] != path:
+                request.session['last_url'] = request.META['HTTP_REFERER']
+                last_url = request.session['last_url']
+        except:
             request.session['last_url'] = request.META['HTTP_REFERER']
             last_url = request.session['last_url']
     except:
-        request.session['last_url'] = request.META['HTTP_REFERER']
-        last_url = request.session['last_url']
+        pass
     
     try:
         this_Report_eotData = Report_eotData.objects.get(eot_data=this_Eotdata)

@@ -1,5 +1,9 @@
 $(document).ready(function(){   
-    	
+    
+	$('.need_login').on('click', function(){
+		alert('请登陆后再使用此功能！');
+	});
+	
 	$('.tooltip_p').each( function(){
         
         $(this).tooltip();

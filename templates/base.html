@@ -54,8 +54,10 @@
               
               {% block welcome %}
               <ul class="nav navbar-nav navbar-right">
-                <li><a id='index_welcome' href="#">欢迎你，{{ user.nic_name }}</a></li>
-                <li><a id='logout_link' href='/log/logout/'>退出</a></li>
+                <li><a id='index_welcome' href="#">欢迎你，{% if user.is_authenticated %}{{ user.nic_name }}{% else %}游客{% endif %}</a></li>
+                <li>{% if user.is_authenticated %}<a id='logout_link' href='/log/logout/'>退出</a>
+					{% else %}<a target='_blank' class='hand_over' href='/log/'><span class='font-color-link'>注册/登陆</span></a>{% endif %}
+				</li>
               </ul>
               {% endblock %}             
               <!-- /.navbar-collapse -->
@@ -84,7 +86,7 @@
     <p class='text-center'>Copyright © 2014 collegeyi.com&nbsp;&nbsp;保留所有权利</p>	
     </div><h4 id='kouhao' class='text-center'>大学易，为自由而生！</h4>
     {% endblock %}
-    
+	
     <!-- Modal -->
     <div class="modal fade" id="nothing_for_version" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div id='modal_nothing' class="modal-dialog">
