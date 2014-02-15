@@ -82,7 +82,7 @@
                             <strong>Message：</strong><span class='font-red'>{{ message}}</span>
 							{% if no_refresh %}
 								<p><strong>Warning：</strong>
-								当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！	</p>
+								当前请不要『刷新』页面或者点击『下一页』（其他功能不受影响），否者会造成数据的重复提交而引发错误！	</p>
 								<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								点击<a href='/index/'>此处</a>即可恢复正常。</p>
 							{% endif %}
@@ -148,52 +148,59 @@
                 {% else %}
 				 <p>&nbsp;<p/>
                  <p class='text-center'>你还没有添加课程数据，赶快添加吧！</p>
+					{% if message %}
+                        <div class="alert alert-danger alert-dismissable">                           
+                            <strong>Message：</strong><span class='font-red'>{{ message}}</span>
+							<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								点击<a href='/index/'>此处</a>重新尝试添加数据</p>	
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
             {% if credits %}
-            <div class='pull-right'>
-               <ul class="pagination">
-                {% if credits.has_previous %}                           
-                    <li><a href="?page={{ credits.previous_page_number }}#index_downleft">&lt; 上一页</a></li>                           
-                {% endif %}                           
-                    {% for p in credits_page_range %}
-                        
-                        {% ifequal p credits.number %}
-                             <li><span class="current">{{p}}</span></li>
-                        {% else %}
-                            <li><a href="?page={{p}}#index_downleft" title="第{{p}}页">{{p}}</a></li>
-                        {% endifequal %}
-                        
-                    {% endfor %}
-                    
-                {% if credits.has_next %}
-                    <li><a href="?page={{ credits.next_page_number }}#index_downleft">下一页 &gt; </a></li>
-                {% endif %}
-                    <li><a >[第{{ credits.number }}/{{ credits.paginator.num_pages }}页]</a></li>
-              </ul>
-            </div>
-            {% endif %}	
-			{% if no_refresh %}
-			<div class='clear_both'>
-				<div class="alert alert-danger alert-dismissable">
-					
-					{% if no_refresh %}
-						<p><strong>Warning：</strong>
-						当前请不要刷新页面或者点击下一页（其他功能不受影响），否者会造成数据的重复提交而引发错误！</p>
-						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							点击<a href='/index/'>此处</a>即可恢复正常。</p>
+				<div class='pull-right'>
+				   <ul class="pagination">
+					{% if credits.has_previous %}                           
+						<li><a href="?page={{ credits.previous_page_number }}#index_downleft">&lt; 上一页</a></li>                           
+					{% endif %}                           
+						{% for p in credits_page_range %}
+							
+							{% ifequal p credits.number %}
+								 <li><span class="current">{{p}}</span></li>
+							{% else %}
+								<li><a href="?page={{p}}#index_downleft" title="第{{p}}页">{{p}}</a></li>
+							{% endifequal %}
+							
+						{% endfor %}
 						
+					{% if credits.has_next %}
+						<li><a href="?page={{ credits.next_page_number }}#index_downleft">下一页 &gt; </a></li>
 					{% endif %}
+						<li><a >[第{{ credits.number }}/{{ credits.paginator.num_pages }}页]</a></li>
+				  </ul>
 				</div>
-			</div>
-			{% endif %}
-			{% if credits %}
-			<div class='clear_both'>
-				
-				<button type="button" data-toggle="modal" data-target="#question_table" class="btn btn-link add_button_info">
-					关于上述成绩表的一些常见问题 Q&A 
-				</button>
-			</div>
+            
+				{% if no_refresh %}
+				<div class='clear_both'>
+					<div class="alert alert-danger alert-dismissable">
+						
+						{% if no_refresh %}
+							<p><strong>Warning：</strong>
+							当前请不要『刷新』页面或者点击『下一页』（其他功能不受影响），否者会造成数据的重复提交而引发错误！</p>
+							<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								点击<a href='/index/'>此处</a>即可恢复正常。</p>
+							
+						{% endif %}
+					</div>
+				</div>
+				{% endif %}
+			
+				<div class='clear_both'>
+					
+					<button type="button" data-toggle="modal" data-target="#question_table" class="btn btn-link add_button_info">
+						关于上述成绩表的一些常见问题 Q&A 
+					</button>
+				</div>
 			{% endif %}
 			{% ifequal school_type 'URP' %}
 			<div class='clear_both'>

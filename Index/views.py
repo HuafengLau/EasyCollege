@@ -494,7 +494,7 @@ def wise_getCredit(request,school_code):
             HTML = 'index.html'
             return display(request,user,message,HTML)
         else:
-            message = u'上传的源代码文件有误！如果您确定上传了正确的文件，请联系管理员'
+            message = u'上传的源代码文件有误！如果您确定上传了正确的文件，请联系管理员collegeyi@sina.com'
             HTML = 'index.html'
             return display(request,user,message,HTML)
     else:
