@@ -7,11 +7,11 @@ class Eot_dataForm(forms.ModelForm):
     title = forms.CharField(
         required=True,
         label=u'资料主题',
-        max_length=10,
-        help_text=u'主题中请包涵平时作业、期末、期中、课件、试题等关键字，10字以内 ',
+        max_length=15,
+        help_text=u'主题中请包涵平时作业、期末、期中、课件、试题等关键字，15字以内 ',
         error_messages={
             'required': u'你还没有为资料添加主题！',
-            'max_length': u'主题不宜超过10个字'
+            'max_length': u'主题不宜超过15个字'
         }
     )
     description = forms.CharField(
@@ -55,8 +55,8 @@ class Eot_imgForm(forms.ModelForm):
     title = forms.CharField(
         required=True,
         label=u'图片标题',
-        max_length=15,
-        help_text=u'主题中请务必表明时间，如：2011级教材。15字以内 ',
+        max_length=10,
+        help_text=u'主题中请务必表明时间，如：2011级教材。10字以内 ',
         error_messages={
             'required': u'你还没有为图片添加主题！',
             'max_length': u'主题不宜超过15个字'
