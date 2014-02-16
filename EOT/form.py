@@ -55,11 +55,11 @@ class Eot_imgForm(forms.ModelForm):
     title = forms.CharField(
         required=True,
         label=u'图片标题',
-        max_length=10,
-        help_text=u'主题中请务必表明时间，如：2011级教材。10字以内 ',
+        max_length=15,
+        help_text=u'主题中请务必表明时间，如：2011级教材。15字以内 ',
         error_messages={
             'required': u'你还没有为图片添加主题！',
-            'max_length': u'主题不宜超过10个字'
+            'max_length': u'主题不宜超过15个字'
         }
     )
     description = forms.CharField(
@@ -77,7 +77,7 @@ class Eot_imgForm(forms.ModelForm):
     img = forms.ImageField(
         required=True,
         label=u'图片',
-        help_text=u'请确保图片与课程相关，文件名称不要使用中文',
+        help_text=u'请确保图片与课程相关；为了更好的显示，图片应宽大于高',
         error_messages={
             'required': u'你还没有上传图片！',
         }

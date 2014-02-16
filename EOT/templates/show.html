@@ -237,7 +237,8 @@
                             {% endfor %}
 
                         </table>                           
-                        <button class="btn btn-default" id='' type="submit">提交</button>
+                        <p class='text-danger'>注意，由于显示照片的空间为540px X 390px（宽远大于高），所以上传的图片应采用横拍，否则会相当难看！</p>
+						<button class="btn btn-default" id='' type="submit">提交</button>
                     </form>
                     
 					{% if user.is_authenticated %}
@@ -540,7 +541,7 @@
                             <td>
 								<a target='_blank' href='/eot/showcomment/{{data.id}}/'><span data-toggle="tooltip" title="{{data.description}}">{{data.title}}</span></a>
 							</td>
-                            <td>{{data.price_num}}</td>
+                            <td><img src='{{STATIC_URL}}img/moneybag2.png' height="27" alt='易币图片'/>{{data.price_num}}</td>
                             
                             <td>{{data.upload_time|date:'Y-m-d'}}</td>
                             <td>
@@ -894,7 +895,7 @@
                 {% endif %}
             </div>            
         </div>
-        {% if message_samecourse %}
+        {% if message_sameteacher %}
         {% else %}
             <div class="panel-footer">注：括号内为对应的课程评分</div>
         {% endif %}
