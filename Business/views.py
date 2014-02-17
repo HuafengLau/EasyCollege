@@ -466,7 +466,7 @@ def wise_analyzeCreditFile(doc,school_code):
         points = nenu(doc)
     if school_code == 'hunnu':
         points = hunnu(doc)
-    if school_code == 'sctu':
-        points = sctu(doc)
+    if school_code == 'scut':
+        points = scut(doc)
     return points
     
