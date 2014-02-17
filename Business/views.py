@@ -33,6 +33,8 @@ def guide_getCreditFile(request,school_code):
         name = u'*婧'
     if school_code == 'hunnu':
         name = u'*传贵'
+    if school_code == 'scut':
+        name = u'*晓凤'
     if school_code == 'jxufe':
         name = u'*咪同学'
         more = True 
@@ -412,6 +414,32 @@ def hunnu(doc):
         return points
     except:
         return None
+
+def scut(doc):
+    points = []
+    soup = get_soup(doc)
+    try:
+        table = soup.findAll('table',{'class':'datelist'})[0]
+        TRs = table.findAll('tr')
+        for index, TR in enumerate(TRs):
+            point = []
+            if index == 0:
+                continue
+            else:
+                tds = TR.findAll('td')           
+                name = str_change(tds[3].string)
+                sttr = str_change(tds[4].string)
+                credit = str_change(tds[6].string)
+                score = str_change(tds[8].string)
+                point.append(name)
+                point.append(credit)
+                point.append(sttr)
+                point.append(score)
+
+                points.append(point)
+        return points
+    except:
+        return None
         
 def wise_analyzeCreditFile(doc,school_code):
     if school_code == 'ecnu':
@@ -438,5 +466,7 @@ def wise_analyzeCreditFile(doc,school_code):
         points = nenu(doc)
     if school_code == 'hunnu':
         points = hunnu(doc)
+    if school_code == 'sctu':
+        points = sctu(doc)
     return points
     

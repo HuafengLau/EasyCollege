@@ -23,12 +23,13 @@ from django.contrib.auth.decorators import login_required
 school_code = {u'华东师范大学':'ecnu',u'赣南师范学院':'gnnu',u'内蒙古师范大学':'imnu',
     u'西北农林科技大学':'nwsuaf',u'北京信息科技大学':'bistu',u'江西财经大学':'jxufe',u'西昌学院':'xcc',
     u'西华大学':'xhu',u'大连医科大学':'dlmedu',u'湖北经济学院':'hbue',u'东北师范大学':'nenu',
-    u'湖南师范大学':'hunnu'}
+    u'湖南师范大学':'hunnu',u'华南理工大学':'sctu'}
 
 URP_school = [u'四川大学', u'安徽财经大学']
 
 wise_school = [u'华东师范大学',u'赣南师范学院',u'内蒙古师范大学',u'西北农林科技大学',
-    u'北京信息科技大学',u'江西财经大学',u'西昌学院',u'西华大学',u'大连医科大学',u'湖北经济学院',u'东北师范大学',u'湖南师范大学']   
+    u'北京信息科技大学',u'江西财经大学',u'西昌学院',u'西华大学',u'大连医科大学',u'湖北经济学院',u'东北师范大学',u'湖南师范大学',
+    u'华南理工大学']   
 
 from_email = settings.EMAIL_HOST_USER
     

@@ -34,6 +34,18 @@
     color: blue;
 }
 
+.font-jin{
+	color: #fead00;
+}
+
+.font-yin{
+	color: #a5a5a5;
+}
+
+.font-tong{
+	color: #d97443;
+}
+
 .underline{
     text-decoration: underline;
 }
@@ -265,15 +277,20 @@ div.transp { /* make the div translucent */
 }
 
 /* CSS for index.html */
+#index_rich{
+	margin-left: 65px;
+	margin-right: 0px;
+	width: 27%;
+}
 
 #index_upleft{
 	width: 400px;
-	margin-left: 70px;
+	margin-left: 60px;
 
 }
 
 #index_upright{
-	margin-left:50px;
+	margin-left:10px;
 	margin-top: 0px;
 	width: 390px;
 }

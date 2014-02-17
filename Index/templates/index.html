@@ -36,7 +36,7 @@
 								{% endfor %}</div></td>
                           </tr>
                           <tr>
-                            <td>永载史册</td><td><div class='pull-left'>{{user.first_value}}次</div></td>
+                            <td>永载史册</td><td><div class='pull-left'>{{user.first_value}}&nbsp;次</div></td>
                           </tr>
                           <tr>
                             <td><img src='{{STATIC_URL}}img/moneybag2.png' height="32" alt='易币图片'/></td>
@@ -67,7 +67,30 @@
 					<img width='55px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
 				{% endfor %}
 			{% endif %}
+			
         </div>
+		<div id='index_rich' class='pull-left'>
+			<div class='panel panel-danger'>			
+                <div id='' class="panel-heading">富豪榜<span class='pull-right'><a href='#'><small>查看完整榜单</small></a></span></div>
+                <div class="panel-body">
+                    <table class='table'>
+						<tr>
+							<th>排名</th><th>昵称</th><th>资产/易币</th><th>学校</th>
+						</tr>
+						{% for richer in rich_users %}
+						{% ifequal forloop.counter 1 %}<tr class='font-jin'>{% endifequal %}
+						{% ifequal forloop.counter 2 %}<tr class='font-yin'>{% endifequal %}
+						{% ifequal forloop.counter 3 %}<tr class='font-tong'>{% endifequal %}
+							<td><img src='{{STATIC_URL}}img/{{forloop.counter}}th.png' height="35" alt='财富名次'/></td>
+							<td>{{richer.nic_name}}</td>
+							<td>{{richer.money}}</td>
+							<td>{% ShowSchool richer.university_info_id %}</td>
+						</tr>
+						{% endfor %}
+					</table>
+                </div>       
+            </div>
+		</div>
     </div>
     <div class='clear_both' id='index_down'>
         <div id='index_downleft' class='pull-left'>
@@ -288,7 +311,7 @@
                     {% if credits %}
                     <div>
                         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您需要填写完任课教师后，才可以去评教~</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;评教不但可以获得<span class='font-red'>易币奖励</span>，更有机会<span class='font-red'>名留青史</span>哦！</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;评教不但可以获得<span class='font-red'>易币奖励</span>，更有机会<span class='font-red'>永载史册</span>哦！</p>
                     </div>
                     <div>
                         <button type="button" data-toggle="modal" data-target="#value_info_modal" class="btn btn-link add_button_info">

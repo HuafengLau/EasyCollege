@@ -8,5 +8,6 @@ urlpatterns = patterns('Index.views',
     url(r'verify_URP/$', 'verify_URP', name='index_verify_URP'),
     url(r'loading_gif/$', 'loading_gif', name='loading_gif'),
     url(r'URP_getCredit/$', 'URP_getCredit', name='URP_getCredit'),
-    url(r'wise_getCredit/(?P<school_code>.+)/$', 'wise_getCredit', name='wise_getCredit')
+    url(r'wise_getCredit/(?P<school_code>.+)/$', 'wise_getCredit', name='wise_getCredit'),
+    url(r'TheRich/$', 'TheRich', name='TheRich'),
 )

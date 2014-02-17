@@ -13,6 +13,7 @@ from django.core.paginator import PageNotAnInteger, Paginator, InvalidPage, Empt
 from Index.form import AvatarForm
 from django.conf import settings
 from Index.models import Avatar
+from account.models import MyUser
 import os
 import random
 from datetime import datetime
@@ -79,6 +80,7 @@ def display(request,user,message,HTML):
     
     form = AvatarForm()
     indexHTML = True
+    rich_users = MyUser.objects.order_by('-money')[:3]
     return render_to_response(HTML,locals(),
         context_instance=RequestContext(request))
 
