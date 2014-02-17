@@ -278,9 +278,9 @@ div.transp { /* make the div translucent */
 
 /* CSS for index.html */
 #index_rich{
-	margin-left: 65px;
-	margin-right: 0px;
-	width: 27%;
+	position: absolute; 
+	right: 30px;
+	width: 28%;
 }
 
 #index_upleft{
@@ -331,6 +331,7 @@ div.transp { /* make the div translucent */
     padding-left: 7%;
     padding-right: 0px;
     margin-right: 0px;
+	margin-top: 57px;
 }
 
 #index_downright{
@@ -339,6 +340,7 @@ div.transp { /* make the div translucent */
     padding-left:0px;
     padding-right: 6%;
     margin-left: 0px;
+	margin-top: 65px;
 }
 
 #avtar_td{
