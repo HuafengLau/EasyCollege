@@ -34,7 +34,6 @@ class ShowSchoolNode(template.Node):
 
     def render(self, context):
         values = self.sequence.resolve(context, True) 
-        print 'values:%s' % values
         try:
             this_University_info = University_info.objects.get(id=values)
             name = this_University_info.school

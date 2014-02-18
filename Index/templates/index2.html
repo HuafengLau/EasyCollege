@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load my_tags %}
 
 {% block title %}
 个人中心 - 大学易
@@ -7,8 +8,8 @@
 
 {% block mainbody %}
 <div class=''>
-    <div id='index2_up'>
-        <div id='index2_upleft'>
+    <div id='index_up'>
+        <div id='index_upleft' class='pull-left' >
             <table>
                 <tr> 
                     <td id='avtar_td'>
@@ -57,11 +58,40 @@
                 </tr>
             </table>
         </div>
-        <div id='index2_upright'>
+        <div id='index_upright' class='pull-left'>
+			{% if user.honour_set.all %}
+				{% for honour in user.honour_set.all %}
+					<img width='55px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
+				{% endfor %}
+			{% endif %}
         </div>
+		<div id='index_rich' class='pull-left'>
+			<div class='panel panel-danger'>			
+                <div id='' class="panel-heading">
+					富豪榜<span class='pull-right'><a target='_blank' href='/index/TheRich/'><small>查看完整榜单</small></a></span>
+				</div>
+                <div class="panel-body">
+                    <table class='table'>
+						<tr>
+							<th>排名</th><th>昵称</th><th>资产/易币</th><th>学校</th>
+						</tr>
+						{% for richer in rich_users %}
+						{% ifequal forloop.counter 1 %}<tr class='font-jin'>{% endifequal %}
+						{% ifequal forloop.counter 2 %}<tr class='font-yin'>{% endifequal %}
+						{% ifequal forloop.counter 3 %}<tr class='font-tong'>{% endifequal %}
+							<td><img src='{{STATIC_URL}}img/{{forloop.counter}}th.png' height="35" alt='财富名次'/></td>
+							<td>{{richer.nic_name}}</td>
+							<td>{{richer.money}}</td>
+							<td>{% ShowSchool richer.university_info_id %}</td>
+						</tr>
+						{% endfor %}
+					</table>
+                </div>       
+            </div>
+		</div>
     </div>
-    <div id='index2_down'>
-        <div id='index2_downleft' class='pull-left'>
+    <div class='clear_both' id='index_down'>
+        <div id='index_downleft' class='pull-left'>
             <div id='index_credit_head' class="alert alert-info">                                
                 <p class='text-center'>历年成绩</p>
             </div>
@@ -161,7 +191,7 @@
 		  </div>
           
         </div>
-        <div id='index2_downright' class='pull-right'>
+        <div id='index_downright' class='pull-right'>
             <div id='add_course_div' class='panel panel-danger'>
                 <div id='heading_wise_add' class="panel-heading">添加课程</div>
                 <div class="panel-body">

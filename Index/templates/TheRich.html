@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block title %}
+富豪榜 - 大学易
+{% endblock %}
+
+{% block moreLink %}
+<link rel="stylesheet" href="{{STATIC_URL}}css/flipclock.css">
+{% endblock %}
+
+{% block mainbody %}
+<div>
+	<div class='clear_both'>
+		<h1 class='text-center font-jin'><b>富&nbsp;豪&nbsp;榜</b></h1>
+		<div class='container'>
+			<p>拥有更多的易币，意味着在开创者的路上走得更远，意味着留下了更多的经验、知识和见解，意味着学弟学妹能够获得更多的益处。向每一个大学易富豪致敬！</p>
+			<p>大学易将在<strong>每周五</strong><a class='hand_over' data-toggle="modal" data-target="#TheRich_info">（查看详情）</a>为首富颁发一枚大学易<span class='font-jin'>『首富勋章』</span>，历届<span class='font-jin'>『首富勋章』</span>得主：</p>
+					
+			<div id='TheHistoryRich' class="alert alert-success alert-dismissable">										
+				<p class='text-center'>
+				{% if RichHonour %}
+				{% for Honour in RichHonour %}						
+					<a href='#{{Honour.user.id}}'>
+					<span class='font-jin'>{{Honour.user.nic_name}}</span>{% if forloop.last %}<span class='font-black'>(上届首富)</span>{% endif %}
+					</a>&nbsp;&nbsp;&nbsp;
+				{% endfor %}
+				{% else %}
+				第一届首富还没有出现，是你吗？！
+				{% endif %}
+				</p>
+			</div>
+				
+			<p>&nbsp;</p>
+			<p>距离下一枚<span class='font-jin'>『首富勋章』</span>的产生只有：</p>
+		</div>
+		<div id="TheRich_clock"></div>
+		<p id='findMe'>
+			{% if user.is_authenticated %}
+				{% if no_money %}
+					<a class='hand_over' data-toggle="modal" data-target="#howToRich">你没有排名，如何才能入榜？</a>
+				{% else %}
+					<a href='#15'>看看我排在哪？</a>
+				{% endif %}
+			
+			{% else %}
+				<span>登录后可快速定位自己</span>
+			{% endif %}
+		</p>
+
+		
+	</div>
+	<div>
+		<div id='richHTML_left' class='pull-left'>
+			{% for bug in bug_num %}
+			<img src='{{STATIC_URL}}img/moneybag2.png' height="140" alt='金袋'/>
+			{% endfor %}
+		</div>
+		<div id='richHTML_center' class='pull-left'>
+			<table class='table'>
+				<tr>
+					<th>排名</th><th>昵称</th><th>资产/易币</th><th>学校</th>
+				</tr>
+				{% for richer in rich_users %}
+					{% ifequal forloop.counter 1 %}<tr id='{{richer.id}}' class='font-jin'>
+					{% else %}
+						{% ifequal forloop.counter 2 %}<tr id='{{richer.id}}' class='font-yin'>
+						{% else %}
+							{% ifequal forloop.counter 3 %}<tr id='{{richer.id}}' class='font-tong'>
+							{% else %}
+								<tr id='{{richer.id}}'>
+							{% endifequal %}
+						{% endifequal %}
+					{% endifequal %}
+					<td>
+						{% if forloop.counter <= 3 %}
+						<img src='{{STATIC_URL}}img/{{forloop.counter}}th.png' height="35" alt='财富名次'/>
+						{% else %}
+							{{ forloop.counter }}
+						{% endif %}
+					</td>
+					<td>
+						<div class='form-inline'>
+						<label>{{richer.nic_name}}</label>
+						{% if richer.honour_set.all %}
+							{% for honour in richer.honour_set.all %}
+								<img width='25px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
+							{% endfor %}
+						{% endif %}
+						</div>
+					</td>
+					<td>{{richer.money}}</td>
+					<td>{% ShowSchool richer.university_info_id %}</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+		<div id='richHTML_right' class='pull-left'>
+			{% for bug in bug_num %}
+			<img src='{{STATIC_URL}}img/moneybag2.png' height="140" alt='金袋'/>
+			{% endfor %}
+		</div>
+	</div>
+	
+	<script src="{{STATIC_URL}}js/jquery-1.9.1.js"></script>
+	<script src="{{STATIC_URL}}js/flipclock.min.js"></script>
+	<script type="text/javascript">
+		var clock = $('#TheRich_clock').FlipClock({{seconds}}, {
+			clockFace: 'DailyCounter',
+			countdown: true
+		});
+	</script>
+	
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="TheRich_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">富豪勋章</h4>
+      </div>
+      <div class="modal-body">
+	  每周五晚8:30，大学易将为首富（即当时拥有易币最多的用户）颁发一枚富豪勋章。如果该用户已经获得过富豪勋章，
+	  则不再颁发勋章，但是仍然享受这份荣誉！
+	  <p>&nbsp;</p>
+	  <p class='text-danger'>
+	  当前获取易币的主要方式：
+	  </p>
+	  <P class='text-danger'>
+		<ul><li class='text-danger'>每点评一门课程，将随机获得10~20个易币</li>
+			<li class='text-danger'>当其他用户下载你上传的资料时，将按你的定价向你支付易币</li>
+		</ul>
+	  </p>
+      </div>
+	</div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="howToRich" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">如何进入富豪榜</h4>
+		<p>只要你的易币数量大于0，就可以进入富豪榜，参与富豪勋章的争夺！</p>
+		<p>&nbsp;</p>
+		<p class='text-danger'>
+		  当前获取易币的主要方式：
+		  </p>
+		  <P class='text-danger'>
+			<ul>
+				<li class='text-danger'>每点评一门课程，将随机获得10~20个易币</li>
+				<li class='text-danger'>当其他用户下载你上传的资料时，将按你的定价向你支付易币</li>
+			</ul>
+		  </p>
+      </div>
+      <div class="modal-body">
+      </div>   
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endblock %}

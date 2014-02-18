@@ -1,4 +1,5 @@
 /* CSS for all HTML */
+
 .hidden {
 	display:none;
 }
@@ -7,9 +8,14 @@
 	display:inline;
 }
 
+.underline{
+    text-decoration: underline;
+}
+
 .margin-top-6px{
 	margin-top: 6px;
 }
+
 .font-red{
     color: red;
 }
@@ -35,7 +41,7 @@
 }
 
 .font-jin{
-	color: #fead00;
+	color: #e69800;
 }
 
 .font-yin{
@@ -77,8 +83,110 @@
 	margin-right:15px;
 }
 
-/* CSS for business.html */
+#scrollUp {
+    bottom: 40px;
+	right: 60px;
+	padding: 10px 20px;
+	background: #555;
+	color: #fff;
+}
 
+/* CSS for business.html */
+/* CSS for TheRich.html */
+#TheRich_info,#howToRich{
+	padding-top: 5%;
+}
+
+#TheHistoryRich{
+	margin-left: 14%;
+	width: 60%;
+}
+
+#findMe{
+	margin-left: 77%;
+}
+
+#richHTML_left{
+	margin-left: 1%;
+	width: 14%;
+}
+
+#richHTML_right{
+	margin-left: 2%;
+	width: 13%;
+
+}
+
+#richHTML_center{
+	width: 70%;
+	
+}
+
+#TheRich_clock{
+	margin-left: 440px;
+}
+
+.flip-clock-wrapper {
+  text-align: center;
+  position: relative;
+  width: 50%;
+  margin: 1em;
+}
+
+.flip-clock-wrapper ul {
+  position: relative;
+  float: left;
+  margin: 5px;
+  width: 40px;
+  height: 60px;
+  font-size: 60px;
+  font-weight: bold;
+  line-height: 55px;   /* 调整数字在块内的高度*/
+  border-radius: 6px;
+  background: #996301;  /* 数字块底部颜色 */
+}
+
+.flip-clock-divider.days .flip-clock-label {
+  right: -67px; }
+
+.flip-clock-divider.hours .flip-clock-label {
+  right: -72px; }
+
+.flip-clock-divider.minutes .flip-clock-label {
+  right: -71px; }
+
+.flip-clock-divider.seconds .flip-clock-label {
+  right: -72px; }
+
+.flip-clock-dot.top {
+  top: 18px; }
+
+.flip-clock-dot.bottom {
+  bottom: 47px; }
+
+.flip-clock-wrapper ul li a div div.inn {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 200%;
+  color: #ccc;
+  text-shadow: 0 1px 2px #000;
+  text-align: center;
+  background-color: #e69800;   /* 数字块颜色 */
+  border-radius: 6px;
+  font-size: 40px; }
+
+.flip-clock-dot {
+  display: block;
+  background: #323434;  /* 点的颜色 */
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  left: 5px; }
+  
 /* CSS for base.html */
 
 #base_brand {

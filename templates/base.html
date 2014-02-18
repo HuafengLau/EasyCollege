@@ -8,6 +8,8 @@
     <meta name="keywords" content="大学易,大学选课,评教,课程评教,课程资料,大学生活,大学" />
     {% block meta %}
     {% endblock %}
+	{% block moreLink %}
+	{% endblock %}
     <!-- Bootstrap -->
     <link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="{{STATIC_URL}}css/my_css.css" rel="stylesheet" media="screen">
@@ -19,7 +21,7 @@
     body{font-family:"Microsoft YaHei","Microsoft YaHei UI","ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","WenQuanYi Micro Hei",sans-serif;}
     h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {font-family:"ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
     pre code { background: transparent; }
-    </style>
+    </style>	
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -87,6 +89,7 @@
     </div><h4 id='kouhao' class='text-center'>大学易，为自由而生！</h4>
     {% endblock %}
 	
+
     <!-- Modal -->
     <div class="modal fade" id="nothing_for_version" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div id='modal_nothing' class="modal-dialog">
@@ -146,6 +149,7 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{STATIC_URL}}js/jquery-1.9.1.js"></script>
     <script src="{{STATIC_URL}}bootstrap/js/bootstrap.min.js"></script>
+	<script src="{{STATIC_URL}}js/jquery.scrollUp.min.js"></script>
     <script src="{{STATIC_URL}}js/my_scripts.js"></script>
   </body>
 </html>
