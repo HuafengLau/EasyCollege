@@ -35,6 +35,8 @@ def guide_getCreditFile(request,school_code):
         name = u'*传贵'
     if school_code == 'scut':
         name = u'*晓凤'
+    if school_code == 'sysu':
+        name = u'*雷'
     if school_code == 'jxufe':
         name = u'*咪同学'
         more = True 
@@ -51,7 +53,7 @@ def guide_getCreditFile(request,school_code):
         return render_to_response('CFileGuideNenu.html',locals(),
             context_instance=RequestContext(request))
     
-    more_school = ['nwsuaf',]
+    more_school = ['nwsuaf','sysu']
     if school_code in more_school:
         more = True
      
@@ -440,7 +442,41 @@ def scut(doc):
         return points
     except:
         return None
-        
+
+def sysu(doc):
+    points = []
+    try:
+        this_doc = str_change(doc)
+        this_doc = this_doc.replace(' ','')
+        doc_encoding = chardet.detect(this_doc)['encoding']
+        this_doc = this_doc.decode(doc_encoding)
+        start =  this_doc.index('rowSet:') + 18
+        j =  this_doc[start:-8]
+
+        course_list = j.split('},{')
+        for course in  course_list:
+            item_list = course.split(',')
+            point = []
+            for item in item_list:
+                if 'kcmc' in item:
+                    name = str_change(item.split(':')[1]).replace('"', '')
+                if 'zzcj' in item:
+                    score = str_change(item.split(':')[1]).replace('"', '')
+                if 'xf' in item:
+                    credit = str_change(item.split(':')[1]).replace('"', '')
+                if 'jsxm' in item:
+                    teacher = str_change(item.split(':')[1]).replace('"', '')
+            point.append(name)
+            point.append(credit)
+            point.append('')
+            point.append(score)
+            point.append(teacher)
+            
+            points.append(point)        
+        return points
+    except:
+        return None
+ 
 def wise_analyzeCreditFile(doc,school_code):
     if school_code == 'ecnu':
         points = ecnu(doc)
@@ -468,5 +504,7 @@ def wise_analyzeCreditFile(doc,school_code):
         points = hunnu(doc)
     if school_code == 'scut':
         points = scut(doc)
+    if school_code == 'sysu':
+        points = sysu(doc)
     return points
     
