@@ -11,7 +11,13 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from University.models import University_info
 
+code_school = {'ecnu':u'华东师范大学','gnnu':u'赣南师范学院','imnu':u'内蒙古师范大学',
+    'nwsuaf':u'西北农林科技大学','bistu':u'北京信息科技大学','jxufe':u'江西财经大学','xcc':u'西昌学院',
+    'xhu':u'西华大学','dlmedu':u'大连医科大学','hbue':u'湖北经济学院','nenu':u'东北师范大学',
+    'hunnu':u'湖南师范大学','scut':u'华南理工大学','sysu':u'中山大学'}
+
 def guide_getCreditFile(request,school_code):
+    school = code_school[school_code]
     upper_code = school_code.upper()
     if school_code == 'ecnu':
         name = u'*艺真同学'
@@ -63,7 +69,11 @@ def guide_getCreditFile(request,school_code):
 def googelSearch(request):
     return render_to_response('googlee7b5e63c07c5ed83.html',locals(),
         context_instance=RequestContext(request))
-              
+
+def baiduSearch(request):
+    return render_to_response('baidu_verify_hWg7x7b1q5.html',locals(),
+        context_instance=RequestContext(request))
+        
 def get_soup(doc):
     doc_encoding = chardet.detect(doc)['encoding']
     soup = BeautifulSoup(''.join(doc), from_encoding=doc_encoding)

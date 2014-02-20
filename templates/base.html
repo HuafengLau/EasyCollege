@@ -4,9 +4,11 @@
     <title>{% block title %}{% endblock %}</title>
     
     <meta charset="utf-8" />
+	{% block search %}
     <meta name="description" content="大学易--帮助大学生掌控大学生活，为大学生提供课程资料、考试资料的下载，提供课程的详尽信息包括课程评分、教师评分、课程期末平均分、是否点名、是否有期中考等等。分享学长学姐的大学经历，为大学生活提供参考。大学生活，从大学易开始。" />
-    <meta name="keywords" content="大学易,大学选课,评教,课程评教,课程资料,大学生活,大学" />
-    {% block meta %}
+    <meta name="keywords" content="大学易,选课助手,课程点评,课程资料,大学生活" />
+    {% endblock %}
+	{% block meta %}
     {% endblock %}
 	{% block moreLink %}
 	{% endblock %}

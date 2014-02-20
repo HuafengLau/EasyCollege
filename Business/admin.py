@@ -8,7 +8,7 @@ class CreditAdmin(admin.ModelAdmin):
     """docstring for CreditAdmin"""
     list_display = ('user', 'university_info_id', 'course_name', 'add_money')
     list_filter = ('user', 'grade')
-    ordering = ('user', 'grade')
+    ordering = ('user', )
     
 class Major_courseAdmin(admin.ModelAdmin):
     """docstring for CreditAdmin"""

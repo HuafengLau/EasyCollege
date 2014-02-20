@@ -22,7 +22,7 @@ class Credit(models.Model):
         return '%s,%s' %(self.course_name, self.id)
         
     class Meta:
-        ordering = ['grade',]
+        #ordering = ['grade',]
         verbose_name = u'成绩单'
         verbose_name_plural = u'成绩'
         
