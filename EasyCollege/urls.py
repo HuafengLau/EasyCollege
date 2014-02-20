@@ -3,6 +3,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from log.views import log, verify
+from Business.views import googelSearch
 from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
@@ -27,7 +28,8 @@ urlpatterns = patterns('',
     url(r'^center/', include('Center.urls')),
     url(r'^affair/', include('Affair.urls')),
     url(r'^business/', include('Business.urls')),
-    (r'^$', log),  
+    (r'^$', log),
+    (r'^googlee7b5e63c07c5ed83.html/$', googelSearch),
     (r'^verify/$', verify),
     (r'^appmedia/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     (r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_ROOT})

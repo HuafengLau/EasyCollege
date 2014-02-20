@@ -60,6 +60,10 @@ def guide_getCreditFile(request,school_code):
     return render_to_response('CFileGuideBase.html',locals(),
         context_instance=RequestContext(request))        
 
+def googelSearch(request):
+    return render_to_response('googlee7b5e63c07c5ed83.html',locals(),
+        context_instance=RequestContext(request))
+              
 def get_soup(doc):
     doc_encoding = chardet.detect(doc)['encoding']
     soup = BeautifulSoup(''.join(doc), from_encoding=doc_encoding)

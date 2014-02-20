@@ -29,12 +29,12 @@
 		</p>
 		<p>&nbsp;</p>
 		<p class='text-center text-danger'>
-			<strong>Attention!</strong>您收到的激活邮件很可能在垃圾箱，把激活邮件标记为非垃圾邮件，下次您就可以正常收到大学易的邮件了~
+			<strong>Attention!</strong>根据用户的反映，您收到的激活邮件很可能在<span class='font-red'>垃圾箱</span>，把激活邮件标记为非垃圾邮件，下次您就可以正常收到大学易的邮件了~
 		</p>
 	</div>
 	<div>
 		{% if email_add %}
-		<a href='{{email_add}}'><button class='btn btn-success register-next-btn'>进入邮箱</button></a>
+		<a target='_blank' href='{{email_add}}'><button class='btn btn-success register-next-btn'>进入邮箱</button></a>
 		{% endif %}
 	</div>
 {% endblock %}
