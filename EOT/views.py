@@ -355,8 +355,7 @@ def show(request,this_eot,no_eot, credit_id, **kwargs):
     
     return render_to_response('show.html',locals(),
         context_instance=RequestContext(request))
-
-      
+     
 def showcredit(request, credit_id):     
     credit = Credit.objects.get(id=credit_id)
     university_info = University_info.objects.get(id=credit.university_info_id)
@@ -1235,7 +1234,8 @@ def uploadfile(request,eot_id):
                 profit = 0
             )
             data.save()
-            
+            eot = Eot.objects.get(id=eot_id)
+            eot.save()
             return HttpResponseRedirect('/eot/showeot/%s/' % eot_id)
         else:
             no_eot = False
@@ -1309,7 +1309,8 @@ def uploadImg(request,eot_id):
                 if_safe = '0'
             )
             img.save()
-            
+            eot = Eot.objects.get(id=eot_id)
+            eot.save()
             return HttpResponseRedirect('/eot/showeot/%s/' % eot_id)
         else:
             no_eot = False
@@ -1398,6 +1399,7 @@ def comment_Eotdata(request,Eotdata_id):
         eot_data = this_Eotdata
     )
     this_Eotdata_comment.save()
+    this_Eotdata.save()
     nocomment_list = user.nocomment_Eotdata.split(';')[:-1]
     nocomment_list.remove('%s' % Eotdata_id)
     if nocomment_list:

@@ -177,6 +177,8 @@ class Eot(models.Model):
     reveal = models.ForeignKey(Eot_reveal, null=True,blank=True, verbose_name=u'泄题')
     usual_work = models.ForeignKey(Eot_usual_work, null=True,blank=True, verbose_name=u'平时作业')
     
+    last_modified = models.DateField(auto_now=True,null=True,verbose_name='上次修改时间')
+    
     def __unicode__(self):
         return '%s,%s,%s' % (self.university, self.course, self.teacher)
     
@@ -196,6 +198,7 @@ class Eot_data(models.Model):
     eot = models.ForeignKey(Eot, null=True,blank=True,verbose_name=u'课程')
     file = models.FileField(upload_to='eot_data/',null=True,blank=True,verbose_name=u'资料')
     profit = models.IntegerField(default=0,null=True,blank=True,verbose_name=u'资料收益')
+    last_modified = models.DateField(auto_now=True,null=True,verbose_name='上次修改时间')
     
 class Eot_comment(models.Model):
     user = models.ForeignKey(MyUser, null=True,blank=True,verbose_name=u'评论者')

@@ -1,4 +1,7 @@
 {% load my_tags %}User-agent:  *
+Allow: /index/TheRich/
+
+User-agent:  *
 Disallow: /index/
 Disallow: /affair/
 Disallow: /center/

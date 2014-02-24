@@ -5,7 +5,7 @@ from University.models import University_info
 from EOT.models import Eot, Eot_data, Eot_data
 from Business.models import Credit
 from Business.views import code_school
-
+from datetime import datetime
 import re
 
 register = template.Library()
@@ -61,22 +61,22 @@ class RobotNode(template.Node):
     def render(self, context):
         #values = self.sequence.resolve(context, True)
         if str(self.sequence) == 'credit':
-            num = Credit.objects.all().count()
+            credits = Credit.objects.all()
             s = ''
-            for i in xrange(1, num):
-                s += 'Allow: /eot/showcredit/%s/\r\n' % i
+            for credit in credits:
+                s += 'Allow: /eot/showcredit/%s/\r\n' % credit.id
             return s
         elif str(self.sequence) == 'eot':
-            num = Eot.objects.all().count()
+            eots = Eot.objects.all()
             s = ''
-            for i in xrange(1, num):
-                s += 'Allow: /eot/showeot/%s/\r\n' % i
+            for eot in eots:
+                s += 'Allow: /eot/showeot/%s/\r\n' % eot.id
             return s
         elif str(self.sequence) == 'eotcomment':
-            num = Eot_data.objects.all().count()
+            eotdatas = Eot_data.objects.all()
             s = ''
-            for i in xrange(1, num):
-                s += 'Allow: /eot/showcomment/%s/\r\n' % i
+            for eotdata in eotdatas:
+                s += 'Allow: /eot/showcomment/%s/\r\n' % eotdata.id
             return s
         elif str(self.sequence) == 'getCreditFile':
             s = ''
@@ -94,7 +94,88 @@ def Robot(parser, token):
         
     sequence = parser.compile_filter(text_name)    
     return RobotNode(sequence)
+
+class SitemapNode(template.Node):
+    def __init__(self,sequence):
+        self.sequence = sequence
+
+    def render(self, context):
+        #values = self.sequence.resolve(context, True)
+        if str(self.sequence) == 'today': 
+            now = datetime.now()
+            return '%s-%s-%s' % (now.year,now.month,now.day)
+        elif str(self.sequence) == 'showcredit':    
+            credits = Credit.objects.all()
+            s = ''
+            for credit in credits:
+                try:
+                    this_eot = Eot.objects.get(
+                        course = credit.course_name,
+                        teacher = credit.course_teacher,
+                        university = university_info.school
+                    )
+                    if eot.last_modified:
+                        lastmod = this_eot.last_modified
+                    else:
+                        this_eot.save()
+                        lastmod = this_eot.last_modified
+                except:
+                    lastmod = credit.add_date
+                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/eot/showcredit/%s/</loc>\r\n' % credit.id
+                s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % lastmod
+                s_temp3 = '\r\n      <changefreq>weekly</changefreq>\r\n\r\n   </url>\r\n'
+                s += s_temp1 + s_temp2 + s_temp3
+            return s
+        elif str(self.sequence) == 'showeot': 
+            eots = Eot.objects.all()
+            s = ''
+            for eot in eots:
+                if eot.last_modified:
+                    lastmod = eot.last_modified
+                else:
+                    eot.save()
+                    lastmod = eot.last_modified
+                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/eot/showeot/%s/</loc>\r\n' % eot.id
+                s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % lastmod
+                s_temp3 = '\r\n      <changefreq>weekly</changefreq>\r\n\r\n   </url>\r\n'
+                s += s_temp1 + s_temp2 + s_temp3
+            return s
+        elif str(self.sequence) == 'eotcomment':
+            eotdatas = Eot_data.objects.all()
+            s = ''
+            for eotdata in eotdatas:
+                if eotdata.last_modified:
+                    lastmod = eotdata.last_modified
+                else:
+                    eotdata.save()
+                    lastmod = eotdata.last_modified
+                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/eot/showcomment/%s/</loc>\r\n' % eotdata.id
+                s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % lastmod
+                s_temp3 = '\r\n      <changefreq>weekly</changefreq>\r\n\r\n   </url>\r\n'
+                s += s_temp1 + s_temp2 + s_temp3
+            return s
+        elif str(self.sequence) == 'getCreditFile':
+            s = ''
+            school_time = '2014-02-24'
+            for (k,v) in  code_school.items(): 
+                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/business/guide/getCreditFile/%s/</loc>\r\n' % k
+                s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % school_time
+                s_temp3 = '\r\n      <changefreq>yearly</changefreq>\r\n\r\n   </url>\r\n'
+                s += s_temp1 + s_temp2 + s_temp3
+            return s
+        else:
+            return 'wrong Robot thing'
+            
+def Sitemap(parser, token):
+    try:
+        tag_name, text_name= token.split_contents() 
+    except:
+        raise template.TemplateSyntaxError
+        
+    sequence = parser.compile_filter(text_name)    
+    return SitemapNode(sequence)
     
 register.tag('ShowCourse', ShowCourse)
 register.tag('ShowSchool', ShowSchool)
 register.tag('Robot', Robot)
+register.tag('Sitemap', Sitemap)
