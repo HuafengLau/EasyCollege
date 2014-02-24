@@ -10,6 +10,7 @@ import cookielib
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from University.models import University_info
+#from django.views.generic import TemplateView
 
 code_school = {'ecnu':u'华东师范大学','gnnu':u'赣南师范学院','imnu':u'内蒙古师范大学',
     'nwsuaf':u'西北农林科技大学','bistu':u'北京信息科技大学','jxufe':u'江西财经大学','xcc':u'西昌学院',
@@ -66,6 +67,7 @@ def guide_getCreditFile(request,school_code):
     return render_to_response('CFileGuideBase.html',locals(),
         context_instance=RequestContext(request))        
 
+      
 def googelSearch(request):
     return render_to_response('googlee7b5e63c07c5ed83.html',locals(),
         context_instance=RequestContext(request))

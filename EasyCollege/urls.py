@@ -5,6 +5,8 @@ from django.contrib import admin
 from log.views import log, verify
 from Business.views import googelSearch, baiduSearch
 from django.conf import settings
+from django.views.generic import TemplateView
+from EOT.models import Eot
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -29,6 +31,7 @@ urlpatterns = patterns('',
     url(r'^affair/', include('Affair.urls')),
     url(r'^business/', include('Business.urls')),
     (r'^$', log),
+    (r'^robots\.txt$', TemplateView.as_view(template_name= 'robots.txt', content_type='text/plain')),
     (r'^googlee7b5e63c07c5ed83.html/$', googelSearch),
     (r'^baidu_verify_hWg7x7b1q5.html/$', baiduSearch),
     (r'^verify/$', verify),
