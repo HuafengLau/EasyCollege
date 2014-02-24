@@ -103,7 +103,15 @@ class SitemapNode(template.Node):
         #values = self.sequence.resolve(context, True)
         if str(self.sequence) == 'today': 
             now = datetime.now()
-            return '%s-%s-%s' % (now.year,now.month,now.day)
+            if now.month < 10:
+                month = '0%s' % now.month
+            else:
+                month = now.month
+            if now.day < 10:
+                day = '0%s' % now.day
+            else:
+                day = now.day
+            return '%s-%s-%s' % (now.year,month,day)
         elif str(self.sequence) == 'showcredit':    
             credits = Credit.objects.all()
             s = ''
