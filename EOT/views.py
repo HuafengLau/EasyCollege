@@ -465,6 +465,8 @@ def value(request, credit_id):
             this_eot.teacher_avg_score = (this_eot.teacher_avg_score * value_num + 
                 float(request.POST.get('teacher_score'))) / (value_num+1)
             
+            this_eot.history_avg_score = (this_eot.history_avg_score * value_num + 
+                float(credit.course_score)) / (value_num+1)
                 
             if request.POST.get('like_or_hate') == 'like':
                 this_eot.like_num += 1
