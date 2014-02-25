@@ -17,7 +17,6 @@ from account.models import MyUser
 from bs4 import BeautifulSoup
 from log.views import URP_school,wise_school,school_code
 from Center.models import Honour
-from datetime import datetime
 from EOT.models import Eot_data
 import os
 import random
@@ -27,7 +26,7 @@ import urllib
 import chardet 
 import cookielib
 import bs4
-import datetime, calendar 
+
 
 
 def display(request,user,message,HTML):                  
@@ -506,36 +505,6 @@ def wise_getCredit(request,school_code):
         HTML = 'index.html'
         return display(request,user,message,HTML)
         
-def TheRich(request):
-    user = request.user
-    
-    if user.is_authenticated():
-        if user.money == 0:
-            no_money = True
-        else:
-            no_money = False
-    rich_users = MyUser.objects.filter(money__gt=0).order_by('-money')
-    RichHonour = Honour.objects.filter(img='fu.png').order_by('id')
-    num = rich_users.count() / 3 + 1
-    bug_num = xrange(num)
-    
-
-    nextFriday = datetime.date.today( )  
-    oneday = datetime.timedelta(days=1)  
-    while nextFriday.weekday( ) != calendar.FRIDAY:  
-          nextFriday += oneday 
-
-    now = datetime.datetime.now()
-          
-    t = datetime.time(20, 30, 0)
-    aim_time = datetime.datetime.combine(nextFriday, t)
-    
-    timeDiff = aim_time - now
-    seconds = timeDiff.total_seconds()
-    print timeDiff
-    print seconds
-    return render_to_response('TheRich.html',locals(),
-        context_instance=RequestContext(request))
         
     
         

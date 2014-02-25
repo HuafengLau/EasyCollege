@@ -1,7 +1,4 @@
 {% load my_tags %}User-agent:  *
-Allow: /index/TheRich/
-
-User-agent:  *
 Disallow: /index/
 Disallow: /affair/
 Disallow: /center/
@@ -14,4 +11,5 @@ Disallow: /eot/delStore/
 
 User-agent:  *
 Allow: /log/
+Allow: /business/TheRich/
 {% Robot credit %}{% Robot eot %}{% Robot eotcomment %}{% Robot getCreditFile %}
