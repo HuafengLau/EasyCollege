@@ -253,20 +253,33 @@
     margin-bottom: 8px;
 }
 
+#log_button{
+	margin-top: 25px;
+}
+
 #register_or_login{
-    
-    width: 30%;
-    margin-left:3%;
+    width: 28%;
+    margin-left: 14px;
     padding-right: 0px;
     margin-right: 14%;
 }
 
+#log_pwd_div{
+	margin-top: 20px;
+}
+
+#siteinfo_div{
+	margin-top: 7%;
+	width: 50%;
+	margin-left: 90px;
+}
+
 #slogan_div{
-    width: 50%;
+    
     padding-left: 7%;
     padding-right: 0px;
     margin-right: 0px;
-    margin-top: 2%;
+    margin-top: 5px;
 }
 
 #log_warning_div{

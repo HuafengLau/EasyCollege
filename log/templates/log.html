@@ -24,19 +24,30 @@
   </head>
   <body background="{{STATIC_URL}}img/background-img1.jpg">
     <div id='log_div' class="" >       
-        <div id='slogan_div' class='pull-left'>
+        <div id='slogan_div'>
             <h1>大学易</h1>
-            <p class="lead">分享学长学姐的经验、知识和见解</p>
+            <p class=""><span id='siteInfo_span1'>分享学长学姐的经验、知识和见解</span></P>
             <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#nothing_for_version">Learn more</button>
             <div>
             </div>
         </div>
-        <div id='log_warning_div' class="alert alert-danger alert-dismissable pull-right">
+        <!--
+		<div id='log_warning_div' class="alert alert-danger alert-dismissable pull-right">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <p><strong>Warning!</strong>
             由于IE浏览器（特别是低于IE8的版本）并不能很好的支持最新的网页技术，我们强烈建议您通过其他的浏览器来使用大学易，以获得最佳的体验        
             </p>
-        </div>
+        </div>-->
+		<div class='clear_both'>
+		<div id='siteinfo_div' class='pull-left'>
+			<p class='font-black'>帮你选课，<课程和教师评分><历年期末成绩的分布图>……信息一览无余</p>
+			<P>&nbsp;</p>
+			<p class='font-black'>安全逃课，<点名情况><点名方式><期末考方式和难度>……风险自在心中</p>
+			<P>&nbsp;</p>
+			<p class='font-black'>轻松期末，<期末真题><绝密标准答案><复习资料>……资料一键下载</p>
+			<P>&nbsp;</p>
+			<P class='font-black'>More……</p>
+		</div>
         <div id='register_or_login' class='panel panel-info pull-right'>                       
             {% block log_or_register %}
             <div id='' class="panel-heading">
@@ -72,23 +83,26 @@
                             <label>邮箱</label>
                             <input type="email"  class='form-control' id='' name='email' placeholder="邮箱" required autofocus>
                         </div>
-                        <div class='form-group'>
+                        <div id='log_pwd_div' class='form-group'>
                             <label>密码</label>
                             <input type="password"  class='form-control' id='' name='stu_pwd' placeholder="密码" required>
                         </div>
                         {% if next %}  
                             <input type="hidden" value="{{next}}" name="next">  
                         {% endif %} 
-                        <div>
+                        <div id='log_button'>
                             <button class="btn btn-info btn-block" id='' type="submit">立即登录</button>
                         </div>
                     </form>
                 </div>
+				<div>
+				<p class='text-center text-danger'><small>由于IE浏览器不能很好地支持最新的网页技术，大学易强烈建议您使用其它浏览器以获得更好的体验</small></p>
+				</div>
             </div>
             
             {% endblock %}
         </div>
-            
+        </div>    
     </div>
 	<div id='log_bottom_div' class='clear_both'>
 		<div id='log_info_div'>
