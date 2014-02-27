@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head lang='zh-CN'>
-    <title>{% block title %}{% endblock %}</title>
-    
     <meta charset="utf-8" />
+	<link rel='shortcut icon' href='{{STATIC_URL}}img/logo.ico'>
+	<title>{% block title %}{% endblock %}</title>   
 	{% block search %}
     <meta name="description" content="大学易--帮助大学生掌控大学生活，为大学生提供课程资料、考试资料的下载，提供课程的详尽信息包括课程评分、教师评分、课程期末平均分、是否点名、是否有期中考等等。分享学长学姐的大学经历，为大学生活提供参考。大学生活，从大学易开始。" />
-    <meta name="keywords" content="大学易,选课助手,课程点评,课程资料,大学生活" />
+    <meta name="keywords" content="大学易,选课助手,课程点评,课程资料" />
     {% endblock %}
 	{% block meta %}
     {% endblock %}
@@ -15,7 +15,7 @@
     <!-- Bootstrap -->
     <link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="{{STATIC_URL}}css/my_css.css" rel="stylesheet" media="screen">
-    <link rel='shortcut icon' href='{{STATIC_URL}}img/logo.ico'>
+    
 	{% block moreStyle %}
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	{% endblock %}
@@ -53,6 +53,7 @@
                     {% if indexHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/index/'>主页</a></li>
                     {% if centerHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/center/'>个人中心</a></li>
                     {% if xuankeHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/eot/list/'>选课</a></li>
+					{% if newsHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/news/all/all/'>方遒</a></li>
                 </ul>
               {% endblock %}
               
