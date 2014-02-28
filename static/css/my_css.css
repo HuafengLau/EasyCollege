@@ -87,12 +87,22 @@
 	font-size: 20px;
 }
 
+.font-15{
+	font-size: 15px;
+}
+
 #scrollUp {
     bottom: 40px;
 	right: 60px;
 	padding: 10px 20px;
 	background: #555;
 	color: #fff;
+}
+
+#idCard_modal{
+	padding-top: 1%;
+	padding-left: 20%;
+	padding-right: 20%;
 }
 
 /* CSS for business.html */
@@ -343,9 +353,9 @@ div.transp { /* make the div translucent */
 
 /* CSS for index2.html */
 
+
 #nic_name_input{
-    margin-left: 20%;
-    width: 16%;
+	margin-right: 11%;
 }
 
 #index_welcome { font-size: 14px; }
@@ -487,6 +497,14 @@ div.transp { /* make the div translucent */
 }
 
 /* CSS for center.html */
+#center_avatar_form{
+	margin-top: 50px;
+}
+
+#for_20px{
+	height: 20px;
+}
+
 #center_left_div{
     width: 65%;
     padding-left: 7%;
@@ -502,12 +520,22 @@ div.transp { /* make the div translucent */
     margin-left: 0px;
 }
 
-#my_data_div{
+#my_property_div{
     margin-top: 8%;
 }
 
 #my_download_div{
     margin-top: 8%;
+}
+
+.straight_div{
+	margin-top: 15px;
+	margin-bottom: 25px;
+}
+
+.straight{
+	margin-left: 10px;
+	margin-right: 15px;
 }
 
 /* CSS for value.html */

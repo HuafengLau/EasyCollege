@@ -26,8 +26,7 @@
 				<p class='text-center'>
 				{% if RichHonour %}
 				{% for Honour in RichHonour %}						
-					<a href='#{{Honour.user.id}}'>
-					<span class='font-jin'>{{Honour.user.nic_name}}</span>{% if forloop.last %}<span class='font-black'>(上届首富)</span>{% endif %}
+					<a id='{{Honour.user.id}}' class='hand_over ID_card'><span class='font-jin'>{{Honour.user.nic_name}}</span></a>{% if forloop.last %}<span class='font-black'>(上届首富)</span>{% endif %}
 					</a>&nbsp;&nbsp;&nbsp;
 				{% endfor %}
 				{% else %}
@@ -86,7 +85,7 @@
 					</td>
 					<td>
 						<div class='form-inline'>
-						<label>{{richer.nic_name}}</label>
+						<a id='{{richer.id}}' class='hand_over ID_card'>{{richer.nic_name}}</a>
 						{% if richer.honour_set.all %}
 							{% for honour in richer.honour_set.all %}
 								<img width='25px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
@@ -164,6 +163,26 @@
       </div>
       <div class="modal-body">
       </div>   
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="idCard_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">易卡<span id='wise_modal_header'></span></h4>
+      </div>
+      <div class="modal-body">
+          <div id='idCard_div'>
+		  </div>
+          <div class='modal_sure_btn'>
+             <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >确定</button>
+          </div>
+      </div>
+      
    </div><!-- /.modal-content -->
  </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

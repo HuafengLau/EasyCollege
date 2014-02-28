@@ -12,11 +12,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import PageNotAnInteger, Paginator, InvalidPage, EmptyPage
 from Index.form import AvatarForm
 from django.conf import settings
-from Index.models import Avatar
 from account.models import MyUser
 from bs4 import BeautifulSoup
 from log.views import URP_school,wise_school,school_code
 from Center.models import Honour
+from Center.models import User_info
 from EOT.models import Eot_data
 import os
 import random
@@ -218,12 +218,7 @@ def index(request):
             response = HttpResponse()
             return response
             
-        if 'nic_name' in request.POST:
-            user = request.user
-            user.nic_name = request.POST.get('nic_name')
-            user.save()
-            response = HttpResponse()
-            return response
+        
                        
     elif request.is_ajax() and request.method == 'GET':
         if 'wise_add' in request.GET:
@@ -314,32 +309,6 @@ def del_credit(request, credit_id):
         pass
     return HttpResponseRedirect('/index/')
 
-@csrf_exempt 
-@login_required(login_url='/log/')    
-def upload_avatar(request):
-    if request.method == 'POST':
-        form = AvatarForm(request.POST,request.FILES)
-        if form.is_valid():
-            try:
-                old_avatar = Avatar.objects.get(user = request.user)
-                old_avatar.delete()
-                old_file = settings.MEDIA_ROOT + '/' + str(old_avatar.photo)
-                if os.path.isfile(old_file):
-                    os.remove(old_file)
-                
-            except:
-                pass
-            info = Avatar(
-                photo = form.cleaned_data['photo'],
-                user = request.user
-            )
-            info.save()
-            name = str(info.photo).split('/')[1]
-            user = request.user
-            user.avatar = 'avatar/%s' % name
-            user.save()
-        return HttpResponseRedirect('/index/')
- 
 def loading_gif(request):
     if request.is_ajax() and request.method == 'GET':
         if 'loading' in request.GET:
@@ -505,9 +474,14 @@ def wise_getCredit(request,school_code):
         HTML = 'index.html'
         return display(request,user,message,HTML)
         
-        
-    
-        
+def get_idCard(request):
+    if request.is_ajax() and request.method == 'GET':
+        if 'id' in request.GET:    
+            this_id = request.GET.get('id')
+            this_user = MyUser.objects.get(id=this_id)
+            this_user_info = User_info.objects.get(user=this_user)
+            return render_to_response('idCard.html',locals(),
+                context_instance=RequestContext(request))
         
             
                  

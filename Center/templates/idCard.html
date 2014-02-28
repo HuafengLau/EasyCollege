@@ -1,0 +1,27 @@
+<table class='table table-bordered'>							
+	<tr>
+		<th><p class='text-left'>昵称</p></th>
+		<td>{{this_user.nic_name}}</td>								
+	</tr>
+	<tr>
+		<th><p class='text-left'>个性签名</p></th>
+		<td><p id='center_sign'>{{this_user_info.sign}}</p></td>
+	</tr>
+	<tr><th><p class='text-left'>邮箱</p></th>
+		<td>
+			{% if this_user_info.show_email %}{{this_user.email}}
+			{% else %}保密哦~{% endif %}
+		</td>
+	</tr>
+	<tr>
+		<th><p class='text-left'>财富/等级</p></th>
+		<td>{{this_user.money}} 易币 /{{ this_user_info.grade }}</td>
+	</tr>
+	<tr>
+		<th><p class='text-left'>勋章</p></th>
+		<td>{% if this_user.honour_set.all %}{% for honour in this_user.honour_set.all %}
+			<img width='20px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
+			{% endfor %}{% else %}还没有获取任何勋章哦！{% endif %}
+		</td>
+	</tr>
+</table>

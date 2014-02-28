@@ -18,6 +18,15 @@ $(document).ready(function(){
 	  });
 	});
 	
+	
+	$('.ID_card').on('click', function(){
+		var id=$(this).attr('id');  
+		$.get('/index/get_idCard/', {'id':id}, function(data){
+            $('#idCard_div').html(data);				
+		});
+		$('#idCard_modal').modal('show');
+	});
+	
 	$('.need_login').on('click', function(){
 		alert('请登陆后再使用此功能！');
 	});
@@ -111,8 +120,64 @@ $(document).ready(function(){
 			$('#register_check_emial').html("<span class='glyphicon glyphicon-remove font-red'> 请输入正确的邮箱地址</span>");
 		}
 	});
+	
     // JS for center.html
-    
+    $(function () {
+		$('#centerTab a:first').tab('show')
+    })
+	
+	// JS for the change nic_name
+    $('#change_nicname_btn').on('click', function(){
+        var name = $('#nic_name_input').val();
+        if (name==''){
+            alert('昵称不能为空!');
+        }
+        else{
+            var count=name.length; 
+            if (count>10){
+                alert('昵称不能超过10个字!');
+            }else{
+                $.get('/center/', {'nic_name':name},function(data){
+					alert(data)
+				}); 
+				$('#center_name').html(name);
+				$('#nic_name_input').val('')
+            }
+        }
+    });
+	
+	//JS for change show_email
+	$('#change_showEmail').on('click', function(){
+		var text=$(this).text()
+		var count = text.length;
+		if (count == 11){
+			$.post('/center/', {'change':'show_email'});
+			var text=$(this).text('当前为不显示（点击更改）');
+			alert('更改成功！');
+		}else{
+			$.post('/center/', {'change':'show_email'});
+			var text=$(this).text('当前为显示（点击更改）');
+			alert('更改成功！');
+		}
+	});
+	
+	$('#change_sign_btn').on('click',function(){
+		var text=$('#sign_textarea').val()
+		var count = text.length;
+		if (count == 0){
+			alert('个性签名不能为空！');
+		}else if (count <= 50){
+			$('#sign_textarea').val('');
+			$('#center_sign').html(text);
+			$.get('/center/', {'sign':text},function(data){
+				alert(data);
+			});
+		}else{
+			alert('不能超过50个字哦！');
+		}
+	
+	});
+	
     //JS for index.html
     //Edit the course_teacher
     $('.btn_edit_teacher').bind('click',function(){
@@ -218,22 +283,6 @@ $(document).ready(function(){
 　　  $('#add_course_button').hide();  
 　　};
     
-    // JS for the change nic_name
-    $('#change_nicname_btn').on('click', function(){
-        var name = $('#nic_name_input').val();
-        if (name==''){
-            $('#wrong_nicname').html('昵称不能为空!');
-        }
-        else{
-            var count=name.length; 
-            if (count>10){
-                $('#wrong_nicname').html('昵称不能超过10个字!');
-            }else{
-                $.post('/index/', {'nic_name':name});
-                $('#change_nicname_modal').modal('hide');
-            }
-        }
-    });
     
     $('#change_nicname_modal').on('hidden.bs.modal', function () {
         window.location.reload();
@@ -427,7 +476,7 @@ $(document).ready(function(){
             $('#modal_table_wise_div').append(data);
        });
        
-       $('#myModal_wise').modal('show')
+       $('#myModal_wise').modal('show');
        
     });
     

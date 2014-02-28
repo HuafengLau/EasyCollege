@@ -94,18 +94,28 @@ def TheRich(request):
     bug_num = xrange(num)
     
 
-    nextFriday = datetime.date.today( )  
-    oneday = datetime.timedelta(days=1)  
-    while nextFriday.weekday() != calendar.FRIDAY:  
-          nextFriday += oneday 
-
+    nextFriday = datetime.date.today( )
     now = datetime.datetime.now()
-          
-    t = datetime.time(20, 30, 0)
-    aim_time = datetime.datetime.combine(nextFriday, t)
-    
-    timeDiff = aim_time - now
-    seconds = timeDiff.total_seconds()
+    if nextFriday.weekday() == calendar.FRIDAY:
+        year = nextFriday.year
+        month = nextFriday.month
+        day = nextFriday.day
+        times = datetime.datetime(year,month,day,23,59,59)
+        seconds_1 = (times-now).total_seconds()
+        seconds_2 = 4*24*60*60 + 20*60*60 + 30*60
+        seconds = seconds_1 + seconds_2
+    else:
+        oneday = datetime.timedelta(days=1)  
+        while nextFriday.weekday() != calendar.FRIDAY:  
+              nextFriday += oneday 
+
+        
+              
+        t = datetime.time(20, 30, 0)
+        aim_time = datetime.datetime.combine(nextFriday, t)
+        
+        timeDiff = aim_time - now
+        seconds = timeDiff.total_seconds()
     return render_to_response('TheRich.html',locals(),
         context_instance=RequestContext(request))
         

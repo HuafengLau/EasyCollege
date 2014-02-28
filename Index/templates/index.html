@@ -10,7 +10,8 @@
 <div class='last_right_div'>
     <div id='index_up'>
         <div id='index_upleft' class='pull-left' >
-            <table>
+            {% for info in user.user_info_set.all %}<p id='index_sign'>个性签名：{{info.sign}}</p>{% endfor %}
+			<table>
                 <tr> 
                     <td id='avtar_td'>
                         {% ifequal user.avatar 'img/avatar.png'%}
@@ -25,7 +26,7 @@
                             <td>昵称</td>
                             <td>
                                 <div class='pull-left'>
-                                <a class='hand_over' data-toggle="modal" data-target="#change_nicname_modal">{{user.nic_name}}</a>
+                                <a id='{{user.id}}' class='hand_over ID_card'>{{user.nic_name}}</a>
                                 </div>
                             </td>
                           </tr>
@@ -45,20 +46,7 @@
                         </table>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <button class='btn' id='avatar_btn'>更改头像</button>
-                        <form id='avatar_form' class='form-group' action='/index/uploadavatar/' enctype="multipart/form-data" method='POST'> 
-                            {% csrf_token %}
-                            <table>
-                                {{ form.as_table }}
-                            </table>                           
-                            <button class="btn btn-default" id='' type="submit">提交</button>
-                        </form>                       
-                    </td>
-                    
-                </tr>
+                                                        
             </table>
         </div>
         <div id='index_upright' class='pull-left'>
@@ -457,45 +445,25 @@
    </div><!-- /.modal-content -->
  </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
 <!-- Modal -->
-<div class="modal fade" id="change_nicname_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="idCard_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div id='modal_1' class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">更改昵称<span id='wise_modal_header'></span></h4>
+        <h4 class="modal-title" id="myModalLabel">易卡<span id='wise_modal_header'></span></h4>
       </div>
       <div class="modal-body">
-         <div>
-            <p class='text-info'>基于唯一性和辨识性的考虑，大学易倡导使用真实姓名，当然，你也可以随心所欲的取昵称：）</p>
-         </div>
-         <div class='container'>
-            <p>您现在的昵称为：{{user.nic_name}}</p>
-            <label>请输入您想要的昵称（10字以内）：</label>
-            <div class='form-group'>
-                <p>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span class='font-red' id='wrong_nicname'></span>
-                </p>
-                <input id='nic_name_input' type="text"  class='form-control' id ='nic_name' name='nic_name' placeholder="" required>
-            </div>
-         </div>
-         <div class='modal_sure_btn'>
-             <button  id='change_nicname_btn' type="button" class="btn btn-success " >确认更改</button>
-             <button  type="button" data-dismiss="modal" class="btn btn-danger" >取消</button>
-         </div>
+          <div id='idCard_div'>
+		  </div>
+          <div class='modal_sure_btn'>
+             <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >确定</button>
+          </div>
       </div>
       
    </div><!-- /.modal-content -->
  </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-    
-    
-   
 {% endblock %}

@@ -9,6 +9,8 @@ class User_info(models.Model):
     download_Eotdata = models.CharField(max_length=250,null=True, blank=True,verbose_name=u'下载的资料')
     nocomment_Eotdata = models.CharField(max_length=250,null=True, blank=True, verbose_name=u'未评价资料')
     grade = models.CharField(max_length=250,null=True, blank=True,verbose_name=u'等级')
+    show_email = models.BooleanField(default=True,verbose_name=u'是否显示email')
+    sign = models.CharField(max_length=50,default=u'ta什么也没说',verbose_name=u'个性签名')
     
     def __unicode__(self):
         return self.user
