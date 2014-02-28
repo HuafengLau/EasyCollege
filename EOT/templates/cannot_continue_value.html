@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block title %}
+继续点评课程 - 大学易
+{% endblock %}
+
+
+{% block mainbody %}
+<div id='cannot_continue_value_div' class='container'>
+	<h4 id='show_no_eot_message'>
+	{% if all_finished %}
+		你已经点评完了所有课程！你可以添加新的课程数据，或者去别处逛逛：）感谢您对大学易的支持
+	{% endif %}
+	{% if cannot_continue %}
+		课程需要同时具备『任课老师』和『课程属性』才能被点评，当前没有符合这一条件的课程。请返回主页完善课程信息后再点评：）
+	{% endif %}
+	</h4>
+</div>
+{% endblock %}

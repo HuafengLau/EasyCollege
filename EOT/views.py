@@ -975,6 +975,31 @@ def value(request, credit_id):
         money_message = credit.add_money
         return showeot(request, this_eot.id, lucky=lucky,money_message=money_message)
 
+def value_next(request):
+    this_user = request.user
+    credits = Credit.objects.filter(
+        user=this_user,
+        add_money = 0
+    )
+    if credits:
+        for credit in credits:
+            if credit.course_attr != '':
+                try:
+                    teacher = credit.course_teacher
+                    url = '/value/%s/' % credit.id
+                    HttpResponseRedirect(url)
+                except:
+                    continue
+            else:
+                continue
+        cannot_continue = True 
+        return render_to_response('cannot_continue_value.html',locals(),
+            context_instance=RequestContext(request))
+    else:
+        all_finished = True
+        return render_to_response('cannot_continue_value.html',locals(),
+            context_instance=RequestContext(request)) 
+        
 @login_required(login_url='/log/')        
 def list(request):
     user = request.user

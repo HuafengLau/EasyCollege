@@ -9,19 +9,18 @@
 {% endblock %}
 
 {% block mainbody %}
-{% if cannot_message %}
-	
-		<div id='no_teacher_div' class='container pull-left'>
-			<div id='back_btn_div'>
-				<a href='/index/'><button class='btn btn-default'><<返回</button></a>
-			</div>
-			<div class="alert alert-success">
-				<p class='text-danger'>
-					{% if no_teacher_message %}非常抱歉，您还没有为「{{credit.course_name}}」添加任课老师。请添加教师后再点评{% endif %}
-					{% if no_attr_message %}非常抱歉，您还没有为「{{credit.course_name}}」添加课程属性。请添加属性后再点评{% endif %}
-				</p>
-			</div>
+{% if cannot_message %}	
+	<div id='no_teacher_div' class='container pull-left'>
+		<div id='back_btn_div'>
+			<a href='/index/'><button class='btn btn-default'><<返回</button></a>
 		</div>
+		<div class="alert alert-success">
+			<p class='text-danger'>
+				{% if no_teacher_message %}非常抱歉，您还没有为「{{credit.course_name}}」添加任课老师。请添加教师后再点评{% endif %}
+				{% if no_attr_message %}非常抱歉，您还没有为「{{credit.course_name}}」添加课程属性。请添加属性后再点评{% endif %}
+			</p>
+		</div>
+	</div>
 {% else %}
 
 <div id='value_main_div' class='container pull-left'>
@@ -386,8 +385,8 @@
         <div id='comment_div'>
             <table class='table'>
                 <tr>
-                    <td class='pull-left' bgcolor='#d2322d' width='100px'>
-                        <span class='font-white'>&nbsp;真&nbsp;心&nbsp;话&nbsp;</span>
+                    <td class='pull-left' bgcolor='#d2322d' width='150px'>
+                        <span class='font-white'>&nbsp;真&nbsp;心&nbsp;话&nbsp;（选填）</span>
                     </td>
                 </tr>
                 <tr>
@@ -427,8 +426,9 @@
         </div>
         
         <div id='submit_div' class='form-inline'>
-            <span id='check_over' data-toggle="tooltip" title="在漏填状态下提交需要重新填写表单！" class='tooltip_th font-color-link hand_over'>看看漏填没？</span>
-			<button id='value_submit_btn' class='btn btn-success' type="submit">马上提交</button>
+            <span>漏评需全部重填</span>
+			<span id='check_over' class='font-color-link hand_over font-20'>看看漏评没？</span>
+			<button id='value_submit_btn' class='btn btn-success' type="submit">提&nbsp;&nbsp;&nbsp;交</button>
 			
         </div>
     </form>

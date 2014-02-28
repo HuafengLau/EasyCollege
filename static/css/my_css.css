@@ -518,7 +518,7 @@ div.transp { /* make the div translucent */
 }
 
 #check_over{
-	margin-left: 30px;
+	margin-left: 5px;
 }
 
 #value_main_div{
@@ -609,6 +609,11 @@ div.transp { /* make the div translucent */
 #show_no_value_div{
     margin-left: 7%;
     padding-top: 16%;
+}
+
+#show_no_eot_message{
+	margin-left: 4%;
+    padding-top: 9%;
 }
 
 #show_luck_why{
