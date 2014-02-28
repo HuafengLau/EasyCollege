@@ -102,7 +102,7 @@ def TheRich(request):
         day = nextFriday.day
         times = datetime.datetime(year,month,day,23,59,59)
         seconds_1 = (times-now).total_seconds()
-        seconds_2 = 4*24*60*60 + 20*60*60 + 30*60
+        seconds_2 = 6*24*60*60 + 20*60*60 + 30*60
         seconds = seconds_1 + seconds_2
     else:
         oneday = datetime.timedelta(days=1)  
