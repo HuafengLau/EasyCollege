@@ -1,5 +1,4 @@
 #coding:utf-8
-
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from log.views import log, verify
@@ -30,6 +29,7 @@ urlpatterns = patterns('',
     url(r'^center/', include('Center.urls')),
     url(r'^affair/', include('Affair.urls')),
     url(r'^business/', include('Business.urls')),
+    url(r'^news/', include('News.urls')),
     (r'^$', log),
     (r'^robots\.txt$', TemplateView.as_view(template_name= 'robots.txt', content_type='text/plain')),
     (r'^sitemaps1\.xml$', TemplateView.as_view(template_name= 'sitemaps1.xml', content_type='text/plain')),

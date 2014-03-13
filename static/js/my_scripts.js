@@ -36,10 +36,183 @@ $(document).ready(function(){
         $(this).tooltip();
     });
 	
+	$('.tooltip_div').each( function(){
+        
+        $(this).tooltip({container:'div'});
+    });
+	
     // JS for base.html   
     
     // JS for log.html
     
+	// JS for newsBase.html
+	$('.RuleDiv').on('mouseover', function(){
+		$(this).children("div")[0].style.display='block';
+	});
+	
+	$('.RuleDiv').on('mouseout', function(){
+		$(this).children("div")[0].style.display='none';
+	});
+	
+	$('#showNewsGold').on('mouseover', function(){
+		$(this).children("div")[1].style.display='block';
+	});
+	
+	$('#showNewsGold').on('mouseout', function(){
+		$(this).children("div")[1].style.display='none';
+	});
+
+	$('.newsScoreInfo').on('click', function(){
+		var list = $(this).attr('id').split(';');
+		var ups = list[0];
+		var downs = list[1];
+		var score = list[2];
+		var s = '得分   顶   沉\r'+'  '+score+'      '+ups+'    '+downs
+		alert(s)
+	});
+	
+	$('.subscriptionClick').on('click', function(){
+		var part = $(this).attr('id');
+		var text = $(this).text();
+		$.get('/news/mySubscription/', {'part':part},function(data){
+			alert(data);
+		});
+		if(text == '已订阅（点击取消）'){
+			$(this).text('未订阅（点击订阅）');
+			$('#mySubscriptionUl').children().each( function(){
+				if ($(this).attr('id') == part){
+					$(this).remove();
+				}
+			});
+		}else{
+			$(this).text('已订阅（点击取消）');
+			var s1 ="<li role='presentation'><a role='menuitem' tabindex='-1' href='/news/"
+			var s2 = part+"/hot/'>"+part+"</a></li>"
+			var s = s1 + s2;
+			$('#mySubscriptionUl').prepend(s);
+		}
+	});
+	
+	$('.subscriptionOrder').on('click',function(){
+		var order = $(this).attr('id');
+		$.get('/news/mySubscription/', {'order':order},function(data){
+			$('#subscriptionDiv').html(data);
+		});
+	});
+	
+	// JS for newsSubmit.html
+	
+	// JS for newsShow.html
+	$('.giveGold').on('click', function(){
+		var type = $(this).attr('id').split(';')[0];
+		var id = $(this).attr('id').split(';')[1];
+		var num = $(this).attr('id').split(';')[2];
+		$.get('/news/giveGold/', {'type':type,'id':id}, function(data){
+			if(data == '0'){
+				if(type == 'news'){
+					alert('臭美，你不能给自己的分享镀金哦：）');
+				}else{
+					alert('臭美，你不能给自己的回复镀金哦：）');
+				}
+			}else{
+				var after_num = parseInt(num) + 5;
+				var id_name = '#'+type+'_goldNum_'+id;
+				$(id_name).html(after_num);
+				alert(data);
+			}
+		});
+	});
+	
+	$('.callReplyBtn').on('click', function(){
+		var type = $(this).attr('id').split(';')[0];
+		var id = $(this).attr('id').split(';')[1];
+		$.get('/news/reply/', {'type':type,'id':id}, function(data){
+			var id_name = '#'+type+'_'+id+'_reply'
+			$(id_name).html(data);
+		});
+	});
+	
+	$('#newsComment1Btn').on('click', function(){
+		editor.sync();
+		var comment = $('#newsComment1Textarea').val();
+		if(comment==''){
+			alert('评论不能为空！');
+		}else{
+			if($("#noComment").length!=0){
+				$("#noComment").remove();
+			}
+			var id = $(this).parent().attr('id');
+			$.get('/news/comment/', {'comment': comment,'news_id':id}, function(data){
+				$('#commentDiv').prepend(data);	
+			});
+			editor.text('');
+		}	
+	});
+	
+	$('.commentUpVote').on('click', function(){
+		var id = $(this).attr('id').split(';')[1];
+		var type = $(this).attr('id').split(';')[0]
+		$(this).parent().children().eq(1).show();
+		$(this).parent().children().eq(2).show();
+		$(this).parent().children().eq(3).hide();
+		$(this).hide();	
+		$.get('/news/comment/vote/',{'type':type,'id':id,'nowVote':'upVote'},function(data){
+			var id_name = '#'+type+'Score_'+id
+			$(id_name).html(data);
+		});
+	});
+
+	$('.commentUpVoted').on('click', function(){
+		var id = $(this).attr('id').split(';')[1];
+		var type = $(this).attr('id').split(';')[0]
+		$(this).parent().children().eq(0).show();
+		$(this).hide();
+		$.get('/news/comment/vote/',{'type':type,'id':id,'nowVote':'upVoted'},function(data){
+			var id_name = '#'+type+'Score_'+id
+			$(id_name).html(data);
+		});
+	});
+
+	$('.commentDownVote').on('click', function(){
+		var id = $(this).attr('id').split(';')[1];
+		var type = $(this).attr('id').split(';')[0]
+		$(this).parent().children().eq(0).show();
+		$(this).parent().children().eq(1).hide();
+		$(this).parent().children().eq(3).show();
+		$(this).hide();
+		$.get('/news/comment/vote/',{'type':type,'id':id,'nowVote':'downVote'},function(data){
+			var id_name = '#'+type+'Score_'+id
+			$(id_name).html(data);
+		});
+	});
+
+	$('.commentDownVoted').on('click', function(){
+		var id = $(this).attr('id').split(';')[1];
+		var type = $(this).attr('id').split(';')[0]
+		$(this).parent().children().eq(2).show();
+		$(this).hide();
+		$.get('/news/comment/vote/',{'type':type,'id':id,'nowVote':'downVoted'},function(data){
+			var id_name = '#'+type+'Score_'+id
+			$(id_name).html(data);
+		});
+	});
+
+	$('.watchClick').on('click', function(){
+		var text = $(this).text();
+		var id = $(this).attr('id');
+		if(text=='关注ta'){
+			$(this).text('已关注（点击取消）');
+			$.get('/news/watch/',{'id':id,'action':'1'},function(data){
+				alert(data);
+			});
+		}else{
+			$(this).text('关注ta');
+			$.get('/news/watch/',{'id':id,'action':'-1'},function(data){
+				alert(data);
+			});
+		}	
+	});
+	
     // JS for register.html
     $("#register_sure_pwd").on('blur', function(){	
 		var pwd1 = $("#register_stu_pwd").val();

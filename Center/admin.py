@@ -6,7 +6,7 @@ from Center.models import User_info,Honour
 
 class User_infoAdmin(admin.ModelAdmin): 
     """docstring for User_infoAdmin"""
-    list_display = ('user','store_eot','download_Eotdata','nocomment_Eotdata','grade')    
+    list_display = ('user','store_eot','download_Eotdata','nocomment_Eotdata','grade','subscription')    
     list_filter = ('user',)
     ording = ('user',)
     

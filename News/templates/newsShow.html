@@ -1,0 +1,432 @@
+{% extends 'newsBase.html' %}
+{% load my_tags %}
+
+{% block title %}
+{{this_news.title}}- 方遒 - 大学易
+{% endblock %}
+
+{% block moreLink %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.css" />
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/kindeditorImg.css" />
+{% endblock %}
+
+{% block LeftDiv %}
+<div>
+	<div id='news_user' class='clear_both'>	
+		<div class='pull-left MT_7px MR_9px'>
+			{{this_news.user.nic_name}}&nbsp;&nbsp;&nbsp;{% for info in user.user_info_set.all %}{{ info.grade }}{% endfor %}</div>
+		<div class='pull-left MT_3px'>
+		{% if this_news.user.honour_set.all %}
+			{% for honour in this_news.user.honour_set.all %}
+				<img width='25px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
+			{% endfor %}
+		{% endif %}
+		</div>
+		<div id='watchDiv' class='pull-left'>
+			{% if need_log %}
+			{% else %}
+				{% ifnotequal this_news.user.id user.id %}
+					{% for info in user.user_info_set.all %}
+						{% ifintInstr this_news.user.id info.watching %}
+							<a id='{{this_news.user.id}}' class='watchClick hand_over'>已关注（点击取消）</a>
+						{% else %}
+							<a id='{{this_news.user.id}}' class='watchClick hand_over'>关注ta</a>
+						{% endifintInstr %}
+					{% endfor %}
+				{% endifnotequal %}
+			{% endif %}
+		</div>
+	</div>
+	<div class='clear_both MT_80px'>
+		<div id='{{this_news.ups}};{{this_news.downs}};{{this_news.score}}' class='pull-left hand_over newsScoreInfo MR_16px' >
+			{% for info in user.user_info_set.all %}
+				{% if info.upVoted_news %}
+					{% ifintInstr this_news.id info.upVoted_news %}	
+						<div id='' class='newsUpVote hidden'></div>
+						<div id='' class='newsUpVoted'></div>
+					{% else %}
+						<div id='' class='newsUpVote'></div>
+						<div id='' class='newsUpVoted hidden'></div>
+					{% endifintInstr %}
+				{% else %}
+					<div id='' class='newsUpVote'></div>
+					<div id='' class='newsUpVoted hidden'></div>
+				{% endif %}
+				<div class='{% newsScoreClass info this_news %}'>{{this_news.score}}</div>
+				{% if info.downVoted_news %}
+					{% ifintInstr this_news.id info.downVoted_news %}
+						<div id='' class='newsDownVote hidden'></div>
+						<div id='' class='newsDownVoted'></div>
+					{% else %}
+						<div id='' class='newsDownVote'></div>
+						<div id='' class='newsDownVoted hidden'></div>
+					{% endifintInstr %}
+				{% else %}
+					<div id='' class='newsDownVote'></div>
+					<div id='' class='newsDownVoted hidden'></div>
+				{% endif %}
+			{% endfor %}
+		</div>
+		<div id='newsShow_itslef' class='pull-left'>
+			<div>
+				{% ifequal this_news.type 'link' %}
+				<a class='news_title' target='_blank' href='{{this_news.link}}'>{{this_news.title}}</a>
+				{% else %}
+				<a class='news_title' href='/news/{{part.part}}/new/showNews/{{this_news.id}}/'>{{this_news.title}}</a>
+				{% endifequal %}
+			</div>
+			<div>
+				<small>{% showNewsTime this_news %}前&nbsp;由&nbsp;&nbsp;<a class='shallowLink'>{{this_news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
+				<a class='shallowLink' href='/news/{{this_news.newspart.part}}/hot/'>
+					{{this_news.newspart.part}}/{{this_news.newspart.realPart}}
+				</a></small>
+			</div>
+			<ul class='list-inline list-unstyled'>
+				<li><small>{% ifnotequal this_news.comment_num 0 %}{{this_news.comment_num}}&nbsp;{% endifnotequal %}评论</small></li>
+				<li><i> <small>{{this_news.type}}</small></i></li> 
+			</ul>
+		</div>
+		{% ifequal this_news.type 'text' %}
+			<div class='clear_both' id='showNewsTitle'>
+				{% autoescape off %}{{this_news.text}}{% endautoescape %}
+			</div>
+		{% endifequal %}
+		{% ifequal this_news.type 'pic' %}
+			<div class='clear_both' id='showNewsPic'>
+				<img src='{{MEDIA_URL}}{{this_news.pic}}' class="img-responsive" />
+			</div>
+		{% endifequal %}
+		{% ifequal this_news.type 'mp3' %}
+		<div class='clear_both' id='showNewsmp3'>
+			<audio src="{{MEDIA_URL}}{{this_news.mp3}}" loop controls preload="metadata">你的浏览器不支持音乐播放</audio>
+		</div>
+		{% endifequal %}
+		<div class='clear_both' id='showNewsGold'>
+			<div id='showNewsGoldwords' class='pull-left'>
+				<a id='news;{{this_news.id}};{{this_news.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-jin hand_over'>
+				镀金&nbsp;<span id='news_goldNum_{{this_news.id}}'>{{this_news.gold}}</span>
+				</a>
+			</div>
+			<div style='display:none;' class='pull-left'>
+				<span>&nbsp;&nbsp;&nbsp;感谢分享，赠予作者5易币,可无限叠加</span>
+			</div>
+		</div>
+		
+		{% if canSeeComment %}
+			<div id='{{this_news.id}}' class='form-group clear_both'>
+				<label>评论</label>
+				<div><textarea name='newsComment1Textarea' id='newsComment1Textarea' cols='80' rows='5' placeholder='说点什么吧'></textarea></div>
+				<button id='newsComment1Btn' class='button'>提交</button>
+			</div>
+			<div id='commentDiv'>
+				{% if this_news.newscomment1_set.all %}
+					<div class='newscomment1WholeDiv clear_both'>
+					{% for newscomment1 in this_news.newscomment1_set.all %}
+						<div class='left_line clear_both'>
+							<div class='news_vote pull-left'>
+								{% for info in user.user_info_set.all %}
+									{% if info.upVoted_comment1 %}
+										{% ifintInstr newscomment1.id info.upVoted_comment1 %}	
+											<div id='newscomment1;{{newscomment1.id}}' style='display:none' class='commentUpVote hand_over'></div>
+											<div id='newscomment1;{{newscomment1.id}}' class='commentUpVoted hand_over'></div>
+										{% else %}
+											<div id='newscomment1;{{newscomment1.id}}' class='commentUpVote hand_over'></div>
+											<div id='newscomment1;{{newscomment1.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+										{% endifintInstr %}
+									{% else %}
+										<div id='newscomment1;{{newscomment1.id}}' class='commentUpVote hand_over'></div>
+										<div id='newscomment1;{{newscomment1.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+									{% endif %}
+									{% if info.downVoted_comment1 %}
+										{% ifintInstr newscomment1.id info.downVoted_comment1 %}
+											<div id='newscomment1;{{newscomment1.id}}' style='display:none' class='commentDownVote hand_over'></div>
+											<div id='newscomment1;{{newscomment1.id}}' class='commentDownVoted hand_over'></div>
+										{% else %}
+											<div id='newscomment1;{{newscomment1.id}}' class='commentDownVote hand_over'></div>
+											<div id='newscomment1;{{newscomment1.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+										{% endifintInstr %}
+									{% else %}
+										<div id='newscomment1;{{newscomment1.id}}' class='commentDownVote hand_over'></div>
+										<div id='newscomment1;{{newscomment1.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+									{% endif %}
+								{% endfor %}
+							</div>
+							<div class='pull-left newsCommentAvatar'>
+								{% ifequal newscomment1.user.avatar 'img/avatar.png' %}									
+									<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+								{% else %}									
+									<img src='{{MEDIA_URL}}{{newscomment1.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+								{% endifequal %}
+							</div>
+							<div class='pull-left'>
+								<div class='font-grey'><small>{{newscomment1.user.nic_name}}&nbsp;&nbsp;<span id='newscomment1Score_{{newscomment1.id}}' >{{newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment1 %}前</small></div>
+								<div class='wordsColor'>level_1:{% autoescape off %}{{ newscomment1.words}}{% endautoescape %}_{{newscomment1.confidence}}</div>
+								<div>
+									<ul class='list-inline list-unstyled'>
+										<li><a id='newscomment1;{{newscomment1.id}};{{newscomment1.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
+											<small>镀金<span id='newscomment1_goldNum_{{newscomment1.id}}'>{{newscomment1.gold}}</span></small>&nbsp;
+											</a>
+										</li>
+										<li><a id='newscomment1;{{newscomment1.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
+									</ul>
+								</div>
+							</div>
+							<div id='newscomment1_{{newscomment1.id}}_reply'></div>
+						</div>
+						<hr class='clear_both comment_hr'/>
+						{% if newscomment1.newscomment2_set.all %}
+							<div class='newscomment2WholeDiv clear_both'>
+							{% for newscomment2 in newscomment1.newscomment2_set.all %}
+								<div class='clear_both left_line'>
+									<div class='news_vote pull-left'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment2 %}
+												{% ifintInstr newscomment2.id info.upVoted_comment2 %}	
+													<div id='newscomment2;{{newscomment2.id}}' style='display:none' class='commentUpVote hand_over'></div>
+													<div id='newscomment2;{{newscomment2.id}}' class='commentUpVoted hand_over'></div>
+												{% else %}
+													<div id='newscomment2;{{newscomment2.id}}' class='commentUpVote hand_over'></div>
+													<div id='newscomment2;{{newscomment2.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment2;{{newscomment2.id}}' class='commentUpVote hand_over'></div>
+												<div id='newscomment2;{{newscomment2.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment2 %}
+												{% ifintInstr newscomment2.id info.downVoted_comment2 %}
+													<div id='newscomment2;{{newscomment2.id}}' style='display:none' class='commentDownVote hand_over'></div>
+													<div id='newscomment2;{{newscomment2.id}}' class='commentDownVoted hand_over'></div>
+												{% else %}
+													<div id='newscomment2;{{newscomment2.id}}' class='commentDownVote hand_over'></div>
+													<div id='newscomment2;{{newscomment2.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment2;{{newscomment2.id}}' class='commentDownVote hand_over'></div>
+												<div id='newscomment2;{{newscomment2.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+											{% endif %}
+										{% endfor %}
+									</div>
+									<div class='pull-left newsCommentAvatar'>
+										{% ifequal newscomment2.user.avatar 'img/avatar.png' %}									
+											<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+										{% else %}									
+											<img src='{{MEDIA_URL}}{{newscomment2.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+										{% endifequal %}
+									</div>
+									<div class='pull-left'>
+										<div class='font-grey'><small>{{newscomment2.user.nic_name}}&nbsp;&nbsp;<span id='newscomment2Score_{{newscomment2.id}}' >{{newscomment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment2 %}前</small></div>
+										<div class='wordsColor'>level_2:{% autoescape off %}{{ newscomment2.words}}{% endautoescape %}_{{newscomment2.confidence}}</div>
+										<div>
+											<ul class='list-inline list-unstyled'>
+												<li><a id='newscomment2;{{newscomment2.id}};{{newscomment2.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
+													<small>镀金<span id='newscomment2_goldNum_{{newscomment2.id}}'>{{newscomment2.gold}}</span></small>&nbsp;
+													</a>
+												</li>
+												<li><a id='newscomment2;{{newscomment2.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
+											</ul>
+										</div>
+									</div>
+									<div id='newscomment2_{{newscomment2.id}}_reply'></div>
+								</div>
+								<hr class='clear_both comment_hr'/>
+								{% if newscomment2.newscomment3_set.all %}
+									<div class='newscomment3WholeDiv clear_both'>
+									{% for newscomment3 in newscomment2.newscomment3_set.all %}
+										<div class='clear_both left_line'>
+											<div class='news_vote pull-left'>
+												{% for info in user.user_info_set.all %}
+													{% if info.upVoted_comment3 %}
+														{% ifintInstr newscomment3.id info.upVoted_comment3 %}	
+															<div id='newscomment3;{{newscomment3.id}}' style='display:none' class='commentUpVote hand_over'></div>
+															<div id='newscomment3;{{newscomment3.id}}' class='commentUpVoted hand_over'></div>
+														{% else %}
+															<div id='newscomment3;{{newscomment3.id}}' class='commentUpVote hand_over'></div>
+															<div id='newscomment3;{{newscomment3.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+														{% endifintInstr %}
+													{% else %}
+														<div id='newscomment3;{{newscomment3.id}}' class='commentUpVote hand_over'></div>
+														<div id='newscomment3;{{newscomment3.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+													{% endif %}
+													{% if info.downVoted_comment3 %}
+														{% ifintInstr newscomment3.id info.downVoted_comment3 %}
+															<div id='newscomment3;{{newscomment3.id}}' style='display:none' class='commentDownVote hand_over'></div>
+															<div id='newscomment3;{{newscomment3.id}}' class='commentDownVoted hand_over'></div>
+														{% else %}
+															<div id='newscomment3;{{newscomment3.id}}' class='commentDownVote hand_over'></div>
+															<div id='newscomment3;{{newscomment3.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+														{% endifintInstr %}
+													{% else %}
+														<div id='newscomment3;{{newscomment3.id}}' class='commentDownVote hand_over'></div>
+														<div id='newscomment3;{{newscomment3.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+													{% endif %}
+												{% endfor %}
+											</div>
+											<div class='pull-left newsCommentAvatar'>
+												{% ifequal newscomment3.user.avatar 'img/avatar.png' %}									
+													<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+												{% else %}									
+													<img src='{{MEDIA_URL}}{{newscomment3.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+												{% endifequal %}
+											</div>
+											<div class='pull-left'>
+												<div class='font-grey'><small>{{newscomment3.user.nic_name}}&nbsp;&nbsp;<span id='newscomment3Score_{{newscomment3.id}}' >{{newscomment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment3 %}前</small></div>
+												<div class='wordsColor'>level_3:{% autoescape off %}{{ newscomment3.words}}{% endautoescape %}_{{newscomment3.confidence}}</div>
+												<div>
+													<ul class='list-inline list-unstyled'>
+														<li><a id='newscomment3;{{newscomment3.id}};{{newscomment3.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
+															<small>镀金<span id='newscomment3_goldNum_{{newscomment3.id}}'>{{newscomment3.gold}}</span></small>&nbsp;
+															</a>
+														</li>
+														<li><a id='newscomment3;{{newscomment3.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
+													</ul>
+												</div>
+											</div>
+											<div id='newscomment3_{{newscomment3.id}}_reply'></div>
+										</div>
+										<hr class='clear_both comment_hr'/>
+										{% if newscomment3.newscomment4_set.all %}
+											<div class='newscomment4WholeDiv clear_both'>
+											{% for newscomment4 in newscomment3.newscomment4_set.all %}
+												<div class='clear_both left_line'>
+													<div class='news_vote pull-left'>
+														{% for info in user.user_info_set.all %}
+															{% if info.upVoted_comment4 %}
+																{% ifintInstr newscomment4.id info.upVoted_comment4 %}	
+																	<div id='newscomment4;{{newscomment4.id}}' style='display:none' class='commentUpVote hand_over'></div>
+																	<div id='newscomment4;{{newscomment4.id}}' class='commentUpVoted hand_over'></div>
+																{% else %}
+																	<div id='newscomment4;{{newscomment4.id}}' class='commentUpVote hand_over'></div>
+																	<div id='newscomment4;{{newscomment4.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+																{% endifintInstr %}
+															{% else %}
+																<div id='newscomment4;{{newscomment4.id}}' class='commentUpVote hand_over'></div>
+																<div id='newscomment4;{{newscomment4.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+															{% endif %}
+															{% if info.downVoted_comment4 %}
+																{% ifintInstr newscomment4.id info.downVoted_comment4 %}
+																	<div id='newscomment4;{{newscomment4.id}}' style='display:none' class='commentDownVote hand_over'></div>
+																	<div id='newscomment4;{{newscomment4.id}}' class='commentDownVoted hand_over'></div>
+																{% else %}
+																	<div id='newscomment4;{{newscomment4.id}}' class='commentDownVote hand_over'></div>
+																	<div id='newscomment4;{{newscomment4.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+																{% endifintInstr %}
+															{% else %}
+																<div id='newscomment4;{{newscomment4.id}}' class='commentDownVote hand_over'></div>
+																<div id='newscomment4;{{newscomment4.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+															{% endif %}
+														{% endfor %}
+													</div>
+													<div class='pull-left newsCommentAvatar'>
+														{% ifequal newscomment4.user.avatar 'img/avatar.png' %}									
+															<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+														{% else %}									
+															<img src='{{MEDIA_URL}}{{newscomment4.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+														{% endifequal %}
+													</div>
+													<div class='pull-left'>
+														<div class='font-grey'><small>{{newscomment4.user.nic_name}}&nbsp;&nbsp;<span id='newscomment4Score_{{newscomment4.id}}' >{{newscomment4.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment4 %}前</small></div>
+														<div class='wordsColor'>level_4:{% autoescape off %}{{ newscomment4.words}}{% endautoescape %}_{{newscomment4.confidence}}</div>
+														<div>
+															<ul class='list-inline list-unstyled'>
+																<li><a id='newscomment4;{{newscomment4.id}};{{newscomment4.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
+																	<small>镀金<span id='newscomment4_goldNum_{{newscomment4.id}}'>{{newscomment4.gold}}</span></small>&nbsp;
+																	</a>
+																</li>
+																
+															</ul>
+														</div>
+													</div>
+													<div id='newscomment4_{{newscomment4.id}}_reply'></div>
+												</div>
+												<hr class='clear_both comment_hr'/>											
+											{% endfor %}
+											</div>
+										{% endif %}								
+									{% endfor %}
+									</div>
+								{% endif %}
+							{% endfor %}
+							</div>
+						{% endif %}
+					{% endfor %}
+					</div>
+				{% else %}
+					<p id='noComment'>暂无评论</p>
+				{% endif %}
+			</div>	
+		{% else %}
+			{% if need_log %}
+			<div class='MT_20px clear_both'>
+				<p class='text-danger'>登陆后可评论或者查看评论</p>
+			</div>
+			{% endif %}
+			{% if need_vote %}
+				<div class='MT_20px clear_both'>
+					<p class='text-danger'>你暂时不能评论或者查看评论，因为你还没有评价这个分享</p>
+				</div>
+				<div class='MT_40px'>
+					<p class='font-20 text-center hand_over'><a href='/news/vote/{{this_small_part}}/{{this_news.id}}/1/' class='underline'><b>顶，让更多人看见这个分享</b></a></p>
+					<p class='font-20 text-center hand_over'><a href='/news/vote/{{this_small_part}}/{{this_news.id}}/0/' class='underline'><b>沉，把它沉下去</b></a></p>
+				</div>
+			{% endif %}
+			{% if need_money %}
+				<div class='MT_20px clear_both'>
+					<p class='text-danger'>你太穷啦以至于无法评论或者查看评论……</p>
+				</div>
+				<div class='MT_40px'>
+					<p class='text-center'>据说有一本神奇的小册子，那里藏有致富的秘密……</p>
+				</div>
+			{% endif %}
+		{% endif %}
+	</div>
+</div>
+<script src="{{STATIC_URL}}kindeditor-4.1.10/kindeditor-min.js"></script>
+<script charset="utf-8" src="{{STATIC_URL}}kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script src="{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.js"></script>
+
+<script type="text/javascript"> 
+    var csrfitems = document.getElementsByName("csrfmiddlewaretoken"); 
+    var csrftoken = ""; 
+    if(csrfitems.length > 0) 
+    { 
+        csrftoken = csrfitems[0].value; 
+    } 
+         
+    var editor ; 
+    KindEditor.ready(function(K) {  
+        var options = {  
+            cssPath : ('{{STATIC_URL}}kindeditor-4.1.10/themes/default/default.css', 
+                       '{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.css'), 
+            width : '680px',  
+            height : '400px',  
+            filterMode : true, 
+            uploadJson : K.undef('/upload/'), 
+            extraFileUploadParams : { 
+                csrfmiddlewaretoken:csrftoken 
+            } 
+       };  
+        editor = K.create('textarea[name="newsComment1Textarea"]',{
+		items : [		 
+			'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'removeformat', '|','emoticons','code','|','justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist','|', 'subscript',
+			'superscript', '|', 'table', 'hr',  'link']	
+		});  
+		prettyPrint();
+	});
+	KindEditor.options.cssData = 'body { font: 14px "Microsoft YaHei","Microsoft YaHei UI";}';
+</script>
+
+
+
+
+{% endblock %}
+
+{% block news_details %}
+<div id='newsDetailDiv'>
+	<div><small>分享于{{this_news.time | date:"Y-m-d H:i:s"}}</small></div>
+	<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{this_news.score}}&nbsp;分（{{ratioLink}}喜欢）</div>
+	<div><small>&nbsp;<span class='font-red'>{{this_news.ups}}&nbsp;赞</span>&nbsp;&nbsp;/&nbsp;&nbsp;<span class='font-blue'>{{this_news.downs}}&nbsp;沉</span></small></div>
+</div>
+{% endblock %}
+

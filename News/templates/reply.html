@@ -1,0 +1,59 @@
+<div id='{{this_id}}' class='form-group clear_both'>
+	<div><textarea name='reply' id='{{this_type}}replyTextarea{{this_id}}' cols='50' rows='2' placeholder='' autofocus="autofocus"></textarea></div>
+	<button id='{{this_type}};{{this_id}};btn' class='replyBtn' class='button'>回复</button>
+	<button class='replyCancelBtn' class='button'>取消</button>
+</div>
+<script type="text/javascript"> 
+    var csrfitems = document.getElementsByName("csrfmiddlewaretoken"); 
+    var csrftoken = ""; 
+    if(csrfitems.length > 0) 
+    { 
+        csrftoken = csrfitems[0].value; 
+    } 
+         
+    var editor ; 
+    KindEditor.ready(function(K) {  
+        var options = {  
+            cssPath : ('{{STATIC_URL}}kindeditor-4.1.10/themes/default/default.css', 
+                       '{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.css'), 
+            width : '680px',  
+            height : '400px',  
+            filterMode : true, 
+            uploadJson : K.undef('/upload/'), 
+            extraFileUploadParams : { 
+                csrfmiddlewaretoken:csrftoken 
+            } 
+       };  
+        editor = K.create('textarea[name="reply"]',{
+		items : [		 
+			'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'removeformat', '|','emoticons','code','|','justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist','|', 'subscript',
+			'superscript',  '|', 'hr',  'link']	
+		});  
+    });
+	KindEditor.options.cssData = 'body { font: 14px "Microsoft YaHei","Microsoft YaHei UI";}';
+	editor.focus();
+</script>
+<script>
+	$('.replyCancelBtn').on('click', function(){
+		$(this).parent().remove();
+	});
+	$('.replyBtn').on('click', function(){
+		editor.sync();
+		var type = $(this).attr('id').split(';')[0];
+		var id = $(this).attr('id').split(';')[1];
+		var id_name = '#'+type+'replyTextarea'+id;
+		var words = $(id_name).val();
+		if(words==''){
+			alert('回复不能为空！');
+		}else{
+			$(this).parent().remove();
+			$.get('/news/comment/',{'type':type,'id':id,'words':words},function(data){
+				var id_name2 = '#'+type+'_'+id+'_reply'
+				$(id_name2).after(data);
+				
+			});
+		}
+	});
+</script>

@@ -64,9 +64,10 @@ def center(request):
                     page = 1
             except ValueError:
                 page = 1
-            paginator = Paginator(my_Eotdata,6)   
+            paginator = Paginator(my_Eotdata,6) 
             try:                     
-                my_Eotdata_list = paginator.page(page)
+                 my_Eotdata_list = paginator.page(page)
+                 
             except(EmptyPage,InvalidPage,PageNotAnInteger):
                 my_Eotdata_list = paginator.page(paginator.num_pages)
             if page >= my_Eotdata_after_range_num:
@@ -75,18 +76,36 @@ def center(request):
                 my_Eotdata_page_range = paginator.page_range[0:int(page)+my_Eotdata_befor_range_num]
             my_Eotdata = my_Eotdata_list
         
+       
         try: 
             this_user_info = User_info.objects.get(user=user)
         except:       
             this_user_info = User_info(
                 store_eot = '',
-                user = user,
+                user = new_user,
                 download_Eotdata = '',
                 nocomment_Eotdata = '',
-                grade = u'公民'
+                grade = u'公民',
+                subscription = 'ExplainCY;Funny;Home-news;Life;AskAnything;',
+                beWatched = '',
+                watching = '',
+                upVoted_news = '',
+                downVoted_news = '',
+                upVoted_comment1 = '',
+                upVoted_comment2 = '',
+                upVoted_comment3 = '',
+                upVoted_comment4 = '',
+                downVoted_comment1 = '',
+                downVoted_comment2 = '',
+                downVoted_comment3 = '',
+                downVoted_comment4 = '',
+                when_newsbeGold = u'你的支持是我分享的动力：）',
+                when_commentbeGold = u'下一次，我的评论将更有含金量：）',
+                when_beWatched = u'感谢关注：）',
+                agree_num = 0
             )
             this_user_info.save()
-             
+                 
         if this_user_info.store_eot:
             storeEot_list = this_user_info.store_eot.split(';')[:-1]
             my_storeEot = Eot.objects.filter(id__in=storeEot_list)
