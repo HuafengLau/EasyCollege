@@ -1,0 +1,106 @@
+{% load my_tags %}
+<div class='clear_both' {% if noSuojin %}{% else %}style='margin-left: 32px;{% endif %}'>
+	<div class='news_vote pull-left'>
+		<div id='{{type}};{{this_newComment.id}}' class='commentUpVote hand_over'></div>
+		<div id='{{type}};{{this_newComment.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+		<div id='{{type}};{{this_newComment.id}}' class='commentDownVote hand_over'></div>
+		<div id='{{type}};{{this_newComment.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+	</div>
+	<div class='pull-left newsCommentAvatar'>
+		{% ifequal this_newComment.user.avatar 'img/avatar.png' %}									
+			<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+		{% else %}									
+			<img src='{{MEDIA_URL}}{{this_newComment.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+		{% endifequal %}
+	</div>
+	<div class='pull-left'>
+		<div><small>{{this_newComment.user.nic_name}}&nbsp;&nbsp;<span id='{{type}}Score_{{this_newComment.id}}' >{{this_newComment.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime this_newComment %}</small></div>
+		<div class='wordsColor'>{% autoescape off %}{{this_newComment.words}}{% endautoescape %}</div>
+		<div><ul class='list-inline list-unstyled'>
+		<li><a id='{{type}};{{this_newComment.id}};{{this_newComment.gold}}' class='{% if user.is_authenticated %}giveGold2{% else %}need_login{% endif %} font-grey hand_over'>
+			<small>镀金<span id='{{type}}_goldNum_{{this_newComment.id}}'>{{this_newComment.gold}}</span></small>&nbsp;</a></li>
+		</li>
+		{% ifnotequal type 'newscomment4' %}
+		<li><a id='{{type}};{{this_newComment.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
+		{% endifnotequal %}
+		</ul></div>
+	</div>
+	<div id='{{type}}_{{this_newComment.id}}_reply'></div>
+</div>
+<script>
+	prettyPrint();
+	$('.commentUpVote').on('click', function(){
+		var id = $(this).attr('id').split(';')[1];
+		var type = $(this).attr('id').split(';')[0]
+		$(this).parent().children().eq(1).show();
+		$(this).parent().children().eq(2).show();
+		$(this).parent().children().eq(3).hide();
+		$(this).hide();	
+		$.get('/news/comment/vote/',{'type':type,'id':id,'nowVote':'upVote'},function(data){
+			var id_name = '#'+type+'Score_'+id
+			$(id_name).html(data);
+		});
+	});
+
+	$('.commentUpVoted').on('click', function(){
+		var id = $(this).attr('id').split(';')[1];
+		var type = $(this).attr('id').split(';')[0]
+		$(this).parent().children().eq(0).show();
+		$(this).hide();
+		$.get('/news/comment/vote/',{'type':type,'id':id,'nowVote':'upVoted'},function(data){
+			var id_name = '#'+type+'Score_'+id
+			$(id_name).html(data);
+		});
+	});
+
+	$('.commentDownVote').on('click', function(){
+		var id = $(this).attr('id').split(';')[1];
+		var type = $(this).attr('id').split(';')[0]
+		$(this).parent().children().eq(0).show();
+		$(this).parent().children().eq(1).hide();
+		$(this).parent().children().eq(3).show();
+		$(this).hide();
+		$.get('/news/comment/vote/',{'type':type,'id':id,'nowVote':'downVote'},function(data){
+			var id_name = '#'+type+'Score_'+id
+			$(id_name).html(data);
+		});
+	});
+
+	$('.commentDownVoted').on('click', function(){
+		var id = $(this).attr('id').split(';')[1];
+		var type = $(this).attr('id').split(';')[0]
+		$(this).parent().children().eq(2).show();
+		$(this).hide();
+		$.get('/news/comment/vote/',{'type':type,'id':id,'nowVote':'downVoted'},function(data){
+			var id_name = '#'+type+'Score_'+id
+			$(id_name).html(data);
+		});
+	});
+	$('.callReplyBtn').on('click', function(){
+		var type = $(this).attr('id').split(';')[0];
+		var id = $(this).attr('id').split(';')[1];
+		$.get('/news/reply/', {'type':type,'id':id}, function(data){
+			var id_name = '#'+type+'_'+id+'_reply'
+			$(id_name).html(data);
+		});
+	});
+	$('.giveGold2').on('click', function(){
+		var type = $(this).attr('id').split(';')[0];
+		var id = $(this).attr('id').split(';')[1];
+		var num = $(this).attr('id').split(';')[2];
+		$.get('/news/giveGold/', {'type':type,'id':id}, function(data){
+			if(data == '0'){
+				if(type == 'news'){
+					alert('臭美，你不能给自己的分享镀金哦：）');
+				}else{
+					alert('臭美，你不能给自己的回复镀金哦：）');
+				}
+			}else{
+				var after_num = parseInt(num) + 5;
+				var id_name = '#'+type+'_goldNum_'+id;
+				$(id_name).html(after_num);
+				alert(data);
+			}
+		});
+	});
+</script>

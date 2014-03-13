@@ -20,6 +20,10 @@
     color: red;
 }
 
+.font-grey{
+	color: #999999;
+}
+
 .font-color-link{
 	color: #2a7cc0;
 }
@@ -40,6 +44,10 @@
     color: blue;
 }
 
+.font-orange{
+	color: #ff4500;
+}
+
 .font-jin{
 	color: #e69800;
 }
@@ -50,6 +58,10 @@
 
 .font-tong{
 	color: #d97443;
+}
+
+.font-333{
+	color:#333333;
 }
 
 .underline{
@@ -85,6 +97,46 @@
 
 .font-20{
 	font-size: 20px;
+}
+
+.MT_80px{
+	margin-top:80px;
+}
+
+.MT_40px{
+	margin-top:40px;
+}
+
+.MT_20px{
+	margin-top:20px;
+}
+
+.MT_8px{
+	margin-top:8px;
+}
+
+.MT_7px{
+	margin-top:7px;
+}
+
+.MT_6px{
+	margin-top:6px;
+}
+
+.MT_3px{
+	margin-top:3px;
+}
+
+.MR_16px{
+	margin-right:16px;
+}
+
+.MR_9px{
+	margin-right:9px;
+}
+
+.ML_13px{
+	margin-left: 13px;
 }
 
 #scrollUp {
@@ -716,4 +768,384 @@ ul li{
 /* CSS for affair.html */
 #affair_special_p{
     margin-top: 8%;
+}
+
+/* CSS for newShow.html */
+.commentUpVote{
+	height: 0;
+    width: 0;
+    border-left: 10px solid #fff;
+    border-right: 10px solid #fff;
+    border-top: 10px solid #fff;
+    border-bottom: 15px solid #b7b7b7;
+}
+
+.commentDownVote{
+	height: 0;
+    width: 0;
+    border-left: 10px solid #fff;
+    border-right: 10px solid #fff;
+    border-top: 15px solid #b7b7b7;
+    border-bottom: 10px solid #fff;
+	margin-top:5px;
+}
+
+.commentUpVoted{
+	height: 0;
+    width: 0;
+    border-left: 10px solid #fff;
+    border-right: 10px solid #fff;
+    border-top: 10px solid #fff;
+    border-bottom: 15px solid #FF8B60;
+}
+
+.commentDownVoted{
+	height: 0;
+    width: 0;
+    border-left: 10px solid #fff;
+    border-right: 10px solid #fff;
+    border-top: 15px solid #FF8B60;
+    border-bottom: 10px solid #fff;
+	margin-top:5px;
+}
+
+.replyDivnewscomment1{
+	margin-left: 29px;
+}
+
+.newscomment1WholeDiv{
+	border-left: 1px dotted #D9D9D9;
+	padding-left: 5px;
+}
+
+.newscomment2WholeDiv{
+	margin-left: 29px;
+	border-left: 1px dotted #D9D9D9;
+	padding-left: 5px;
+}
+
+.newscomment3WholeDiv{
+	margin-left:29px;
+	border-left: 1px dotted #D9D9D9;
+	padding-left: 5px;
+}
+
+.newscomment4WholeDiv{
+	margin-left:29px;
+	border-left: 1px dotted #D9D9D9;
+	padding-left: 5px;
+}
+
+.wordsColor{
+	font-size: 13px;
+	margin-top: 4px;
+	margin-bottom: 3px;
+	color: black;
+}
+
+.comment_hr{
+	margin-top:9px;
+	margin-bottom:9px;
+	margin-left: 26px;
+}
+
+.newsCommentAvatar{
+	margin-right:3px;
+}
+
+#showNewsGoldwords{
+	margin-left: 45%;
+}
+
+#watchDiv{
+	margin-top: 8px;
+	margin-left: 20px;
+}
+
+#newsShow_itslef{
+	margin-top: 8px;
+}
+
+#showNewsTitle{
+	border-style:inset;
+	border:2px solid #1B7DA0;
+	width:90%;
+	margin-left:3%;
+	padding: 5px;
+
+}
+
+#showNewsPic{
+	width:60%;
+	margin-left:15%;
+}
+
+#showNewsGold{
+	margin-top:7px;
+	font-size:16px;
+}
+
+#newsDetailDiv{
+	border: 1px solid #5F99CF;
+	margin-left: 20%;
+	margin-bottom: 18px;
+	background: #EFF7FF;
+}
+
+/* CSS for newBase.html */
+
+.newsUpVote{
+	margin-left: 3px;
+	height: 0;
+    width: 0;
+    border-left: 12px solid #fff;
+    border-right: 12px solid #fff;
+    border-top: 12px solid #fff;
+    border-bottom: 16px solid #b7b7b7;
+}
+
+.newsDownVote{
+	margin-left: 3px;
+	height: 0;
+    width: 0;
+    border-left: 12px solid #fff;
+    border-right: 12px solid #fff;
+    border-top: 16px solid #b7b7b7;
+    border-bottom: 12px solid #fff;
+}
+
+.newsUpVoted{
+	margin-left: 3px;
+	height: 0;
+    width: 0;
+    border-left: 12px solid #fff;
+    border-right: 12px solid #fff;
+    border-top: 12px solid #fff;
+    border-bottom: 16px solid #FF8B60;
+}
+
+.newsDownVoted{
+	margin-left: 3px;
+	height: 0;
+    width: 0;
+    border-left: 12px solid #fff;
+    border-right: 12px solid #fff;
+    border-top: 16px solid #FF8B60;
+    border-bottom: 12px solid #fff;
+}
+
+.topPart{
+	margin-left: 12px;
+	font-size: 15px;
+}
+
+.smallPart{
+	margin-left: 12px;
+	font-size: 13px;
+}
+
+.mgbom{
+	margin-top: 25px;
+}
+
+.RuleP{
+	color: white;
+	background-color: #1b7da0;
+}
+
+.unVoteNum3{
+	margin-left: 1px;
+	font-size: 16px;
+	color: #B7B7B7;
+}
+
+.unVoteNum-3{
+	margin-left: 0px;
+	font-size: 16px;
+	color: #B7B7B7;
+}
+
+.unVoteNum2{
+	margin-left: 5px;
+	font-size: 16px;
+	color: #B7B7B7;
+}
+
+.nVoteNum-2{
+	margin-left: 2px;
+	font-size: 16px;
+	color: #B7B7B7;
+}
+
+.unVoteNum1{
+	margin-left: 10px;
+	font-size: 16px;
+	color: #B7B7B7;
+}
+
+.unVoteNum-1{
+	margin-left: 7px;
+	font-size: 16px;
+	color: #B7B7B7;
+}
+
+.VotedNum3{
+	margin-left: 1px;
+	font-size: 16px;
+	color: #FF8B60;
+}
+
+.VotedNum-3{
+	margin-left: 0px;
+	font-size: 16px;
+	color: #FF8B60;
+}
+
+.VotedNum2{
+	margin-left: 5px;
+	font-size: 16px;
+	color: #FF8B60;
+}
+
+.VotedNum-2{
+	margin-left: 2px;
+	font-size: 16px;
+	color: #FF8B60;
+}
+
+.VotedNum1{
+	margin-left: 10px;
+	font-size: 16px;
+	color: #FF8B60;
+}
+
+.VotedNum-1{
+	margin-left: 7px;
+	font-size: 16px;
+	color: #FF8B60;
+}
+
+.line_bottom{
+	border-bottom: 1px dotted #D9D9D9;
+	
+	padding-left: 5px;
+}
+
+.line_left{
+	border-left: 1px dotted #D9D9D9;
+	padding-left: 5px;
+}
+
+.shallowLink{
+	color: #6C66A5;
+}
+
+.news_title{
+	font-size: 15px;
+}
+
+.news_vote{
+	margin-right: 7px;
+}
+
+.news_info{
+	margin-top: 3px;
+}
+
+.news_pic{
+	margin-right: 6px;
+}
+
+#choosePartDiv{
+	margin-left: 4%;
+	border-style: outset;
+	border-width: 1px;
+	border-color: #7f7b7b;
+	margin-top: 3%;
+}
+
+#PicUChooseDiv,#TextUChooseDiv,#LinkUChooseDiv{
+	margin-top: 10px;
+}
+
+#PicDefaultChooseDiv,#LinkDefaultChooseDiv,#TextDefaultChooseDiv{
+	margin-top: 10px;
+}
+
+#realPartDiv{
+	margin-left: 2%;
+	margin-top: 2%;
+	margin-bottom: 5%;
+}
+
+#id_newspart{
+	width: 20%;
+}
+
+#id_pic{
+	width: 30%;
+}
+
+#LeftDiv{
+	width: 71%;
+	margin-left: 2%;
+	margin-right: 2%;
+}
+
+#RightDiv{
+	width: 21%;
+	margin-top: 4%;
+}
+
+#submitBtnDiv{
+	margin-left: 20%;
+	margin-bottom: 15%;
+}
+
+#partInfoDiv{
+	margin-left: 20%;
+	margin-bottom: 8%;
+}
+
+#partRuleDiv{
+	margin-left: 20%;
+	margin-bottom: 9%;
+}
+
+#partSimilarDiv{
+	margin-bottom: 9%;
+	margin-left: 20%;
+}
+
+#partAdminDiv{
+	margin-left: 20%;
+}
+
+#linkBtnDiv{
+	margin-bottom: 10px;
+}
+
+#textBtnDiv{
+	margin-bottom: 10px;
+}
+
+#picBtnDiv{
+	margin-bottom: 10px;
+}
+
+#smallPartLi{
+	margin-top: 10px;
+	margin-left: 10px;
+	font-size: 17px;
+	margin-right: 7px;
+}
+
+#newsBase_line{
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+#topPartDiv{
+	padding-top: 6px;
 }

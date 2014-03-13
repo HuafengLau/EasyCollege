@@ -1,0 +1,45 @@
+{% extends 'newsBase.html' %}
+
+{% block LeftDiv %}
+	<div class='container'>
+		<p>已订阅</p>
+		<table class='table table-bordered'>
+			<tr><th>社群</th><th>主题</th><th></th></tr>
+			{% for sub in mySubs %}
+				<tr>
+					<td><span class='pull-left'>&nbsp;&nbsp;&nbsp;
+					<a href='/news/{{sub.part}}/hot/'>{{sub.part}}&nbsp;/&nbsp;{{sub.realPart}}</a></span></td>
+					<td><span class='pull-left'>&nbsp;&nbsp;&nbsp;&nbsp;{{sub.description}}</span></td>
+					<td><a id='{{sub.part}}' class='subscriptionClick hand_over'>已订阅（点击取消）</a></td>
+				</tr>
+			{% endfor %}
+		</table>
+		<p>探索</p>
+		<div id='subscriptionDiv'>
+			<table class='table table-bordered'>
+				<tr>
+					<th><a id='part' class='hand_over subscriptionOrder'>社群</a></th>
+					<th>主题</th>
+					<th><a id='time' class='hand_over subscriptionOrder'>创立时间</a></th>
+					<th><a id='-num' class='hand_over subscriptionOrder'>分享数</a></th>
+					<th><a id='-user_num' class='hand_over subscriptionOrder'>订阅人数</a></th>
+					<th></th>
+				</tr>
+				{% for sub in notSubs %}
+					<tr>
+						<td><span class='pull-left'>&nbsp;&nbsp;&nbsp;<a href='/news/{{sub.part}}/hot/'>
+							{{sub.part}}&nbsp;/&nbsp;{{sub.realPart}}</a></span>
+						</td>
+						<td><span class='pull-left'>&nbsp;&nbsp;&nbsp;&nbsp;{{sub.description}}</span></td>
+						<td>{{sub.time | date:"Y-m-d"}}</td>
+						<td>{{sub.num}}</td><td>{{sub.user_num}}</td>
+						<td><a id='{{sub.part}}' class='subscriptionClick hand_over'>未订阅（点击订阅）</a></td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+{% endblock %}
+
+{% block RightDiv %}
+{% endblock %}

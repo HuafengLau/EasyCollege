@@ -16,6 +16,7 @@ class Major_courseAdmin(admin.ModelAdmin):
     list_filter = ('major_id',)
     ording = ('major_name',)
 
-
+    
+    
 admin.site.register(Credit, CreditAdmin)
 admin.site.register(Major_course, Major_courseAdmin)

@@ -1,0 +1,37 @@
+<script src="{{STATIC_URL}}kindeditor-4.1.10/kindeditor-min.js"></script>
+
+<script type="text/javascript"> 
+    var csrfitems = document.getElementsByName("csrfmiddlewaretoken"); 
+    var csrftoken = ""; 
+    if(csrfitems.length > 0) 
+    { 
+        csrftoken = csrfitems[0].value; 
+    } 
+         
+    var editor ; 
+    KindEditor.ready(function(K) {  
+        var options = {  
+            cssPath : ('{{STATIC_URL}}kindeditor-4.1.10/themes/default/default.css',  
+                       '{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.css',
+					   '{{STATIC_URL}}css/kindeditorImg.css'), 
+            width : '920px',  
+            height : '400px',
+			imageTabIndex:1,
+			filterMode : true, 
+			uploadJson : K.undef('/news/uploadTextPic/'),
+			items :[
+				'undo', 'redo', '|', 
+				'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+				'italic', 'underline','|', 'code','image','emoticons','|','strikethrough', 'lineheight', 
+				'removeformat',  'link', 'unlink','|', 'justifyleft', 'justifycenter', 
+				'justifyright','justifyfull', '|','insertorderedlist', 'insertunorderedlist', '|','indent', 'outdent','|', 
+				'subscript','superscript', '|','table', 'hr', 'fullscreen', 'preview','quickformat'],
+			extraFileUploadParams : {
+				csrfmiddlewaretoken:csrftoken
+			} 
+            
+       };  
+        editor = K.create('textarea[name="text"]', options);  
+    });
+	KindEditor.options.cssData = 'body { font: 14px "Microsoft YaHei","Microsoft YaHei UI";}';
+</script> 

@@ -9,7 +9,25 @@ class User_info(models.Model):
     download_Eotdata = models.CharField(max_length=250,null=True, blank=True,verbose_name=u'下载的资料')
     nocomment_Eotdata = models.CharField(max_length=250,null=True, blank=True, verbose_name=u'未评价资料')
     grade = models.CharField(max_length=250,null=True, blank=True,verbose_name=u'等级')
-    
+    upVoted_news = models.TextField(default='',blank=True,verbose_name=u'支持的分享')
+    downVoted_news = models.TextField(default='',blank=True,verbose_name=u'不支持的分享')
+    beWatched = models.TextField(default='',blank=True,verbose_name=u'被关注')
+    watching = models.TextField(default='',blank=True,verbose_name=u'关注')
+    subscription = models.TextField(default='ExplainCY;Funny;Home-news;Life;AskAnything;',blank=True,verbose_name=u'收藏的社群')
+    upVoted_comment1 = models.TextField(default='',blank=True,verbose_name=u'赞同评论1')
+    upVoted_comment2 = models.TextField(default='',blank=True,verbose_name=u'赞同评论2')
+    upVoted_comment3 = models.TextField(default='',blank=True,verbose_name=u'赞同评论3')
+    upVoted_comment4 = models.TextField(default='',blank=True,verbose_name=u'赞同评论4')
+    downVoted_comment1 = models.TextField(default='',blank=True,verbose_name=u'不赞同评论1')
+    downVoted_comment2 = models.TextField(default='',blank=True,verbose_name=u'不赞同评论2')
+    downVoted_comment3 = models.TextField(default='',blank=True,verbose_name=u'不赞同评论3')
+    downVoted_comment4 = models.TextField(default='',blank=True,verbose_name=u'不赞同评论4')
+    when_newsbeGold = models.CharField(max_length=20,default=u'你的支持是我分享的动力：）', blank=True,verbose_name=u'回应分享镀金')
+    when_commentbeGold = models.CharField(max_length=20,default=u'下一次，我的评论将更有含金量：）', blank=True,verbose_name=u'回应评论镀金')
+    #when_beAgreed = models.CharField(max_length=20,default=u'感谢赞同：）', blank=True,verbose_name=u'回应赞同')
+    when_beWatched = models.CharField(max_length=20,default=u'感谢关注：）', blank=True,verbose_name=u'回应关注')
+    agree_num = models.IntegerField(default=0,blank=True,verbose_name=u'获赞')
+      
     def __unicode__(self):
         return self.user
     

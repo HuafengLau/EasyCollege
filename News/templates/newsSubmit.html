@@ -1,0 +1,173 @@
+{% extends 'newsBase.html' %}
+{% load my_tags %}
+
+{% block title %}
+提交新闻{{type}}- 大学易
+{% endblock %}
+
+{% block LeftDiv %}
+<ul class="nav nav-tabs">
+  <li id='smallPartLi'><b>分享到 {{part.part}}</b></li>
+  {% if part.can_link %}
+	{% ifequal type 'link' %}<li class='active'>{% else %}<li>{% endifequal %}<a id='HotLi' href="#Link" data-toggle="tab">链接</a></li>
+  {% endif %}
+  {% if part.can_text %}
+	{% ifequal type 'text' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#Text" data-toggle="tab">文章</a></li>
+  {% endif %}
+  {% if part.can_pic %}
+	{% ifequal type 'pic' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#Pic" data-toggle="tab">图片</a></li>
+  {% endif %}
+  {% if part.can_mp3 %}
+	{% ifequal type 'mp3' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#mp3" data-toggle="tab">音乐</a></li>
+  {% endif %}
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  {% if part.can_link %}
+  <div class="tab-pane {% ifequal type 'link' %}in active{% endifequal %}" id="Link">
+	<div class="alert alert-danger">
+		<P>你正在分享链接，一次成功的分享包括创意合理的标题和准确的链接……</p>
+	</div>
+	
+	<form role="form" class='form-group' action='/news/{{part.part}}/submit/link/' enctype="multipart/form-data" method='POST'> 
+	{% csrf_token %}
+
+	{% for field in linkForm %}                                 
+		{% if field.errors %}
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> 
+			{{field.errors}}
+		</div>
+		{% endif %}
+		<div class='form-group'>
+			{% ifnotequal forloop.counter 2 %}
+				<label>{{field.label_tag}}</label>
+			{% endifnotequal %}			
+			
+			{% ifnotequal part.part 'All' %}
+			<div class='clear_both'>
+				{{field}}
+				{% ifequal forloop.counter 1 %}
+					<div style="margin-left:8px;margin-top:8px;" class='pull-left'>想分享到其他社群？移步<a href='/news/All/submit/link/'>All / 全部</a></div>
+				{% endifequal %}
+			</div>
+			{% else %}
+				<div class='clear_both'>{{field}}</div>
+			{% endifnotequal %}
+		</div>
+	{% endfor %}
+
+		<button id='link_submit' class="btn btn-default" type="submit">提交</button>
+	</form>			
+  </div>
+  {% endif %}
+  {% if part.can_text %}
+  <div class="tab-pane {% ifequal type 'text' %}in active{% endifequal %}" id="Text">
+	<div class="alert alert-danger">
+		<P>你正在分享文字，一次成功的分享包括创意合理的标题和详略得当的文章……</p>
+	</div>
+	<form role="form" class='form-group' action='/news/{{part.part}}/submit/text/' enctype="multipart/form-data" method='POST'> 
+	{% csrf_token %}
+	{% for field in textForm %}                                 
+		{% if field.errors %}
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> 
+			{{field.errors}}
+		</div>
+		{% endif %}
+		<div class='form-group'>
+			{% ifnotequal forloop.counter 2 %}<label>{{field.label_tag}}</label>{% endifnotequal %}			
+			
+			{% ifnotequal part.part 'All' %}
+			<div class='clear_both'>
+				{{field}}
+				{% ifequal forloop.counter 1 %}
+					<div style="margin-left:8px;margin-top:8px;" class='pull-left'>想分享到其他社群？移步<a href='/news/All/submit/text/'>All / 全部</a></div>
+				{% endifequal %}
+			</div>
+			{% else %}
+				<div class='clear_both'>{{field}}</div>
+			{% endifnotequal %}
+		</div>
+	{% endfor %}
+		<button id='text_submit' class="btn btn-default" type="submit">提交</button>
+	</form>		
+  </div>
+  {% endif %}
+  {% if part.can_pic %}
+  <div class="tab-pane {% ifequal type 'pic' %}in active{% endifequal %}" id="Pic">
+	<div class="alert alert-danger">
+		<P>你正在分享图片，一次成功的分享包括创意合理的标题和一张有趣的图片……</p>
+	</div>
+	<form role="form" class='form-group' action='/news/{{part.part}}/submit/pic/' enctype="multipart/form-data" method='POST'> 
+	{% csrf_token %}
+	{% for field in picForm %}                                 
+		{% if field.errors %}
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> 
+			{{field.errors}}
+		</div>
+		{% endif %}
+		<div class='form-group'>
+			{% ifnotequal forloop.counter 2 %}<label>{{field.label_tag}}</label>{% endifnotequal %}			
+			
+			{% ifnotequal part.part 'All' %}
+			<div class='clear_both'>
+				{{field}}
+				{% ifequal forloop.counter 1 %}
+					<div style="margin-left:8px;margin-top:8px;" class='pull-left'>想分享到其他社群？移步<a href='/news/All/submit/pic/'>All / 全部</a></div>
+				{% endifequal %}
+			</div>
+			{% else %}
+				<div class='clear_both'>{{field}}</div>
+			{% endifnotequal %}
+		</div>
+	{% endfor %}
+		<button id='pic_submit' class="btn btn-default" type="submit">提交</button>
+	</form>
+  </div>
+  {% endif %}
+  {% if part.can_mp3 %}
+  <div class="tab-pane {% ifequal type 'mp3' %}in active{% endifequal %}" id="mp3">
+	<div class="alert alert-danger">
+		<P>你正在分享音乐，一次成功的分享包括创意合理的标题和准确的MP3文件……</p>
+	</div>
+	<form role="form" class='form-group' action='/news/{{part.part}}/submit/mp3/' enctype="multipart/form-data" method='POST'> 
+	{% csrf_token %}
+	{% for field in mp3Form %}                                 
+		{% if field.errors %}
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> 
+			{{field.errors}}
+		</div>
+		{% endif %}
+		<div class='form-group'>
+			{% ifnotequal forloop.counter 2 %}<label>{{field.label_tag}}</label>{% endifnotequal %}			
+			
+			{% ifnotequal part.part 'All' %}
+			<div class='clear_both'>
+				{{field}}
+				{% ifequal forloop.counter 1 %}
+					<div style="margin-left:8px;margin-top:8px;" class='pull-left'>想分享到其他社群？移步<a href='/news/All/submit/pic/'>All / 全部</a></div>
+				{% endifequal %}
+			</div>
+			{% else %}
+				<div class='clear_both'>{{field}}</div>
+			{% endifnotequal %}
+		</div>
+	{% endfor %}
+		<button id='mp3_submit' class="btn btn-default" type="submit">提交</button>
+	</form>
+  </div>
+  {% endif %}
+</div>
+<script src="{{STATIC_URL}}kindeditor-4.1.10/kindeditor-min.js"></script>
+<script charset="utf-8" src="{{STATIC_URL}}kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script src="{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.js"></script>
+{% endblock %}
+
+
+{% block Submit %}
+{% endblock %}
+

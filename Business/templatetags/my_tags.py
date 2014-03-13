@@ -7,9 +7,55 @@ from Business.models import Credit
 from Business.views import code_school
 from datetime import datetime
 import re
+import pytz
 
 register = template.Library()
 
+@register.tag 
+def ifintInstr(parser, token): 
+    return do_ifintInstr(parser, token, False) 
+ 
+@register.tag 
+def ifnotintInstr(parser, token): 
+    return do_ifintInstr(parser, token, True) 
+ 
+ 
+def do_ifintInstr(parser, token, negate): 
+    bits = list(token.split_contents()) 
+    if len(bits) != 3: 
+        raise TemplateSyntaxError("%r takes two arguments" % bits[0]) 
+    end_tag = 'end' + bits[0] 
+    nodelist_true = parser.parse(('else', end_tag)) 
+    token = parser.next_token() 
+    if token.contents == 'else': 
+        nodelist_false = parser.parse((end_tag,)) 
+        parser.delete_first_token() 
+    else: 
+        nodelist_false = NodeList() 
+    val1 = parser.compile_filter(bits[1]) 
+    val2 = parser.compile_filter(bits[2]) 
+    return IfintInstrNode(val1, val2, nodelist_true, nodelist_false, negate) 
+ 
+ 
+class IfintInstrNode(template.Node): 
+    child_nodelists = ('nodelist_true', 'nodelist_false') 
+ 
+    def __init__(self, var1, var2, nodelist_true, nodelist_false, negate): 
+        self.var1, self.var2 = var1, var2 
+        self.nodelist_true, self.nodelist_false = nodelist_true, nodelist_false 
+        self.negate = negate 
+ 
+    def __repr__(self): 
+        return "<IfEqualNode>" 
+ 
+    def render(self, context): 
+        val1 = self.var1.resolve(context, True) 
+        val2 = self.var2.resolve(context, True) 
+        if (self.negate and str(val1) not in val2) or (not self.negate and str(val1) in val2): 
+            return self.nodelist_true.render(context) 
+        return self.nodelist_false.render(context) 
+
+        
 class ShowCourseNode(template.Node):
     def __init__(self,sequence):
         self.sequence = sequence
@@ -182,8 +228,88 @@ def Sitemap(parser, token):
         
     sequence = parser.compile_filter(text_name)    
     return SitemapNode(sequence)
+
+class showNewsTimeNode(template.Node):
+    def __init__(self,sequence):
+        self.sequence = sequence
+
+    def render(self, context):
+        values = self.sequence.resolve(context, True)
+
+        #tz = pytz.timezone(pytz.country_timezones('cn')[0])  
+        #now2 = tz.localize(datetime.now())
+        now1 = datetime.now(pytz.utc)
+        #now = datetime.now()
+        time1 = (now1 - values.time).total_seconds()
+        #time2 = (now2 - values.time).total_seconds()
+        if time1 >= 86400:
+            num = int(time1 / 86400)
+            return '%s 天' % num
+        elif time1 >= 3600:
+            num = int(time1 / 3600)
+            return '%s 小时' % num
+        elif time1 >= 60:
+            num = int(time1 / 60)
+            return '%s 分钟' % num
+        else:
+            num = int(time1)
+            return '%s 秒' % num
+            
+def showNewsTime(parser, token):
+    try:
+        tag_name, text_name= token.split_contents() 
+    except:
+        raise template.TemplateSyntaxError
+        
+    sequence = parser.compile_filter(text_name)    
+    return showNewsTimeNode(sequence)
+
+class newsScoreClassNode(template.Node):
+    def __init__(self,sequence1,sequence2):
+        self.sequence1 = sequence1
+        self.sequence2 = sequence2
+
+    def render(self, context):
+        info = self.sequence1.resolve(context, True)
+        news = self.sequence2.resolve(context, True)
+        if news.score >=0:
+            if news.score > 100:
+                size = '3'
+            elif news.score >10:
+                size ='2'
+            else:
+                size = '1'
+        else:
+            if abs(news.score) > 100:
+                size = '-3'
+            elif abs(news.score) >10:
+                size ='-2'
+            else:
+                size = '-1'
+            
+        vote = 'unVoteNum'
+        if info.upVoted_news and str(news.id) in info.upVoted_news:
+            vote = 'VotedNum'
+        if info.downVoted_news and str(news.id) in info.downVoted_news:
+            vote = 'VotedNum'
+            
+        s = vote + size
+        return s
+            
+def newsScoreClass(parser, token):
+    try:
+        tag_name, info, news= token.split_contents() 
+    except:
+        raise template.TemplateSyntaxError
+        
+    sequence1 = parser.compile_filter(info)
+    sequence2 = parser.compile_filter(news)
     
+    return newsScoreClassNode(sequence1,sequence2)  
+  
 register.tag('ShowCourse', ShowCourse)
 register.tag('ShowSchool', ShowSchool)
 register.tag('Robot', Robot)
 register.tag('Sitemap', Sitemap)
+register.tag('showNewsTime', showNewsTime)
+register.tag('newsScoreClass', newsScoreClass)

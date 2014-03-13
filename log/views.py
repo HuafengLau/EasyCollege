@@ -94,7 +94,24 @@ def deal_register(request):
             user = new_user,
             download_Eotdata = '',
             nocomment_Eotdata = '',
-            grade = u'公民'
+            grade = u'公民',
+            subscription = 'ExplainCY;Funny;Home-news;Life;AskAnything;',
+            beWatched = '',
+            watching = '',
+            upVoted_news = '',
+            downVoted_news = '',
+            upVoted_comment1 = '',
+            upVoted_comment2 = '',
+            upVoted_comment3 = '',
+            upVoted_comment4 = '',
+            downVoted_comment1 = '',
+            downVoted_comment2 = '',
+            downVoted_comment3 = '',
+            downVoted_comment4 = '',
+            when_newsbeGold = u'你的支持是我分享的动力：）',
+            when_commentbeGold = u'下一次，我的评论将更有含金量：）',
+            when_beWatched = u'感谢关注：）',
+            agree_num = 0
         )
         this_user_info.save()
     

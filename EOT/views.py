@@ -370,8 +370,7 @@ def showcredit(request, credit_id):
         no_eot = True
         this_eot = None   
     return show(request,this_eot,no_eot,credit_id)
-
-   
+ 
 def showeot(request, eot_id,**kwargs):
     if kwargs:
         lucky = kwargs['lucky']

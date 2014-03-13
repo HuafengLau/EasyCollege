@@ -15,10 +15,10 @@
     <!-- Bootstrap -->
     <link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="{{STATIC_URL}}css/my_css.css" rel="stylesheet" media="screen">
-    
 	{% block moreStyle %}
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	{% endblock %}
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <style>
     body{font-family:"Microsoft YaHei","Microsoft YaHei UI","ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","WenQuanYi Micro Hei",sans-serif;}
     h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {font-family:"ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
@@ -53,7 +53,7 @@
                     {% if indexHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/index/'>主页</a></li>
                     {% if centerHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/center/'>个人中心</a></li>
                     {% if xuankeHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/eot/list/'>选课</a></li>
-					{% if newsHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/news/all/all/'>方遒</a></li>
+					{% if newsHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/news/All/hot/'>方遒</a></li>
                 </ul>
               {% endblock %}
               

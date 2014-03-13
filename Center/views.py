@@ -45,7 +45,10 @@ def center(request):
             user = user,
             download_Eotdata = '',
             nocomment_Eotdata = '',
-            grade = u'公民'
+            grade = u'公民',
+            voted_news = '',
+            beWatched = '',
+            watching = ''
         )
         this_user_info.save()
          
