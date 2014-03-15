@@ -545,8 +545,8 @@
 					<div id='partAdminDiv'>
 						<p><strong>社群管理员</strong></p>
 						<ul>
-						{% for adminUser in part.partadmin_set.all %}
-							<li><a id='{{adminUser.id}}' class='hand_over ID_card'>{{adminUser.nic_name}}</a></li>
+						{% for partadmin in part.partadmin_set.all %}
+							<li><a id='{{partadmin.user.id}}' class='hand_over ID_card'>{{partadmin.user.nic_name}}</a></li>
 						{% empty %}
 							<li>暂无管理员</li>
 						{% endfor %}
