@@ -9,37 +9,46 @@
 
 {% block mainbody %}
 <div id='fangqiu'>
-	<div>
-		<div id='topDiv'>		
-			<div class="dropdown pull-left">
-			  <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-				我的订阅
-				<span class="caret"></span>
-			  </button>
-			  <ul id='mySubscriptionUl' class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+	<div style='margin-bottom:0px;padding-bottom:0px;'>
+		<div>
+		  <ul class="nav nav-pills pull-left">	
+			<li class="dropdown">
+			  <a id="drop4" role="button" data-toggle="dropdown" href="#">我的订阅<b class="caret"></b></a> 
+			  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
 				{% for subs in mySubs %}
-				<li id='{{subs.part}}' role="presentation"><a role="menuitem" tabindex="-1" href="/news/{{subs.part}}/hot/">{{subs.part}}&nbsp;/&nbsp;{{subs.realPart}}</a></li>
+				<li role="presentation">
+					<a role="menuitem" tabindex="-1" href='/news/{{subs.part}}/hot/'>{{subs.part}}&nbsp;/&nbsp;{{subs.realPart}}</a>
+				</li>
 				{% endfor %}
 				<li role="presentation" class="divider"></li>
 				<li role="presentation"><a role="menuitem" tabindex="-1" href="/news/mySubscription/">编辑我的订阅</a></li>
 			  </ul>
-			</div>
-			<div id='topPartDiv'>						
-				{% for topPart in top_newsParts %}
+			</li>
+		  </ul>
+		  <div class='pull-left PT_10px'>
+			{% for topPart in top_newsParts %}
 				<a class='topPart {% ifnotequal part.part topPart.part %}font-black{% else %}font-orange{% endifnotequal %}' href='/news/{{topPart.part}}/hot/'>{{ topPart.realPart }}</a>
+			{% endfor %}
+		  </div>
+		  <div class=''>
+		  <ul class="nav nav-pills">
+			<li class="dropdown">
+			  <a id="drop5" role="button" data-toggle="dropdown" href="#">更多+ <b class="caret"></b></a>
+			  <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+				{% for part in more_newsParts %}
+				<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="/news/{{part.part}}/hot/">{{part.part}}&nbsp;/&nbsp;{{part.realPart}}</a>
+				</li>
 				{% endfor %}
-				<a class='topPart' href='/news/mySubscription/'>更多+</a>
-			</div>		
-		</div>
-		<hr />
+			  </ul>
+			</li>
+		  </ul> <!-- /tabs -->
+		  </div>
+		</div> <!-- /example -->
+		<hr class='MT_0px'/>
 		<div id='newsMainDiv' class='clear_both'>
 			<div id='LeftDiv' class='pull-left'>
 				{% block LeftDiv %}
-				<!--<div class='pull-left'>
-					<img src='{{STATIC_URL}}img/temp.png' />
-				</div>-->
-				
-				<!-- Nav tabs -->
 				<ul class="nav nav-tabs">
 				  <li id='smallPartLi'><b>{{ part.part }}</b></li>
 				  {% ifequal smallPart 'hot' %}<li class='active'>{% else %}<li>{% endifequal %}<a id='HotLi' href="#hot" data-toggle="tab">热门</a></li>
@@ -99,7 +108,7 @@
 									<span>——hot{{news.hot}}</span>
 								</div>
 								<div>
-									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;<a class='shallowLink'>{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
+									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;<a id='{{news.user.id}}' class='shallowLink hand_over ID_card'>{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
 									<a class='shallowLink' href='/news/{{news.newspart.part}}/hot/'>
 										{{news.newspart.part}}/{{news.newspart.realPart}}
 									</a></small>
@@ -110,6 +119,7 @@
 										{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
 										</small>
 									</li>
+									<li><small class='font-grey'>镀金{{news.gold}}</small></li>
 									<li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
 								</ul>
 							</div>
@@ -177,6 +187,7 @@
 									<li><small><a class='font-grey' href='/news/{{part.part}}/new/showNews/{{news.id}}/'>
 									{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论
 									</a></small></li>
+									<li><small class='font-grey'>镀金{{news.gold}}</small></li>
 									<li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
 								</ul>
 							</div>
@@ -244,6 +255,7 @@
 									<li><small><a class='font-grey' href='/news/{{part.part}}/controversial/showNews/{{news.id}}/'>
 									{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
 									</small></li>
+									<li><small class='font-grey'>镀金{{news.gold}}</small></li>
 									<li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
 								</ul>
 							</div>			
@@ -310,6 +322,7 @@
 									<li><small><a class='font-grey' href='/news/{{part.part}}/top/showNews/{{news.id}}/'>
 									{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
 									</small></li>
+									<li><small class='font-grey'>镀金{{news.gold}}</small></li>
 									<li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
 								</ul>
 							</div>					
@@ -376,6 +389,7 @@
 									<li><small><a class='font-grey' href='/news/{{part.part}}/gilded/showNews/{{news.id}}/'>
 									{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
 									</small></li>
+									<li><small class='font-grey'>镀金{{news.gold}}</small></li>
 									<li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
 								</ul>
 							</div>
@@ -407,13 +421,13 @@
 							{% if part.can_text %}
 							<div id='textBtnDiv' class='both_clear'>
 								<button type="button" class="btn btn-default">
-									<a href='/news/{{part.part}}/submit/text/'>
-									{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									{% else %}
-										{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
-										{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										{% endifequal %}
-									{% endifequal %}</a>
+										<a href='/news/{{part.part}}/submit/text/'>
+										{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										{% else %}
+											{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
+											{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											{% endifequal %}
+										{% endifequal %}</a>
 								</button>
 							</div>
 							{% endif %}
@@ -470,7 +484,7 @@
 					{% block partInfo %}
 					<div id='partInfoDiv'>
 						<p><a class='font-333' href='/news/{{part.part}}/hot/'><strong>{{part.part}} / {{part.realPart}}</strong></a></p>
-						<p>{{part.description}}</p>
+						<p>{% if not part.open%}（隐藏的）{% endif %}{{part.description}}</p>
 						{% ifnotequal part.part 'All' %}
 						<p>{{part.user_num}}名读者&nbsp;&nbsp;&nbsp;
 						{% for info in user.user_info_set.all %}
@@ -490,14 +504,28 @@
 						<div class='RuleDiv'>
 							<p class='hand_over RuleP'><b>Ⅰ. 遵守方遒公约</b></p>
 							<div style='display:none;'>
-								<p>①<b>禁止</b>一切脏话，脏词（包括相关的网络用语），点此查看禁词</p>
+								<p>①<b>禁止</b>一切脏话，脏词（包括相关的网络用语），点此查看
+								<a class='hand_over' data-toggle="modal" data-target="#ForbiddenWords_modal">禁词</a></p>
 								<p>②<b>禁止</b>对个人或群体进行侮辱或诋毁</p>
 								<p>③<b>禁止</b>发布可能会引发不良社会影响的信息（包括但不限于QQ空间的一些没有证据、不知出处的“热门日志、说说“），
 									有相关证据的或者仅仅分享链接不在禁止之列</p>
 								<p>违反上述约定的将<b>直接封号</b>，并不接受相关申诉！</p>
 							</div>
 						</div>
-						{% include RuleHtml %}
+						<div class='RuleDiv'>
+							<p class='hand_over RuleP'><b>Ⅱ. 分享公约</b></p>
+							<div style='display:none;'>
+								{% for rule in part.newspartrule_set.all %}
+								<p>{% autoescape off %}{{rule.rule}}{% endautoescape %}</p>
+								{% endfor %}
+							</div>
+						</div>
+						<div class='RuleDiv'>
+							<p class='hand_over RuleP'><b>Ⅱ. 回复公约</b></p>
+							<div style='display:none;'>
+								<p>①遵守<b>方遒公约</b>即可</p>
+							</div>
+						</div>
 						<div class='RuleDiv'>
 							<p class='hand_over RuleP'><b>如何举报违反公约的现象？</b></p>
 							<div style='display:none;'>
@@ -508,17 +536,21 @@
 					{% ifnotequal part.part 'All' %}
 					<hr/>
 					<div id='partSimilarDiv'>				
-						<p><strong>相似的板块</strong></p>
+						<p><strong>相似的社群</strong></p>
 						{% include SimilarHtml %}
 						<p>没有找到想要的板块？创建一个吧，只要不和现有板块完全重合，100%通过！移步 <a href='/news/SuggestCY'>SuggestCY / 建议</a></p>
 					</div>
 					<hr/>
 					{% endifnotequal %}
 					<div id='partAdminDiv'>
-						{% ifnotequal part.part 'All' %}
-						<p><strong>本区管理员</strong></p>
-						{% include AdminHtml %}
-						{% endifnotequal %}
+						<p><strong>社群管理员</strong></p>
+						<ul>
+						{% for adminUser in part.partadmin_set.all %}
+							<li><a id='{{adminUser.id}}' class='hand_over ID_card'>{{adminUser.nic_name}}</a></li>
+						{% empty %}
+							<li>暂无管理员</li>
+						{% endfor %}
+						</ul>
 						<p>喜欢大学易？那就加入我们吧！Welcome进阶群&nbsp;<a>151198636</a></p>
 					</div>
 					{% endblock %}
@@ -528,21 +560,52 @@
 	</div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="my_money_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="ForbiddenWords_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div id='' class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel"></h4>
+        <h4 class="modal-title" id="myModalLabel">方遒社区禁词</h4>
       </div>
       <div class="modal-body">
-         
-      </div>
-      <div class="modal-footer">
-        <button  type="button" data-dismiss="modal" class="btn btn-danger" >确定</button>
+		 <p>大学易希望营造一种积极向上的、友善的氛围，以下词汇是强烈禁止的：</p>
+		 <P><ul>
+		 <li class='font-red'>与草、操二字相关的侮辱性词汇，谐音同义也在禁止之列</li>
+		 <li class='font-red'>与家人父母有相关的侮辱性词汇，谐音同义也在禁止之列</li>
+		 <li class='font-red'>其他侮辱谩骂性词汇</li>
+		 </ul></p>
+		 <p>以下词汇允许使用（经查证并无侮辱性，或者在大多数情况下无侮辱性）：</p>
+		 <P><ul>
+		 <li class='font-green'>你妹（详见百度百科相关释义）</li>
+		 <li class='font-green'>我靠（在无厘头语境下可以使用）</li>
+		 </ul></p>
+		 <P>如果你无法接受以上条款，那么<span class='font-green'>只能说明方遒社区不适合你，并无其他含义</span>。你可以转到诸如百度贴吧等
+		 无语言限制的社区</p>
+         <div class='modal_sure_btn'>
+             <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >承诺不使用</button>
+          </div>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Modal -->
+<div class="modal fade" id="idCard_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id='modal_1' class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">易卡<span id='wise_modal_header'></span></h4>
+      </div>
+      <div class="modal-body">
+          <div id='idCard_div'>
+		  </div>
+          <div class='modal_sure_btn'>
+             <button  type="button" data-dismiss="modal" class="btn btn-success btn-block" >确定</button>
+          </div>
+      </div>
+      
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->      
 
 {% endblock %}

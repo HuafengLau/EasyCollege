@@ -15,6 +15,7 @@ from math import sqrt, log10
 import pytz
 import json, os, time
 from account.models import MyUser
+from Index.models import Feeds_news,Feeds_comment,Feeds_followNews
 
 def score(ups,downs):
     return ups - downs
@@ -50,6 +51,7 @@ def confidence(ups, downs):
 
     return (left - right) / under
 
+@login_required(login_url='/log/') 
 def mySubscription(request):
     if request.is_ajax() and request.method == 'GET':
         user = request.user
@@ -99,6 +101,7 @@ def mySubscription(request):
 def news(request):
     return HttpResponseRedirect('/news/All/hot/')
 
+@login_required(login_url='/log/') 
 def newsVote(request,small_part,news_id,upOrDown):
     this_news = News.objects.get(id=news_id)
     user = request.user
@@ -159,15 +162,19 @@ def which_news(request,news_part,small_part):
     SimilarHtml = 'Similar' + news_part + '.html'
     AdminHtml = 'Admin' + news_part + '.html'
     smallParts = [u'热门',u'最新',u'热议',u'得分',u'镀金']
-    top_newsParts = NewsPart.objects.all().order_by('-num','-user_num','part')[:19]
-    this_user_info = User_info.objects.get(user=user)
-    subscriptions = this_user_info.subscription.split(';')[:-1]
-    mySubs = NewsPart.objects.filter(part__in=subscriptions).order_by('part')
-    
+    newsParts = NewsPart.objects.filter(open=True).order_by('-num','-user_num','part')
+    top_newsParts = newsParts[:18]
+    more_newsParts = newsParts[18:]
+    if user.is_authenticated():
+        this_user_info = User_info.objects.get(user=user)
+        subscriptions = this_user_info.subscription.split(';')[:-1]
+        mySubs = NewsPart.objects.filter(part__in=subscriptions).order_by('part')
+    else:
+        mySubs = None
     if news_part != 'All':
         newses = News.objects.filter(newspart=part)
     else:
-        newses = News.objects.all()
+        newses = News.objects.filter(open=True)
     hot_newses = newses.order_by('-hot','-time')[:25]
     new_newses = newses.order_by('-time')[:25]
     controversial_newses = newses.order_by('controversy','-time')[:25]
@@ -176,7 +183,8 @@ def which_news(request,news_part,small_part):
     
     return render_to_response('newsBase.html',locals(),
         context_instance=RequestContext(request))
-        
+
+@login_required(login_url='/log/')         
 def submit_news(request,news_part, news_type):
     user = request.user
     newsHTML = True
@@ -242,7 +250,8 @@ def submit_news(request,news_part, news_type):
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
                     link = form.cleaned_data['link'],
-                    newspart = form.cleaned_data['newspart'],                    
+                    newspart = form.cleaned_data['newspart'],
+                    open = form.cleaned_data['newspart'].open,
                     ups = 0,
                     downs = 0,              
                     gold = 0,
@@ -261,8 +270,6 @@ def submit_news(request,news_part, news_type):
                 part_All.save()
                 this_user.money += 6
                 this_user.save()
-                url = '/news/'+ news_part + '/new/'
-                return HttpResponseRedirect(url)
             else:
                 return render_to_response('newsSubmit.html',locals(),
                     context_instance=RequestContext(request))
@@ -274,7 +281,8 @@ def submit_news(request,news_part, news_type):
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
                     text = form.cleaned_data['text'],
-                    newspart = form.cleaned_data['newspart'],                    
+                    newspart = form.cleaned_data['newspart'],
+                    open = form.cleaned_data['newspart'].open,
                     ups = 0,
                     downs = 0,              
                     gold = 0,
@@ -293,8 +301,6 @@ def submit_news(request,news_part, news_type):
                 part_All.save()
                 this_user.money += 10
                 this_user.save()
-                url = '/news/'+ news_part + '/new/'
-                return HttpResponseRedirect(url)
             else:
                 return render_to_response('newsSubmit.html',locals(),
                     context_instance=RequestContext(request))
@@ -306,7 +312,8 @@ def submit_news(request,news_part, news_type):
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
                     pic = form.cleaned_data['pic'],
-                    newspart = form.cleaned_data['newspart'],                      
+                    newspart = form.cleaned_data['newspart'], 
+                    open = form.cleaned_data['newspart'].open,
                     ups = 0,
                     downs = 0,              
                     gold = 0,
@@ -324,22 +331,20 @@ def submit_news(request,news_part, news_type):
                 part_All.num += 1
                 part_All.save()
                 this_user.money += 10
-                this_user.save()
-                url = '/news/'+ news_part + '/new/'
-                return HttpResponseRedirect(url)
+                this_user.save()             
             else:
                 return render_to_response('newsSubmit.html',locals(),
                     context_instance=RequestContext(request))
-        elif type == 'mp3':
-            form = mp3NewsForm(request.POST,request.FILES)
-            
+        else:
+            form = mp3NewsForm(request.POST,request.FILES)        
             if form.is_valid():
                 this_news = News(
                     user = this_user,
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
                     mp3 = form.cleaned_data['mp3'],
-                    newspart = form.cleaned_data['newspart'],                      
+                    newspart = form.cleaned_data['newspart'],
+                    open = form.cleaned_data['newspart'].open,
                     ups = 0,
                     downs = 0,              
                     gold = 0,
@@ -358,15 +363,35 @@ def submit_news(request,news_part, news_type):
                 part_All.save()
                 this_user.money += 10
                 this_user.save()
-                url = '/news/'+ news_part + '/new/'
-                return HttpResponseRedirect(url)
             else:
                 return render_to_response('newsSubmit.html',locals(),
                     context_instance=RequestContext(request))
-        else:
-            return render_to_response('404.html',locals(),
-                context_instance=RequestContext(request)) 
         
+        
+        this_feeds = Feeds_followNews(
+            type = 'followNews',
+            owner = this_user,
+            showText = True,
+            creator = this_user,
+            news = this_news
+        )
+        this_feeds.save()
+        if this_user_info.beWatched:
+            beWatched_list = this_user_info.beWatched.split(';')[:-1]
+            users = MyUser.objects.filter(id__in=beWatched_list)       
+            for watching_user in users:
+                this_feeds = Feeds_followNews(
+                    type = 'followNews',
+                    owner = watching_user,
+                    showText = True,
+                    creator = this_user,
+                    news = this_news
+                )
+                this_feeds.save()
+        
+        url = '/news/'+ news_part + '/new/'
+        return HttpResponseRedirect(url)
+       
 def show_news(request,news_part,small_part,news_id):             
     user = request.user
     newsHTML = True
@@ -413,6 +438,7 @@ def show_news(request,news_part,small_part,news_id):
     return render_to_response('newsShow.html',locals(),
         context_instance=RequestContext(request))
 
+@login_required(login_url='/log/') 
 def giveGold(request):
     if request.is_ajax() and request.method == 'GET':
         if 'id' in request.GET:
@@ -422,19 +448,116 @@ def giveGold(request):
                 
                 if this_type == 'news':
                     this_object = News.objects.get(id=this_id)
+                    try:
+                        this_feed = Feeds_news.objects.get(
+                            type = 'newsGiveGold',
+                            owner = this_object.user,
+                            creator = request.user,
+                            news = this_object                       
+                        )
+                        this_feed.gold_num += 5
+                    except:
+                        this_feed = Feeds_news(
+                            type = 'newsGiveGold',
+                            owner = this_object.user,
+                            showText = True,
+                            creator = request.user,
+                            news = this_object,  
+                            gold_num = 5                                    
+                        )
                 elif this_type == 'newscomment1':
                     this_object = NewsComment1.objects.get(id=this_id)
+                    try:
+                        this_feed = Feeds_comment.objects.get(
+                            type = 'comment1GiveGold',
+                            showText = False,
+                            owner = this_object.user,
+                            creator = request.user,
+                            news = this_object.news,
+                            newscomment1 = this_object,             
+                        )
+                        this_feed.gold_num += 5
+                    except:
+                        this_feed = Feeds_comment(
+                            type = 'comment1GiveGold',
+                            showText = False,
+                            owner = this_object.user,
+                            creator = request.user,
+                            news = this_object.news,
+                            newscomment1 = this_object,
+                            gold_num = 5                            
+                        )
                 elif this_type == 'newscomment2':
                     this_object = NewsComment2.objects.get(id=this_id)
+                    try:
+                        this_feed = Feeds_comment.objects.get(
+                            type = 'comment2GiveGold',
+                            showText = False,
+                            owner = this_object.user,
+                            creator = request.user,
+                            news = this_object.newscomment1.news,
+                            newscomment2 = this_object,             
+                        )
+                        this_feed.gold_num += 5
+                    except:
+                        this_feed = Feeds_comment(
+                            type = 'comment2GiveGold',
+                            showText = False,
+                            owner = this_object.user,
+                            creator = request.user,
+                            news = this_object.newscomment1.news,
+                            newscomment2 = this_object,
+                            gold_num = 5                            
+                        )
                 elif this_type == 'newscomment3':
                     this_object = NewsComment3.objects.get(id=this_id)
+                    try:
+                        this_feed = Feeds_comment.objects.get(
+                            type = 'comment3GiveGold',
+                            showText = False,
+                            owner = this_object.user,
+                            creator = request.user,
+                            news = this_object.newscomment2.newscomment1.news,
+                            newscomment3 = this_object,             
+                        )
+                        this_feed.gold_num += 5
+                    except:
+                        this_feed = Feeds_comment(
+                            type = 'comment3GiveGold',
+                            showText = False,
+                            owner = this_object.user,
+                            creator = request.user,
+                            news = this_object.newscomment2.newscomment1.news,
+                            newscomment3 = this_object,
+                            gold_num = 5                            
+                        )
                 else:
                     this_object = NewsComment4.objects.get(id=this_id)
-                    
+                    try:
+                        this_feed = Feeds_comment.objects.get(
+                            type = 'comment4GiveGold',
+                            showText = False,
+                            owner = this_object.user,
+                            creator = request.user,
+                            news = this_object.newscomment3.newscomment2.newscomment1.news,
+                            newscomment4 = this_object,             
+                        )
+                        this_feed.gold_num += 5
+                    except:
+                        this_feed = Feeds_comment(
+                            type = 'comment4GiveGold',
+                            showText = False,
+                            owner = this_object.user,
+                            creator = request.user,
+                            news = this_object.newscomment3.newscomment2.newscomment1.news,
+                            newscomment4 = this_object,
+                            gold_num = 5                            
+                        )
                 if this_object.user == request.user:
                     response = HttpResponse('0')
                     return response
                 else:
+                    this_feed.save()
                     this_user_info = User_info.objects.get(user=this_object.user)
                     this_object.user.money += 5
                     this_object.user.save()
@@ -450,7 +573,8 @@ def giveGold(request):
             else:
                 response = HttpResponse('操作失败，你太穷啦！去看看那本致富秘籍吧：）')
                 return response
-                
+
+@login_required(login_url='/log/')                 
 def reply(request):
     if request.is_ajax() and request.method == 'GET':
         if 'id' in request.GET:
@@ -458,7 +582,8 @@ def reply(request):
             this_type = request.GET.get('type')
             return render_to_response('reply.html',locals(),
                 context_instance=RequestContext(request))
-    
+
+@login_required(login_url='/log/')                 
 def comment(request):
     if request.is_ajax() and request.method == 'GET':
         user = request.user
@@ -479,9 +604,21 @@ def comment(request):
                     words = this_comment
                 )
                 this_newComment.save()
-                this_news.comment_num += 1
-                this_news.save()
+                if this_news.user != user:
+                    this_news.comment_num += 1
+                    this_news.save()
                 noSuojin = True
+                if this_news.user != user:
+                    this_feed = Feeds_news(
+                        type = 'newsComment',
+                        owner = this_news.user,
+                        creator = user,
+                        showText = True,
+                        news = this_news,             
+                        gold_num = 0,
+                        comment = this_newComment
+                    )
+                    this_feed.save()
         if 'type' in request.GET:
             noSuojin = False
             this_type = request.GET.get('type')
@@ -502,8 +639,21 @@ def comment(request):
                 )
                 this_newComment.save()
                 type = 'newscomment2'
-                this_news.comment_num += 1
-                this_news.save()
+                if this_news.user != user:
+                    this_news.comment_num += 1
+                    this_news.save()
+                if this_comments1.user != user:
+                    this_feed = Feeds_comment(
+                        type = 'FComment1Reply',
+                        owner = this_comments1.user,
+                        news = this_news,
+                        showText = False,
+                        creator = user,
+                        newscomment1 = this_comments1,                      
+                        gold_num = 0,
+                        comment2 = this_newComment
+                    )
+                    this_feed.save()
             if this_type == 'newscomment2':
                 this_comments2 = NewsComment2.objects.get(id=id)
                 this_news = this_comments2.newscomment1.news
@@ -519,8 +669,21 @@ def comment(request):
                 )
                 this_newComment.save()
                 type = 'newscomment3'
-                this_news.comment_num += 1
-                this_news.save()
+                if this_news.user != user:
+                    this_news.comment_num += 1
+                    this_news.save()
+                if this_comments2.user != user:
+                    this_feed = Feeds_comment(
+                        type = 'FComment2Reply',
+                        owner = this_comments2.user,
+                        creator = user,
+                        showText = False,
+                        news = this_news,
+                        newscomment2 = this_comments2,                      
+                        gold_num = 0,
+                        comment3 = this_newComment
+                    )
+                    this_feed.save()
             if this_type == 'newscomment3':
                 this_comments3 = NewsComment3.objects.get(id=id)
                 this_news = this_comments3.newscomment2.newscomment1.news
@@ -536,11 +699,25 @@ def comment(request):
                 )
                 this_newComment.save()
                 type = 'newscomment4'
-                this_news.comment_num += 1
-                this_news.save()
+                if this_news.user != user:
+                    this_news.comment_num += 1
+                    this_news.save()
+                if this_comments3.user != user:
+                    this_feed = Feeds_comment(
+                        type = 'FComment3Reply',
+                        owner = this_comments3.user,
+                        creator = user,
+                        showText = False,
+                        news = this_news,
+                        newscomment3 = this_comments3,                      
+                        gold_num = 0,
+                        comment4 = this_newComment
+                    )
+                    this_feed.save()
         return render_to_response('comment.html',locals(),
                 context_instance=RequestContext(request))
-                
+
+@login_required(login_url='/log/')                 
 def commentVote(request):
     if request.is_ajax() and request.method == 'GET':
         if 'nowVote' in request.GET:
@@ -620,6 +797,7 @@ def commentVote(request):
             response = HttpResponse(score)
             return response
 
+@login_required(login_url='/log/') 
 def watch(request):
     if request.is_ajax() and request.method == 'GET':
         id = request.GET.get('id')
@@ -651,6 +829,7 @@ def watch(request):
                 news_user_info.save()
                 response = HttpResponse(u'已取消关注')
                 return response
+
 @csrf_exempt
 def ke_upload_view(request):
     

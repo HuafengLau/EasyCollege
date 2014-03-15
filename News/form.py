@@ -1,7 +1,7 @@
 #coding: utf-8
 
 from django import forms
-from News.models import News, NewsPart
+from News.models import News, NewsPart, NewsPartRule
 #from django.utils.translation import ugettext_lazy as _
 from rte.kindeditor.widgets import KindEditor
 
@@ -226,3 +226,4 @@ class mp3NewsForm(forms.ModelForm):
     class Meta:
         model = News
         exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','text','comment_num','pic') 
+        

@@ -34,6 +34,39 @@ def center(request):
                     this_user_info.save()
                     response = HttpResponse(u'更改成功！')
                     return response
+            if 'whenNewsbeGold' in request.GET:
+                if len(request.GET.get('whenNewsbeGold')) > 20:
+                    response = HttpResponse(u'自动回复不能超过20个字哦！')
+                    return response
+                else:
+                    user = request.user
+                    this_user_info = User_info.objects.get(user=user)
+                    this_user_info.when_newsbeGold = request.GET.get('whenNewsbeGold')
+                    this_user_info.save()
+                    response = HttpResponse(u'更改成功！')
+                    return response
+            if 'whenCommentbeGold' in request.GET:
+                if len(request.GET.get('whenCommentbeGold')) > 20:
+                    response = HttpResponse(u'自动回复不能超过20个字哦！')
+                    return response
+                else:
+                    user = request.user
+                    this_user_info = User_info.objects.get(user=user)
+                    this_user_info.when_commentbeGold = request.GET.get('whenCommentbeGold')
+                    this_user_info.save()
+                    response = HttpResponse(u'更改成功！')
+                    return response
+            if 'beWatched' in request.GET:
+                if len(request.GET.get('beWatched')) > 20:
+                    response = HttpResponse(u'自动回复不能超过20个字哦！')
+                    return response
+                else:
+                    user = request.user
+                    this_user_info = User_info.objects.get(user=user)
+                    this_user_info.when_beWatched = request.GET.get('beWatched')
+                    this_user_info.save()
+                    response = HttpResponse(u'更改成功！')
+                    return response
         if request.method == 'POST':
             if 'change' in request.POST:
                 user = request.user

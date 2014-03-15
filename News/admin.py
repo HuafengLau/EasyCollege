@@ -1,7 +1,7 @@
 #coding:utf-8
 
 from django.contrib import admin
-from News.models import News,NewsPart,NewsPartRule,NewsComment1,NewsComment2,NewsComment3,NewsComment4
+from News.models import News,NewsPart,NewsPartRule,NewsComment1,NewsComment2,NewsComment3,NewsComment4,PartAdmin
 
 
 class NewsAdmin(admin.ModelAdmin):
@@ -45,6 +45,12 @@ class NewsComment4Admin(admin.ModelAdmin):
     list_display = ('newscomment3','user','ups', 'downs','score','confidence','time','gold')
     list_filter = ('newscomment3', )
     ordering = ('-confidence', )
+
+class PartAdminAdmin(admin.ModelAdmin):
+    """docstring for PartAdminAdmin"""
+    list_display = ('newspart','user')
+    list_filter = ('newspart', )
+    ordering = ('newspart', )
  
 admin.site.register(News, NewsAdmin)
 admin.site.register(NewsPart, NewsPartAdmin)
@@ -53,3 +59,4 @@ admin.site.register(NewsComment1, NewsComment1Admin)
 admin.site.register(NewsComment2, NewsComment2Admin)
 admin.site.register(NewsComment3, NewsComment3Admin)
 admin.site.register(NewsComment4, NewsComment4Admin)
+admin.site.register(PartAdmin, PartAdminAdmin)

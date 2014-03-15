@@ -8,6 +8,10 @@
 	display:inline;
 }
 
+.showBlock{
+	display:block;
+}
+
 .underline{
     text-decoration: underline;
 }
@@ -131,6 +135,10 @@
 	margin-top:3px;
 }
 
+.MT_0px{
+	margin-top:0px;
+}
+
 .MR_16px{
 	margin-right:16px;
 }
@@ -142,6 +150,26 @@
 .ML_13px{
 	margin-left: 13px;
 
+}
+
+.MB_0px{
+	margin-bottom: 0px;
+}
+
+.MB_5px{
+	margin-bottom: 5px;
+}
+
+.PT_10px{
+	padding-top:10px;
+}
+
+.PT_8px{
+	padding-top:8px;
+}
+
+.PT_0px{
+	padding-top:0px;
 }
 
 #scrollUp {
@@ -465,6 +493,19 @@ div.transp { /* make the div translucent */
 }
 
 /* CSS for index.html */
+#index_down{
+	margin-top: 1%;
+	margin-left: 5%;
+}
+
+#index_up{
+	width: 100%;
+}
+
+#index_infoTable{
+	background: #fff;
+}
+
 #index_rich{
 	position: absolute; 
 	right: 30px;
@@ -472,9 +513,23 @@ div.transp { /* make the div translucent */
 }
 
 #index_upleft{
-	width: 400px;
+	width: 20%;
 	margin-left: 60px;
+	border:1px solid #E0E0E0;
+}
 
+#feeds_left{
+	padding-top: 8px;
+	margin-top: 1%;
+	margin-right: 2%;
+	width: 10%;
+	background: #fff;
+	border:1px solid #E0E0E0;
+}
+
+#feeds_middel{
+	margin-top: 1%;
+	width: 56%;
 }
 
 #index_upright{
@@ -501,7 +556,6 @@ div.transp { /* make the div translucent */
     text-decoration: none;
 }
 
-
 #footer_value_eot, #footer_wise_add_teacher{
     font-size: 13px;
     color: red;
@@ -515,20 +569,17 @@ div.transp { /* make the div translucent */
 }
 
 #index_downleft{
-    width: 65%;
-    padding-left: 7%;
-    padding-right: 0px;
-    margin-right: 0px;
-	margin-top: 57px;
+    margin-top: 1%;
+	width: 65%;
 }
 
 #index_downright{
-    margin-top: 3%;
+    margin-top: 1%;
     width: 30%;
     padding-left:0px;
     padding-right: 6%;
     margin-left: 0px;
-	margin-top: 65px;
+
 }
 
 #avtar_td{
@@ -539,8 +590,35 @@ div.transp { /* make the div translucent */
     display: none;
 }
 
-#index_up{
-    width: 100%;
+.feedsDivAvatar{
+	margin-right:5px;
+}
+
+.feedsDiv{
+	border:1px solid #E0E0E0;
+	margin-bottom: 2%;
+}
+
+.feedsDivTop{
+	padding:8px 5px 0px 5px;
+}
+
+.feedsDivBottom{
+	padding: 0px 4px 6px 4px;
+	border-top:1px solid #E8E8E8;
+	background:#F5F5F5;
+}
+
+.indexCommentTable1{
+	
+}
+
+.indexCommentTable2{
+	margin-left:29px;
+}
+
+.bcColorWhite{
+	background:#FFF;
 }
 
 .modal_sure_btn{
@@ -829,7 +907,7 @@ ul li{
     width: 0;
     border-left: 10px solid #fff;
     border-right: 10px solid #fff;
-    border-top: 10px solid #fff;
+    border-top: 0px solid #fff;
     border-bottom: 15px solid #FF8B60;
 }
 
@@ -840,6 +918,44 @@ ul li{
     border-right: 10px solid #fff;
     border-top: 15px solid #FF8B60;
     border-bottom: 10px solid #fff;
+	margin-top:5px;
+}
+
+.commentUpVote2{
+	height: 0;
+    width: 0;
+    border-left: 10px solid #F2F2F2;
+    border-right: 10px solid #F2F2F2;
+    border-top: 0px solid #F2F2F2;
+    border-bottom: 15px solid #b7b7b7;
+}
+
+.commentDownVote2{
+	height: 0;
+    width: 0;
+    border-left: 10px solid #F2F2F2;
+    border-right: 10px solid #F2F2F2;
+    border-top: 15px solid #b7b7b7;
+    border-bottom: 10px solid #F2F2F2;
+	margin-top:5px;
+}
+
+.commentUpVoted2{
+	height: 0;
+    width: 0;
+    border-left: 10px solid #F2F2F2;
+    border-right: 10px solid #F2F2F2;
+    border-top: 10px solid #F2F2F2;
+    border-bottom: 15px solid #FF8B60;
+}
+
+.commentDownVoted2{
+	height: 0;
+    width: 0;
+    border-left: 10px solid #F2F2F2;
+    border-right: 10px solid #F2F2F2;
+    border-top: 15px solid #FF8B60;
+    border-bottom: 10px solid #F2F2F2;
 	margin-top:5px;
 }
 
@@ -968,7 +1084,48 @@ ul li{
     border-bottom: 12px solid #fff;
 }
 
+.newsUpVote2{
+	margin-left: 3px;
+	height: 0;
+    width: 0;
+    border-left: 12px solid #F2F2F2;
+    border-right: 12px solid #F2F2F2;
+    border-top: 12px solid #F2F2F2;
+    border-bottom: 16px solid #b7b7b7;
+}
+
+.newsDownVote2{
+	margin-left: 3px;
+	height: 0;
+    width: 0;
+    border-left: 12px solid #F2F2F2;
+    border-right: 12px solid #F2F2F2;
+    border-top: 16px solid #b7b7b7;
+    border-bottom: 12px solid #F2F2F2;
+}
+
+.newsUpVoted2{
+	margin-left: 3px;
+	height: 0;
+    width: 0;
+    border-left: 12px solid #F2F2F2;
+    border-right: 12px solid #F2F2F2;
+    border-top: 12px solid #F2F2F2;
+    border-bottom: 16px solid #FF8B60;
+}
+
+.newsDownVoted2{
+	margin-left: 3px;
+	height: 0;
+    width: 0;
+    border-left: 12px solid #F2F2F2;
+    border-right: 12px solid #F2F2F2;
+    border-top: 16px solid #FF8B60;
+    border-bottom: 12px solid #F2F2F2;
+}
+
 .topPart{
+	padding-top: 5px;
 	margin-left: 12px;
 	font-size: 15px;
 }

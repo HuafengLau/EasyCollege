@@ -5,6 +5,7 @@ from account.models import MyUser
 class NewsPart(models.Model):
     part = models.CharField(max_length=100,null=True,verbose_name=u'板块')
     realPart = models.CharField(max_length=100,null=True,verbose_name=u'中文板块')
+    open = models.BooleanField(default=True,verbose_name=u'是否公开')
     num = models.IntegerField(default=0,null=True,verbose_name=u'新闻数')
     user_num = models.IntegerField(default=0,verbose_name=u'订阅人数')
     description = models.CharField(max_length=100,default=u'这里是关于这个版块的一些描述',verbose_name=u'板块描述')
@@ -15,16 +16,17 @@ class NewsPart(models.Model):
     time = models.DateTimeField(auto_now_add=True,verbose_name=u'成立时间')
     
     def __unicode__(self):
-        return '%s_%s' % (self.part,self.num)
+        return '%s' % (self.part)
     
     class Meta:
-        ordering = ['num',]
-        verbose_name = u'子版块'
-        verbose_name_plural = u'子版块'
+        ordering = ['part',]
+        verbose_name = u'社群'
+        verbose_name_plural = u'社群'
 
 class News(models.Model):
      user = models.ForeignKey(MyUser, null=True,verbose_name=u'发表用户')
      newspart = models.ForeignKey(NewsPart, null=True,verbose_name=u'社群')
+     open = models.BooleanField(default=True,verbose_name=u'是否公开')
      type = models.CharField(max_length=10,null=True,verbose_name=u'类型') 
      title = models.CharField(max_length=100,null=True,verbose_name=u'标题')
      
@@ -54,16 +56,16 @@ class News(models.Model):
        
         
 class NewsPartRule(models.Model):
-    rule = models.CharField(max_length=50,null=True,verbose_name=u'板块公约')
-    newspart = models.ForeignKey(NewsPart, null=True,verbose_name=u'板块')
+    rule = models.TextField(null=True,verbose_name=u'社群公约')
+    newspart = models.ForeignKey(NewsPart, null=True,verbose_name=u'社群')
     
     def __unicode__(self):
         return '%s_%s' % (self.newspart,self.id)
     
     class Meta:
         ordering = ['newspart',]
-        verbose_name = u'版块公约'
-        verbose_name_plural = u'版块公约'
+        verbose_name = u'社群公约'
+        verbose_name_plural = u'社群公约'
         
 class NewsComment1(models.Model):
     user = models.ForeignKey(MyUser, null=True,verbose_name=u'发表用户')
@@ -141,3 +143,14 @@ class NewsComment4(models.Model):
         verbose_name = u'回复4'
         verbose_name_plural = u'回复4'
    
+class PartAdmin(models.Model):
+    user = models.ForeignKey(MyUser, null=True,verbose_name=u'用户')
+    newspart = models.ForeignKey(NewsPart, null=True,verbose_name=u'社群')
+    
+    def __unicode__(self):
+        return '%s' % self.id
+    
+    class Meta:
+        ordering = ['newspart',]
+        verbose_name = u'社群管理员'
+        verbose_name_plural = u'社群管理员'

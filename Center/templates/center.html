@@ -202,6 +202,7 @@
 				<a href='#set_avatar' class='straight'>#头像</a>
 				<a href='#set_nicname' class='straight'>#昵称</a>
 				<a href='#set_ID' class='straight'>#身份卡</a>
+				<a href='#set_autoReply' class='straight'>#自动回复</a>
 			</p>
 		  </div>
 			<table class='table table-bordered'>	
@@ -280,12 +281,70 @@
 						</table>
 					</td>
 				</tr>
+				<tr><th colspan='2'>&nbsp;</th></tr>
+				<tr id='set_autoReply'><th class='text-center' colspan='2'>设置自动回复</th></tr>
+				{% for info in user.user_info_set.all %}
+				<tr>
+					<td><p class='pull-left'>当分享被镀金时：</p>
+					<P class='clear_both'><span id='center_whenNewsbeGold'>{{info.when_newsbeGold}}</span></p></td>
+					<td>
+						<div class='form-inline'>
+						<textarea id='whenNewsbeGold_inqut' rows="2" cols="40" placeholder="" required></textarea>
+						<button  id='change_whenNewsbeGold_btn' type="button" class="btn btn-success " >确认更改</button>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><p class='pull-left'>当评论被镀金时：</p>
+					<p class='clear_both'><span id='center_whenCommentbeGold'>{{info.when_commentbeGold}}</span></p></td>
+					<td>
+						<div class='form-inline'>
+						<textarea id='whenCommentbeGold_inqut' rows="2" cols="40" placeholder="" required></textarea>
+						<button  id='change_whenCommentbeGold_btn' type="button" class="btn btn-success " >确认更改</button>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><p class='pull-left'>当被关注时：</p>
+					<p class='clear_both'><span id='center_beWatched'>{{info.when_beWatched}}</span></p></td>
+					<td>
+						<div class='form-inline'>
+						<textarea id='Watched_inqut' rows="2" cols="40" placeholder="" required></textarea>
+						<button  id='change_beWatched_btn' type="button" class="btn btn-success " >确认更改</button>
+						</div>
+					</td>
+				</tr>
+				{% endfor %}
 			</table>
 		 
 	  </div>
 	  <div class="tab-pane" id="center_book">
 	  <P class='text-center'>一本神奇的小册子</p>
-	  <p class='text-center'>这本神奇的小册子还没有写什么……</p>
+	  <p>最重要的事</p>
+	  <P><ul>
+	  <li>阅读方遒公约，那不是摆设，违反方遒公约将被禁号</li>
+	  <li>阅读各社群公约，对于你不熟悉的社群，你应该浏览一下社群公约，以免被莫名地罚掉100或者更多的易币</li>
+	  </ul></p>
+	  
+	  <P>易币都去哪儿啦</p>
+	  <P><ul><li>每当你对分享进行“顶”或“沉”操作时，你将花费5个易币</li>
+	  <li>例外1：对每个社群的【最新】板块的分享进行“顶”或“沉”操作时，你将获得3个易币</li>
+	  <li>例外2：对【易汇报】【易建议】【易反馈】的分享进行“顶”或“沉”操作时，你将获得5个易币</li>
+	  <li>上述两条可叠加</li></ul></p>
+	  
+	  <p>致富之路</p>
+	  <p><ul><li>分享链接将获得6个易币，分享文章、图片、音乐将获得10个易币</li>
+	  <li>精彩的分享和回复可能会得到镀金，镀金可无限叠加</li></ul></p>
+	  
+	  <p>创建社群</p>
+	  <p><ul><li>如果你想创建一个社群，你可以在【易建议】发帖，或者加入进阶群151198636说明</li>
+	  <li>创建一个社群，你仅需要准备社群中文名、社群英文名（可选）和若干规则说明（可选）。只要不和现有社群百分百重合，
+	  都可以迅速通过</li>
+	  <li>一般的，地域性、私人性质较强的宜为隐藏社群，秘密性较强的可以申请私密社群（暂时未开放）</li>
+	  <li>公开社群的所有分享将被自动收录到【All/全部】，公开群可能会被展示在【方遒首页】，会被展示在【更多+】中</li>
+	  <li>隐藏社群的所有分享都不会被收录到【All/全部】，隐藏群不会被展示在【方遒首页】，会被展示在【更多+】中</li>
+	  <li>私密社群的所有分享都不会被收录到【All/全部】，隐藏群不会被展示在【方遒首页】，也不会被展示在【更多+】中</li>
+	  </p>
 	  </div>
 	</div>
 </div>

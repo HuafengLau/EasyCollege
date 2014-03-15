@@ -149,7 +149,7 @@ $(document).ready(function(){
 		}	
 	});
 	
-	$('.commentUpVote').on('click', function(){
+	$('.commentUpVote,.commentUpVote2').on('click', function(){
 		var id = $(this).attr('id').split(';')[1];
 		var type = $(this).attr('id').split(';')[0]
 		$(this).parent().children().eq(1).show();
@@ -162,7 +162,7 @@ $(document).ready(function(){
 		});
 	});
 
-	$('.commentUpVoted').on('click', function(){
+	$('.commentUpVoted,.commentUpVoted2').on('click', function(){
 		var id = $(this).attr('id').split(';')[1];
 		var type = $(this).attr('id').split(';')[0]
 		$(this).parent().children().eq(0).show();
@@ -173,7 +173,7 @@ $(document).ready(function(){
 		});
 	});
 
-	$('.commentDownVote').on('click', function(){
+	$('.commentDownVote,.commentDownVote2').on('click', function(){
 		var id = $(this).attr('id').split(';')[1];
 		var type = $(this).attr('id').split(';')[0]
 		$(this).parent().children().eq(0).show();
@@ -186,7 +186,7 @@ $(document).ready(function(){
 		});
 	});
 
-	$('.commentDownVoted').on('click', function(){
+	$('.commentDownVoted,.commentDownVoted2').on('click', function(){
 		var id = $(this).attr('id').split(';')[1];
 		var type = $(this).attr('id').split(';')[0]
 		$(this).parent().children().eq(2).show();
@@ -334,6 +334,7 @@ $(document).ready(function(){
 		}
 	});
 	
+	//JS for change sign
 	$('#change_sign_btn').on('click',function(){
 		var text=$('#sign_textarea').val()
 		var count = text.length;
@@ -347,11 +348,111 @@ $(document).ready(function(){
 			});
 		}else{
 			alert('不能超过50个字哦！');
-		}
+		}	
+	});
 	
+	//JS for change when_newsbeGold
+	$('#change_whenNewsbeGold_btn').on('click',function(){
+		var text=$('#whenNewsbeGold_inqut').val()
+		var count = text.length;
+		if (count == 0){
+			alert('自动回复不能为空！');
+		}else if (count <= 20){
+			$('#whenNewsbeGold_inqut').val('');
+			$('#center_whenNewsbeGold').html(text);
+			$.get('/center/', {'whenNewsbeGold':text},function(data){
+				alert(data);
+			});
+		}else{
+			alert('不能超过20个字哦！');
+		}	
+	});
+	
+	//JS for change when_commentbeGold
+	$('#change_whenCommentbeGold_btn').on('click',function(){
+		var text=$('#whenCommentbeGold_inqut').val()
+		var count = text.length;
+		if (count == 0){
+			alert('自动回复不能为空！');
+		}else if (count <= 20){
+			$('#whenCommentbeGold_inqut').val('');
+			$('#center_whenCommentbeGold').html(text);
+			$.get('/center/', {'whenCommentbeGold':text},function(data){
+				alert(data);
+			});
+		}else{
+			alert('不能超过20个字哦！');
+		}	
+	});
+	
+	//JS for change when_beWatched
+	$('#change_beWatched_btn').on('click',function(){
+		var text=$('#Watched_inqut').val()
+		var count = text.length;
+		if (count == 0){
+			alert('自动回复不能为空！');
+		}else if (count <= 20){
+			$('#Watched_inqut').val('');
+			$('#center_beWatched').html(text);
+			$.get('/center/', {'beWatched':text},function(data){
+				alert(data);
+			});
+		}else{
+			alert('不能超过20个字哦！');
+		}	
 	});
 	
     //JS for index.html
+	$('#link_related').on('click', function(){
+		if (!$(this).hasClass('font-333')){
+			$(this).addClass('font-333');
+		}
+		if ($(this).hasClass('linkColor')){
+			$(this).removeClass('linkColor');
+		}
+		if (!$('#relatedDiv').hasClass('showBlock')){
+			$('#relatedDiv').addClass('showBlock');
+		}
+		if ($('#relatedDiv').hasClass('hidden')){
+			$('#relatedDiv').removeClass('hidden');
+		}
+		
+		if ($('#link_follow').hasClass('font-333')){
+			$('#link_follow').removeClass('font-333');
+		}
+		if (!$('#link_follow').hasClass('linkColor')){
+			$('#link_follow').addClass('linkColor');
+		}
+		if ($('#followDiv').hasClass('showBlock')){
+			$('#followDiv').removeClass('showBlock');
+		}
+		if (!$('#followDiv').hasClass('hidden')){
+			$('#followDiv').addClass('hidden');
+		}
+
+	});
+	
+	$('#link_follow').on('click', function(){
+		if (!$(this).hasClass('font-333')){
+			$(this).addClass('font-333');
+		}
+		if (!$('#followDiv').hasClass('showBlock')){
+			$('#followDiv').addClass('showBlock');
+		}
+		if ($('#followDiv').hasClass('hidden')){
+			$('#followDiv').removeClass('hidden');
+		}
+		if ($('#link_related').hasClass('font-333')){
+			$('#link_related').removeClass('font-333');
+		}
+		if ($('#relatedDiv').hasClass('showBlock')){
+			$('#relatedDiv').removeClass('showBlock');
+		}
+		if (!$('#relatedDiv').hasClass('hidden')){
+			$('#relatedDiv').addClass('hidden');
+		}
+	});
+	
     //Edit the course_teacher
     $('.btn_edit_teacher').bind('click',function(){
         var id = $(this).parent().attr('id');     

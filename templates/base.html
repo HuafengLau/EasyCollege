@@ -24,7 +24,8 @@
     h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {font-family:"ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
     pre code { background: transparent; }
     </style>	
-
+	{% block moreCSS %}
+	{% endblock %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -51,7 +52,7 @@
               {% block nav_ul %}
                 <ul class="nav navbar-nav">
                     {% if indexHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/index/'>主页</a></li>
-                    {% if centerHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/center/'>个人中心</a></li>
+                    {% if centerHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/center/'>设置</a></li>
                     {% if xuankeHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/eot/list/'>选课</a></li>
 					{% if newsHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/news/All/hot/'>方遒</a></li>
                 </ul>

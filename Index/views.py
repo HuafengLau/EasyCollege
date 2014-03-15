@@ -11,6 +11,7 @@ from University.models import University_info
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import PageNotAnInteger, Paginator, InvalidPage, EmptyPage
 from Index.form import AvatarForm
+from Index.models import Feeds_news,Feeds_comment,Feeds_followNews
 from django.conf import settings
 from account.models import MyUser
 from bs4 import BeautifulSoup
@@ -82,6 +83,20 @@ def display(request,user,message,HTML):
     form = AvatarForm()
     indexHTML = True
     rich_users = MyUser.objects.order_by('-money')[:3]
+    
+    Feeds1 = Feeds_followNews.objects.filter(owner=user)
+    Feeds2 = Feeds_news.objects.filter(owner=user)
+    Feeds3 = Feeds_comment.objects.filter(owner=user)
+    Feeds = sorted(list(Feeds1) + list(Feeds2) + list(Feeds3), key=lambda x: x.time,reverse = True)
+    
+    my_user_info = User_info.objects.get(user=user)
+    if my_user_info.watching:
+        list1 = my_user_info.watching.split(';')[:-1]
+        my_watching = MyUser.objects.filter(id__in=list1)
+    if my_user_info.beWatched:
+        list2 = my_user_info.beWatched.split(';')[:-1]
+        my_beWatched = MyUser.objects.filter(id__in=list2) 
+    
     return render_to_response(HTML,locals(),
         context_instance=RequestContext(request))
 

@@ -14,7 +14,7 @@
 <div>
 	<div id='news_user' class='clear_both'>	
 		<div class='pull-left MT_7px MR_9px'>
-			{{this_news.user.nic_name}}&nbsp;&nbsp;&nbsp;{% for info in user.user_info_set.all %}{{ info.grade }}{% endfor %}</div>
+			<span id='{{this_news.user.id}}' class='hand_over ID_card'>{{this_news.user.nic_name}}</span>&nbsp;&nbsp;&nbsp;{% for info in user.user_info_set.all %}{{ info.grade }}{% endfor %}</div>
 		<div class='pull-left MT_3px'>
 		{% if this_news.user.honour_set.all %}
 			{% for honour in this_news.user.honour_set.all %}
@@ -76,7 +76,7 @@
 				{% endifequal %}
 			</div>
 			<div>
-				<small>{% showNewsTime this_news %}前&nbsp;由&nbsp;&nbsp;<a class='shallowLink'>{{this_news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
+				<small>{% showNewsTime this_news %}前&nbsp;由&nbsp;&nbsp;<a id='{{this_news.user.id}}' class='shallowLink hand_over ID_card'>{{this_news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
 				<a class='shallowLink' href='/news/{{this_news.newspart.part}}/hot/'>
 					{{this_news.newspart.part}}/{{this_news.newspart.realPart}}
 				</a></small>
@@ -159,7 +159,7 @@
 								{% endifequal %}
 							</div>
 							<div class='pull-left'>
-								<div class='font-grey'><small>{{newscomment1.user.nic_name}}&nbsp;&nbsp;<span id='newscomment1Score_{{newscomment1.id}}' >{{newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment1 %}前</small></div>
+								<div class='font-grey'><small><span id='{{newscomment1.user.id}}' class='hand_over ID_card'>{{newscomment1.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment1Score_{{newscomment1.id}}' >{{newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment1 %}前</small></div>
 								<div class='wordsColor'>level_1:{% autoescape off %}{{ newscomment1.words}}{% endautoescape %}_{{newscomment1.confidence}}</div>
 								<div>
 									<ul class='list-inline list-unstyled'>
@@ -214,7 +214,7 @@
 										{% endifequal %}
 									</div>
 									<div class='pull-left'>
-										<div class='font-grey'><small>{{newscomment2.user.nic_name}}&nbsp;&nbsp;<span id='newscomment2Score_{{newscomment2.id}}' >{{newscomment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment2 %}前</small></div>
+										<div class='font-grey'><small><span id='{{newscomment2.user.id}}' class='hand_over ID_card'>{{newscomment2.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment2Score_{{newscomment2.id}}' >{{newscomment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment2 %}前</small></div>
 										<div class='wordsColor'>level_2:{% autoescape off %}{{ newscomment2.words}}{% endautoescape %}_{{newscomment2.confidence}}</div>
 										<div>
 											<ul class='list-inline list-unstyled'>
@@ -269,7 +269,7 @@
 												{% endifequal %}
 											</div>
 											<div class='pull-left'>
-												<div class='font-grey'><small>{{newscomment3.user.nic_name}}&nbsp;&nbsp;<span id='newscomment3Score_{{newscomment3.id}}' >{{newscomment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment3 %}前</small></div>
+												<div class='font-grey'><small><span id='{{newscomment3.user.id}}' class='hand_over ID_card'>{{newscomment3.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment3Score_{{newscomment3.id}}' >{{newscomment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment3 %}前</small></div>
 												<div class='wordsColor'>level_3:{% autoescape off %}{{ newscomment3.words}}{% endautoescape %}_{{newscomment3.confidence}}</div>
 												<div>
 													<ul class='list-inline list-unstyled'>
@@ -324,7 +324,7 @@
 														{% endifequal %}
 													</div>
 													<div class='pull-left'>
-														<div class='font-grey'><small>{{newscomment4.user.nic_name}}&nbsp;&nbsp;<span id='newscomment4Score_{{newscomment4.id}}' >{{newscomment4.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment4 %}前</small></div>
+														<div class='font-grey'><small><span id='{{newscomment4.user.id}}' class='hand_over ID_card'>{{newscomment4.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment4Score_{{newscomment4.id}}' >{{newscomment4.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment4 %}前</small></div>
 														<div class='wordsColor'>level_4:{% autoescape off %}{{ newscomment4.words}}{% endautoescape %}_{{newscomment4.confidence}}</div>
 														<div>
 															<ul class='list-inline list-unstyled'>
