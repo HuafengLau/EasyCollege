@@ -46,7 +46,7 @@ class LinkNewsForm3(forms.ModelForm):
     
     class Meta:
         model = News
-        exclude = ('ups','downs','time','gold','score','controversy','hot','user','text','pic','comment_num','mp3')  
+        exclude = ('ups','downs','time','gold','score','controversy','hot','user','text','pic','comment_num','mp3','open')  
  
 class LinkNewsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):  
@@ -100,7 +100,7 @@ class LinkNewsForm(forms.ModelForm):
     
     class Meta:
         model = News
-        exclude = ('ups','downs','time','gold','score','controversy','hot','user','text','pic','comment_num','mp3') 
+        exclude = ('ups','downs','time','gold','score','controversy','hot','user','text','pic','comment_num','mp3','open') 
 
 class TextNewsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):  
@@ -141,7 +141,7 @@ class TextNewsForm(forms.ModelForm):
     
     class Meta:
         model = News
-        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','pic','comment_num','mp3')
+        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','pic','comment_num','mp3','open')
 
 class PicNewsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):  
@@ -183,7 +183,7 @@ class PicNewsForm(forms.ModelForm):
     
     class Meta:
         model = News
-        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','text','comment_num','mp3')  
+        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','text','comment_num','mp3','open')  
         
 class mp3NewsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):  
@@ -225,5 +225,5 @@ class mp3NewsForm(forms.ModelForm):
     
     class Meta:
         model = News
-        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','text','comment_num','pic') 
+        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','text','comment_num','pic','open') 
         
