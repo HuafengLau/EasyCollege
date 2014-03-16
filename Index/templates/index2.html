@@ -5,12 +5,17 @@
 个人中心 - 大学易
 {% endblock %}
 
+{% block moreCSS %}
+<link href="{{STATIC_URL}}css/bodyCss.css" rel="stylesheet" media="screen">
+<link href="{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.css" rel="stylesheet" media="screen">
+<link href="{{STATIC_URL}}css/kindeditorImg2.css" rel="stylesheet" media="screen">
+{% endblock %}
 
 {% block mainbody %}
 <div class=''>
     <div id='index_up'>
         <div id='index_upleft' class='pull-left' >
-            <table>
+            <table id='index_infoTable'>
                 <tr> 
                     <td id='avtar_td'>
                         {% ifequal user.avatar 'img/avatar.png'%}
@@ -42,195 +47,819 @@
                         </table>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <button class='btn' id='avatar_btn'>更改头像</button>
-                        <form id='avatar_form' class='form-group' action='/index/uploadavatar/' enctype="multipart/form-data" method='POST'> 
-                            {% csrf_token %}
-                            <table>
-                                {{ form.as_table }}
-                            </table>                           
-                            <button class="btn btn-default" id='' type="submit">提交</button>
-                        </form>                       
-                    </td>
-                    
-                </tr>
             </table>
         </div>
-        <div id='index_upright' class='pull-left'>
-			{% if user.honour_set.all %}
-				{% for honour in user.honour_set.all %}
-					<img width='55px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
-				{% endfor %}
-			{% endif %}
-        </div>
-		<div id='index_rich' class='pull-left'>
-			<div class='panel panel-danger'>			
-                <div id='' class="panel-heading">
-					富豪榜<span class='pull-right'><a target='_blank' href='/business/TheRich/'><small>查看完整榜单</small></a></span>
-				</div>
-                <div class="panel-body">
-                    <table class='table'>
-						<tr>
-							<th>排名</th><th>昵称</th><th>资产/易币</th><th>学校</th>
-						</tr>
-						{% for richer in rich_users %}
-						{% ifequal forloop.counter 1 %}<tr class='font-jin'>{% endifequal %}
-						{% ifequal forloop.counter 2 %}<tr class='font-yin'>{% endifequal %}
-						{% ifequal forloop.counter 3 %}<tr class='font-tong'>{% endifequal %}
-							<td><img src='{{STATIC_URL}}img/{{forloop.counter}}th.png' height="35" alt='财富名次'/></td>
-							<td>{{richer.nic_name}}</td>
-							<td>{{richer.money}}</td>
-							<td>{% ShowSchool richer.university_info_id %}</td>
-						</tr>
-						{% endfor %}
-					</table>
-                </div>       
-            </div>
-		</div>
     </div>
     <div class='clear_both' id='index_down'>
-        <div id='index_downleft' class='pull-left'>
-            <div id='index_credit_head' class="alert alert-info">                                
-                <p class='text-center'>历年成绩</p>
-            </div>
-            <table id='table_course' class='table table-bordered table-hover'>
-                <tr>
-                    <th></th>
-                    <th>学期</th>
-                    <th>课程名</th>
-                    <th>任课老师</th>
-                    <th>课程属性</th>
-                    <th>学分</th>
-                    <th>成绩</th>
-                    <th>是否评价</th>             
-                </tr>
-                
-                {% if credits %}
-                  {% for credit in credits %}
-                    <tr>    
-                        <td>
-                            {% ifequal credit.add_money 0 %}
-                            <a data-toggle="tooltip" title="删除此课程，不可恢复！" href='/index/delete/{{credit.id}}/'>
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </a>
-                            {% else %}
-                            <a><span class="glyphicon glyphicon-star"></span></a>
-                            {% endifequal %}                       
-                        </td>
-                        <td>{{ credit.grade }}</td>
-                        <td><a href='/eot/showcredit/{{credit.id}}/'>{{ credit.course_name }}</a></td>
-                        <td>{{ credit.course_teacher }}</td>
-                        <td>{{ credit.course_attr }}</td>
-                        <td>{{ credit.course_credit }}</td>
-                        <td>{{ credit.course_score }}</td>
-                        <td>
-                            {% ifequal credit.add_money 0 %}
-                                <a  href='/eot/value/{{ credit.id }}/'><span class="glyphicon glyphicon-hand-right"></span> 去评价</a>
-                            {% else %}                           
-                                +{{ credit.add_money }}
-                                <img src='{{STATIC_URL}}img/moneybag2.png' height="27" alt='易币图片'/>
-                            {% endifequal %}
-                        </td>
-                    </tr>
-                  {% endfor %}
-                    
-                {% else %}
-                <tr id='first_add_course_tr'>
-                    <td colspan='8'>
-                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                        <span>你还没有添加任何课程哦!&nbsp;&nbsp;</span>
-                        <button id='btn_first_add_course' data-toggle="modal" data-target="#myModal" class= 'btn btn-success'>
-                            马上添加
-                        </button>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                    </td>
-                </tr>
-                {% endif %}
-            </table>
-            <div class='pull-right'>
-               <ul class="pagination">
-                {% if credits.has_previous %}                           
-                    <li><a href="?page={{ credits.previous_page_number }}#index_downleft">&lt; 上一页</a></li>                           
-                {% endif %}                           
-                    {% for p in credits_page_range %}
-                        
-                        {% ifequal p credits.number %}
-                             <li><span class="current">{{p}}</span></li>
-                        {% else %}
-                            <li><a href="?page={{p}}#index_downleft" title="第{{p}}页">{{p}}</a></li>
-                        {% endifequal %}
-                        
-                    {% endfor %}
-                    
-                {% if credits.has_next %}
-                    <li><a href="?page={{ credits.next_page_number }}#index_downleft">下一页 &gt; </a></li>
-                {% endif %}
-                    <li><a >[第{{ credits.number }}/{{ credits.paginator.num_pages }}页]</a></li>
-              </ul>
-          </div>
-		  <div class='clear_both'>
-			<button class='btn btn-link' id='other_btn'>为你的学校开通『智能添加』课程信息服务！</button>
-			<div id='other_form'>
-				<p><strong>选择1：开通『智能』添加的条件：</strong></p>
-			<p class='text-info'>当前仅有URP学生教务系统（似下图）才能开通此服务，开通后提供账号和密码，大学易即可智能抓取课程信息。</p>
-			<img src='{{STATIC_URL}}img/URP.png' alt='URP学生教务系统'/>
-			<p>&nbsp;</p>
-			<p><strong>选择2：开通『半智能』添加：</strong></p>
-			<p class='text-info'>理论上说任何学校均可开通此服务（只是难易问题），开通后按要求上传带有期末成绩的页面，大学易即可分析获取课程信息。</p>
-			<p>&nbsp;</p>
-			<p>只要你的学校教务系统满足上述任一条件，即可发送邮件至 <strong>collegeyi@sina.com</strong>，邮件中须包括贵校的<strong>学生系统登录网址，您的账号和密码</strong>（作为测试）。</p>
-			
-			<p>智能添加服务将在一个工作日内完成测试，半智能服务将在1~3个工作日内完成测试。</p>
-			<p>&nbsp;</p>
-			<h4 class='font-red'>测试成功后不仅您的账户等级将从『平民』跃升至终极<strong>『开国功臣』</strong>，大学易还将奖励您<strong>200个易币</strong>用于下载各类期末、课程资料！</h4>
+        <ul class="nav nav-tabs">
+		  <li class='active'><a href="#Feeds" data-toggle="tab">动态</a></li>
+		  <li><a href="#myCY" data-toggle="tab">课程</a></li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+		  <div class="tab-pane fade in active" id="Feeds">
+			<div id='feeds_left' class='pull-left'>
+				<p class='text-center'><a id='link_related' class='hand_over font-333'>@&nbsp;与我相关</a></p>
+				<p class='text-center'><a id='link_follow' class='hand_over'>0-0&nbsp;我的关注</a></p>
 			</div>
+			<div id='feeds_middel' class='pull-left'>
+				<div id='relatedDiv' class='showBlock'>
+					{% if Feeds %}
+					{% for feed in Feeds %}
+						<div class='bcColorWhite feedsDiv'>
+							<div class='feedsDivTop'>
+								<div class='clear_both'>
+									<div class='pull-left feedsDivAvatar'>
+										{% ifequal feed.creator.avatar 'img/avatar.png' %}									
+											<img src='{{STATIC_URL}}img/avatar.png/' width='32px' height='20px' class="img-responsive MB_5px" alt='用户头像'/>																			
+										{% else %}									
+											<img src='{{MEDIA_URL}}{{feed.creator.avatar}}' width='32px' height='20px' class="img-responsive MB_5px" alt='用户头像'/>										
+										{% endifequal %}
+									</div>
+									<div class='pull-left feedsDivCreatorInfo'>
+										<div id='{{feed.creator.id}}' class='feedsDivCreatorInfo1 hand_over ID_card font-color-link'>{{feed.creator.nic_name}}
+											<span class='font-grey'>
+											{% ifequal feed.type 'followNews' %}
+											&nbsp;&nbsp;分享&nbsp;
+											{% endifequal %}
+											{% ifequal feed.type 'newsComment' %}
+											&nbsp;&nbsp;评论&nbsp;
+											{% endifequal %}
+											{% ifequal feed.type 'newsGiveGold' %}
+											&nbsp;&nbsp;<span>为你的分享<span class='font-jin'>镀金</span></span>&nbsp;
+											{% endifequal %}
+											{% ifequal feed.type 'FComment1Reply' %}
+											&nbsp;&nbsp;<span>回复了你的评论</span>&nbsp;
+											{% endifequal %}
+											{% ifequal feed.type 'FComment2Reply' %}
+											&nbsp;&nbsp;<span>回复了你的评论</span>&nbsp;
+											{% endifequal %}
+											{% ifequal feed.type 'FComment3Reply' %}
+											&nbsp;&nbsp;<span>回复了你的评论</span>&nbsp;
+											{% endifequal %}
+											{% ifequal feed.type 'comment1GiveGold' %}
+											&nbsp;&nbsp;<span>为你的评论<span class='font-jin'>镀金</span></span>&nbsp;
+											{% endifequal %}
+											{% ifequal feed.type 'comment2GiveGold' %}
+											&nbsp;&nbsp;<span>为你的评论<span class='font-jin'>镀金</span></span>&nbsp;
+											{% endifequal %}
+											{% ifequal feed.type 'comment3GiveGold' %}
+											&nbsp;&nbsp;<span>为你的评论<span class='font-jin'>镀金</span></span>&nbsp;
+											{% endifequal %}
+											{% ifequal feed.type 'comment4GiveGold' %}
+											&nbsp;&nbsp;<span>为你的评论<span class='font-jin'>镀金</span></span>&nbsp;
+											{% endifequal %}
+											</span>
+										</div>
+										<div class='feedsDivCreatorInfo2'><small class='font-grey'>{{ feed.time|date:"H:i:s" }}</small></div>
+									</div>
+								</div>
+								{% ifequal feed.type 'newsComment' %}
+								<div class='clear_both MB_5px'>
+									{% autoescape off %}{{feed.comment.words}}{% endautoescape %}
+								</div>
+								{% endifequal %}
+								{% if 'GiveGold' in feed.type %}
+								<div class='clear_both MB_5px'>
+									+{{feed.gold_num}}
+								</div>
+								{% endif %}
+							</div>
+							<div class='clear_both feedsDivBottom'>
+								<div id='{{feed.news.ups}};{{feed.news.downs}};{{feed.news.score}}' class='pull-left hand_over newsScoreInfo MR_9px' >
+									{% for info in user.user_info_set.all %}
+										{% if info.upVoted_news %}
+											{% ifintInstr feed.news.id info.upVoted_news %}	
+												<div id='' class='newsUpVote2 hidden'></div>
+												<div id='' class='newsUpVoted2'></div>
+											{% else %}
+												<div id='' class='newsUpVote2'></div>
+												<div id='' class='newsUpVoted2 hidden'></div>
+											{% endifintInstr %}
+										{% else %}
+											<div id='' class='newsUpVote2'></div>
+											<div id='' class='newsUpVoted2 hidden'></div>
+										{% endif %}
+										<div class='{% newsScoreClass info feed.news %}'>{{feed.news.score}}</div>
+										{% if info.downVoted_news %}
+											{% ifintInstr feed.news.id info.downVoted_news %}
+												<div id='' class='newsDownVote2 hidden'></div>
+												<div id='' class='newsDownVoted2'></div>
+											{% else %}
+												<div id='' class='newsDownVote2'></div>
+												<div id='' class='newsDownVoted2 hidden'></div>
+											{% endifintInstr %}
+										{% else %}
+											<div id='' class='newsDownVote2'></div>
+											<div id='' class='newsDownVoted2 hidden'></div>
+										{% endif %}
+									{% endfor %}
+								</div>
+								
+								<div class='PT_8px'>
+									{% ifequal feed.news.type 'link' %}
+									<a class='news_title' target='_blank' href='{{feed.news.link}}'>{{feed.news.title}}</a>
+									{% else %}
+									<a class='news_title' href='/news/{{feed.news.newspart.part}}/new/showNews/{{feed.news.id}}/'>{{feed.news.title}}</a>
+									{% endifequal %}
+								</div>
+								<div>
+									<small>{% showNewsTime feed.news %}前&nbsp;由&nbsp;&nbsp;
+									<a class='shallowLink'>{{feed.news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
+									<a class='shallowLink' href='/news/{{feed.news.newspart.part}}/hot/'>
+										{{feed.news.newspart.part}}/{{feed.news.newspart.realPart}}
+									</a></small>
+								</div>
+								<ul class='list-inline list-unstyled MB_0px'>
+									<li><a href='/news/{{feed.news.newspart.part}}/new/showNews/{{feed.news.id}}/'><small class='font-grey'>{% ifnotequal feed.news.comment_num 0 %}{{feed.news.comment_num}}&nbsp;{% endifnotequal %}评论</small></a></li>
+									<li><small class='font-grey'>镀金{{feed.news.gold}}</small></li>
+									<li><i><small class='font-grey'>{{feed.news.type}}</small></i></li> 
+								</ul>
+								{% ifequal feed.type 'FComment1Reply' %}
+								<div class='clear_both'>
+									<table class='indexCommentTable1'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment1 %}
+												{% ifintInstr feed.newscomment1.id info.upVoted_comment1 %}	
+													<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment1;{{feed.newscomment1.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment1;{{feed.newscomment1.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment1;{{feed.newscomment1.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment1 %}
+												{% ifintInstr feed.newscomment1.id info.downVoted_comment1 %}
+													<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment1;{{feed.newscomment1.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment1;{{feed.newscomment1.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment1;{{feed.newscomment1.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.newscomment1.user.nic_name}}&nbsp;&nbsp;<span id='newscomment1Score_{{feed.newscomment1.id}}' >{{feed.newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.newscomment1 %}前</small></div>
+											<div class='wordsColor'>level_1:{% autoescape off %}{{ feed.newscomment1.words}}{% endautoescape %}_{{feed.newscomment1.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><span class='font-grey'>
+														<small>镀金<span>{{feed.newscomment1.gold}}</span></small>&nbsp;
+														</span>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+									<table class='indexCommentTable2'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment2 %}
+												{% ifintInstr feed.comment2.id info.upVoted_comment2 %}	
+													<div id='newscomment2;{{feed.comment2.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.comment2.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment2;{{feed.comment2.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.comment2.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment2;{{feed.comment2.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment2;{{feed.comment2.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment2 %}
+												{% ifintInstr feed.comment2.id info.downVoted_comment2 %}
+													<div id='newscomment2;{{feed.comment2.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.comment2.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment2;{{feed.comment2.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.comment2.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment2;{{feed.comment2.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment2;{{feed.comment2.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.comment2.user.nic_name}}&nbsp;&nbsp;<span id='newscomment2Score_{{feed.comment2.id}}' >{{feed.comment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.comment2 %}前</small></div>
+											<div class='wordsColor'>level_1:{% autoescape off %}{{ feed.comment2.words}}{% endautoescape %}_{{feed.comment2.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><a id='newscomment2;{{feed.comment2.id}};{{feed.comment2.gold}}' class='giveGold font-grey hand_over'>
+														<small>镀金<span id='newscomment2_goldNum_{{feed.comment2.id}}'>{{feed.comment2.gold}}</span></small>&nbsp;
+														</a>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+								</div>
+								{% endifequal %}
+								{% ifequal feed.type 'FComment2Reply' %}
+								<div class='clear_both'>
+									<table class='indexCommentTable1'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment2 %}
+												{% ifintInstr feed.newscomment2.id info.upVoted_comment2 %}	
+													<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.newscomment2.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment2;{{feed.newscomment2.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment2;{{feed.newscomment2.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment2 %}
+												{% ifintInstr feed.newscomment2.id info.downVoted_comment2 %}
+													<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.newscomment2.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment2;{{feed.newscomment2.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment2;{{feed.newscomment2.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.newscomment2.user.nic_name}}&nbsp;&nbsp;<span id='newscomment2Score_{{feed.newscomment2.id}}' >{{feed.newscomment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.newscomment2 %}前</small></div>
+											<div class='wordsColor'>level_2:{% autoescape off %}{{ feed.newscomment2.words}}{% endautoescape %}_{{feed.newscomment2.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><span class='font-grey'>
+														<small>镀金<span>{{feed.newscomment2.gold}}</span></small>&nbsp;
+														</span>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+									<table class='indexCommentTable2'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment3 %}
+												{% ifintInstr feed.comment3.id info.upVoted_comment3 %}	
+													<div id='newscomment3;{{feed.comment3.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.comment3.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment3;{{feed.comment3.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.comment3.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment3;{{feed.comment3.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment3;{{feed.comment3.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment3 %}
+												{% ifintInstr feed.comment3.id info.downVoted_comment3 %}
+													<div id='newscomment3;{{feed.comment3.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.comment3.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment3;{{feed.comment3.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.comment3.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment3;{{feed.comment3.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment3;{{feed.comment3.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.comment3.user.nic_name}}&nbsp;&nbsp;<span id='newscomment3Score_{{feed.comment3.id}}' >{{feed.comment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.comment3 %}前</small></div>
+											<div class='wordsColor'>level_3:{% autoescape off %}{{ feed.comment3.words}}{% endautoescape %}_{{feed.comment3.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><a id='newscomment3;{{feed.comment3.id}};{{feed.comment3.gold}}' class='giveGold font-grey hand_over'>
+														<small>镀金<span id='newscomment3_goldNum_{{feed.comment3.id}}'>{{feed.comment3.gold}}</span></small>&nbsp;
+														</a>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+								</div>
+								{% endifequal %}
+								{% ifequal feed.type 'FComment3Reply' %}
+								<div class='clear_both'>
+									<table class='indexCommentTable1'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment3 %}
+												{% ifintInstr feed.newscomment3.id info.upVoted_comment3 %}	
+													<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.newscomment3.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment3;{{feed.newscomment3.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment3;{{feed.newscomment3.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment3 %}
+												{% ifintInstr feed.newscomment3.id info.downVoted_comment3 %}
+													<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.newscomment3.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment3;{{feed.newscomment3.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment3;{{feed.newscomment3.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.newscomment3.user.nic_name}}&nbsp;&nbsp;<span id='newscomment3Score_{{feed.newscomment3.id}}' >{{feed.newscomment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.newscomment3 %}前</small></div>
+											<div class='wordsColor'>level_3:{% autoescape off %}{{ feed.newscomment3.words}}{% endautoescape %}_{{feed.newscomment3.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><span class='font-grey'>
+														<small>镀金<span>{{feed.newscomment3.gold}}</span></small>&nbsp;
+														</span>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+									<table class='indexCommentTable2'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment4 %}
+												{% ifintInstr feed.comment4.id info.upVoted_comment4 %}	
+													<div id='newscomment4;{{feed.comment4.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment4;{{feed.comment4.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment4;{{feed.comment4.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment4;{{feed.comment4.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment4;{{feed.comment4.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment4;{{feed.comment4.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment4 %}
+												{% ifintInstr feed.comment4.id info.downVoted_comment4 %}
+													<div id='newscomment4;{{feed.comment4.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment4;{{feed.comment4.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment4;{{feed.comment4.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment4;{{feed.comment4.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment4;{{feed.comment4.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment4;{{feed.comment4.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.comment4.user.nic_name}}&nbsp;&nbsp;<span id='newscomment4Score_{{feed.comment4.id}}' >{{feed.comment4.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.comment4 %}前</small></div>
+											<div class='wordsColor'>level_4:{% autoescape off %}{{ feed.comment4.words}}{% endautoescape %}_{{feed.comment4.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><a id='newscomment4;{{feed.comment4.id}};{{feed.comment4.gold}}' class='giveGold font-grey hand_over'>
+														<small>镀金<span id='newscomment4_goldNum_{{feed.comment4.id}}'>{{feed.comment4.gold}}</span></small>&nbsp;
+														</a>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+								</div>
+								{% endifequal %}
+								{% ifequal feed.type 'comment1GiveGold' %}
+								<div class='clear_both'>
+									<table class='indexCommentTable1'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment1 %}
+												{% ifintInstr feed.newscomment1.id info.upVoted_comment1 %}	
+													<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment1;{{feed.newscomment1.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment1;{{feed.newscomment1.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment1;{{feed.newscomment1.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment1 %}
+												{% ifintInstr feed.newscomment1.id info.downVoted_comment1 %}
+													<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment1;{{feed.newscomment1.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment1;{{feed.newscomment1.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment1;{{feed.newscomment1.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment1;{{feed.newscomment1.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.newscomment1.user.nic_name}}&nbsp;&nbsp;<span id='newscomment1Score_{{feed.newscomment1.id}}' >{{feed.newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.newscomment1 %}前</small></div>
+											<div class='wordsColor'>level_1:{% autoescape off %}{{ feed.newscomment1.words}}{% endautoescape %}_{{feed.newscomment1.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><span class='font-grey'>
+														<small>镀金<span>{{feed.newscomment1.gold}}</span></small>&nbsp;
+														</span>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+								</div>
+								{% endifequal %}
+								{% ifequal feed.type 'comment2GiveGold' %}
+								<div class='clear_both'>
+									<table class='indexCommentTable1'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment2 %}
+												{% ifintInstr feed.newscomment2.id info.upVoted_comment2 %}	
+													<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.newscomment2.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment2;{{feed.newscomment2.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment2;{{feed.newscomment2.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment2 %}
+												{% ifintInstr feed.newscomment2.id info.downVoted_comment2 %}
+													<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.newscomment2.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment2;{{feed.newscomment2.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment2;{{feed.newscomment2.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment2;{{feed.newscomment2.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.newscomment2.user.nic_name}}&nbsp;&nbsp;<span id='newscomment2Score_{{feed.newscomment2.id}}' >{{feed.newscomment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.newscomment2 %}前</small></div>
+											<div class='wordsColor'>level_2:{% autoescape off %}{{ feed.newscomment2.words}}{% endautoescape %}_{{feed.newscomment2.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><span class='font-grey'>
+														<small>镀金<span>{{feed.newscomment2.gold}}</span></small>&nbsp;
+														</span>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+								</div>
+								{% endifequal %}
+								{% ifequal feed.type 'comment3GiveGold' %}
+								<div class='clear_both'>
+									<table class='indexCommentTable1'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment3 %}
+												{% ifintInstr feed.newscomment3.id info.upVoted_comment3 %}	
+													<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.newscomment3.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment3;{{feed.newscomment3.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment3;{{feed.newscomment3.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment3 %}
+												{% ifintInstr feed.newscomment3.id info.downVoted_comment3 %}
+													<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.newscomment3.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment3;{{feed.newscomment3.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment3;{{feed.newscomment3.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment3;{{feed.newscomment3.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.newscomment3.user.nic_name}}&nbsp;&nbsp;<span id='newscomment3Score_{{feed.newscomment3.id}}' >{{feed.newscomment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.newscomment3 %}前</small></div>
+											<div class='wordsColor'>level_3:{% autoescape off %}{{ feed.newscomment3.words}}{% endautoescape %}_{{feed.newscomment3.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><span class='font-grey'>
+														<small>镀金<span>{{feed.newscomment3.gold}}</span></small>&nbsp;
+														</span>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+								</div>
+								{% endifequal %}
+								{% ifequal feed.type 'comment4GiveGold' %}
+								<div class='clear_both'>
+									<table class='indexCommentTable1'>
+										<tr><td><div class='MR_9px'>
+										{% for info in user.user_info_set.all %}
+											{% if info.upVoted_comment4 %}
+												{% ifintInstr feed.newscomment4.id info.upVoted_comment4 %}	
+													<div id='newscomment4;{{feed.newscomment4.id}}' style='display:none' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment4;{{feed.newscomment4.id}}' class='commentUpVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment4;{{feed.newscomment4.id}}' class='commentUpVote2 hand_over'></div>
+													<div id='newscomment4;{{feed.newscomment4.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment4;{{feed.newscomment4.id}}' class='commentUpVote2 hand_over'></div>
+												<div id='newscomment4;{{feed.newscomment4.id}}' style='display:none' class='commentUpVoted2 hand_over'></div>
+											{% endif %}
+											{% if info.downVoted_comment4 %}
+												{% ifintInstr feed.newscomment4.id info.downVoted_comment4 %}
+													<div id='newscomment4;{{feed.newscomment4.id}}' style='display:none' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment4;{{feed.newscomment4.id}}' class='commentDownVoted2 hand_over'></div>
+												{% else %}
+													<div id='newscomment4;{{feed.newscomment4.id}}' class='commentDownVote2 hand_over'></div>
+													<div id='newscomment4;{{feed.newscomment4.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+												{% endifintInstr %}
+											{% else %}
+												<div id='newscomment4;{{feed.newscomment4.id}}' class='commentDownVote2 hand_over'></div>
+												<div id='newscomment4;{{feed.newscomment4.id}}' style='display:none' class='commentDownVoted2 hand_over'></div>
+											{% endif %}
+										{% endfor %}</div>
+										</td>
+										<td>
+											<div class='font-grey'><small>{{feed.newscomment4.user.nic_name}}&nbsp;&nbsp;<span id='newscomment4Score_{{feed.newscomment4.id}}' >{{feed.newscomment4.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime feed.newscomment4 %}前</small></div>
+											<div class='wordsColor'>level_4:{% autoescape off %}{{ feed.newscomment4.words}}{% endautoescape %}_{{feed.newscomment4.confidence}}</div>
+											<div>
+												<ul class='list-inline list-unstyled'>
+													<li><span class='font-grey'>
+														<small>镀金<span>{{feed.newscomment4.gold}}</span></small>&nbsp;
+														</span>
+													</li>
+													<li><span class='font-grey'><small>回复</small></span></li>
+												</ul>
+											</div>
+										</td>	
+									</tr>
+									</table>
+								</div>
+								{% endifequal %}
+						
+								{% if feed.showText %}
+									{% ifequal feed.news.type 'pic' %}
+									<div id=''>
+										<img src='{{MEDIA_URL}}{{feed.news.pic}}' width='56%' class="img-responsive" />
+									</div>
+									{% endifequal %}
+									{% ifequal feed.news.type 'text' %}
+									<div id=''>
+										{% autoescape off %}{{feed.news.text|truncatewords_html:9}}{% endautoescape %}<a href='/news/{{feed.news.newspart.part}}/new/showNews/{{feed.news.id}}/'>查看全文</a>
+									</div>							
+									{% endifequal %}
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+					{% else %}
+					<div class='bcColorWhite'>
+						<p class='text-center'>暂无动态，去探索方遒吧！</p>
+					</div>
+				{% endif %}
+					<script src="{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.js"></script>
+					<script>prettyPrint();</script>
+				</div>
+				<div id='followDiv' class='hidden'>
+					<div class='bcColorWhite feedsDiv'>
+						<div class='feedsDivTop'>
+						<p>我关注的</p>
+						</div>
+						<div class='feedsDivBottom'>
+						{% if my_watching %}
+							<table class='table table-bordered'>
+							{% for user1 in my_watching %}
+								<tr>
+									<td id='{{user1.id}}' class='hand_over ID_card font-color-link'>{{user1.nic_name}}</td>
+									<td><a id='{{user1.id}}' class='watchClick hand_over'>已关注（点击取消）</a></td>
+									<td>
+										{% for info1 in user1.user_info_set.all %}{% if info1.watching %}
+										{% ifintInstr user.id info1.watching %}<span>ta也关注了你</span>{% else %}{% endifintInstr %}{% endif %}{% endfor %}
+									</td>
+								</tr>
+							{% endfor %}
+							</table>
+						{% else %}
+							<p class='text-center'>你还没有关注任何人，去探索方遒吧：）</p>
+						{% endif %}
+						</div>
+					</div>
+					<div class='bcColorWhite feedsDiv'>
+						<div class='feedsDivTop'>
+						<p>关注我的</p>
+						</div>
+						<div class='feedsDivBottom'>
+						{% if my_beWatched %}
+							<table class='table table-bordered'>
+							{% for user2 in my_beWatched %}
+								<tr>
+									<td id='{{user2.id}}' class='hand_over ID_card font-color-link'>{{user2.nic_name}}</td>
+									<td>{% for info in user.user_info_set.all %}{% ifintInstr user2.id info.watching %}
+									<a id='{{user2.id}}' class='watchClick hand_over'>已关注（点击取消）</a></td>{% else %}
+									<a id='{{user2.id}}' class='watchClick hand_over'>关注ta</a></td>{% endifintInstr %}
+									{% endfor %}
+								</tr>
+							{% endfor %}
+							</table>
+						{% else %}
+							<p class='text-center'>暂时还没有人关注你，精彩的分享和评论是高人气的秘诀哦：）</p>
+						{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>				
 		  </div>
-          
-        </div>
-        <div id='index_downright' class='pull-right'>
-            <div id='add_course_div' class='panel panel-danger'>
-                <div id='heading_wise_add' class="panel-heading">添加课程</div>
-                <div class="panel-body">
-                    <div>
-                        <button id='add_course' data-toggle="modal" data-target="#myModal" class= 'btn btn-success'>
-                            手工添加
-                        </button>
-                        <button  type="button" data-toggle="modal" data-target="#hand_add_explain" class="btn btn-link add_button_info">
-                            了解手工添加的好处
-                        </button>
-                    </div>
-                    <div id='wise_add_course_div'>
-                        
-                        <button id='wise_add_course_btn' class='btn btn-success'>
-                            智能推荐
-                        </button>
-                       
-                        <button  type="button" data-toggle="modal" data-target="#what_wise_add" class="btn btn-link add_button_info">
-                            什么是智能推荐？
-                        </button>
-                    </div>
-                </div>            
+		  <div class="tab-pane fade" id="myCY">
+			<div id='index_downleft' class='pull-left'>
+				<div id='index_credit_head' class="alert alert-info">                                
+					<p class='text-center'>历年成绩</p>
+				</div>
+				<table id='table_course' class='table table-bordered table-hover'>
+					<tr>
+						<th></th>
+						<th>学期</th>
+						<th>课程名</th>
+						<th>任课老师</th>
+						<th>课程属性</th>
+						<th>学分</th>
+						<th>成绩</th>
+						<th>是否评价</th>             
+					</tr>
+					
+					{% if credits %}
+					  {% for credit in credits %}
+						<tr>    
+							<td>
+								{% ifequal credit.add_money 0 %}
+								<a data-toggle="tooltip" title="删除此课程，不可恢复！" href='/index/delete/{{credit.id}}/'>
+									<span class="glyphicon glyphicon-trash"></span>
+								</a>
+								{% else %}
+								<a><span class="glyphicon glyphicon-star"></span></a>
+								{% endifequal %}                       
+							</td>
+							<td>{{ credit.grade }}</td>
+							<td><a href='/eot/showcredit/{{credit.id}}/'>{{ credit.course_name }}</a></td>
+							<td>{{ credit.course_teacher }}</td>
+							<td>{{ credit.course_attr }}</td>
+							<td>{{ credit.course_credit }}</td>
+							<td>{{ credit.course_score }}</td>
+							<td>
+								{% ifequal credit.add_money 0 %}
+									<a  href='/eot/value/{{ credit.id }}/'><span class="glyphicon glyphicon-hand-right"></span> 去评价</a>
+								{% else %}                           
+									+{{ credit.add_money }}
+									<img src='{{STATIC_URL}}img/moneybag2.png' height="27" alt='易币图片'/>
+								{% endifequal %}
+							</td>
+						</tr>
+					  {% endfor %}
+						
+					{% else %}
+					<tr id='first_add_course_tr'>
+						<td colspan='8'>
+							<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+							<p>&nbsp;</p>
+							<span>你还没有添加任何课程哦!&nbsp;&nbsp;</span>
+							<button id='btn_first_add_course' data-toggle="modal" data-target="#myModal" class= 'btn btn-success'>
+								马上添加
+							</button>
+							<p>&nbsp;</p>
+							<p>&nbsp;</p>
+						</td>
+					</tr>
+					{% endif %}
+				</table>
+				<div class='pull-right'>
+				   <ul class="pagination">
+					{% if credits.has_previous %}                           
+						<li><a href="?page={{ credits.previous_page_number }}#index_downleft">&lt; 上一页</a></li>                           
+					{% endif %}                           
+						{% for p in credits_page_range %}
+							
+							{% ifequal p credits.number %}
+								 <li><span class="current">{{p}}</span></li>
+							{% else %}
+								<li><a href="?page={{p}}#index_downleft" title="第{{p}}页">{{p}}</a></li>
+							{% endifequal %}
+							
+						{% endfor %}
+						
+					{% if credits.has_next %}
+						<li><a href="?page={{ credits.next_page_number }}#index_downleft">下一页 &gt; </a></li>
+					{% endif %}
+						<li><a >[第{{ credits.number }}/{{ credits.paginator.num_pages }}页]</a></li>
+				  </ul>
+			  </div>
+			  <div class='clear_both'>
+				<button class='btn btn-link' id='other_btn'>为你的学校开通『智能添加』课程信息服务！</button>
+				<div id='other_form'>
+					<p><strong>选择1：开通『智能』添加的条件：</strong></p>
+				<p class='text-info'>当前仅有URP学生教务系统（似下图）才能开通此服务，开通后提供账号和密码，大学易即可智能抓取课程信息。</p>
+				<img src='{{STATIC_URL}}img/URP.png' alt='URP学生教务系统'/>
+				<p>&nbsp;</p>
+				<p><strong>选择2：开通『半智能』添加：</strong></p>
+				<p class='text-info'>理论上说任何学校均可开通此服务（只是难易问题），开通后按要求上传带有期末成绩的页面，大学易即可分析获取课程信息。</p>
+				<p>&nbsp;</p>
+				<p>只要你的学校教务系统满足上述任一条件，即可发送邮件至 <strong>collegeyi@sina.com</strong>，邮件中须包括贵校的<strong>学生系统登录网址，您的账号和密码</strong>（作为测试）。</p>
+				
+				<p>智能添加服务将在一个工作日内完成测试，半智能服务将在1~3个工作日内完成测试。</p>
+				<p>&nbsp;</p>
+				<h4 class='font-red'>测试成功后不仅您的账户等级将从『平民』跃升至终极<strong>『开国功臣』</strong>，大学易还将奖励您<strong>200个易币</strong>用于下载各类期末、课程资料！</h4>
+				</div>
+			  </div>
+			  
+			</div>
+			<div id='index_downright' class='pull-right'>
+				<div id='add_course_div' class='panel panel-danger'>
+					<div id='heading_wise_add' class="panel-heading">添加课程</div>
+					<div class="panel-body">
+						<div>
+							<button id='add_course' data-toggle="modal" data-target="#myModal" class= 'btn btn-success'>
+								手工添加
+							</button>
+							<button  type="button" data-toggle="modal" data-target="#hand_add_explain" class="btn btn-link add_button_info">
+								了解手工添加的好处
+							</button>
+						</div>
+						<div id='wise_add_course_div'>
+							
+							<button id='wise_add_course_btn' class='btn btn-success'>
+								智能推荐
+							</button>
+						   
+							<button  type="button" data-toggle="modal" data-target="#what_wise_add" class="btn btn-link add_button_info">
+								什么是智能推荐？
+							</button>
+						</div>
+					</div>            
+				</div>
+				<div id='' class='panel panel-danger'>
+					<div id='heading_value_eot' class="panel-heading">点评课程</div>
+					<div class="panel-body">
+						<div>
+							<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;添加课程并确保信息无误后，您就可以去评价了！</p>
+							<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;评教不但可以获得<span class='font-red'>易币奖励</span>，更有机会<span class='font-red'>名留青史</span>哦！</p>
+						</div>
+						<div>
+							<button type="button" data-toggle="modal" data-target="#value_info_modal" class="btn btn-link add_button_info">
+								查看详情
+							</button>
+						</div>                  
+					</div>
+				</div>
             </div>
-            <div id='' class='panel panel-danger'>
-                <div id='heading_value_eot' class="panel-heading">点评课程</div>
-                <div class="panel-body">
-                    <div>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;添加课程并确保信息无误后，您就可以去评价了！</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;评教不但可以获得<span class='font-red'>易币奖励</span>，更有机会<span class='font-red'>名留青史</span>哦！</p>
-                    </div>
-                    <div>
-                        <button type="button" data-toggle="modal" data-target="#value_info_modal" class="btn btn-link add_button_info">
-                            查看详情
-                        </button>
-                    </div>                  
-                </div>
-            </div>
-        </div>
-     </div>
+          </div>
+	   </div>
+	</div>
 </div>
 
      

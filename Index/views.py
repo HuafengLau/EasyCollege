@@ -97,7 +97,9 @@ def display(request,user,message,HTML):
         list2 = my_user_info.beWatched.split(';')[:-1]
         my_beWatched = MyUser.objects.filter(id__in=list2) 
     
-    return render_to_response(HTML,locals(),
+    indexChoice = HTML
+    
+    return render_to_response('index.html',locals(),
         context_instance=RequestContext(request))
 
 
@@ -232,9 +234,7 @@ def index(request):
             user.save()
             response = HttpResponse()
             return response
-            
-        
-                       
+                                
     elif request.is_ajax() and request.method == 'GET':
         if 'wise_add' in request.GET:
             user = request.user
@@ -276,12 +276,12 @@ def index(request):
                 message = 'URP'
             else:
                 message = 'wise'
-            HTML = 'index.html'
+            HTML = 'index'
             return display(request,user,message,HTML)   
         else:           
             #credits = Credit.objects.filter(user=user).order_by('grade','add_money')
             message = None
-            HTML = 'index2.html'
+            HTML = 'index2'
             return display(request,user,message,HTML)
 
             
@@ -292,7 +292,7 @@ def wise_teacher(request):
     credits = Credit.objects.filter(user=user,course_teacher='')
     if not credits:
         message = u'所有课程已添加任课老师！'
-        HTML = 'index.html'
+        HTML = 'index'
         return display(request,user,message,HTML)
         
     else:
@@ -307,12 +307,12 @@ def wise_teacher(request):
                 add_num += 1
         if add_num == 0:
             message = u'暂时没有发现新的可以添加的任课老师。试试手工添加吧！'
-            HTML = 'index.html'
+            HTML = 'index'
             return display(request,user,message,HTML)
             
         else:
             message = u'学长学姐为您添加了%s位任课老师！' % add_num
-            HTML = 'index.html'
+            HTML = 'index'
             return display(request,user,message,HTML)
             
 @login_required(login_url='/log/')
@@ -436,7 +436,7 @@ def URP_getCredit(request):
             message = u'本次访问数据库没有发现新的课程数据！'
         else:
             message = u'本次访问数据库为您添加了%s门课程的数据！' % add_num
-        HTML = 'index.html'
+        HTML = 'index'
         return display(request,user,message,HTML)
     except urllib2.URLError:
         time.sleep(1)
@@ -447,7 +447,7 @@ def URP_getCredit(request):
                 message = u'本次访问数据库没有发现新的课程数据！'
             else:
                 message = u'本次访问数据库为您添加了%s门课程的数据！' % add_num
-            HTML = 'index.html'
+            HTML = 'index'
             return display(request,user,message,HTML)
         except urllib2.URLError:
             time.sleep(1)
@@ -458,11 +458,11 @@ def URP_getCredit(request):
                     message = u'本次访问数据库没有发现新的课程数据！'
                 else:
                     message = u'本次访问数据库为您添加了%s项新的数据！' % add_num
-                HTML = 'index.html'
+                HTML = 'index'
                 return display(request,user,message,HTML)
             except urllib2.URLError:
                 message = u'当前无法访问教务系统，请稍候再试'
-                HTML = 'index.html'
+                HTML = 'index'
                 return display(request,user,message,HTML)
 
 @login_required(login_url='/log/')                
@@ -478,15 +478,15 @@ def wise_getCredit(request,school_code):
                 message = u'未在您本次提交的源代码页面中发现新的数据！'
             else:
                 message = u'在您本次提交的源代码页面中，大学易发现了%s项新的数据！' % add_num
-            HTML = 'index.html'
+            HTML = 'index'
             return display(request,user,message,HTML)
         else:
             message = u'上传的源代码文件有误！如果您确定上传了正确的文件，请联系管理员collegeyi@sina.com'
-            HTML = 'index.html'
+            HTML = 'index'
             return display(request,user,message,HTML)
     else:
         message = u'上传的源代码文件有误！如果您确定上传了正确的文件，请联系管理员'
-        HTML = 'index.html'
+        HTML = 'index'
         return display(request,user,message,HTML)
         
 def get_idCard(request):
