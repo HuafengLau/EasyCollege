@@ -396,7 +396,9 @@ def show_news(request,news_part,small_part,news_id):
     user = request.user
     newsHTML = True
     this_small_part = small_part
-    top_newsParts = NewsPart.objects.all().order_by('-num','-user_num','part')[:19]
+    newsParts = NewsPart.objects.filter(open=True).order_by('-num','-user_num','part')
+    top_newsParts = newsParts[:18]
+    more_newsParts = newsParts[18:]
     this_news = News.objects.get(id=news_id)
     if (this_news.ups+this_news.downs) != 0:
         percent = float(this_news.ups) / abs(this_news.ups+this_news.downs)
