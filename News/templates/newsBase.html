@@ -412,69 +412,62 @@
 					<div id='submitBtnDiv'>
 						{% ifnotequal part.part 'ExplainCY' %}
 							{% if part.can_link %}
-							<div id='linkBtnDiv' class='both_clear'>
-								<button type="button" class="btn btn-default">
-									<a href='/news/{{part.part}}/submit/link/'>&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-								</button>
+							<div id='linkBtnDiv' class='both_clear'>						
+								<a href='/news/{{part.part}}/submit/link/'><button type="button" class="btn btn-default font-link">&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></a>
+								
 							</div>
 							{% endif %}
 							{% if part.can_text %}
-							<div id='textBtnDiv' class='both_clear'>
-								<button type="button" class="btn btn-default">
-										<a href='/news/{{part.part}}/submit/text/'>
+							<div id='textBtnDiv' class='both_clear'>								
+								<a href='/news/{{part.part}}/submit/text/'><button type="button" class="btn btn-default font-link">
 										{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										{% else %}
 											{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
 											{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											{% endifequal %}
-										{% endifequal %}</a>
-								</button>
+										{% endifequal %}</button></a>
+								
 							</div>
 							{% endif %}
 							{% if part.can_pic %}
-							<div id='picBtnDiv' class='both_clear'>
-								<button type="button" class="btn btn-default">
-								<a href='/news/{{part.part}}/submit/pic/'>&nbsp;&nbsp;
-								分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-								</button>
+							<div id='picBtnDiv' class='both_clear'>	
+								<a href='/news/{{part.part}}/submit/pic/'><button type="button" class="btn btn-default font-link">&nbsp;&nbsp;
+								分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></a>								
 							</div>
 							{% endif %}
 							{% if part.can_mp3 %}
-							<div id='mp3BtnDiv' class='both_clear'>
-								<button type="button" class="btn btn-default">
-								<a href='/news/{{part.part}}/submit/mp3/'>&nbsp;&nbsp;
-								分享音乐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-								</button>
+							<div id='mp3BtnDiv' class='both_clear'>								
+								<a href='/news/{{part.part}}/submit/mp3/'><button type="button" class="btn btn-default font-link">&nbsp;&nbsp;
+								分享音乐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></a>
+								
 							</div>
 							{% endif %}
 						{% else %}
 							{% ifequal user.email 'you_xiang_123@sina.com' %}
 								{% if part.can_link %}
-								<div id='linkBtnDiv' class='both_clear'>
-									<button type="button" class="btn btn-default">
-										<a href='/news/{{part.part}}/submit/link/'>&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-									</button>
+								<div id='linkBtnDiv' class='both_clear'>									
+									<a href='/news/{{part.part}}/submit/link/'><button type="button" class="btn btn-default font-link">&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></a>								
 								</div>
 								{% endif %}
 								{% if part.can_text %}
-								<div id='textBtnDiv' class='both_clear'>
-									<button type="button" class="btn btn-default">
-										<a href='/news/{{part.part}}/submit/text/'>
+								<div id='textBtnDiv' class='both_clear'>								
+									<a href='/news/{{part.part}}/submit/text/'><button type="button" class="btn btn-default font-link">
 										{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										{% else %}
 											{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
 											{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											{% endifequal %}
-										{% endifequal %}</a>
-									</button>
+										{% endifequal %}</button></a>
+									
 								</div>
 								{% endif %}
 								{% if part.can_pic %}
-								<div id='picBtnDiv' class='both_clear'>
-									<button type="button" class="btn btn-default">
-									<a href='/news/{{part.part}}/submit/pic/'>&nbsp;&nbsp;
-									分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-									</button>
+								<div id='picBtnDiv' class='both_clear'>								
+									<a href='/news/{{part.part}}/submit/pic/'><button type="button" class="btn btn-default font-link">&nbsp;&nbsp;
+									分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></a>
+									
 								</div>
 								{% endif %}
 							{% endifequal %}
