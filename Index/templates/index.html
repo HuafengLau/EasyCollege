@@ -115,7 +115,7 @@
 											{% endifequal %}
 											</span>
 										</div>
-										<div class='feedsDivCreatorInfo2'><small class='font-grey'>{{ feed.time|date:"H:i:s" }}</small></div>
+										<div class='feedsDivCreatorInfo2'><small class='font-grey'>{% showDay feed.time %}&nbsp;{{ feed.time|date:"H:i:s" }}</small></div>
 									</div>
 								</div>
 								{% ifequal feed.type 'newsComment' %}

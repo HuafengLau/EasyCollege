@@ -264,6 +264,33 @@ def showNewsTime(parser, token):
     sequence = parser.compile_filter(text_name)    
     return showNewsTimeNode(sequence)
 
+class showDayNode(template.Node):
+    def __init__(self,sequence):
+        self.sequence = sequence
+
+    def render(self, context):
+        values = self.sequence.resolve(context, True)
+
+        nowDay = datetime.now(pytz.utc).day
+        thatDay = values.day
+        if nowDay == thatDay:
+            return '今天'
+        elif (nowDay-thatDay) == 1:
+            return '昨天'
+        elif (nowDay-thatDay) == 2:
+            return '前天'
+        else:
+            return '%s 天前' % (nowDay-thatDay)
+            
+def showDay(parser, token):
+    try:
+        tag_name, text_name= token.split_contents() 
+    except:
+        raise template.TemplateSyntaxError
+        
+    sequence = parser.compile_filter(text_name)    
+    return showDayNode(sequence)
+    
 class newsScoreClassNode(template.Node):
     def __init__(self,sequence1,sequence2):
         self.sequence1 = sequence1
@@ -312,4 +339,5 @@ register.tag('ShowSchool', ShowSchool)
 register.tag('Robot', Robot)
 register.tag('Sitemap', Sitemap)
 register.tag('showNewsTime', showNewsTime)
+register.tag('showDay', showDay)
 register.tag('newsScoreClass', newsScoreClass)
