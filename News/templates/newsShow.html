@@ -98,7 +98,7 @@
 		{% endifequal %}
 		{% ifequal this_news.type 'mp3' %}
 		<div class='clear_both' id='showNewsmp3'>
-			<audio src="{{MEDIA_URL}}{{this_news.mp3}}" loop controls preload="metadata">你的浏览器不支持音乐播放</audio>
+			<audio src="{{MEDIA_URL}}{{this_news.mp3}}" controls="controls" loop="loop" preload="metadata">你的浏览器不支持音乐播放</audio>
 		</div>
 		{% endifequal %}
 		<div class='clear_both' id='showNewsGold'>
