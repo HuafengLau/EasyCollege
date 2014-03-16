@@ -160,7 +160,7 @@
 							</div>
 							<div class='pull-left'>
 								<div class='font-grey'><small><span id='{{newscomment1.user.id}}' class='hand_over ID_card'>{{newscomment1.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment1Score_{{newscomment1.id}}' >{{newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment1 %}前</small></div>
-								<div class='wordsColor'>level_1:{% autoescape off %}{{ newscomment1.words}}{% endautoescape %}_{{newscomment1.confidence}}</div>
+								<div class='wordsColor'>{% autoescape off %}{{ newscomment1.words}}{% endautoescape %}</div>
 								<div>
 									<ul class='list-inline list-unstyled'>
 										<li><a id='newscomment1;{{newscomment1.id}};{{newscomment1.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
@@ -215,7 +215,7 @@
 									</div>
 									<div class='pull-left'>
 										<div class='font-grey'><small><span id='{{newscomment2.user.id}}' class='hand_over ID_card'>{{newscomment2.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment2Score_{{newscomment2.id}}' >{{newscomment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment2 %}前</small></div>
-										<div class='wordsColor'>level_2:{% autoescape off %}{{ newscomment2.words}}{% endautoescape %}_{{newscomment2.confidence}}</div>
+										<div class='wordsColor'>{% autoescape off %}{{ newscomment2.words}}{% endautoescape %}</div>
 										<div>
 											<ul class='list-inline list-unstyled'>
 												<li><a id='newscomment2;{{newscomment2.id}};{{newscomment2.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
@@ -270,7 +270,7 @@
 											</div>
 											<div class='pull-left'>
 												<div class='font-grey'><small><span id='{{newscomment3.user.id}}' class='hand_over ID_card'>{{newscomment3.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment3Score_{{newscomment3.id}}' >{{newscomment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment3 %}前</small></div>
-												<div class='wordsColor'>level_3:{% autoescape off %}{{ newscomment3.words}}{% endautoescape %}_{{newscomment3.confidence}}</div>
+												<div class='wordsColor'>{% autoescape off %}{{ newscomment3.words}}{% endautoescape %}</div>
 												<div>
 													<ul class='list-inline list-unstyled'>
 														<li><a id='newscomment3;{{newscomment3.id}};{{newscomment3.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
@@ -325,7 +325,7 @@
 													</div>
 													<div class='pull-left'>
 														<div class='font-grey'><small><span id='{{newscomment4.user.id}}' class='hand_over ID_card'>{{newscomment4.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment4Score_{{newscomment4.id}}' >{{newscomment4.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment4 %}前</small></div>
-														<div class='wordsColor'>level_4:{% autoescape off %}{{ newscomment4.words}}{% endautoescape %}_{{newscomment4.confidence}}</div>
+														<div class='wordsColor'>{% autoescape off %}{{ newscomment4.words}}{% endautoescape %}</div>
 														<div>
 															<ul class='list-inline list-unstyled'>
 																<li><a id='newscomment4;{{newscomment4.id}};{{newscomment4.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
