@@ -6,6 +6,7 @@ class NewsPart(models.Model):
     part = models.CharField(max_length=100,null=True,verbose_name=u'板块')
     realPart = models.CharField(max_length=100,null=True,verbose_name=u'中文板块')
     open = models.BooleanField(default=True,verbose_name=u'是否公开')
+    secret = models.BooleanField(default=False,verbose_name=u'是否秘密')
     num = models.IntegerField(default=0,null=True,verbose_name=u'新闻数')
     user_num = models.IntegerField(default=0,verbose_name=u'订阅人数')
     description = models.CharField(max_length=100,default=u'这里是关于这个版块的一些描述',verbose_name=u'板块描述')
@@ -27,6 +28,7 @@ class News(models.Model):
      user = models.ForeignKey(MyUser, null=True,verbose_name=u'发表用户')
      newspart = models.ForeignKey(NewsPart, null=True,verbose_name=u'社群')
      open = models.BooleanField(default=True,verbose_name=u'是否公开')
+     secret = models.BooleanField(default=False,verbose_name=u'是否秘密')
      type = models.CharField(max_length=10,null=True,verbose_name=u'类型') 
      title = models.CharField(max_length=100,null=True,verbose_name=u'标题')
      

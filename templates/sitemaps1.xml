@@ -34,5 +34,5 @@
       <changefreq>always</changefreq>
 	  
    </url>
-   {% Sitemap showcredit %}{% Sitemap showeot %}{% Sitemap eotcomment %}{% Sitemap getCreditFile %}
+   {% Sitemap showcredit %}{% Sitemap showeot %}{% Sitemap eotcomment %}{% Sitemap getCreditFile %}{% Sitemap partNews %}{% Sitemap news %}
 </urlset> 

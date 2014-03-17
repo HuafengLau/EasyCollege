@@ -8,8 +8,16 @@ Disallow: /eot/uploadfile/
 Disallow: /eot/uploadImg/
 Disallow: /eot/store/
 Disallow: /eot/delStore/
+Disallow: /news/giveGold/
+Disallow: /news/watch/
+Disallow: /news/reply/
+Disallow: /news/uploadTextPic/
+Disallow: /news/mySubscription/
+Disallow: /news/comment/
+Disallow: /news/vote/
+Disallow: /news/comment/vote/
 
 User-agent:  *
 Allow: /log/
 Allow: /business/TheRich/
-{% Robot credit %}{% Robot eot %}{% Robot eotcomment %}{% Robot getCreditFile %}
+{% Robot credit %}{% Robot eot %}{% Robot eotcomment %}{% Robot getCreditFile %}{% Robot partNews %}{% Robot news %}

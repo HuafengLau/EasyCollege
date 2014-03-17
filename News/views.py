@@ -162,7 +162,7 @@ def which_news(request,news_part,small_part):
     SimilarHtml = 'Similar' + news_part + '.html'
     AdminHtml = 'Admin' + news_part + '.html'
     smallParts = [u'热门',u'最新',u'热议',u'得分',u'镀金']
-    newsParts = NewsPart.objects.filter(open=True).order_by('-num','-user_num','part')
+    newsParts = NewsPart.objects.filter(open=True,secret=False).order_by('-num','-user_num','part')
     top_newsParts = newsParts[:18]
     more_newsParts = newsParts[18:]
     if user.is_authenticated():
@@ -174,7 +174,7 @@ def which_news(request,news_part,small_part):
     if news_part != 'All':
         newses = News.objects.filter(newspart=part)
     else:
-        newses = News.objects.filter(open=True)
+        newses = News.objects.filter(open=True,secret=False)
     hot_newses = newses.order_by('-hot','-time')[:25]
     new_newses = newses.order_by('-time')[:25]
     controversial_newses = newses.order_by('-controversy','-time')[:25]
@@ -252,6 +252,7 @@ def submit_news(request,news_part, news_type):
                     link = form.cleaned_data['link'],
                     newspart = form.cleaned_data['newspart'],
                     open = form.cleaned_data['newspart'].open,
+                    secret=form.cleaned_data['newspart'].secret,
                     ups = 0,
                     downs = 0,              
                     gold = 0,
@@ -283,6 +284,7 @@ def submit_news(request,news_part, news_type):
                     text = form.cleaned_data['text'],
                     newspart = form.cleaned_data['newspart'],
                     open = form.cleaned_data['newspart'].open,
+                    secret=form.cleaned_data['newspart'].secret,
                     ups = 0,
                     downs = 0,              
                     gold = 0,
@@ -314,6 +316,7 @@ def submit_news(request,news_part, news_type):
                     pic = form.cleaned_data['pic'],
                     newspart = form.cleaned_data['newspart'], 
                     open = form.cleaned_data['newspart'].open,
+                    secret=form.cleaned_data['newspart'].secret,
                     ups = 0,
                     downs = 0,              
                     gold = 0,
@@ -345,6 +348,7 @@ def submit_news(request,news_part, news_type):
                     mp3 = form.cleaned_data['mp3'],
                     newspart = form.cleaned_data['newspart'],
                     open = form.cleaned_data['newspart'].open,
+                    secret=form.cleaned_data['newspart'].secret,
                     ups = 0,
                     downs = 0,              
                     gold = 0,

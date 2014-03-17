@@ -8,6 +8,7 @@ from Business.views import code_school
 from datetime import datetime
 import re
 import pytz
+from News.models import NewsPart,News
 
 register = template.Library()
 
@@ -129,6 +130,20 @@ class RobotNode(template.Node):
             for (k,v) in  code_school.items():          
                 s += 'Allow: /business/guide/getCreditFile/%s/\r\n' % k
             return s
+        elif str(self.sequence) == 'partNews':
+            s = ''
+            for part in NewsPart.objects.filter(secret=False):
+                for small in ['hot','new','controversial','top','gilded']:
+                    s += 'Allow: /news/%s/%s/\r\n' % (part.part, small)
+            return s
+        elif str(self.sequence) == 'news':
+            s ='' 
+            for news in News.objects.filter(secret=False):
+                for s1 in ['hot','new','controversial','top','gilded']:
+                    s += 'Allow: /news/%s/%s/showNews/%s/\r\n' % (news.newspart.part,s1,news.id)
+                    if not news.secret:
+                        s += 'Allow: /news/All/%s/showNews/%s/\r\n' % (s1,news.id)
+            return s
         else:
             return 'wrong Robot thing'
             
@@ -216,6 +231,52 @@ class SitemapNode(template.Node):
                 s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % school_time
                 s_temp3 = '\r\n      <changefreq>yearly</changefreq>\r\n\r\n   </url>\r\n'
                 s += s_temp1 + s_temp2 + s_temp3
+            return s
+        elif str(self.sequence) == 'partNews':
+            s = ''
+            now = datetime.now()
+            if now.month < 10:
+                month = '0%s' % now.month
+            else:
+                month = now.month
+            if now.day < 10:
+                day = '0%s' % now.day
+            else:
+                day = now.day
+            today = '%s-%s-%s' % (now.year,month,day)
+             
+            for part in NewsPart.objects.filter(secret=False):
+                for small in ['hot','new','controversial','top','gilded']:
+                    s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/news/%s/%s/</loc>\r\n' % (part.part, small)
+                    s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % today
+                    s_temp3 = '\r\n      <changefreq>always</changefreq>\r\n\r\n   </url>\r\n'
+                    s += s_temp1 + s_temp2 + s_temp3
+            return s
+        elif str(self.sequence) == 'news':
+            s = ''
+            now = datetime.now()
+            if now.month < 10:
+                month = '0%s' % now.month
+            else:
+                month = now.month
+            if now.day < 10:
+                day = '0%s' % now.day
+            else:
+                day = now.day
+            today = '%s-%s-%s' % (now.year,month,day)
+            for news in News.objects.filter(secret=False):
+                for s1 in ['hot','new','controversial','top','gilded']:
+                    url = 'http://www.collegeyi.com/news/%s/%s/showNews/%s/' % (news.newspart.part,s1,news.id)
+                    s_temp1 = '\r\n   <url>\r\n\r\n      <loc>%s</loc>\r\n' % url
+                    s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % today
+                    s_temp3 = '\r\n      <changefreq>always</changefreq>\r\n\r\n   </url>\r\n'
+                    s += s_temp1 + s_temp2 + s_temp3              
+                    if not news.secret:
+                        url = 'http://www.collegeyi.com/news/All/%s/showNews/%s/' % (s1,news.id)
+                        s_temp1 = '\r\n   <url>\r\n\r\n      <loc>%s</loc>\r\n' % url
+                        s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % today
+                        s_temp3 = '\r\n      <changefreq>always</changefreq>\r\n\r\n   </url>\r\n'
+                        s += s_temp1 + s_temp2 + s_temp3
             return s
         else:
             return 'wrong Robot thing'
