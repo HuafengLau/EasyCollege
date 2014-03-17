@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load my_tags %}
 
 {% block title %}
 个人中心 - 大学易
@@ -8,12 +9,13 @@
 {% block mainbody %}
 <div id='center_left_div'>
     <ul class="nav nav-tabs" id="centerTab">
-	  <li class="active"><a href="#center_my" data-toggle="tab">我的</a></li>
+	  {% if user.is_student %}<li class="active"><a href="#center_my" data-toggle="tab">我的</a></li>{% endif %}
 	  <li><a href="#center_settings" data-toggle="tab">设置</a></li>
 	  <li><a href="#center_book" data-toggle="tab">小册子</a></li>
 	</ul>
 
 	<div class="tab-content">
+	  {% if user.is_student %}
 	  <div class="tab-pane active" id="center_my">
 		  <div class='straight_div'>
 			<p class='font-15 text-center'>
@@ -195,10 +197,12 @@
 		   </div>       
 		</div>
 	  </div>
+	  {% endif %}
 	  <div class="tab-pane" id="center_settings">
 		  <div class='straight_div'>
 			<p class='font-15 text-center'>
 				直达
+				{% judgeStudent user %}<a href='#set_switchModel' class='straight'>#切换模式</a>{% else %}{% endjudgeStudent %}
 				<a href='#set_avatar' class='straight'>#头像</a>
 				<a href='#set_nicname' class='straight'>#昵称</a>
 				<a href='#set_ID' class='straight'>#身份卡</a>
@@ -206,6 +210,22 @@
 			</p>
 		  </div>
 			<table class='table table-bordered'>	
+				{% judgeStudent user %}
+				<tr><th class='text-center' colspan='2'>切换模式</th></tr>
+					{% if user.is_student %}
+					<tr>
+						<td>当前为大学生模式</td>
+						<td><a href='/center/switchModal/'>切换为主模式</a></td>
+					</tr>
+					{% else %}
+					<tr>
+						<td>当前为主模式</td>
+						<td><a href='/center/switchModal/'>切换为大学生模式</a></td>
+					</tr>
+					{% endif %}		
+				{% else %}
+				{% endjudgeStudent %}	
+				<tr><th colspan='2'>&nbsp;</th></tr>
 				<tr id='set_avatar'>
 				<th class='text-center' colspan='2'>设置头像</th>
 				</tr>		

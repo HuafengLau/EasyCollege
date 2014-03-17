@@ -9,6 +9,8 @@ from datetime import datetime
 import re
 import pytz
 from News.models import NewsPart,News
+from account.models import MyUser
+from University.models import University_info
 
 register = template.Library()
 
@@ -55,6 +57,53 @@ class IfintInstrNode(template.Node):
         if (self.negate and str(val1) not in val2) or (not self.negate and str(val1) in val2): 
             return self.nodelist_true.render(context) 
         return self.nodelist_false.render(context) 
+
+@register.tag 
+def judgeStudent(parser, token): 
+    return do_judgeStudent(parser, token, False) 
+ 
+@register.tag 
+def judgenotStudent(parser, token): 
+    return do_judgeStudent(parser, token, True) 
+ 
+ 
+def do_judgeStudent(parser, token, negate): 
+    bits = list(token.split_contents()) 
+    if len(bits) != 2: 
+        raise TemplateSyntaxError("%r takes one arguments" % bits[0]) 
+    end_tag = 'end' + bits[0] 
+    nodelist_true = parser.parse(('else', end_tag)) 
+    token = parser.next_token() 
+    if token.contents == 'else': 
+        nodelist_false = parser.parse((end_tag,)) 
+        parser.delete_first_token() 
+    else: 
+        nodelist_false = NodeList() 
+    val1 = parser.compile_filter(bits[1]) 
+    return do_judgeStudentNode(val1, nodelist_true, nodelist_false, negate) 
+ 
+ 
+class do_judgeStudentNode(template.Node): 
+    child_nodelists = ('nodelist_true', 'nodelist_false') 
+ 
+    def __init__(self, var1, nodelist_true, nodelist_false, negate): 
+        self.var1 = var1
+        self.nodelist_true, self.nodelist_false = nodelist_true, nodelist_false 
+        self.negate = negate 
+ 
+    def __repr__(self): 
+        return "<IfEqualNode>" 
+ 
+    def render(self, context): 
+        val1 = self.var1.resolve(context, True)
+        this_University_info = University_info.objects.get(id=val1.university_info_id)
+        if this_University_info.school == 'notStudent' and this_University_info.college== 'notStudent' and this_University_info.major == 'notStudent':
+            judge = False
+        else:
+            judge = True
+        if (self.negate and not judge) or (not self.negate and judge): 
+            return self.nodelist_true.render(context) 
+        return self.nodelist_false.render(context)
 
         
 class ShowCourseNode(template.Node):

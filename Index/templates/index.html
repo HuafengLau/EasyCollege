@@ -56,7 +56,7 @@
     <div class='clear_both' id='index_down'>
         <ul class="nav nav-tabs">
 		  <li class='active'><a href="#Feeds" data-toggle="tab">动态</a></li>
-		  <li><a href="#myCY" data-toggle="tab">课程</a></li>
+		  {% if user.is_student %}<li><a href="#myCY" data-toggle="tab">课程</a></li>{% endif %}
 		</ul>
 
 		<!-- Tab panes -->
@@ -115,7 +115,7 @@
 											{% endifequal %}
 											</span>
 										</div>
-										<div class='feedsDivCreatorInfo2'><small class='font-grey'>{% showDay feed.time %}&nbsp;{{ feed.time|date:"H:i:s" }}</small></div>
+										<div class='feedsDivCreatorInfo2'><small class='font-grey'>{% showDay feed.time %}&nbsp;{{ feed.time|date:"H:i" }}</small></div>
 									</div>
 								</div>
 								{% ifequal feed.type 'newsComment' %}
@@ -720,6 +720,7 @@
 				</div>
 			</div>				
 		  </div>
+		  {% if user.is_student %}
 		  <div class="tab-pane fade" id="myCY">
 			{% ifequal indexChoice 'index' %}
 			<div id='index_downleft' class='pull-left'>
@@ -1096,6 +1097,7 @@
             </div>
 			{% endifequal %}
 		  </div>
+		  {% endif %}
 		</div>
 		
 		

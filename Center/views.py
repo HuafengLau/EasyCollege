@@ -11,6 +11,7 @@ from EOT.models import Eot_data, Eot
 from Center.models import User_info
 from Index.form import AvatarForm
 from Index.models import Avatar
+from University.models import University_info
 
 @csrf_exempt
 @login_required(login_url='/log/')
@@ -231,3 +232,19 @@ def delStore(request, eot_id):
         this_user_info.store_eot = ''
     this_user_info.save()
     return HttpResponseRedirect('/center/')
+    
+def switchModal(request):
+    user = request.user
+    this_info = University_info.objects.get(id=user.university_info_id)
+    if this_info.school != 'notStudent' and this_info.college != 'notStudent' and this_info.major != 'notStudent':
+        if user.is_student:
+            user.is_student = False
+            user.save()
+        else:
+            user.is_student = True
+            user.save()
+        return HttpResponseRedirect('/center/')
+    else:
+        return render_to_response('404.html',locals(),
+            context_instance=RequestContext(request))
+        

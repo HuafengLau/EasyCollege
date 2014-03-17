@@ -158,9 +158,12 @@ def deal_register(request):
             email_add = 'http://mail.sogou.com/'
         else:
             email_add = None
-            
-        return render_to_response('register_step2.html',locals(),
-            context_instance=RequestContext(request))
+        
+        if request.POST['school'] == 'notStudent' and request.POST['college'] == 'notStudent':
+            return render_to_response('noStudent_step2.html',locals(),context_instance=RequestContext(request))
+        else:
+            return render_to_response('register_step2.html',locals(),
+                context_instance=RequestContext(request))
     except Exception, e:
         print e
         return render_to_response('404.html',locals(),
@@ -279,8 +282,10 @@ def activateUser(request, id):
         login(request, user)               
         
         if this_user.is_student:
+            print 'qqqqqqqqqqqqqq'
             return HttpResponseRedirect('/log/register/step3/')
         else:
+            print 'yyyyyyeyeye'
             return HttpResponseRedirect('/index/')
     except:
         return render_to_response('404.html',locals(),

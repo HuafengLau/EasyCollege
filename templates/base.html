@@ -53,7 +53,7 @@
                 <ul class="nav navbar-nav">
                     {% if indexHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/index/'>主页</a></li>
                     {% if centerHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/center/'>设置</a></li>
-                    {% if xuankeHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/eot/list/'>选课</a></li>
+                    {% if user.is_student %}{% if xuankeHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/eot/list/'>选课</a></li>{% endif %}
 					{% if newsHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/news/All/hot/'>方遒</a></li>
                 </ul>
               {% endblock %}
