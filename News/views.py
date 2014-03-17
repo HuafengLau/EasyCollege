@@ -848,7 +848,7 @@ def ke_upload_view(request):
     # 250MB - 214958080
     # 500MB - 429916160
     print 'tttttttttttttttttttttt'
-    ext_allowed = ['gif', 'jpg', 'jpeg', 'png']
+    ext_allowed = ['gif', 'jpg', 'jpeg', 'png','PNG','GIF','JPG','JPEG']
     max_size = 4194304 # 4M
     today = datetime.today()
     save_dir = '/news_TextPic/%d/%d/%d/' % (today.year, today.month, today.day)

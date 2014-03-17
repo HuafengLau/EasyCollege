@@ -144,7 +144,7 @@ class Teacher(models.Model):
         verbose_name_plural = u'评价老师'
     
 class Eot(models.Model):
-    course = models.CharField(max_length=30,null=True,verbose_name=u'课程名')
+    course = models.CharField(max_length=40,null=True,verbose_name=u'课程名')
     teacher = models.CharField(max_length=30,null=True,verbose_name=u'任课老师')
     credit = models.FloatField(null=True, verbose_name=u'学分')
     #university_info_id = models.CharField(max_length=30,null=True,verbose_name=u'院校信息id')
