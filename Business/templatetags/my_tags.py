@@ -400,7 +400,30 @@ def showDay(parser, token):
         
     sequence = parser.compile_filter(text_name)    
     return showDayNode(sequence)
-    
+  
+class showTimeHMNode(template.Node):
+    def __init__(self,sequence):
+        self.sequence = sequence
+
+    def render(self, context):
+        values = self.sequence.resolve(context, True)
+        hour = values.hour+8
+        minute = values.minute
+        if hour < 10:
+            hour = '0%s' % hour
+        if minute < 10:
+            minute = '0%s' % minute
+        return '%s:%s' % (hour,minute)
+            
+def showTimeHM(parser, token):
+    try:
+        tag_name, text_name= token.split_contents() 
+    except:
+        raise template.TemplateSyntaxError
+        
+    sequence = parser.compile_filter(text_name)    
+    return showTimeHMNode(sequence)
+  
 class newsScoreClassNode(template.Node):
     def __init__(self,sequence1,sequence2):
         self.sequence1 = sequence1
@@ -451,3 +474,4 @@ register.tag('Sitemap', Sitemap)
 register.tag('showNewsTime', showNewsTime)
 register.tag('showDay', showDay)
 register.tag('newsScoreClass', newsScoreClass)
+register.tag('showTimeHM', showTimeHM)
