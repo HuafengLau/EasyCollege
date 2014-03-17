@@ -5,7 +5,7 @@
    
       <loc>http://www.collegeyi.com/</loc>
 
-      <lastmod>2014-02-27</lastmod>
+      <lastmod>2014-03-17</lastmod>
 
       <changefreq>weekly</changefreq>
 
@@ -17,11 +17,22 @@
    
       <loc>http://www.collegeyi.com/log/</loc>
 
-      <lastmod>2014-02-27</lastmod>
+      <lastmod>2014-03-17</lastmod>
 
       <changefreq>weekly</changefreq>
 
       <priority>0.8</priority>
+	  
+   </url>
+   
+   <url>
+	   <loc>http://www.collegeyi.com/news/All/hot/</loc>
+	   
+	   <lastmod>{% Sitemap today %}</lastmod>
+
+       <changefreq>always</changefreq>
+
+       <priority>0.8</priority>
 	  
    </url>
    

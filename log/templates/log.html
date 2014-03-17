@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head lang='zh-CN'>
-    <title>{% block title %}大学易-分享学长学姐的经验、知识和见解{% endblock %}</title>
+    <title>{% block title %}大学易-分享生活、知识和见解{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="keywords" content="大学易/选课助手/课程点评/课程资料/大学生活" />
-	<meta name="description" content="大学易--帮助大学生选课，为大学生提供课程点评/课程资料，提供课程的详尽信息包括课程评分/教师评分/课程期末平均分/是否点名/是否有期中考等等。" />
+	<meta name="keywords" content="大学易/方遒社区/选课助手/" />
+	<meta name="description" content="大学易--方遒社区是一个类reddit的分享平台，你可以这里分享你的生活、知识和见解。此外，大学易还帮助大学生选课。" />
     
     <!-- Bootstrap -->
     <link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -26,7 +26,7 @@
     <div id='log_div' class="" >       
         <div id='slogan_div'>
             <h1>大学易</h1>
-            <p class="font-20">分享学长学姐的经验、知识和见解</P>
+            <p class="font-20">分享生活、知识和见解</P>
             <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#nothing_for_version">Learn more</button>
             <div>
             </div>
@@ -39,6 +39,7 @@
             </p>
         </div>-->
 		<div class='clear_both'>
+		<!--
 		<div id='siteinfo_div' class='pull-left'>
 			<p class='font-black'>帮你选课，<课程和教师评分><历年期末成绩的分布图>……信息一览无余</p>
 			<P>&nbsp;</p>
@@ -47,7 +48,7 @@
 			<p class='font-black'>轻松期末，<期末真题><绝密标准答案><复习资料>……资料一键下载</p>
 			<P>&nbsp;</p>
 			<P class='font-black'>More……</p>
-		</div>
+		</div>-->
         <div id='register_or_login' class='panel panel-info pull-right'>                       
             {% block log_or_register %}
             <div id='' class="panel-heading">
