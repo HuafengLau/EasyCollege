@@ -37,14 +37,20 @@ def deal_register(request):
     _code = request.POST.get('verify') or ''
     if not _code:
         register_message = u'你没有填写验证码！'
-        return render_to_response('register_step1.html',locals(),context_instance=RequestContext(request))
+        if request.POST['school'] == 'notStudent' and request.POST['college'] == 'notStudent':
+            return render_to_response('noStudent_step1.html',locals(),context_instance=RequestContext(request))
+        else:
+            return render_to_response('register_step1.html',locals(),context_instance=RequestContext(request))
 
     ca = Captcha(request)
     if ca.check(_code):
         pass
     else:
         register_message = u'验证码错误！'
-        return render_to_response('register_step1.html',locals(),context_instance=RequestContext(request))
+        if request.POST['school'] == 'notStudent' and request.POST['college'] == 'notStudent':
+            return render_to_response('noStudent_step1.html',locals(),context_instance=RequestContext(request))
+        else:
+            return render_to_response('register_step1.html',locals(),context_instance=RequestContext(request))
         
     if request.POST['major'].endswith(u'专业'):
         real_major = request.POST['major'][:-2]
@@ -70,9 +76,17 @@ def deal_register(request):
     try:
         exist_user = MyUser.objects.get(email=request.POST['email'])
         register_message = u'该邮箱已存在，直接登录或者换一个邮箱注册！'
-        return render_to_response('register_step1.html',locals(),context_instance=RequestContext(request))
+        if request.POST['school'] == 'notStudent' and request.POST['college'] == 'notStudent':
+            return render_to_response('noStudent_step1.html',locals(),context_instance=RequestContext(request))
+        else:
+            return render_to_response('register_step1.html',locals(),context_instance=RequestContext(request))
     except:
         pass
+    
+    if request.POST['school'] == 'notStudent' and request.POST['college'] == 'notStudent':
+        student = False
+    else:
+        student = True
     
     try:
         new_user = MyUser.objects.create_user(
@@ -82,10 +96,10 @@ def deal_register(request):
             email = request.POST['email'],
             name = '',
             nic_name = u'某某同学',
-            money = '0',
-            first_value = '0',
-            avatar = 'img/avatar.png'           
-            
+            money = 100,
+            first_value = 0,
+            avatar = 'img/avatar.png',
+            is_student = student
         )
         new_user.save()
         
@@ -211,7 +225,15 @@ def log(request):
             context_instance=RequestContext(request))
 
 def page_register(request):
+    return render_to_response('register_choose.html',locals(),
+        context_instance=RequestContext(request))
+        
+def page_register1(request):
     return render_to_response('register_step1.html',locals(),
+        context_instance=RequestContext(request))
+        
+def page_register2(request):
+    return render_to_response('noStudent_step1.html',locals(),
         context_instance=RequestContext(request))
         
 def verify_email(request):
@@ -241,7 +263,7 @@ def quit(request):
     
 def verify(request):
     ca =  Captcha(request)
-    ca.words = ['collegeyi','college','daxueyi','xuanke']
+    ca.words = ['collegeyi','reddit','daxueyi','fangqiu']
     ca.type = 'word'
     return ca.display()
     
@@ -255,8 +277,11 @@ def activateUser(request, id):
         password = this_user.stu_pwd
         user = authenticate(username=username, password=password)
         login(request, user)               
-  
-        return HttpResponseRedirect('/log/register/step3/')
+        
+        if this_user.is_student:
+            return HttpResponseRedirect('/log/register/step3/')
+        else:
+            return HttpResponseRedirect('/index/')
     except:
         return render_to_response('404.html',locals(),
             context_instance=RequestContext(request))

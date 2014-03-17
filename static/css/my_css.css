@@ -190,6 +190,14 @@
 	padding-right: 20%;
 }
 
+/* CSS for register_choose.html*/
+.registerChooseBtn{
+	margin-left: 20%;
+	width: 40%;
+	margin-top: 10px;
+	margin-bottom: 8px;
+}
+
 /* CSS for business.html */
 /* CSS for TheRich.html */
 #TheRich_info,#howToRich{

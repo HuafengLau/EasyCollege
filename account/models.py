@@ -9,7 +9,7 @@ from django.utils import timezone
 
 class MyUserManager(BaseUserManager):
     def create_user(self, stu_ID, stu_pwd, name, nic_name, email, money,
-        university_info_id,first_value, avatar,**extra_fields):
+        university_info_id,first_value, avatar,is_student,**extra_fields):
         
         now = timezone.now()
         
@@ -20,7 +20,7 @@ class MyUserManager(BaseUserManager):
         
         user = self.model(stu_ID=stu_ID, stu_pwd=stu_pwd, name=name, nic_name=nic_name,
             email=email, money=money,university_info_id= university_info_id,
-            first_value=first_value, last_login=now, avatar=avatar,**extra_fields)
+            first_value=first_value, last_login=now, avatar=avatar,is_student=is_student,**extra_fields)
                           
         user.set_password(stu_pwd)
         
@@ -30,12 +30,12 @@ class MyUserManager(BaseUserManager):
         
     
     def create_superuser(self, stu_ID, stu_pwd, name, nic_name, email, money,
-        university_info_id,first_value,avatar,**extra_fields):
+        university_info_id,first_value,avatar,is_student,**extra_fields):
         
         now = timezone.now()
         
         user = self.create_user(stu_ID, stu_pwd, name, nic_name, email, money,
-            university_info_id,first_value,avatar, **extra_fields)
+            university_info_id,first_value,avatar,is_student, **extra_fields)
             
 
         user.is_acitve=True
@@ -54,9 +54,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     university_info_id = models.CharField(max_length=30,verbose_name='school_id')
     first_value = models.IntegerField(verbose_name=u'honour')
     avatar = models.CharField(max_length=200,null=True,blank=True)
-    
-    
-    
+    is_student = models.BooleanField(default=True,verbose_name=u'是否学生')
+
     is_admin = models.BooleanField('staff status', default=False,
         help_text='flag for log into admin site.')
         
@@ -64,14 +63,14 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['stu_ID', 'stu_pwd', 'name', 'nic_name', 'money',
-        'university_info_id','first_value','avatar']
+        'university_info_id','first_value','avatar','is_student']
     objects = MyUserManager()
     
     def get_full_name(self):
-        return self.stu_ID
+        return self.nic_name
         
     def get_short_name(self):
-        return self.stu_ID
+        return self.nic_name
         
     def __unicode__(self):
         return self.email

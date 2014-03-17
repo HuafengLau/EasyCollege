@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}大学易 —— 注册选择{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block welcome %}
+{% endblock %} 
+
+{% block mainbody %}
+<div class='container'>
+	<p>请选择注册方式：</p>
+	<P class='text-danger'>（我们为学生用户提供了一些额外的功能，包括：选课、课程点评、课程资料下载等。选择学生模式注册后，你也可以在设置中选择切换到主模式）</p>
+	<a href='/log/page_register2/'>
+		<button class='btn btn-success form-control registerChooseBtn'>主模式</button>
+	</a>
+	<a href='/log/page_register1/'>
+		<button class='btn btn-success form-control registerChooseBtn'>学生模式（可切换）</button>
+	</a>
+</div>
+{% endblock %}
