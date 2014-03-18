@@ -1,9 +1,9 @@
 #coding:utf-8
 
 from django.contrib import admin
-from Business.models import Credit, Major_course
+#from Business.models import Credit, Major_course
 
-
+'''
 class CreditAdmin(admin.ModelAdmin):
     """docstring for CreditAdmin"""
     list_display = ('user', 'university_info_id', 'course_name', 'add_money')
@@ -19,4 +19,4 @@ class Major_courseAdmin(admin.ModelAdmin):
     
     
 admin.site.register(Credit, CreditAdmin)
-admin.site.register(Major_course, Major_courseAdmin)
+admin.site.register(Major_course, Major_courseAdmin)'''

@@ -1,6 +1,7 @@
 #coding:utf-8
 
 from django.contrib import admin
+'''
 from University.models import University_info
 
 class University_infoAdmin(admin.ModelAdmin):
@@ -10,4 +11,4 @@ class University_infoAdmin(admin.ModelAdmin):
     
 
     
-admin.site.register(University_info, University_infoAdmin)
+admin.site.register(University_info, University_infoAdmin)'''

@@ -1,6 +1,7 @@
 #coding:utf-8
 
 from django.contrib import admin
+'''
 from EOT.models import *
 
 
@@ -104,4 +105,4 @@ admin.site.register(Eot_mid_test_way, Eot_mid_test_wayAdmin)
 admin.site.register(Eot_final_test_way, Eot_final_test_wayAdmin)
 admin.site.register(Eot_reveal, Eot_revealAdmin)
 admin.site.register(Eot_usual_work, Eot_usual_workAdmin)
-admin.site.register(Eot_mid_test, Eot_mid_testAdmin)
+admin.site.register(Eot_mid_test, Eot_mid_testAdmin)'''
