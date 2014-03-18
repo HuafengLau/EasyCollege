@@ -171,10 +171,11 @@ def which_news(request,news_part,small_part):
         this_user_info = User_info.objects.get(user=user)
         subscriptions = this_user_info.subscription.split(';')[:-1]
         mySubs = allNewsPart.filter(part__in=subscriptions).order_by('part')
+        otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
     else:
         mySubs = None
+        otherParts = newsParts.order_by('part')
     
-    otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
         
     if news_part != 'All':
         newses = News.objects.filter(newspart=part)
@@ -416,10 +417,11 @@ def show_news(request,news_part,small_part,news_id):
         this_user_info = User_info.objects.get(user=user)
         subscriptions = this_user_info.subscription.split(';')[:-1]
         mySubs = allNewsPart.filter(part__in=subscriptions).order_by('part')
+        otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
     else:
         mySubs = None
+        otherParts = newsParts.order_by('part')
     
-    otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
     
     this_news = News.objects.get(id=news_id)
     if (this_news.ups+this_news.downs) != 0:
