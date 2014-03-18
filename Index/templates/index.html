@@ -19,9 +19,9 @@
 				<tr> 
 					<td id='avtar_td'>
 						{% ifequal user.avatar 'img/avatar.png'%}
-							 <img src='{{STATIC_URL}}img/avatar.png'  height="160" class="img-circle" alt='用户头像'/>                         
+							 <img src='{{STATIC_URL}}img/avatar.png'  height="160" alt='用户头像'/>                         
 						{% else %}
-							 <img src='{{MEDIA_URL}}{{user.avatar}}'  height="160" class="img-circle" alt='用户头像'/>
+							 <img src='{{MEDIA_URL}}{{user.avatar}}'  height="160" alt='用户头像'/>
 						{% endifequal %}
 					</td>
 					<td>
