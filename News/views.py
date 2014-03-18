@@ -20,7 +20,7 @@ from Index.models import Feeds_news,Feeds_comment,Feeds_followNews
 def score(ups,downs):
     return ups - downs
 
-# 当前为30倍票可保持原位
+# 当前为10倍票可保持原位
 def hot(ups, downs, time):
     s = score(ups, downs)
     order = log10(max(abs(s), 1))
@@ -31,7 +31,7 @@ def hot(ups, downs, time):
     else:
         sign = 0
     seconds = (time-datetime(2014,2,11,10,46,0,0,pytz.utc)).total_seconds()
-    return round(sign * order + seconds / 58492, 7)
+    return round(sign * order + seconds / (24*3600), 7)
 
 def controversy(ups, downs):
     return float(ups + downs) / max(abs(score(ups, downs)), 1)
