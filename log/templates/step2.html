@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}方遒社区 —— 注册{% endblock %}
+
+{% block nav_ul %}
+{% endblock %}
+
+{% block welcome %}
+{% endblock %} 
+
+{% block mainbody %}
+<div class='container'>
+	<h2>分享生活、知识和见解</h2>
+	<div>
+		<table class='table table-bordered'>
+			<tr>
+				<th>&nbsp;&nbsp;&nbsp;&nbsp;注册账号&nbsp;<span class='glyphicon glyphicon-ok font-green'></span></th>
+				<th bgcolor='#f9c62c'><span class='glyphicon glyphicon-hand-right font-green'></span>&nbsp;&nbsp;&nbsp;&nbsp;验证邮箱</th>					
+			</tr>
+		</table>
+		<p>---------------------------------------------------------------------------------------------------------------------</p>
+	</div>
+	<div>
+		<p class='text-center'>感谢您注册方遒社区，我们已经发了一封验证邮件至您的邮箱 <strong>{{email}}</strong>，点击对应链接后即可验证邮箱并获得100易币！</p>
+		<p class='text-center'>如果您一小时内还没有收到邮件，请致信 <strong>fangqiushequ@sina.com</strong></p>
+		<p class='text-center'>
+			ps.一周内未激活的账户将被自动删除
+		</p>
+		<p>&nbsp;</p>
+		<p class='text-center text-danger'>
+			<strong>Attention!</strong>根据用户的反映，您收到的验证邮件很可能在<span class='font-20 font-red'>垃圾箱</span>，把验证邮件标记为非垃圾邮件，下次您就可以正常收到方遒的邮件了~
+		</p>
+	</div>
+	<div>
+		{% if email_add %}
+		<a target='_blank' href='{{email_add}}'><button class='btn btn-success register-next-btn'>验证邮箱（获得100易币）</button></a>
+		{% endif %}
+		<a target='_blank' href='/news/All/hot/'><button class='btn btn-success register-next-btn'>进入方遒</button></a>
+	</div>
+{% endblock %}

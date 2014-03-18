@@ -1,11 +1,12 @@
 #coding:utf-8
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from log.views import log, verify
+from News.views import fangqiu
+from log.views import verify
 from Business.views import googelSearch, baiduSearch
 from django.conf import settings
 from django.views.generic import TemplateView
-from EOT.models import Eot
+#from EOT.models import Eot
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -25,12 +26,12 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^log/', include('log.urls')),
     url(r'^index/', include('Index.urls')),
-    url(r'^eot/', include('EOT.urls')),
+    #url(r'^eot/', include('EOT.urls')),
     url(r'^center/', include('Center.urls')),
     url(r'^affair/', include('Affair.urls')),
     url(r'^business/', include('Business.urls')),
     url(r'^news/', include('News.urls')),
-    (r'^$', log),
+    (r'^$', fangqiu),
     (r'^robots\.txt$', TemplateView.as_view(template_name= 'robots.txt', content_type='text/plain')),
     (r'^sitemaps1\.xml$', TemplateView.as_view(template_name= 'sitemaps1.xml', content_type='text/plain')),
     (r'^googlee7b5e63c07c5ed83.html/$', googelSearch),

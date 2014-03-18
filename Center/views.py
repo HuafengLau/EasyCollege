@@ -7,12 +7,170 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import PageNotAnInteger, Paginator, InvalidPage, EmptyPage
-from EOT.models import Eot_data, Eot
+#from EOT.models import Eot_data, Eot
 from Center.models import User_info
 from Index.form import AvatarForm
 from Index.models import Avatar
-from University.models import University_info
+#from University.models import University_info
 
+@csrf_exempt
+@login_required(login_url='/log/')
+def center(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            if 'nic_name' in request.GET:
+                user = request.user
+                user.nic_name = request.GET.get('nic_name')
+                user.save()
+                response = HttpResponse(u'更改昵称成功！')
+                return response
+            if 'sign' in request.GET:
+                if len(request.GET.get('sign')) > 50:
+                    response = HttpResponse(u'个性签名不能超过50个字哦！')
+                    return response
+                else:
+                    user = request.user
+                    this_user_info = User_info.objects.get(user=user)
+                    this_user_info.sign = request.GET.get('sign')
+                    this_user_info.save()
+                    response = HttpResponse(u'更改成功！')
+                    return response
+            if 'whenNewsbeGold' in request.GET:
+                if len(request.GET.get('whenNewsbeGold')) > 20:
+                    response = HttpResponse(u'自动回复不能超过20个字哦！')
+                    return response
+                else:
+                    user = request.user
+                    this_user_info = User_info.objects.get(user=user)
+                    this_user_info.when_newsbeGold = request.GET.get('whenNewsbeGold')
+                    this_user_info.save()
+                    response = HttpResponse(u'更改成功！')
+                    return response
+            if 'whenCommentbeGold' in request.GET:
+                if len(request.GET.get('whenCommentbeGold')) > 20:
+                    response = HttpResponse(u'自动回复不能超过20个字哦！')
+                    return response
+                else:
+                    user = request.user
+                    this_user_info = User_info.objects.get(user=user)
+                    this_user_info.when_commentbeGold = request.GET.get('whenCommentbeGold')
+                    this_user_info.save()
+                    response = HttpResponse(u'更改成功！')
+                    return response
+            if 'beWatched' in request.GET:
+                if len(request.GET.get('beWatched')) > 20:
+                    response = HttpResponse(u'自动回复不能超过20个字哦！')
+                    return response
+                else:
+                    user = request.user
+                    this_user_info = User_info.objects.get(user=user)
+                    this_user_info.when_beWatched = request.GET.get('beWatched')
+                    this_user_info.save()
+                    response = HttpResponse(u'更改成功！')
+                    return response
+        if request.method == 'POST':
+            if 'change' in request.POST:
+                user = request.user
+                if request.POST.get('change') == 'show_email':
+                    this_user_info = User_info.objects.get(user=user)
+                    if this_user_info.show_email:
+                        this_user_info.show_email = False
+                        this_user_info.save()
+                    else:
+                        this_user_info.show_email = True
+                        this_user_info.save()
+                    response = HttpResponse()
+                    return response
+                
+    else:
+        user = request.user
+        form = AvatarForm()     
+       
+        try: 
+            this_user_info = User_info.objects.get(user=user)
+        except:       
+            this_user_info = User_info(
+                user = new_user,
+                grade = u'公民',
+                subscription = 'ExplainCY;Funny;Home-news;Life;AskAnything;',
+                beWatched = '',
+                watching = '',
+                upVoted_news = '',
+                downVoted_news = '',
+                upVoted_comment1 = '',
+                upVoted_comment2 = '',
+                upVoted_comment3 = '',
+                upVoted_comment4 = '',
+                downVoted_comment1 = '',
+                downVoted_comment2 = '',
+                downVoted_comment3 = '',
+                downVoted_comment4 = '',
+                when_newsbeGold = u'你的支持是我分享的动力：）',
+                when_commentbeGold = u'下一次，我的评论将更有含金量：）',
+                when_beWatched = u'感谢关注：）',
+                agree_num = 0
+            )
+            this_user_info.save()               
+            
+        centerHTML = True
+        return render_to_response('center.html',locals(),
+            context_instance=RequestContext(request))
+
+@csrf_exempt 
+@login_required(login_url='/log/')    
+def upload_avatar(request):
+    if request.method == 'POST':
+        form = AvatarForm(request.POST,request.FILES)
+        if form.is_valid():
+            try:
+                old_avatar = Avatar.objects.get(user = request.user)
+                old_avatar.delete()
+                old_file = settings.MEDIA_ROOT + '/' + str(old_avatar.photo)
+                if os.path.isfile(old_file):
+                    os.remove(old_file)
+                
+            except:
+                pass
+            info = Avatar(
+                photo = form.cleaned_data['photo'],
+                user = request.user
+            )
+            info.save()
+            name = str(info.photo).split('/')[1]
+            user = request.user
+            user.avatar = 'avatar/%s' % name
+            user.save()
+        return HttpResponseRedirect('/center/#set_avatar')
+
+'''        
+def delStore(request, eot_id):
+    user = request.user
+    this_user_info = User_info.objects.get(user=user)
+    storeEot_list = this_user_info.store_eot.split(';')[:-1]
+    storeEot_list.remove('%s' % eot_id)
+    if storeEot_list:
+        s = ';'.join(storeEot_list)
+        this_user_info.store_eot = s + ';'
+    else:
+        this_user_info.store_eot = ''
+    this_user_info.save()
+    return HttpResponseRedirect('/center/')
+  
+def switchModal(request):
+    user = request.user
+    this_info = University_info.objects.get(id=user.university_info_id)
+    if this_info.school != 'notStudent' and this_info.college != 'notStudent' and this_info.major != 'notStudent':
+        if user.is_student:
+            user.is_student = False
+            user.save()
+        else:
+            user.is_student = True
+            user.save()
+        return HttpResponseRedirect('/center/')
+    else:
+        return render_to_response('404.html',locals(),
+            context_instance=RequestContext(request))
+          
 @csrf_exempt
 @login_required(login_url='/log/')
 def center(request):
@@ -193,58 +351,5 @@ def center(request):
         centerHTML = True
         return render_to_response('center.html',locals(),
             context_instance=RequestContext(request))
-
-@csrf_exempt 
-@login_required(login_url='/log/')    
-def upload_avatar(request):
-    if request.method == 'POST':
-        form = AvatarForm(request.POST,request.FILES)
-        if form.is_valid():
-            try:
-                old_avatar = Avatar.objects.get(user = request.user)
-                old_avatar.delete()
-                old_file = settings.MEDIA_ROOT + '/' + str(old_avatar.photo)
-                if os.path.isfile(old_file):
-                    os.remove(old_file)
-                
-            except:
-                pass
-            info = Avatar(
-                photo = form.cleaned_data['photo'],
-                user = request.user
-            )
-            info.save()
-            name = str(info.photo).split('/')[1]
-            user = request.user
-            user.avatar = 'avatar/%s' % name
-            user.save()
-        return HttpResponseRedirect('/center/#set_avatar')
-            
-def delStore(request, eot_id):
-    user = request.user
-    this_user_info = User_info.objects.get(user=user)
-    storeEot_list = this_user_info.store_eot.split(';')[:-1]
-    storeEot_list.remove('%s' % eot_id)
-    if storeEot_list:
-        s = ';'.join(storeEot_list)
-        this_user_info.store_eot = s + ';'
-    else:
-        this_user_info.store_eot = ''
-    this_user_info.save()
-    return HttpResponseRedirect('/center/')
-    
-def switchModal(request):
-    user = request.user
-    this_info = University_info.objects.get(id=user.university_info_id)
-    if this_info.school != 'notStudent' and this_info.college != 'notStudent' and this_info.major != 'notStudent':
-        if user.is_student:
-            user.is_student = False
-            user.save()
-        else:
-            user.is_student = True
-            user.save()
-        return HttpResponseRedirect('/center/')
-    else:
-        return render_to_response('404.html',locals(),
-            context_instance=RequestContext(request))
+'''
         

@@ -5,9 +5,9 @@ from django.db import models
 
 class User_info(models.Model):
     user = models.ForeignKey(MyUser, null=True,verbose_name=u'用户')
-    store_eot = models.CharField(max_length=250,null=True,blank=True,verbose_name=u'收藏的课程')    
-    download_Eotdata = models.CharField(max_length=250,null=True, blank=True,verbose_name=u'下载的资料')
-    nocomment_Eotdata = models.CharField(max_length=250,null=True, blank=True, verbose_name=u'未评价资料')
+    #store_eot = models.CharField(max_length=250,null=True,blank=True,verbose_name=u'收藏的课程')    
+    #download_Eotdata = models.CharField(max_length=250,null=True, blank=True,verbose_name=u'下载的资料')
+    #nocomment_Eotdata = models.CharField(max_length=250,null=True, blank=True, verbose_name=u'未评价资料')
     grade = models.CharField(max_length=250,null=True, blank=True,verbose_name=u'等级')
     show_email = models.BooleanField(default=True,verbose_name=u'是否显示email')
     sign = models.CharField(max_length=50,default=u'ta什么也没说',verbose_name=u'个性签名')
@@ -28,7 +28,6 @@ class User_info(models.Model):
     when_commentbeGold = models.CharField(max_length=20,default=u'下一次，我的评论将更有含金量：）', blank=True,verbose_name=u'回应评论镀金')
     #when_beAgreed = models.CharField(max_length=20,default=u'感谢赞同：）', blank=True,verbose_name=u'回应赞同')
     when_beWatched = models.CharField(max_length=20,default=u'感谢关注：）', blank=True,verbose_name=u'回应关注')
-    agree_num = models.IntegerField(default=0,blank=True,verbose_name=u'获赞')
 
     def __unicode__(self):
         return self.user

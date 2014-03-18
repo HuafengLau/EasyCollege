@@ -5,9 +5,9 @@
    
       <loc>http://www.collegeyi.com/</loc>
 
-      <lastmod>2014-03-17</lastmod>
+      <lastmod>2014-03-18</lastmod>
 
-      <changefreq>weekly</changefreq>
+      <changefreq>always</changefreq>
 
       <priority>0.8</priority>
 	  
@@ -17,7 +17,7 @@
    
       <loc>http://www.collegeyi.com/log/</loc>
 
-      <lastmod>2014-03-17</lastmod>
+      <lastmod>2014-03-18</lastmod>
 
       <changefreq>weekly</changefreq>
 
@@ -45,5 +45,5 @@
       <changefreq>always</changefreq>
 	  
    </url>
-   {% Sitemap showcredit %}{% Sitemap showeot %}{% Sitemap eotcomment %}{% Sitemap getCreditFile %}{% Sitemap partNews %}{% Sitemap news %}
+   {% Sitemap partNews %}{% Sitemap news %}
 </urlset> 

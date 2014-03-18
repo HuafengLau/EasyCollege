@@ -5,9 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from Business.models import Credit, Major_course
-from Business.views import GPA, wise_analyzeCreditFile
-from University.models import University_info
+#from Business.models import Credit, Major_course
+#from Business.views import GPA, wise_analyzeCreditFile
+#from University.models import University_info
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import PageNotAnInteger, Paginator, InvalidPage, EmptyPage
 from Index.form import AvatarForm
@@ -15,10 +15,10 @@ from Index.models import Feeds_news,Feeds_comment,Feeds_followNews
 from django.conf import settings
 from account.models import MyUser
 from bs4 import BeautifulSoup
-from log.views import URP_school,wise_school,school_code
+#from log.views import URP_school,wise_school,school_code
 from Center.models import Honour
 from Center.models import User_info
-from EOT.models import Eot_data
+#from EOT.models import Eot_data
 import os
 import random
 import time
@@ -28,8 +28,44 @@ import chardet
 import cookielib
 import bs4
 
+def index(request):
+    user = request.user
+    Feeds1 = Feeds_followNews.objects.filter(owner=user)
+    Feeds2 = Feeds_news.objects.filter(owner=user)
+    Feeds3 = Feeds_comment.objects.filter(owner=user)
+    Feeds = sorted(list(Feeds1) + list(Feeds2) + list(Feeds3), key=lambda x: x.time,reverse = True)
+    
+    my_user_info = User_info.objects.get(user=user)
+    if my_user_info.watching:
+        list1 = my_user_info.watching.split(';')[:-1]
+        my_watching = MyUser.objects.filter(id__in=list1)
+    if my_user_info.beWatched:
+        list2 = my_user_info.beWatched.split(';')[:-1]
+        my_beWatched = MyUser.objects.filter(id__in=list2) 
+        
+    indexHTML = True
+    
+    return render_to_response('index.html',locals(),
+        context_instance=RequestContext(request))
+    
+def loading_gif(request):
+    if request.is_ajax() and request.method == 'GET':
+        if 'loading' in request.GET:
+            print settings.STATIC_URL
+            temp = "<img src='%simg/loading.gif' alt='URP检测'/>" % settings.STATIC_URL
+            response = HttpResponse(temp)
+            return response
 
-
+def get_idCard(request):
+    if request.is_ajax() and request.method == 'GET':
+        if 'id' in request.GET:    
+            this_id = request.GET.get('id')
+            this_user = MyUser.objects.get(id=this_id)
+            this_user_info = User_info.objects.get(user=this_user)
+            return render_to_response('idCard.html',locals(),
+                context_instance=RequestContext(request))            
+        
+'''        
 def display(request,user,message,HTML):                  
     credits = Credit.objects.filter(user=user)
     if not credits:
@@ -101,7 +137,6 @@ def display(request,user,message,HTML):
     
     return render_to_response('index.html',locals(),
         context_instance=RequestContext(request))
-
 
 @csrf_exempt
 @login_required(login_url='/log/') 
@@ -283,8 +318,7 @@ def index(request):
             message = None
             HTML = 'index2'
             return display(request,user,message,HTML)
-
-            
+         
 @login_required(login_url='/log/')
 def wise_teacher(request):
     user = request.user
@@ -324,14 +358,6 @@ def del_credit(request, credit_id):
         pass
     return HttpResponseRedirect('/index/')
 
-def loading_gif(request):
-    if request.is_ajax() and request.method == 'GET':
-        if 'loading' in request.GET:
-            print settings.STATIC_URL
-            temp = "<img src='%simg/loading.gif' alt='URP检测'/>" % settings.STATIC_URL
-            response = HttpResponse(temp)
-            return response
- 
 @login_required(login_url='/log/') 
 def verify_URP(request):
     if request.is_ajax() and request.method == 'GET':
@@ -488,15 +514,9 @@ def wise_getCredit(request,school_code):
         message = u'上传的源代码文件有误！如果您确定上传了正确的文件，请联系管理员'
         HTML = 'index'
         return display(request,user,message,HTML)
+'''
         
-def get_idCard(request):
-    if request.is_ajax() and request.method == 'GET':
-        if 'id' in request.GET:    
-            this_id = request.GET.get('id')
-            this_user = MyUser.objects.get(id=this_id)
-            this_user_info = User_info.objects.get(user=this_user)
-            return render_to_response('idCard.html',locals(),
-                context_instance=RequestContext(request))
+
         
             
                  

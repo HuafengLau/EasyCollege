@@ -158,9 +158,7 @@ def which_news(request,news_part,small_part):
     newsHTML = True
     part = NewsPart.objects.get(part=news_part)
     smallPart = small_part
-    RuleHtml = 'Rule'+ news_part + '.html'
     SimilarHtml = 'Similar' + news_part + '.html'
-    AdminHtml = 'Admin' + news_part + '.html'
     smallParts = [u'热门',u'最新',u'热议',u'得分',u'镀金']
     newsParts = NewsPart.objects.filter(open=True,secret=False).order_by('-num','-user_num','part')
     top_newsParts = newsParts[:18]
@@ -184,6 +182,9 @@ def which_news(request,news_part,small_part):
     return render_to_response('newsBase.html',locals(),
         context_instance=RequestContext(request))
 
+def fangqiu(request):
+    return which_news(request,'All','hot')
+        
 @login_required(login_url='/log/')         
 def submit_news(request,news_part, news_type):
     user = request.user

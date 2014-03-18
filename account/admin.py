@@ -17,8 +17,7 @@ class UserCreationForm(forms.ModelForm):
     
     class Meta:
         model = MyUser
-        fields = ('stu_ID', 'stu_pwd', 'name', 'nic_name', 'email', 'money',
-            'university_info_id','first_value','avatar','is_student')
+        fields = ('stu_pwd', 'nic_name', 'email', 'money','agree_num','avatar')
         
     def clean_password2(self):
         #Check that the two password entries match
@@ -45,8 +44,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = MyUser
-        fields = ['stu_ID', 'stu_pwd', 'name', 'nic_name', 'email', 'money',
-            'university_info_id','first_value','avatar','is_student','is_active', 'is_admin']
+        fields = ['stu_pwd', 'nic_name', 'email', 'money','agree_num','avatar','is_active', 'is_admin']
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -63,23 +61,21 @@ class MyUserAdmin(UserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     
-    list_display = ('stu_ID','name','first_value','money','email','university_info_id',
-        'nic_name', 'avatar','is_student','is_admin','is_active')
+    list_display = ('email','money','agree_num','nic_name', 'avatar','is_admin','is_active')
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('university_info_id', 'stu_ID','name', 'first_value','money','nic_name','avatar','is_student')}),
+        ('Personal info', {'fields': ('money','agree_num','nic_name','avatar')}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'university_info_id', 'stu_ID','name', 'first_value','money',
-                'nic_name','password1', 'password2')}
+            'fields': ('email', 'money','agree_num', 'nic_name','password1', 'password2')}
         ),
     )
-    search_fields = ('university_info_id',)
-    ordering = ('university_info_id',)
+    search_fields = ('email',)
+    ordering = ('email',)
     filter_horizontal = ()
     
 # Now register the new UserAdmin...

@@ -2,12 +2,7 @@
 Disallow: /index/
 Disallow: /affair/
 Disallow: /center/
-Disallow: /eot/value/
-Disallow: /eot/poll/
-Disallow: /eot/uploadfile/
-Disallow: /eot/uploadImg/
-Disallow: /eot/store/
-Disallow: /eot/delStore/
+Disallow: /eot/
 Disallow: /news/giveGold/
 Disallow: /news/watch/
 Disallow: /news/reply/
@@ -20,4 +15,4 @@ Disallow: /news/comment/vote/
 User-agent:  *
 Allow: /log/
 Allow: /business/TheRich/
-{% Robot credit %}{% Robot eot %}{% Robot eotcomment %}{% Robot getCreditFile %}{% Robot partNews %}{% Robot news %}
+{% Robot partNews %}{% Robot news %}

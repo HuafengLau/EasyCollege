@@ -8,8 +8,7 @@ from django.utils import timezone
 
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, stu_ID, stu_pwd, name, nic_name, email, money,
-        university_info_id,first_value, avatar,is_student,**extra_fields):
+    def create_user(self, stu_pwd, nic_name, email, money,agree_num,avatar,**extra_fields):
         
         now = timezone.now()
         
@@ -18,9 +17,8 @@ class MyUserManager(BaseUserManager):
             
         email = MyUserManager.normalize_email(email)
         
-        user = self.model(stu_ID=stu_ID, stu_pwd=stu_pwd, name=name, nic_name=nic_name,
-            email=email, money=money,university_info_id= university_info_id,
-            first_value=first_value, last_login=now, avatar=avatar,is_student=is_student,**extra_fields)
+        user = self.model(stu_pwd=stu_pwd, nic_name=nic_name,
+            email=email, money=money,agree_num=agree_num,last_login=now, avatar=avatar,**extra_fields)
                           
         user.set_password(stu_pwd)
         
@@ -29,15 +27,12 @@ class MyUserManager(BaseUserManager):
         return user
         
     
-    def create_superuser(self, stu_ID, stu_pwd, name, nic_name, email, money,
-        university_info_id,first_value,avatar,is_student,**extra_fields):
+    def create_superuser(self, stu_pwd, nic_name, email, money,agree_num,avatar,**extra_fields):
         
         now = timezone.now()
         
-        user = self.create_user(stu_ID, stu_pwd, name, nic_name, email, money,
-            university_info_id,first_value,avatar,is_student, **extra_fields)
+        user = self.create_user(stu_pwd, nic_name, email, money,agree_num,avatar, **extra_fields)
             
-
         user.is_acitve=True
         user.is_admin=True
 
@@ -45,25 +40,25 @@ class MyUserManager(BaseUserManager):
         return user
         
 class MyUser(AbstractBaseUser, PermissionsMixin):
-    stu_ID = models.CharField(max_length=20,)
+    #stu_ID = models.CharField(max_length=20,)
     stu_pwd = models.CharField(max_length=20)
-    name = models.CharField(max_length=25,null=True, blank=True)
+    #name = models.CharField(max_length=25,null=True, blank=True)
     nic_name = models.CharField(max_length=20)
     email = models.EmailField(verbose_name='email', unique=True)
     money = models.IntegerField(verbose_name=u'money')
-    university_info_id = models.CharField(max_length=30,verbose_name='school_id')
-    first_value = models.IntegerField(verbose_name=u'honour')
+    agree_num = models.IntegerField(default=0,blank=True,verbose_name=u'获赞')
+    #university_info_id = models.CharField(max_length=30,verbose_name='school_id')
+    #first_value = models.IntegerField(verbose_name=u'honour')
     avatar = models.CharField(max_length=200,null=True,blank=True)
-    is_student = models.BooleanField(default=True,verbose_name=u'是否学生')
+    #is_student = models.BooleanField(default=True,verbose_name=u'是否学生')
 
     is_admin = models.BooleanField('staff status', default=False,
         help_text='flag for log into admin site.')
         
-    is_active = models.BooleanField('active', default=False)
+    is_active = models.BooleanField('active', default=True)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['stu_ID', 'stu_pwd', 'name', 'nic_name', 'money',
-        'university_info_id','first_value','avatar','is_student']
+    REQUIRED_FIELDS = ['stu_pwd', 'nic_name', 'money','agree_num','avatar']
     objects = MyUserManager()
     
     def get_full_name(self):

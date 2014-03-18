@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head lang='zh-CN'>
-    <title>{% block title %}方遒-分享生活、知识和见解{% endblock %}</title>
+    <title>{% block title %}大学易-分享生活、知识和见解{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="keywords" content="方遒社区/方遒网/方遒/" />
-	<meta name="description" content="方遒社区是一个类reddit的分享平台，你可以这里分享你的生活、知识和见解。" />
+	<meta name="keywords" content="大学易/方遒社区/选课助手/" />
+	<meta name="description" content="大学易--方遒社区是一个类reddit的分享平台，你可以这里分享你的生活、知识和见解。此外，大学易还帮助大学生选课。" />
     
     <!-- Bootstrap -->
     <link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -31,7 +31,24 @@
             <div>
             </div>
         </div>
+        <!--
+		<div id='log_warning_div' class="alert alert-danger alert-dismissable pull-right">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <p><strong>Warning!</strong>
+            由于IE浏览器（特别是低于IE8的版本）并不能很好的支持最新的网页技术，我们强烈建议您通过其他的浏览器来使用大学易，以获得最佳的体验        
+            </p>
+        </div>-->
 		<div class='clear_both'>
+		<!--
+		<div id='siteinfo_div' class='pull-left'>
+			<p class='font-black'>帮你选课，<课程和教师评分><历年期末成绩的分布图>……信息一览无余</p>
+			<P>&nbsp;</p>
+			<p class='font-black'>安全逃课，<点名情况><点名方式><期末考方式和难度>……风险自在心中</p>
+			<P>&nbsp;</p>
+			<p class='font-black'>轻松期末，<期末真题><绝密标准答案><复习资料>……资料一键下载</p>
+			<P>&nbsp;</p>
+			<P class='font-black'>More……</p>
+		</div>-->
         <div id='register_or_login' class='panel panel-info pull-right'>                       
             {% block log_or_register %}
             <div id='' class="panel-heading">
@@ -89,6 +106,23 @@
         </div>    
     </div>
 	<div id='log_bottom_div' class='clear_both'>
+		<div id='log_info_div'>
+		<p class='text-left'>大学易当前支持的：</p>
+		<p class='text-left'>
+			<span data-toggle="tooltip" title="可通过提供学生系统的账号和密码来上传课程数据" class='tooltip_p'>URP_school</span>
+		</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% for item in URP_list %}<span>{{item}}&nbsp;&nbsp;&nbsp;</span>{% endfor %}</p>
+		<p class='text-left'>
+			<span data-toggle="tooltip" title="可通过提供成绩页面源代码来上传课程数据" class='tooltip_p'>Wise_school</span>
+		</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% for key,value in wise_list.items %} 
+			<span><a target='_blank' href='business/guide/getCreditFile/{{value}}'>{{key}}</a>&nbsp;&nbsp;</span>{% endfor %}
+		</p>
+		<p class='text-left'>
+			<span data-toggle="tooltip" title="需要手工添加课程数据" class='tooltip_p'>Other_school</span>
+		</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所有中国高校</p>
+		</div>
 		<div id='log_bottom_nav'>
 		<p class='text-center'>
 			<a class='hand_over' data-toggle="modal" data-target="#nothing_for_version">
