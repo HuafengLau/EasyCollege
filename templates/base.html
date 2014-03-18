@@ -47,14 +47,13 @@
                 </button>
                 <a id='base_brand' class="navbar-brand hand_over" data-toggle="modal" data-target="#version_info">方遒社区</a>
               </div>
-
+			  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <!-- Collect the nav links, forms, and other content for toggling -->
               {% block nav_ul %}
                 <ul class="nav navbar-nav">
-                    {% if newsHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/news/All/hot/'>方遒</a></li>
+                    {% if newsHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/news/All/new/'>方遒</a></li>
 					{% if indexHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/index/'>个人中心</a></li>
                     {% if centerHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/center/'>设置</a></li>
-                    <!--{% if user.is_student %}{% if xuankeHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/eot/list/'>选课</a></li>{% endif %}-->	
                 </ul>
               {% endblock %}
               
@@ -67,6 +66,7 @@
               </ul>
               {% endblock %}             
               <!-- /.navbar-collapse -->
+			  </div>
             </div>
         </div>
 

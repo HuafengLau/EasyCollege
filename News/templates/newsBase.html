@@ -2,15 +2,15 @@
 {% load my_tags %}
 
 {% block title %}
-分享生活、知识和见解 - 方遒社区
+一个用户投票投出来的分享社区 - 方遒社区
 {% endblock %}
 
 
 
 {% block mainbody %}
-<div id='fangqiu'>
-	<div style='margin-bottom:0px;padding-bottom:0px;'>
-		<div>
+<div id='fangqiu' >
+	<div style='padding: 0 15px;'>
+		<div class='hidden-xs'>
 		  <ul class="nav nav-pills pull-left">	
 			<li class="dropdown">
 			  <a id="drop4" role="button" data-toggle="dropdown" href="#">我的订阅<b class="caret"></b></a> 
@@ -45,9 +45,43 @@
 		  </ul> <!-- /tabs -->
 		  </div>
 		</div> <!-- /example -->
+		<div class='visible-xs row'>
+			<div class='col-xs-12'>
+				<ul class='nav nav-pills'>
+					<li class='dropdown'>
+						<a id='drop11'' role='button' data-toggle='dropdown' href='#'>
+						我的订阅<b class='caret'></b>
+						</a>
+						<ul class='dropdown-menu' role='menu' aria-labelledby='drop11'>
+							{% for sub in  mySubs %}
+							<li role='presentation'>
+								<a role='menuitem' tabindex='-1' href='/news/{{sub.part}}/hot/'>{{sub.part}}/{{sub.realPart}}</a>
+							</li>
+							{% empty %}
+							<li role='presentation'>
+								你没有登陆或者没有订阅
+							</li>
+							{% endfor %}
+						</ul>
+					</li>
+					<li class='dropdown'>
+						<a id='drop22'' role='button' data-toggle='dropdown' href='#'>
+						其他社群<b class='caret'></b>
+						</a>
+						<ul class='dropdown-menu' role='menu' aria-labelledby='drop22'>
+							{% for part in otherParts %}
+							<li role='presentation'>
+								<a role='menuitem' tabindex='-1' href='/news/{{part.part}}/hot/'>{{part.part}}/{{part.realPart}}</a>
+							</li>
+							{% endfor %}
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
 		<hr class='MT_0px'/>
-		<div id='newsMainDiv' class='clear_both'>
-			<div id='LeftDiv' class='pull-left'>
+		<div id='newsMainDiv' class='row'>
+			<div id='LeftDiv' class='col-xs-12 col-md-8'>
 				{% block LeftDiv %}
 				<ul class="nav nav-tabs">
 				  <li id='smallPartLi'><b>{{ part.part }}</b></li>
@@ -404,7 +438,7 @@
 				{% endblock %}
 			</div>
 			
-			<div id='RightDiv' class='pull-left'>
+			<div id='RightDiv' class='col-xs-6 col-md-3 col-md-offset-1'>
 				{% block RightDiv %}
 					{% block news_details %}
 					{% endblock %}
@@ -475,9 +509,9 @@
 					</div>
 					{% endblock %}
 					{% block partInfo %}
-					<div id='partInfoDiv'>
+					<div id='partInfoDiv' class='hidden-xs'>
 						<p><a class='font-333' href='/news/{{part.part}}/hot/'><strong>{{part.part}} / {{part.realPart}}</strong></a></p>
-						<p>{% if not part.open%}（隐藏的）{% endif %}{{part.description}}</p>
+						<p>{% if not part.open%}（非公开的）{% endif %}{{part.description}}</p>
 						{% ifnotequal part.part 'All' %}
 						<p>{{part.user_num}}名读者&nbsp;&nbsp;&nbsp;
 						{% for info in user.user_info_set.all %}
@@ -492,7 +526,7 @@
 					<hr/>
 					{% endblock %}
 					{% block Rule %}
-					<div id='partRuleDiv'>
+					<div id='partRuleDiv' class='hidden-xs'>
 						<p><strong>本版块公约</strong></p>
 						<div class='RuleDiv'>
 							<p class='hand_over RuleP'><b>Ⅰ. 遵守方遒公约</b></p>
@@ -527,15 +561,15 @@
 						</div>
 					</div>
 					{% ifnotequal part.part 'All' %}
-					<hr/>
-					<div id='partSimilarDiv'>				
+					<hr/  class='hidden-xs'>
+					<div id='partSimilarDiv'  class='hidden-xs'>				
 						<p><strong>相似的社群</strong></p>
 						{% include SimilarHtml %}
 						<p>没有找到想要的板块？创建一个吧，只要不和现有板块完全重合，100%通过！移步 <a href='/news/SuggestCY'>SuggestCY / 建议</a></p>
 					</div>
 					<hr/>
 					{% endifnotequal %}
-					<div id='partAdminDiv'>
+					<div id='partAdminDiv'  class='hidden-xs'>
 						<p><strong>社群管理员</strong></p>
 						<ul>
 						{% for partadmin in part.partadmin_set.all %}

@@ -12,17 +12,30 @@
 
 {% block LeftDiv %}
 <div>
-	<div id='news_user' class='clear_both'>	
-		<div class='pull-left MT_7px MR_9px'>
-			<span id='{{this_news.user.id}}' class='hand_over ID_card'>{{this_news.user.nic_name}}</span>&nbsp;&nbsp;&nbsp;{% for info in user.user_info_set.all %}{{ info.grade }}{% endfor %}</div>
-		<div class='pull-left MT_3px'>
-		{% if this_news.user.honour_set.all %}
-			{% for honour in this_news.user.honour_set.all %}
-				<img width='25px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
-			{% endfor %}
-		{% endif %}
+	<div class='container visible-xs'>
+		<div class='row'>
+			<div class='col-xs-12'>
+				<p><a class='font-333' href='/news/{{part.part}}/hot/'><strong>{{part.part}} / {{part.realPart}}</strong></a></p>
+				<p>{% if not part.open%}（非公开的）{% endif %}{{part.description}}</p>
+				{% ifnotequal part.part 'All' %}
+				<p>{{part.user_num}}名读者&nbsp;&nbsp;&nbsp;
+				{% for info in user.user_info_set.all %}
+					{% if part.part in info.subscription %}
+						<a id='{{part.part}}' class='subscriptionClick hand_over'>已订阅（点击取消）</a>
+					{% else %}
+						<a id='{{part.part}}' class='subscriptionClick hand_over'>未订阅（点击订阅）</a>
+					{% endif %}
+				{% endfor %}</p>
+				{% endifnotequal %}
+			</div>
+			<hr/>
 		</div>
-		<div id='watchDiv' class='pull-left'>
+	</div>
+	<div id='news_user' class='clear_both'>	
+		<div class='MT_7px MR_9px'>
+			<p>&nbsp;&nbsp;分享人：
+			<span id='{{this_news.user.id}}' class='hand_over ID_card font-link'>{{this_news.user.nic_name}}</span>&nbsp;&nbsp;&nbsp;
+			累计获得&nbsp;{{this_news.user.agree_num}}&nbsp;个赞同&nbsp;&nbsp;&nbsp;
 			{% if need_log %}
 			{% else %}
 				{% ifnotequal this_news.user.id user.id %}
@@ -35,9 +48,10 @@
 					{% endfor %}
 				{% endifnotequal %}
 			{% endif %}
+			</p>
 		</div>
 	</div>
-	<div class='clear_both MT_80px'>
+	<div class='clear_both'>
 		<div id='{{this_news.ups}};{{this_news.downs}};{{this_news.score}}' class='pull-left hand_over newsScoreInfo MR_16px' >
 			{% for info in user.user_info_set.all %}
 				{% if info.upVoted_news %}
@@ -359,7 +373,7 @@
 			<div class='MT_20px clear_both'>
 				<p class='text-danger'>登陆后可评论或者查看评论</p>
 			</div>
-			<div id='showNewslogForm' class='panel panel-info'>                       
+			<div id='showNewslogForm' class='panel panel-info col-xs-12 col-md-7'>                       
 				<div id='' class="panel-heading">
 					<h4>登录
 						<a href='/log/page_register/'><span class='pull-right'><span class="glyphicon glyphicon-hand-right"></span> 注册</span></a>
@@ -424,7 +438,7 @@
 					<p class='text-danger'>你太穷啦以至于无法评论或者查看评论……</p>
 				</div>
 				<div class='MT_40px'>
-					<p class='text-center'>据说有一本神奇的小册子，那里藏有致富的秘密……</p>
+					<p class='text-center'>在设置里有一本神奇的小册子，那里藏有致富的秘密……</p>
 				</div>
 			{% endif %}
 		{% endif %}
@@ -473,8 +487,8 @@
 {% endblock %}
 
 {% block news_details %}
-<div id='newsDetailDiv'>
-	<div><small>分享于{{this_news.time | date:"Y-m-d H:i:s"}}</small></div>
+<div id='newsDetailDiv' class='hidden-xs'>
+	<div><small>分享于{{this_news.time | date:"Y-m-d"}}&nbsp;&nbsp;{% showTimeHM this_news.time %}</small></div>
 	<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{this_news.score}}&nbsp;分（{{ratioLink}}喜欢）</div>
 	<div><small>&nbsp;<span class='font-red'>{{this_news.ups}}&nbsp;赞</span>&nbsp;&nbsp;/&nbsp;&nbsp;<span class='font-blue'>{{this_news.downs}}&nbsp;沉</span></small></div>
 </div>

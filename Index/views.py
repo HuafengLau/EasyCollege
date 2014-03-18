@@ -28,6 +28,7 @@ import chardet
 import cookielib
 import bs4
 
+@login_required(login_url='/log/') 
 def index(request):
     user = request.user
     Feeds1 = Feeds_followNews.objects.filter(owner=user)

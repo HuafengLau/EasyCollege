@@ -4,6 +4,10 @@
 		<td>{{this_user.nic_name}}</td>								
 	</tr>
 	<tr>
+		<th><p class='text-left'>声望</p></th>
+		<td>获得了&nbsp;{{this_user.agree_num}}&nbsp;个赞同</td>
+	</tr>
+	<tr>
 		<th><p class='text-left'>个性签名</p></th>
 		<td><p id='center_sign'>{{this_user_info.sign}}</p></td>
 	</tr>
@@ -17,11 +21,5 @@
 		<th><p class='text-left'>财富/等级</p></th>
 		<td>{{this_user.money}} 易币 /{{ this_user_info.grade }}</td>
 	</tr>
-	<tr>
-		<th><p class='text-left'>勋章</p></th>
-		<td>{% if this_user.honour_set.all %}{% for honour in this_user.honour_set.all %}
-			<img width='20px' src='{{STATIC_URL}}img/honour/{{honour.img}}' data-toggle="tooltip" title="{{honour.info}}" class='tooltip_th'/>
-			{% endfor %}{% else %}还没有获取任何勋章哦！{% endif %}
-		</td>
-	</tr>
+	
 </table>

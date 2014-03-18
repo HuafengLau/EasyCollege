@@ -109,7 +109,8 @@ def newsVote(request,small_part,news_id,upOrDown):
     ups = this_news.ups
     downs = this_news.downs
     if upOrDown == '1':
-        user.money -= 5
+        user.money -= 3
+        user.agree_num += 1
         user.save()
         ups += 1
         if news_id in this_user_info.upVoted_news:
@@ -119,7 +120,7 @@ def newsVote(request,small_part,news_id,upOrDown):
             this_user_info.upVoted_news += '%s;' % news_id
             this_user_info.save()
     elif upOrDown == '0':
-        user.money -= 5
+        user.money -= 3
         user.save()
         downs += 1
         if news_id in this_user_info.downVoted_news:
@@ -156,19 +157,25 @@ def newsVote(request,small_part,news_id,upOrDown):
 def which_news(request,news_part,small_part):
     user = request.user
     newsHTML = True
-    part = NewsPart.objects.get(part=news_part)
+    allNewsPart = NewsPart.objects.all()
+    part = allNewsPart.get(part=news_part)
     smallPart = small_part
     SimilarHtml = 'Similar' + news_part + '.html'
     smallParts = [u'热门',u'最新',u'热议',u'得分',u'镀金']
-    newsParts = NewsPart.objects.filter(open=True,secret=False).order_by('-num','-user_num','part')
+   
+    newsParts = allNewsPart.filter(open=True,secret=False).order_by('-num','-user_num','part')
+   
     top_newsParts = newsParts[:18]
     more_newsParts = newsParts[18:]
     if user.is_authenticated():
         this_user_info = User_info.objects.get(user=user)
         subscriptions = this_user_info.subscription.split(';')[:-1]
-        mySubs = NewsPart.objects.filter(part__in=subscriptions).order_by('part')
+        mySubs = allNewsPart.filter(part__in=subscriptions).order_by('part')
     else:
         mySubs = None
+    
+    otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
+        
     if news_part != 'All':
         newses = News.objects.filter(newspart=part)
     else:
@@ -183,7 +190,7 @@ def which_news(request,news_part,small_part):
         context_instance=RequestContext(request))
 
 def fangqiu(request):
-    return which_news(request,'All','hot')
+    return which_news(request,'All','new')
         
 @login_required(login_url='/log/')         
 def submit_news(request,news_part, news_type):
@@ -401,9 +408,19 @@ def show_news(request,news_part,small_part,news_id):
     user = request.user
     newsHTML = True
     this_small_part = small_part
-    newsParts = NewsPart.objects.filter(open=True).order_by('-num','-user_num','part')
+    allNewsPart = NewsPart.objects.all()
+    newsParts = allNewsPart.filter(open=True,secret=False).order_by('-num','-user_num','part')   
     top_newsParts = newsParts[:18]
     more_newsParts = newsParts[18:]
+    if user.is_authenticated():
+        this_user_info = User_info.objects.get(user=user)
+        subscriptions = this_user_info.subscription.split(';')[:-1]
+        mySubs = allNewsPart.filter(part__in=subscriptions).order_by('part')
+    else:
+        mySubs = None
+    
+    otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
+    
     this_news = News.objects.get(id=news_id)
     if (this_news.ups+this_news.downs) != 0:
         percent = float(this_news.ups) / abs(this_news.ups+this_news.downs)
@@ -754,9 +771,8 @@ def commentVote(request):
             if nowVote == 'upVote':
                 ups = this_object.ups + 1
                 if user != this_object.user:
-                    object_user_info = User_info.objects.get(user=this_object.user)
-                    object_user_info.agree_num += 1
-                    object_user_info.save()
+                    this_object.user.agree_num += 1
+                    this_object.user.save()
                 downs = this_object.downs
                 setattr(this_user_info,upVoted, (getattr(this_user_info,upVoted)+s))
                 if getattr(this_user_info,downVoted):
@@ -774,25 +790,21 @@ def commentVote(request):
                         setattr(this_user_info,upVoted,(getattr(this_user_info,upVoted).replace(s, '')))
                         ups = this_object.ups - 1
                         if user != this_object.user:
-                            object_user_info = User_info.objects.get(user=this_object.user)
-                            object_user_info.agree_num -= 1
-                            object_user_info.save()
+                            this_object.user.agree_num -= 1
+                            this_object.user.save()
                 this_user_info.save()
             elif nowVote == 'upVoted':
                 ups = this_object.ups - 1
                 if user != this_object.user:
-                    object_user_info = User_info.objects.get(user=this_object.user)
-                    object_user_info.agree_num -= 1
-                    object_user_info.save()
+                    this_object.user.agree_num -= 1
+                    this_object.user.save()
                 downs = this_object.downs 
                 setattr(this_user_info,upVoted,(getattr(this_user_info,upVoted).replace(s, '')))
-                #this_user_info.upVoted_comment1 = this_user_info.upVoted_comment1.replace(s, '')
                 this_user_info.save()
             else:
                 downs = this_object.downs - 1
                 ups = this_object.ups
                 setattr(this_user_info,downVoted,(getattr(this_user_info,downVoted).replace(s, '')))
-                #this_user_info.downVoted_comment1 = this_user_info.downVoted_comment1.replace(s, '')
                 this_user_info.save()
                 
             score = ups - downs
