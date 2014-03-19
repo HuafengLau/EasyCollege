@@ -75,9 +75,17 @@ def guide_getCreditFile(request,school_code):
 def googelSearch(request):
     return render_to_response('googlee7b5e63c07c5ed83.html',locals(),
         context_instance=RequestContext(request))
+       
+def googelSearch2(request):
+    return render_to_response('googlee7b5e63c07c5ed83.html',locals(),
+        context_instance=RequestContext(request))
 
 def baiduSearch(request):
     return render_to_response('baidu_verify_hWg7x7b1q5.html',locals(),
+        context_instance=RequestContext(request))
+        
+def baiduSearch2(request):
+    return render_to_response('baidu_verify_e7gA3p0lSA.html',locals(),
         context_instance=RequestContext(request))
 
 def TheRich(request):

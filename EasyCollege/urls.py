@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from News.views import fangqiu
 from log.views import verify
-from Business.views import googelSearch, baiduSearch
+from Business.views import googelSearch, baiduSearch,baiduSearch2,googelSearch2
 from django.conf import settings
 from django.views.generic import TemplateView
 #from EOT.models import Eot
@@ -35,6 +35,8 @@ urlpatterns = patterns('',
     (r'^robots\.txt$', TemplateView.as_view(template_name= 'robots.txt', content_type='text/plain')),
     (r'^sitemaps1\.xml$', TemplateView.as_view(template_name= 'sitemaps1.xml', content_type='text/plain')),
     (r'^googlee7b5e63c07c5ed83.html/$', googelSearch),
+    (r'^googlee7b5e63c07c5ed83.html/$', googelSearch2),
+    (r'^baidu_verify_e7gA3p0lSA.html/$',baiduSearch2),
     (r'^baidu_verify_hWg7x7b1q5.html/$', baiduSearch),
     (r'^verify/$', verify),
     (r'^appmedia/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
