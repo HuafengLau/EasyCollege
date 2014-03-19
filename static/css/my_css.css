@@ -156,10 +156,6 @@
 
 }
 
-.PL_1px{
-	padding-left: 1px;
-}
-
 .MB_0px{
 	margin-bottom: 0px;
 }
@@ -167,6 +163,15 @@
 .MB_5px{
 	margin-bottom: 5px;
 }
+
+.PL_1px{
+	padding-left: 1px;
+}
+
+.PA_0xp{
+	padding:0px;
+}
+
 
 .PT_10px{
 	padding-top:10px;

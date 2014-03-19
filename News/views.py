@@ -109,7 +109,7 @@ def newsVote(request,small_part,news_id,upOrDown):
     ups = this_news.ups
     downs = this_news.downs
     if upOrDown == '1':
-        user.money -= 3
+        user.money -= 1
         user.agree_num += 1
         user.save()
         ups += 1
@@ -120,7 +120,7 @@ def newsVote(request,small_part,news_id,upOrDown):
             this_user_info.upVoted_news += '%s;' % news_id
             this_user_info.save()
     elif upOrDown == '0':
-        user.money -= 3
+        user.money -= 1
         user.save()
         downs += 1
         if news_id in this_user_info.downVoted_news:
@@ -435,7 +435,7 @@ def show_news(request,news_part,small_part,news_id):
             need_log = False
             need_vote = False
             need_money = False
-        elif user.money < 5:
+        elif user.money < 1:
             canSeeComment = False
             need_log = False
             need_vote = False

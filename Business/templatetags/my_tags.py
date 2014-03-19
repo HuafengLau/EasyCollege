@@ -448,10 +448,13 @@ class newsScoreClassNode(template.Node):
                 size = '-1'
             
         vote = 'unVoteNum'
-        if info.upVoted_news and str(news.id) in info.upVoted_news:
-            vote = 'VotedNum'
-        if info.downVoted_news and str(news.id) in info.downVoted_news:
-            vote = 'VotedNum'
+        try:
+            if info.upVoted_news and str(news.id) in info.upVoted_news:
+                vote = 'VotedNum'
+            if info.downVoted_news and str(news.id) in info.downVoted_news:
+                vote = 'VotedNum'
+        except:
+            pass
             
         s = vote + size
         return s

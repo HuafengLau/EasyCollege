@@ -100,6 +100,14 @@ $(document).ready(function(){
 		});
 	});
 	
+	$('.cardNeedLog').on('click', function(){
+		alert('登陆后才可以查看分享人信息哦：）');
+	});
+	
+	$('.logVote').on('click',function(){
+		alert("为了不让分享排序被少部分人'控制'，请登录后投上宝贵的一票：）");
+	});
+	
 	// JS for newsSubmit.html
 	
 	// JS for newsShow.html

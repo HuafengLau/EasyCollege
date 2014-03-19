@@ -21,7 +21,11 @@
 				</li>
 				{% endfor %}
 				<li role="presentation" class="divider"></li>
+				{% if user.is_authenticated %}
 				<li role="presentation"><a role="menuitem" tabindex="-1" href="/news/mySubscription/">编辑我的订阅</a></li>
+				{% else %}
+					<li role="presentation">你还没有登陆哦：）</li>
+				{% endif %}
 			  </ul>
 			</li>
 		  </ul>
@@ -96,37 +100,45 @@
 				<div class="tab-content">
 				  <div class="tab-pane{% ifequal smallPart 'hot' %} in active{% endifequal %}" id="hot">
 					{% if hot_newses %}
-					{% for news in hot_newses %}
-						<div class='clear_both line_bottom ML_13px'>
-							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px'>
-							{% for info in user.user_info_set.all %}
-								{% if info.upVoted_news %}
-									{% ifintInstr news.id info.upVoted_news %}	
-										<div id='' style='display:none' class='newsUpVote'></div>
-										<div id='' class='newsUpVoted'></div>
+						{% for news in hot_newses %}							
+							<div class='clear_both line_bottom ML_13px'>
+								<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>
+								{% if user.is_authenticated %}
+								{% for info in user.user_info_set.all %}
+									{% if info.upVoted_news %}
+										{% ifintInstr news.id info.upVoted_news %}	
+											<div id='' style='display:none' class='newsUpVote'></div>
+											<div id='' class='newsUpVoted'></div>
+										{% else %}
+											<div id='' class='newsUpVote'></div>
+											<div id='' style='display:none' class='newsUpVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsUpVote'></div>
 										<div id='' style='display:none' class='newsUpVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsUpVote'></div>
-									<div id='' style='display:none' class='newsUpVoted'></div>
-								{% endif %}
-								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
-								{% if info.downVoted_news %}
-									{% ifintInstr news.id info.downVoted_news %}
-										<div id='' style='display:none' class='newsDownVote'></div>
-										<div id='' class='newsDownVoted'></div>
+									{% endif %}
+									<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+									{% if info.downVoted_news %}
+										{% ifintInstr news.id info.downVoted_news %}
+											<div id='' style='display:none' class='newsDownVote'></div>
+											<div id='' class='newsDownVoted'></div>
+										{% else %}
+											<div id='' class='newsDownVote'></div>
+											<div id='' style='display:none' class='newsDownVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsDownVote'></div>
 										<div id='' style='display:none' class='newsDownVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsDownVote'></div>
-									<div id='' style='display:none' class='newsDownVoted'></div>
-								{% endif %}
-							{% endfor %}
-						</div>
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<div id='' class='newsUpVote'></div>
+								<div id='' style='display:none' class='newsUpVoted'></div>
+								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+								<div id='' class='newsDownVote'></div>
+								<div id='' style='display:none' class='newsDownVoted'></div>
+							{% endif %}
+							</div>
 						{% ifequal news.type 'pic' %}
 							<div class='news_pic pull-left MT_6px'>
 								<img width='50px' class="img-responsive" src='{{MEDIA_URL}}{{news.pic}}' />
@@ -142,7 +154,9 @@
 									<!--<span>——hot{{news.hot}}</span>-->
 								</div>
 								<div>
-									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;<a id='{{news.user.id}}' class='shallowLink hand_over ID_card'>{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
+									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;
+									<a id='{{news.user.id}}' class='shallowLink hand_over {% if user.is_authenticated %}ID_card{% else %}cardNeedLog{% endif %}'>
+									{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
 									<a class='shallowLink' href='/news/{{news.newspart.part}}/hot/'>
 										{{news.newspart.part}}/{{news.newspart.realPart}}
 									</a></small>
@@ -168,34 +182,42 @@
 				  {% if new_newses %}
 					{% for news in new_newses %}
 						<div class='clear_both line_bottom ML_13px'>
-							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px'>
-							{% for info in user.user_info_set.all %}
-								{% if info.upVoted_news %}
-									{% ifintInstr news.id info.upVoted_news %}	
-										<div id='' style='display:none' class='newsUpVote'></div>
-										<div id='' class='newsUpVoted'></div>
+							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>							
+							{% if user.is_authenticated %}	
+								{% for info in user.user_info_set.all %}
+									{% if info.upVoted_news %}
+										{% ifintInstr news.id info.upVoted_news %}	
+											<div id='' style='display:none' class='newsUpVote'></div>
+											<div id='' class='newsUpVoted'></div>
+										{% else %}
+											<div id='' class='newsUpVote'></div>
+											<div id='' style='display:none' class='newsUpVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsUpVote'></div>
 										<div id='' style='display:none' class='newsUpVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsUpVote'></div>
-									<div id='' style='display:none' class='newsUpVoted'></div>
-								{% endif %}
-								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
-								{% if info.downVoted_news %}
-									{% ifintInstr news.id info.downVoted_news %}
-										<div id='' style='display:none' class='newsDownVote'></div>
-										<div id='' class='newsDownVoted'></div>
+									{% endif %}
+									<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+									{% if info.downVoted_news %}
+										{% ifintInstr news.id info.downVoted_news %}
+											<div id='' style='display:none' class='newsDownVote'></div>
+											<div id='' class='newsDownVoted'></div>
+										{% else %}
+											<div id='' class='newsDownVote'></div>
+											<div id='' style='display:none' class='newsDownVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsDownVote'></div>
 										<div id='' style='display:none' class='newsDownVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsDownVote'></div>
-									<div id='' style='display:none' class='newsDownVoted'></div>
-								{% endif %}
-							{% endfor %}
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<div id='' class='newsUpVote'></div>
+								<div id='' style='display:none' class='newsUpVoted'></div>
+								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+								<div id='' class='newsDownVote'></div>
+								<div id='' style='display:none' class='newsDownVoted'></div>
+							{% endif %}
 						</div>
 						{% ifequal news.type 'pic' %}
 							<div class='news_pic pull-left MT_6px'>
@@ -212,7 +234,9 @@
 									<!--<span>——time{{news.time}}</span>-->
 								</div>
 								<div>
-									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;<a class='shallowLink'>{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
+									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;
+									<a id='{{news.user.id}}' class='shallowLink hand_over {% if user.is_authenticated %}ID_card{% else %}cardNeedLog{% endif %}'>
+									{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
 									<a class='shallowLink' href='/news/{{news.newspart.part}}/hot/'>
 										{{news.newspart.part}}/{{news.newspart.realPart}}
 									</a></small>
@@ -236,34 +260,42 @@
 				  {% if controversial_newses %}
 					{% for news in controversial_newses %}
 						<div class='clear_both line_bottom ML_13px'>
-							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px'>
-							{% for info in user.user_info_set.all %}
-								{% if info.upVoted_news %}
-									{% ifintInstr news.id info.upVoted_news %}	
-										<div id='' style='display:none' class='newsUpVote'></div>
-										<div id='' class='newsUpVoted'></div>
+							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>
+							{% if user.is_authenticated %}
+								{% for info in user.user_info_set.all %}
+									{% if info.upVoted_news %}
+										{% ifintInstr news.id info.upVoted_news %}	
+											<div id='' style='display:none' class='newsUpVote'></div>
+											<div id='' class='newsUpVoted'></div>
+										{% else %}
+											<div id='' class='newsUpVote'></div>
+											<div id='' style='display:none' class='newsUpVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsUpVote'></div>
 										<div id='' style='display:none' class='newsUpVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsUpVote'></div>
-									<div id='' style='display:none' class='newsUpVoted'></div>
-								{% endif %}
-								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
-								{% if info.downVoted_news %}
-									{% ifintInstr news.id info.downVoted_news %}
-										<div id='' style='display:none' class='newsDownVote'></div>
-										<div id='' class='newsDownVoted'></div>
+									{% endif %}
+									<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+									{% if info.downVoted_news %}
+										{% ifintInstr news.id info.downVoted_news %}
+											<div id='' style='display:none' class='newsDownVote'></div>
+											<div id='' class='newsDownVoted'></div>
+										{% else %}
+											<div id='' class='newsDownVote'></div>
+											<div id='' style='display:none' class='newsDownVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsDownVote'></div>
 										<div id='' style='display:none' class='newsDownVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsDownVote'></div>
-									<div id='' style='display:none' class='newsDownVoted'></div>
-								{% endif %}
-							{% endfor %}
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<div id='' class='newsUpVote'></div>
+								<div id='' style='display:none' class='newsUpVoted'></div>
+								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+								<div id='' class='newsDownVote'></div>
+								<div id='' style='display:none' class='newsDownVoted'></div>
+							{% endif %}
 						</div>
 						{% ifequal news.type 'pic' %}
 							<div class='news_pic pull-left MT_6px'>
@@ -280,7 +312,9 @@
 									<!--<span>——controversy{{news.controversy}}</span>-->
 								</div>
 								<div>
-									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;<a class='shallowLink'>{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
+									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;
+									<a id='{{news.user.id}}' class='shallowLink hand_over {% if user.is_authenticated %}ID_card{% else %}cardNeedLog{% endif %}'>
+									{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
 									<a class='shallowLink' href='/news/{{news.newspart.part}}/hot/'>
 										{{news.newspart.part}}/{{news.newspart.realPart}}
 									</a></small>
@@ -303,34 +337,42 @@
 				  {% if top_newses %}
 					{% for news in top_newses %}
 						<div class='clear_both line_bottom ML_13px'>
-							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px'>
-							{% for info in user.user_info_set.all %}
-								{% if info.upVoted_news %}
-									{% ifintInstr news.id info.upVoted_news %}	
-										<div id='' style='display:none' class='newsUpVote'></div>
-										<div id='' class='newsUpVoted'></div>
+							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>
+							{% if user.is_authenticated %}
+								{% for info in user.user_info_set.all %}
+									{% if info.upVoted_news %}
+										{% ifintInstr news.id info.upVoted_news %}	
+											<div id='' style='display:none' class='newsUpVote'></div>
+											<div id='' class='newsUpVoted'></div>
+										{% else %}
+											<div id='' class='newsUpVote'></div>
+											<div id='' style='display:none' class='newsUpVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsUpVote'></div>
 										<div id='' style='display:none' class='newsUpVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsUpVote'></div>
-									<div id='' style='display:none' class='newsUpVoted'></div>
-								{% endif %}
-								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
-								{% if info.downVoted_news %}
-									{% ifintInstr news.id info.downVoted_news %}
-										<div id='' style='display:none' class='newsDownVote'></div>
-										<div id='' class='newsDownVoted'></div>
+									{% endif %}
+									<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+									{% if info.downVoted_news %}
+										{% ifintInstr news.id info.downVoted_news %}
+											<div id='' style='display:none' class='newsDownVote'></div>
+											<div id='' class='newsDownVoted'></div>
+										{% else %}
+											<div id='' class='newsDownVote'></div>
+											<div id='' style='display:none' class='newsDownVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsDownVote'></div>
 										<div id='' style='display:none' class='newsDownVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsDownVote'></div>
-									<div id='' style='display:none' class='newsDownVoted'></div>
-								{% endif %}
-							{% endfor %}
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<div id='' class='newsUpVote'></div>
+								<div id='' style='display:none' class='newsUpVoted'></div>
+								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+								<div id='' class='newsDownVote'></div>
+								<div id='' style='display:none' class='newsDownVoted'></div>
+							{% endif %}
 						</div>
 						{% ifequal news.type 'pic' %}
 							<div class='news_pic pull-left MT_6px'>
@@ -347,7 +389,9 @@
 									<!--<span>——score{{news.score}}</span>-->
 								</div>
 								<div>
-									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;<a class='shallowLink'>{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
+									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;
+									<a id='{{news.user.id}}' class='shallowLink hand_over {% if user.is_authenticated %}ID_card{% else %}cardNeedLog{% endif %}'>
+									{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
 									<a class='shallowLink' href='/news/{{news.newspart.part}}/hot/'>
 										{{news.newspart.part}}/{{news.newspart.realPart}}
 									</a></small>
@@ -370,34 +414,42 @@
 				  {% if gilded_newses %}
 					  {% for news in gilded_newses %}
 							<div class='clear_both line_bottom ML_13px'>
-							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px'>
-							{% for info in user.user_info_set.all %}
-								{% if info.upVoted_news %}
-									{% ifintInstr news.id info.upVoted_news %}	
-										<div id='' style='display:none' class='newsUpVote'></div>
-										<div id='' class='newsUpVoted'></div>
+							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>
+							{% if user.is_authenticated %}
+								{% for info in user.user_info_set.all %}
+									{% if info.upVoted_news %}
+										{% ifintInstr news.id info.upVoted_news %}	
+											<div id='' style='display:none' class='newsUpVote'></div>
+											<div id='' class='newsUpVoted'></div>
+										{% else %}
+											<div id='' class='newsUpVote'></div>
+											<div id='' style='display:none' class='newsUpVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsUpVote'></div>
 										<div id='' style='display:none' class='newsUpVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsUpVote'></div>
-									<div id='' style='display:none' class='newsUpVoted'></div>
-								{% endif %}
-								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
-								{% if info.downVoted_news %}
-									{% ifintInstr news.id info.downVoted_news %}
-										<div id='' style='display:none' class='newsDownVote'></div>
-										<div id='' class='newsDownVoted'></div>
+									{% endif %}
+									<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+									{% if info.downVoted_news %}
+										{% ifintInstr news.id info.downVoted_news %}
+											<div id='' style='display:none' class='newsDownVote'></div>
+											<div id='' class='newsDownVoted'></div>
+										{% else %}
+											<div id='' class='newsDownVote'></div>
+											<div id='' style='display:none' class='newsDownVoted'></div>
+										{% endifintInstr %}
 									{% else %}
 										<div id='' class='newsDownVote'></div>
 										<div id='' style='display:none' class='newsDownVoted'></div>
-									{% endifintInstr %}
-								{% else %}
-									<div id='' class='newsDownVote'></div>
-									<div id='' style='display:none' class='newsDownVoted'></div>
-								{% endif %}
-							{% endfor %}
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<div id='' class='newsUpVote'></div>
+								<div id='' style='display:none' class='newsUpVoted'></div>
+								<div class='{% newsScoreClass info news %}'>{{news.score}}</div>
+								<div id='' class='newsDownVote'></div>
+								<div id='' style='display:none' class='newsDownVoted'></div>
+							{% endif %}
 						</div>
 						{% ifequal news.type 'pic' %}
 							<div class='news_pic pull-left MT_6px'>
@@ -414,7 +466,9 @@
 									<!--<span>——gold{{news.gold}}</span>-->
 								</div>
 								<div>
-									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;<a class='shallowLink'>{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
+									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;
+									<a id='{{news.user.id}}' class='shallowLink hand_over {% if user.is_authenticated %}ID_card{% else %}cardNeedLog{% endif %}'>
+									{{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
 									<a class='shallowLink' href='/news/{{news.newspart.part}}/hot/'>
 										{{news.newspart.part}}/{{news.newspart.realPart}}
 									</a></small>
@@ -595,7 +649,7 @@
         <h4 class="modal-title" id="myModalLabel">方遒社区禁词</h4>
       </div>
       <div class="modal-body">
-		 <p>大学易希望营造一种积极向上的、友善的氛围，以下词汇是强烈禁止的：</p>
+		 <p>方遒社区希望营造一种积极向上的、友善的氛围，以下词汇是强烈禁止的：</p>
 		 <P><ul>
 		 <li class='font-red'>与草、操二字相关的侮辱性词汇，谐音同义也在禁止之列</li>
 		 <li class='font-red'>与家人父母有相关的侮辱性词汇，谐音同义也在禁止之列</li>
