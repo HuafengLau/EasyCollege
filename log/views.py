@@ -181,7 +181,7 @@ def quit(request):
     
 def verify(request):
     ca =  Captcha(request)
-    ca.words = ['share','reddit','fqsq','fangqiu']
+    ca.words = ['share','reddit','fqsq','funqiu']
     ca.type = 'word'
     return ca.display()
     
