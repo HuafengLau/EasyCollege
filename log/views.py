@@ -48,7 +48,7 @@ def deal_register(request):
             stu_pwd = request.POST['stu_pwd'],
             email = request.POST['email'],
             nic_name = u'某某',
-            money = 0,
+            money = 50,
             avatar = 'img/avatar.png',
             agree_num = 0
         )
@@ -188,7 +188,7 @@ def verify(request):
 def activateUser(request, id):
     try:
         this_user = MyUser.objects.get(id=id)
-        this_user.money += 100
+        this_user.money += 50
         this_user.save()
         
         username = this_user.email
