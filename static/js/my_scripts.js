@@ -46,6 +46,13 @@ $(document).ready(function(){
     // JS for log.html
     
 	// JS for newsBase.html
+	$('.callTopPart').on('click',function(){
+		var partname = $(this).attr('id');
+		$.get('/news/getTopPart/',{'partname':partname},function(data){
+			$('#mainDiv').html(data);
+		});
+	});
+	
 	$('.RuleDiv').on('mouseover', function(){
 		$(this).children("div")[0].style.display='block';
 	});
@@ -108,9 +115,28 @@ $(document).ready(function(){
 		alert("为了不让分享排序被少部分人'控制'，请登录后投上宝贵的一票：）");
 	});
 	
+	$("ul.side_nav li").on('mouseover', function() {
+		$(this).children("div")[0].style.display='block';
+	});
+	
+	$('ul.side_nav li').on('mouseout', function(){
+		$(this).children("div")[0].style.display='none';
+	});
+	
 	// JS for newsSubmit.html
 	
 	// JS for newsShow.html
+	$('#newsShowCallLog').on('click', function(){
+       if ($( "#showNewslogForm").is(":hidden")){
+           $( "#showNewslogForm").show();
+           $(this).html("&nbsp;&nbsp;收起");
+       } 
+       else{
+           $( "#showNewslogForm").hide();
+           $(this).html('&nbsp;&nbsp;立即登陆');
+       }
+    });
+	
 	$('.giveGold').on('click', function(){
 		var type = $(this).attr('id').split(';')[0];
 		var id = $(this).attr('id').split(';')[1];

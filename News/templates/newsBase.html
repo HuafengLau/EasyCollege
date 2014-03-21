@@ -8,46 +8,20 @@
 
 
 {% block mainbody %}
-<div id='fangqiu' >
+<div id='fangqiu'>
 	<div style='padding: 0 15px;'>
 		<div class='hidden-xs'>
-		  <ul class="nav nav-pills pull-left">	
-			<li class="dropdown">
-			  <a id="drop4" role="button" data-toggle="dropdown" href="#">我的订阅<b class="caret"></b></a> 
-			  <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
-				{% for subs in mySubs %}
-				<li role="presentation">
-					<a role="menuitem" tabindex="-1" href='/news/{{subs.part}}/hot/'>{{subs.part}}&nbsp;/&nbsp;{{subs.realPart}}</a>
-				</li>
-				{% endfor %}
-				<li role="presentation" class="divider"></li>
-				{% if user.is_authenticated %}
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="/news/mySubscription/">编辑我的订阅</a></li>
-				{% else %}
-					<li role="presentation">你还没有登陆哦：）</li>
-				{% endif %}
-			  </ul>
-			</li>
-		  </ul>
-		  <div class='pull-left PT_10px'>
-			{% for topPart in top_newsParts %}
-				<a class='topPart {% ifnotequal part.part topPart.part %}font-black{% else %}font-orange{% endifnotequal %}' href='/news/{{topPart.part}}/hot/'>{{ topPart.realPart }}</a>
-			{% endfor %}
-		  </div>
 		  <div class=''>
-		  <ul class="nav nav-pills">
-			<li class="dropdown">
-			  <a id="drop5" role="button" data-toggle="dropdown" href="#">更多+ <b class="caret"></b></a>
-			  <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
-				{% for part in more_newsParts %}
-				<li role="presentation">
-					<a role="menuitem" tabindex="-1" href="/news/{{part.part}}/hot/">{{part.part}}&nbsp;/&nbsp;{{part.realPart}}</a>
-				</li>
-				{% endfor %}
-			  </ul>
-			</li>
-		  </ul> <!-- /tabs -->
+		  
+		  <ul class=' list-inline'>
+			<li>{% if user.is_authenticated %}<span>我的订阅：</span>{% else %}<span>默认订阅：</span>{% endif %}</li>
+			{% for sub in mySubs %}
+				<li><a class='{% ifnotequal part.part sub.part %}{% else %}font-orange{% endifnotequal %}' href='/news/{{sub.part}}/hot/'>{{ sub.realPart }}</a></li>
+			{% endfor %}
+			<li><a class='topPart' href='#'>探索+</a><li> 
+		  </ul>
 		  </div>
+		  
 		</div> <!-- /example -->
 		<div class='visible-xs row'>
 			<div class='col-xs-12'>
@@ -85,11 +59,25 @@
 		</div>
 		<hr class='MT_0px'/>
 		<div id='newsMainDiv' class='row'>
-			<div id='LeftDiv' class='col-xs-12 col-md-8'>
+			{% block topPartLi %}
+			<div id='leftDiv' class='hidden-xs col-md-2 MT_40px'>			
+				<ul class="side_nav">
+					<li id='partLi'>&nbsp;&nbsp;最活跃的社群</li>
+					{% for part in top_newsParts %}
+					<li>
+						<a id='{{part.part}}' class='callTopPart hand_over'>&nbsp;&nbsp;{{part.realPart}}</a>
+						<div style='display:none'><p>{{part.description}}</p></div>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endblock %}
+			<div id='mainDiv' class='col-xs-12 {% if newsBase %}col-md-6{%else%}col-md-8{% endif %}'>
 				{% block LeftDiv %}
 				<ul class="nav nav-tabs">
+				  <li>&nbsp;&nbsp;</li>
 				  <li id='smallPartLi'><b>{{ part.part }}</b></li>
-				  {% ifequal smallPart 'hot' %}<li class='active'>{% else %}<li>{% endifequal %}<a id='HotLi' href="#hot" data-toggle="tab">热门</a></li>
+				  {% ifequal smallPart 'hot' %}<li class='active'>{% else %}<li>{% endifequal %}<a id='HotLi' href="#hot" data-toggle="tab">综合</a></li>
 				  {% ifequal smallPart 'new' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#new" data-toggle="tab">最新</a></li>
 				  {% ifequal smallPart 'controversial' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#controversial" data-toggle="tab">热议</a></li>
 				  {% ifequal smallPart 'top' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#top" data-toggle="tab">得分</a></li>
@@ -101,7 +89,7 @@
 				  <div class="tab-pane{% ifequal smallPart 'hot' %} in active{% endifequal %}" id="hot">
 					{% if hot_newses %}
 						{% for news in hot_newses %}							
-							<div class='clear_both line_bottom ML_13px'>
+							<div class='clear_both line_bottom ML_23px'>
 								<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>
 								{% if user.is_authenticated %}
 								{% for info in user.user_info_set.all %}

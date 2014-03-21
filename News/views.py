@@ -110,8 +110,9 @@ def newsVote(request,small_part,news_id,upOrDown):
     downs = this_news.downs
     if upOrDown == '1':
         user.money -= 1
-        user.agree_num += 1
         user.save()
+        this_news.user.agree_num += 1
+        this_news.user.save()
         ups += 1
         if news_id in this_user_info.upVoted_news:
             return render_to_response('404.html',locals(),
@@ -157,6 +158,7 @@ def newsVote(request,small_part,news_id,upOrDown):
 def which_news(request,news_part,small_part):
     user = request.user
     newsHTML = True
+    newsBase = True
     allNewsPart = NewsPart.objects.all()
     part = allNewsPart.get(part=news_part)
     smallPart = small_part
@@ -164,17 +166,19 @@ def which_news(request,news_part,small_part):
     smallParts = [u'热门',u'最新',u'热议',u'得分',u'镀金']
    
     newsParts = allNewsPart.filter(open=True,secret=False).order_by('-num','-user_num','part')
-   
+    
     top_newsParts = newsParts[:18]
     more_newsParts = newsParts[18:]
     if user.is_authenticated():
         this_user_info = User_info.objects.get(user=user)
         subscriptions = this_user_info.subscription.split(';')[:-1]
         mySubs = allNewsPart.filter(part__in=subscriptions).order_by('part')
-        otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
+        #otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
     else:
-        mySubs = None
-        otherParts = newsParts.order_by('part')
+        defaultList = ['Funny','Life','Music','Home-news','SuggestCY','Gossip']
+        mySubs = allNewsPart.filter(part__in=defaultList).order_by('part')
+        
+        #otherParts = newsParts.order_by('part')
     
         
     if news_part != 'All':
@@ -417,10 +421,9 @@ def show_news(request,news_part,small_part,news_id):
         this_user_info = User_info.objects.get(user=user)
         subscriptions = this_user_info.subscription.split(';')[:-1]
         mySubs = allNewsPart.filter(part__in=subscriptions).order_by('part')
-        otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
     else:
-        mySubs = None
-        otherParts = newsParts.order_by('part')
+        defaultList = ['Funny','Life','Music','Home-news','SuggestCY','Gossip']
+        mySubs = allNewsPart.filter(part__in=defaultList).order_by('part')
     
     
     this_news = News.objects.get(id=news_id)
@@ -431,31 +434,27 @@ def show_news(request,news_part,small_part,news_id):
         ratioLink = 0
     if user.is_authenticated():
         if user == this_news.user:
-            canSeeComment = True
             need_log = False
             need_vote = False
             need_money = False
         elif user.money < 1:
-            canSeeComment = False
             need_log = False
             need_vote = False
             need_money = True
         else:
             this_user_info = User_info.objects.get(user=user)
             if news_id in this_user_info.upVoted_news or news_id in this_user_info.downVoted_news:
-                canSeeComment = True
                 need_log = False
                 need_vote = False
                 need_money = False
             else:
-                canSeeComment = False
                 need_log = False
                 need_vote = True
                 need_money = False
     else:
-        canSeeComment = False
         need_log = True
         need_vote = False
+        need_money = False
     part = this_news.newspart
     RuleHtml = 'Rule'+ part.part + '.html'
     SimilarHtml = 'Similar' + part.part + '.html'
@@ -464,6 +463,27 @@ def show_news(request,news_part,small_part,news_id):
     return render_to_response('newsShow.html',locals(),
         context_instance=RequestContext(request))
 
+def getTopPart(request):
+    if request.is_ajax() and request.method == 'GET':
+        if 'partname' in request.GET:        
+            smallPart = 'hot'
+            user = request.user
+            partname = request.GET.get('partname')
+            allNewsPart = NewsPart.objects.all()
+            part = allNewsPart.get(part=partname)
+            if partname != 'All':
+                newses = News.objects.filter(newspart=part)
+            else:
+                newses = News.objects.filter(open=True,secret=False)
+            hot_newses = newses.order_by('-hot','-time')[:25]
+            new_newses = newses.order_by('-time')[:25]
+            controversial_newses = newses.order_by('-controversy','-time')[:25]
+            top_newses = newses.order_by('-score','-time')[:30]
+            gilded_newses = newses.order_by('-gold','-time')[:30]
+            
+            return render_to_response('callTopPart.html',locals(),
+                context_instance=RequestContext(request))
+            
 @login_required(login_url='/log/') 
 def giveGold(request):
     if request.is_ajax() and request.method == 'GET':

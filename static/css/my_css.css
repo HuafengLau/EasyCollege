@@ -119,6 +119,9 @@
 	margin-top:40px;
 }
 
+.MT_30px{
+	margin-top:30px;
+}
 .MT_20px{
 	margin-top:20px;
 }
@@ -153,6 +156,11 @@
 
 .ML_13px{
 	margin-left: 13px;
+
+}
+
+.ML_23px{
+	margin-left: 23px;
 
 }
 
@@ -367,6 +375,11 @@
 
 #log_button{
 	margin-top: 25px;
+}
+
+#normalLogDiv{
+	border:1px solid #E0E0E0;
+	padding:5px;
 }
 
 
@@ -998,6 +1011,10 @@ ul li{
 	margin-right:3px;
 }
 
+#showNewslogForm{
+	display:none;
+}
+
 #showNewsGoldwords{
 	margin-left: 45%;
 }
@@ -1242,6 +1259,55 @@ ul li{
 	margin-right: 6px;
 }
 
+ul.side_nav {
+     width: 200px;
+	 float: left;
+	 margin: 0;
+	 padding: 0;
+}
+
+ul.side_nav li {
+	 position: relative; /*--Add a relative positioning--*/
+	 float: left;
+	 margin: 0;
+	 padding: 0;
+	 display: inline;
+}
+
+ul.side_nav li a {
+     width: 170px;
+	 border-top: 1px solid #3373a9;
+	 border-bottom: 1px solid #003867;
+	 padding: 10px 10px 10px 25px;
+	 display: block;
+	 color: #fff;
+	 text-decoration: none;
+	 background: #1B7DA0 url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+	 position: relative;
+	 z-index: 2;
+}
+
+#partLi{
+	 width: 170px;
+	 border-top: 1px solid #3373a9;
+	 border-bottom: 1px solid #003867;
+	 padding: 10px 10px 10px 25px;
+	 display: block;
+	 color: #fff;
+	 text-decoration: none;
+	 background: #1B7DA0;
+	 position: relative;
+	 z-index: 2;
+}
+
+ul.side_nav li a:hover {
+	 background-color: #2d353f;
+}
+
+ul.side_nav li div {
+	 width: 170px;
+}
+
 #choosePartDiv{
 	margin-left: 4%;
 	border-style: outset;
@@ -1270,10 +1336,6 @@ ul li{
 
 #id_pic{
 	width: 30%;
-}
-
-#LeftDiv{
-
 }
 
 #RightDiv{

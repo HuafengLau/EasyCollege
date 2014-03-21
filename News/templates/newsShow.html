@@ -10,6 +10,9 @@
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/kindeditorImg.css" />
 {% endblock %}
 
+{% block topPartLi %}
+{% endblock %}
+
 {% block LeftDiv %}
 <div>
 	<div class='container visible-xs'>
@@ -133,7 +136,7 @@
 			url:location.href,
 			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
 			desc:'我在方遒社区发现了很赞的分享！',/*默认分享理由(可选)*/
-			summary:'由{{this_news.user.nic_name}}分享到 {{part.part}} / {{part.realPart}}，{{part.description}}',/*分享摘要(可选)*/
+			summary:'由{{this_news.user.nic_name}}分享到方遒社区【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
 			title:'{{this_news.title}}',/*分享标题(可选)*/
 			site:'方遒社区',/*分享来源 如：腾讯网(可选)*/
 			pics:'http://www.funqiu.com/static/img/funqiu.png', /*分享图片的路径(可选)*/
@@ -157,7 +160,7 @@
 			url:location.href,
 			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
 			desc:'我在方遒社区发现了很赞的文章！',/*默认分享理由(可选)*/
-			summary:'由{{this_news.user.nic_name}}分享到 {{part.part}} / {{part.realPart}}，{{part.description}}',/*分享摘要(可选)*/
+			summary:'由{{this_news.user.nic_name}}分享到方遒社区【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
 			title:'{{this_news.title}}',/*分享标题(可选)*/
 			site:'方遒社区',/*分享来源 如：腾讯网(可选)*/
 			pics:'http://www.funqiu.com/static/img/funqiu.png', /*分享图片的路径(可选)*/
@@ -182,10 +185,10 @@
 			url:location.href,
 			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
 			desc:'我在方遒社区发现了很赞的图片！',/*默认分享理由(可选)*/
-			summary:'由{{this_news.user.nic_name}}分享到 {{part.part}} / {{part.realPart}}，{{part.description}}',/*分享摘要(可选)*/
+			summary:'由{{this_news.user.nic_name}}分享到方遒社区【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
 			title:'{{this_news.title}}',/*分享标题(可选)*/
 			site:'方遒社区',/*分享来源 如：腾讯网(可选)*/
-			pics:'{{MEDIA_URL}}{{this_news.pic}}', /*分享图片的路径(可选)*/
+			pics:'http://www.funqiu.com/appmedia{{this_news.pic}}', /*分享图片的路径(可选)*/
 			style:'101',
 			width:199,
 			height:30
@@ -207,7 +210,7 @@
 			url:location.href,
 			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
 			desc:'我在方遒社区发现了很赞的音乐！',/*默认分享理由(可选)*/
-			summary:'由{{this_news.user.nic_name}}分享到 {{part.part}} / {{part.realPart}}，{{part.description}}',/*分享摘要(可选)*/
+			summary:'由{{this_news.user.nic_name}}分享到方遒社区【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
 			title:'{{this_news.title}}',/*分享标题(可选)*/
 			site:'方遒社区',/*分享来源 如：腾讯网(可选)*/
 			pics:'http://www.funqiu.com/static/img/funqiu.png', /*分享图片的路径(可选)*/
@@ -227,11 +230,44 @@
 
         </div>
 		
-		{% if canSeeComment %}
+		{% if not need_money %}
+			{% if need_log %}
+			<p>&nbsp;</p>
+			<p class='text-center clear_both MT_8px'>为了避免评论和分享的排序被少部分人“控制”，请登陆后投上宝贵的一票：）<a class='hand_over font-link' id='newsShowCallLog'>&nbsp;&nbsp;立即登录</a></p>
+			<div id='showNewslogForm' class='col-xs-6 col-md-4 PA_0xp'>                       
+				<div id='normalLogDiv'>                   
+					<form class='form-group' action='/log/' method='POST' autocomplete="on">
+							{% csrf_token %}
+							<div class='form-group'>
+								<label>邮箱</label>
+								<input type="email"  class='form-control' id='' name='email' placeholder="邮箱" required autofocus>
+							</div>
+							<div id='log_pwd_div' class='form-group'>
+								<label>密码</label>
+								<input type="password"  class='form-control' id='' name='stu_pwd' placeholder="密码" required>
+							</div> 
+							<input type="hidden" value="{{ request.path }}" name="next">  
+							<div id='log_button' class='ML_23px'>
+								<button class="btn btn-info" id='' type="submit">立即登录</button>
+								<a href='/log/page_register/'>&nbsp;&nbsp;&nbsp;&nbsp;注册&nbsp;&nbsp;</a>
+							</div>
+						</form>
+
+				</div>
+			</div>
+			{% endif %}
+			{% if need_vote %}
+				<p>&nbsp;</p>
+				<p class='text-center clear_both MT_8px'>为了避免分享的排序被少部分人“控制”，请投上宝贵的一票：）</p>
+				<div class='MT_40px'>
+					<p class='font-20 text-center hand_over'><a href='/news/vote/{{this_small_part}}/{{this_news.id}}/1/' class='underline'><b>顶，让更多人看见这个分享</b></a></p>
+					<p class='font-20 text-center hand_over'><a href='/news/vote/{{this_small_part}}/{{this_news.id}}/0/' class='underline'><b>沉，把它沉下去</b></a></p>
+				</div>
+			{% endif %}
 			<div id='{{this_news.id}}' class='form-group clear_both'>
 				<label>评论</label>
 				<div><textarea name='newsComment1Textarea' id='newsComment1Textarea' cols='80' rows='5' placeholder='说点什么吧'></textarea></div>
-				<button id='newsComment1Btn' class='button'>提交</button>
+				<button id='{% if not need_log %}newsComment1Btn{% endif %}' class='button {% if need_log %}need_login{% endif %}'>提交</button>
 			</div>
 			<div id='commentDiv'>
 				{% if this_news.newscomment1_set.all %}
@@ -274,7 +310,7 @@
 								{% endifequal %}
 							</div>
 							<div class='pull-left'>
-								<div class='font-grey'><small><span id='{{newscomment1.user.id}}' class='hand_over ID_card'>{{newscomment1.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment1Score_{{newscomment1.id}}' >{{newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment1 %}前</small></div>
+								<div class='font-grey'><small><span id='{{newscomment1.user.id}}' class='hand_over {% if not need_log  %}ID_card{% else %}need_login{% endif %}'>{{newscomment1.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment1Score_{{newscomment1.id}}' >{{newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment1 %}前</small></div>
 								<div class='wordsColor'>{% autoescape off %}{{ newscomment1.words}}{% endautoescape %}</div>
 								<div>
 									<ul class='list-inline list-unstyled'>
@@ -329,7 +365,7 @@
 										{% endifequal %}
 									</div>
 									<div class='pull-left'>
-										<div class='font-grey'><small><span id='{{newscomment2.user.id}}' class='hand_over ID_card'>{{newscomment2.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment2Score_{{newscomment2.id}}' >{{newscomment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment2 %}前</small></div>
+										<div class='font-grey'><small><span id='{{newscomment2.user.id}}' class='hand_over {% if not need_log  %}ID_card{% else %}need_login{% endif %}'>{{newscomment2.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment2Score_{{newscomment2.id}}' >{{newscomment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment2 %}前</small></div>
 										<div class='wordsColor'>{% autoescape off %}{{ newscomment2.words}}{% endautoescape %}</div>
 										<div>
 											<ul class='list-inline list-unstyled'>
@@ -384,7 +420,7 @@
 												{% endifequal %}
 											</div>
 											<div class='pull-left'>
-												<div class='font-grey'><small><span id='{{newscomment3.user.id}}' class='hand_over ID_card'>{{newscomment3.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment3Score_{{newscomment3.id}}' >{{newscomment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment3 %}前</small></div>
+												<div class='font-grey'><small><span id='{{newscomment3.user.id}}' class='hand_over {% if not need_log  %}ID_card{% else %}need_login{% endif %}'>{{newscomment3.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment3Score_{{newscomment3.id}}' >{{newscomment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment3 %}前</small></div>
 												<div class='wordsColor'>{% autoescape off %}{{ newscomment3.words}}{% endautoescape %}</div>
 												<div>
 													<ul class='list-inline list-unstyled'>
@@ -439,7 +475,7 @@
 														{% endifequal %}
 													</div>
 													<div class='pull-left'>
-														<div class='font-grey'><small><span id='{{newscomment4.user.id}}' class='hand_over ID_card'>{{newscomment4.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment4Score_{{newscomment4.id}}' >{{newscomment4.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment4 %}前</small></div>
+														<div class='font-grey'><small><span id='{{newscomment4.user.id}}' class='hand_over {% if not need_log  %}ID_card{% else %}need_login{% endif %}'>{{newscomment4.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment4Score_{{newscomment4.id}}' >{{newscomment4.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment4 %}前</small></div>
 														<div class='wordsColor'>{% autoescape off %}{{ newscomment4.words}}{% endautoescape %}</div>
 														<div>
 															<ul class='list-inline list-unstyled'>
@@ -469,86 +505,19 @@
 					<p id='noComment'>暂无评论</p>
 				{% endif %}
 			</div>	
+
+			
 		{% else %}
-			{% if need_log %}
 			<p>&nbsp;</p>
 			<p class='text-center clear_both MT_8px'>为了避免分享的排序被少部分人“控制”，请登陆后投上宝贵的一票：）</p>
 			<div class='MT_20px clear_both'>
-				<p class='text-danger'>登陆后可评论或者查看评论</p>
+				<p class='text-danger'>你太穷啦（易币数量为0）以至于无法评论或者查看评论……</p>
 			</div>
-			<div id='showNewslogForm' class='panel panel-info col-xs-12 col-md-7 PA_0xp'>                       
-				<div id='' class="panel-heading">
-					<h4>登录
-						<a href='/log/page_register/'><span class='pull-right'><span class="glyphicon glyphicon-hand-right"></span> 注册</span></a>
-					</h4> 
-				</div>
-				<div class="panel-body">
-					<div id="login">                      
-					   <div id='log_wrong_message'>                     
-							{% if wrong_not_active %} 
-							<div class="alert alert-danger alert-dismissable">
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-								<strong>Warning!</strong> &nbsp;&nbsp;<span class='font-red'>{{ wrong_not_active }}</span>                                                 
-							</div>
-							{% endif %}
-							{% if wrong_not_exist %}
-							<div class="alert alert-danger alert-dismissable">                        
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-								<strong>Warning!</strong> &nbsp;&nbsp;<span class='font-red'>{{ wrong_not_exist }}</span>                                           
-							</div>
-							{% endif %}
-							{% if internet_not_work %}
-							<div class="alert alert-danger alert-dismissable">
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-								<strong>Warning!</strong> &nbsp;&nbsp;<span class='font-red'>{{ internet_not_work }}</span>                                             
-							</div>
-							{% endif %}
-						</div>
-						<form class='form-group' action='/log/' method='POST' autocomplete="on">
-							{% csrf_token %}
-							<div class='form-group'>
-								<label>邮箱</label>
-								<input type="email"  class='form-control' id='' name='email' placeholder="邮箱" required autofocus>
-							</div>
-							<div id='log_pwd_div' class='form-group'>
-								<label>密码</label>
-								<input type="password"  class='form-control' id='' name='stu_pwd' placeholder="密码" required>
-							</div> 
-							<input type="hidden" value="{{ request.path }}" name="next">  
-							<div id='log_button'>
-								<button class="btn btn-info btn-block" id='' type="submit">立即登录</button>
-							</div>
-						</form>
-						
-					</div>
-					<div>
-					<p class='text-center text-danger'><small>由于IE浏览器不能很好地支持最新的网页技术，方遒社区强烈建议您使用其它浏览器以获得更好的体验</small></p>
-					</div>
-				</div>
+			<div class='MT_40px'>
+				<p class='text-center'>在设置里有一本神奇的小册子，那里藏有财富的秘密……</p>
 			</div>
-			{% endif %}
-			{% if need_vote %}
-				<p>&nbsp;</p>
-				<p class='text-center clear_both MT_8px'>为了避免分享的排序被少部分人“控制”，请登陆后投上宝贵的一票：）</p>
-				<div class='MT_20px clear_both'>
-					<p class='text-danger'>你暂时不能评论或者查看评论，因为你还没有评价这个分享</p>
-				</div>
-				<div class='MT_40px'>
-					<p class='font-20 text-center hand_over'><a href='/news/vote/{{this_small_part}}/{{this_news.id}}/1/' class='underline'><b>顶，让更多人看见这个分享</b></a></p>
-					<p class='font-20 text-center hand_over'><a href='/news/vote/{{this_small_part}}/{{this_news.id}}/0/' class='underline'><b>沉，把它沉下去</b></a></p>
-				</div>
-			{% endif %}
-			{% if need_money %}
-				<p>&nbsp;</p>
-				<p class='text-center clear_both MT_8px'>为了避免分享的排序被少部分人“控制”，请登陆后投上宝贵的一票：）</p>
-				<div class='MT_20px clear_both'>
-					<p class='text-danger'>你太穷啦以至于无法评论或者查看评论……</p>
-				</div>
-				<div class='MT_40px'>
-					<p class='text-center'>在设置里有一本神奇的小册子，那里藏有致富的秘密……</p>
-				</div>
-			{% endif %}
 		{% endif %}
+
 	</div>
 </div>
 <script src="{{STATIC_URL}}kindeditor-4.1.10/kindeditor-min.js"></script>
