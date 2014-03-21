@@ -4,9 +4,7 @@
       <li>&nbsp;&nbsp;</li>
       <li id='smallPartLi'><b>{{ part.part }}</b></li>
       {% ifequal smallPart 'hot' %}<li class='active'>{% else %}<li>{% endifequal %}<a id='HotLi' href="#hot" data-toggle="tab">综合</a></li>
-      {% ifequal smallPart 'new' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#new" data-toggle="tab">最新</a></li>
       {% ifequal smallPart 'controversial' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#controversial" data-toggle="tab">热议</a></li>
-      {% ifequal smallPart 'top' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#top" data-toggle="tab">得分</a></li>
       {% ifequal smallPart 'gilded' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#gilded" data-toggle="tab">镀金的</a></li>
     </ul>
 
@@ -86,89 +84,20 @@
                     </ul>
                 </div>
             </div>
-            
+            {% if news in top_newses %}
+			<div class='pull-right'>
+				<img src='{{STATIC_URL}}img/hot.png' class="img-responsive" />
+			</div>
+			{% endif %}
+			{% if news in new_newslist %}
+			<div class='pull-right'>
+				<img src='{{STATIC_URL}}img/new.png' class="img-responsive" />
+			</div>
+			{% endif %}
         {% endfor %}
       {% else %}
         <p>这个社群还没有任何分享哦，成为第一个吧！</p>
       {% endif %}
-      </div>
-      <div class="tab-pane{% ifequal smallPart 'new' %} in active{% endifequal %}" id="new">
-      {% if new_newses %}
-        {% for news in new_newses %}
-            <div class='clear_both line_bottom ML_13px'>
-                <div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>							
-                {% if user.is_authenticated %}	
-                    {% for info in user.user_info_set.all %}
-                        {% if info.upVoted_news %}
-                            {% ifintInstr news.id info.upVoted_news %}	
-                                <div id='' style='display:none' class='newsUpVote'></div>
-                                <div id='' class='newsUpVoted'></div>
-                            {% else %}
-                                <div id='' class='newsUpVote'></div>
-                                <div id='' style='display:none' class='newsUpVoted'></div>
-                            {% endifintInstr %}
-                        {% else %}
-                            <div id='' class='newsUpVote'></div>
-                            <div id='' style='display:none' class='newsUpVoted'></div>
-                        {% endif %}
-                        <div class='{% newsScoreClass info news %}'>{{news.score}}</div>
-                        {% if info.downVoted_news %}
-                            {% ifintInstr news.id info.downVoted_news %}
-                                <div id='' style='display:none' class='newsDownVote'></div>
-                                <div id='' class='newsDownVoted'></div>
-                            {% else %}
-                                <div id='' class='newsDownVote'></div>
-                                <div id='' style='display:none' class='newsDownVoted'></div>
-                            {% endifintInstr %}
-                        {% else %}
-                            <div id='' class='newsDownVote'></div>
-                            <div id='' style='display:none' class='newsDownVoted'></div>
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    <div id='' class='newsUpVote'></div>
-                    <div id='' style='display:none' class='newsUpVoted'></div>
-                    <div class='{% newsScoreClass info news %}'>{{news.score}}</div>
-                    <div id='' class='newsDownVote'></div>
-                    <div id='' style='display:none' class='newsDownVoted'></div>
-                {% endif %}
-            </div>
-            {% ifequal news.type 'pic' %}
-                <div class='news_pic pull-left MT_6px'>
-                    <img width='50px' class="img-responsive" src='{{MEDIA_URL}}{{news.pic}}' />
-                </div>
-            {% endifequal %}
-                <div class='pull-left MT_8px'>
-                    <div>
-                        {% ifequal news.type 'link' %}
-                        <a class='news_title' target='_blank' href='{{news.link}}'>{{news.title}}</a>
-                        {% else %}
-                        <a class='news_title' href='/news/{{part.part}}/new/showNews/{{news.id}}/'>{{news.title}}</a>
-                        {% endifequal %}
-                        <!--<span>——time{{news.time}}</span>-->
-                    </div>
-                    <div>
-                        <small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;
-                        <a id='{{news.user.id}}' class='shallowLink hand_over {% if user.is_authenticated %}ID_card{% else %}cardNeedLog{% endif %}'>
-                        {{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
-                        <a class='shallowLink' href='/news/{{news.newspart.part}}/hot/'>
-                            {{news.newspart.part}}/{{news.newspart.realPart}}
-                        </a></small>
-                    </div>
-                    <ul class='list-inline list-unstyled'>
-                        <li><small><a class='font-grey' href='/news/{{part.part}}/new/showNews/{{news.id}}/'>
-                        {% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论
-                        </a></small></li>
-                        <li><small class='font-grey'>镀金{{news.gold}}</small></li>
-                        <li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
-                    </ul>
-                </div>
-            
-            </div>
-        {% endfor %}
-      {% else %}
-        <p>这个社群还没有任何分享哦，成为第一个吧！</p>
-      {% endif %}	
       </div>
       <div class="tab-pane{% ifequal smallPart 'controversial' %} in active{% endifequal %}" id="controversial">
       {% if controversial_newses %}
@@ -247,83 +176,7 @@
         <p>这个社群还没有任何分享哦，成为第一个吧！</p>
       {% endif %}
       </div>
-      <div class="tab-pane{% ifequal smallPart 'top' %} in active{% endifequal %}" id="top">
-      {% if top_newses %}
-        {% for news in top_newses %}
-            <div class='clear_both line_bottom ML_13px'>
-                <div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>
-                {% if user.is_authenticated %}
-                    {% for info in user.user_info_set.all %}
-                        {% if info.upVoted_news %}
-                            {% ifintInstr news.id info.upVoted_news %}	
-                                <div id='' style='display:none' class='newsUpVote'></div>
-                                <div id='' class='newsUpVoted'></div>
-                            {% else %}
-                                <div id='' class='newsUpVote'></div>
-                                <div id='' style='display:none' class='newsUpVoted'></div>
-                            {% endifintInstr %}
-                        {% else %}
-                            <div id='' class='newsUpVote'></div>
-                            <div id='' style='display:none' class='newsUpVoted'></div>
-                        {% endif %}
-                        <div class='{% newsScoreClass info news %}'>{{news.score}}</div>
-                        {% if info.downVoted_news %}
-                            {% ifintInstr news.id info.downVoted_news %}
-                                <div id='' style='display:none' class='newsDownVote'></div>
-                                <div id='' class='newsDownVoted'></div>
-                            {% else %}
-                                <div id='' class='newsDownVote'></div>
-                                <div id='' style='display:none' class='newsDownVoted'></div>
-                            {% endifintInstr %}
-                        {% else %}
-                            <div id='' class='newsDownVote'></div>
-                            <div id='' style='display:none' class='newsDownVoted'></div>
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    <div id='' class='newsUpVote'></div>
-                    <div id='' style='display:none' class='newsUpVoted'></div>
-                    <div class='{% newsScoreClass info news %}'>{{news.score}}</div>
-                    <div id='' class='newsDownVote'></div>
-                    <div id='' style='display:none' class='newsDownVoted'></div>
-                {% endif %}
-            </div>
-            {% ifequal news.type 'pic' %}
-                <div class='news_pic pull-left MT_6px'>
-                    <img width='50px' class="img-responsive" src='{{MEDIA_URL}}{{news.pic}}' />
-                </div>
-            {% endifequal %}
-                <div class='pull-left MT_8px'>
-                    <div>
-                        {% ifequal news.type 'link' %}
-                        <a class='news_title' target='_blank' href='{{news.link}}'>{{news.title}}</a>
-                        {% else %}
-                        <a class='news_title' href='/news/{{part.part}}/top/showNews/{{news.id}}/'>{{news.title}}</a>
-                        {% endifequal %}
-                        <!--<span>——score{{news.score}}</span>-->
-                    </div>
-                    <div>
-                        <small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;
-                        <a id='{{news.user.id}}' class='shallowLink hand_over {% if user.is_authenticated %}ID_card{% else %}cardNeedLog{% endif %}'>
-                        {{news.user.nic_name}}</a>&nbsp;&nbsp;分享到&nbsp;
-                        <a class='shallowLink' href='/news/{{news.newspart.part}}/hot/'>
-                            {{news.newspart.part}}/{{news.newspart.realPart}}
-                        </a></small>
-                    </div>
-                    <ul class='list-inline list-unstyled'>
-                        <li><small><a class='font-grey' href='/news/{{part.part}}/top/showNews/{{news.id}}/'>
-                        {% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
-                        </small></li>
-                        <li><small class='font-grey'>镀金{{news.gold}}</small></li>
-                        <li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
-                    </ul>
-                </div>					
-            </div>
-        {% endfor %}
-      {% else %}
-        <p>这个社群还没有任何分享哦，成为第一个吧！</p>
-      {% endif %}
-      </div>
+
       <div class="tab-pane{% ifequal smallPart 'gilded' %} in active{% endifequal %}" id="gilded">
       {% if gilded_newses %}
           {% for news in gilded_newses %}

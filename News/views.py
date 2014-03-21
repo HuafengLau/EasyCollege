@@ -10,6 +10,7 @@ from django.conf import settings
 from News.models import NewsPart,News,NewsComment1,NewsComment2,NewsComment3,NewsComment4
 from News.form import LinkNewsForm, TextNewsForm, PicNewsForm, mp3NewsForm
 from datetime import datetime
+import calendar
 from Center.models import User_info
 from math import sqrt, log10
 import pytz
@@ -180,35 +181,60 @@ def which_news(request,news_part,small_part):
    
     newsParts = allNewsPart.filter(open=True,secret=False).order_by('-num','-user_num','part')
     
-    top_newsParts = newsParts[:18]
-    more_newsParts = newsParts[18:]
+    top_newsParts = newsParts[:25]
+    more_newsParts = newsParts[25:]
     if user.is_authenticated():
         this_user_info = User_info.objects.get(user=user)
         subscriptions = this_user_info.subscription.split(';')[:-1]
         mySubs = allNewsPart.filter(part__in=subscriptions).order_by('part')
-        #otherParts = newsParts.exclude(part__in=subscriptions).order_by('part')
     else:
         defaultList = ['Funny','Life','Music','Home-news','SuggestCY','Gossip']
         mySubs = allNewsPart.filter(part__in=defaultList).order_by('part')
-        
-        #otherParts = newsParts.order_by('part')
     
-        
     if news_part != 'All':
         newses = News.objects.filter(newspart=part)
     else:
         newses = News.objects.filter(open=True,secret=False)
+        
+    def cut(arr, indices):  
+        return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
+                
+    today = datetime.today()
+    year = today.year
+    month = today.month
+    day = today.day
+    _weekday,_lastday = calendar.monthrange(year,month)  
+    _sundays = [x for x in range(6-_weekday+1,_lastday+1,7)]  
+
+    weekList =  cut(range(1,_lastday+1),_sundays)
+
+    for index, item in enumerate(weekList):
+        if day in item:
+            this_week = item
+            break
+
+    start_date = datetime(year,month,this_week[0],0,0,0,0)
+    end_date = datetime.today()
+    weekTopList = newses.filter(time__range=(start_date, end_date)).order_by('-score','-time')[:8]
+        
     hot_newses = newses.order_by('-hot','-time')[:25]
-    new_newses = newses.order_by('-time')[:25]
-    controversial_newses = newses.order_by('-controversy','-time')[:25]
-    top_newses = newses.order_by('-score','-time')[:30]
     gilded_newses = newses.order_by('-gold','-time')[:30]
+    controversial_newses = newses.order_by('-controversy','-time')[:25]
     
+    top_newses = newses.order_by('-score','-time')[:5]
+    new_newses = newses.order_by('-time')[:20]
+    now = datetime.now(pytz.utc)
+    new_newslist = []
+
+    for news in new_newses: 
+        if (now - news.time).total_seconds() < 43200.0:
+            new_newslist.append(news)
+        
     return render_to_response('newsBase.html',locals(),
         context_instance=RequestContext(request))
 
 def fangqiu(request):
-    return which_news(request,'All','new')
+    return which_news(request,'All','hot')
         
 @login_required(login_url='/log/')         
 def submit_news(request,news_part, news_type):
@@ -421,7 +447,7 @@ def submit_news(request,news_part, news_type):
                 this_feeds.save()
                 this_feeds.owner.message += 1
                 this_feeds.owner.save()
-        url = '/news/'+ news_part + '/new/'
+        url = '/news/'+ news_part + '/hot/'
         return HttpResponseRedirect(url)
        
 def show_news(request,news_part,small_part,news_id):             
@@ -471,9 +497,33 @@ def show_news(request,news_part,small_part,news_id):
         need_vote = False
         need_money = False
     part = this_news.newspart
-    RuleHtml = 'Rule'+ part.part + '.html'
     SimilarHtml = 'Similar' + part.part + '.html'
-    AdminHtml = 'Admin' + part.part + '.html'
+    
+    if news_part != 'All':
+        newses = News.objects.filter(newspart=part)
+    else:
+        newses = News.objects.filter(open=True,secret=False)
+    
+    def cut(arr, indices):  
+        return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
+                
+    today = datetime.today()
+    year = today.year
+    month = today.month
+    day = today.day
+    _weekday,_lastday = calendar.monthrange(year,month)  
+    _sundays = [x for x in range(6-_weekday+1,_lastday+1,7)]  
+
+    weekList =  cut(range(1,_lastday+1),_sundays)
+
+    for index, item in enumerate(weekList):
+        if day in item:
+            this_week = item
+            break
+
+    start_date = datetime(year,month,this_week[0],0,0,0,0)
+    end_date = datetime.today()
+    weekTopList = newses.filter(time__range=(start_date, end_date)).order_by('-score','-time')[:8]
     
     return render_to_response('newsShow.html',locals(),
         context_instance=RequestContext(request))
@@ -490,11 +540,20 @@ def getTopPart(request):
                 newses = News.objects.filter(newspart=part)
             else:
                 newses = News.objects.filter(open=True,secret=False)
+        
             hot_newses = newses.order_by('-hot','-time')[:25]
-            new_newses = newses.order_by('-time')[:25]
             controversial_newses = newses.order_by('-controversy','-time')[:25]
-            top_newses = newses.order_by('-score','-time')[:30]
             gilded_newses = newses.order_by('-gold','-time')[:30]
+            
+            top_newses = newses.order_by('-score','-time')[:5]
+            
+            new_newses = newses.order_by('-time')[:20]
+            now = datetime.now(pytz.utc)
+            new_newslist = []
+
+            for news in new_newses: 
+                if (now - news.time).total_seconds() < 43200.0:
+                    new_newslist.append(news)
             
             return render_to_response('callTopPart.html',locals(),
                 context_instance=RequestContext(request))
