@@ -31,6 +31,8 @@ import bs4
 @login_required(login_url='/log/') 
 def index(request):
     user = request.user
+    user.message = 0
+    user.save()
     Feeds1 = Feeds_followNews.objects.filter(owner=user)
     Feeds2 = Feeds_news.objects.filter(owner=user)
     Feeds3 = Feeds_comment.objects.filter(owner=user)

@@ -53,7 +53,18 @@
               {% block nav_ul %}
                 <ul class="nav navbar-nav">
                     {% if newsHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/news/All/new/'>方遒</a></li>
-					{% if indexHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/index/'>个人中心</a></li>
+					{% if indexHTML %}
+						<li class='active'>
+					{% else %}
+						<li>
+					{% endif %}
+						<a href='/index/'>个人中心
+						{% if user.is_authenticated %}
+							{% ifnotequal user.message 0 %}
+							&nbsp;<span class="badge" style='background-color:red'>{{user.message}}</span>
+							{% endifnotequal %}
+						{% endif %}
+						</a></li>
                     {% if centerHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/center/'>设置</a></li>
                 </ul>
               {% endblock %}

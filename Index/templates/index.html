@@ -83,6 +83,9 @@
 												{% ifequal feed.type 'followNews' %}
 												&nbsp;&nbsp;分享&nbsp;
 												{% endifequal %}
+												{% ifequal feed.type 'newsVoteUp' %}
+												&nbsp;&nbsp;顶了你的分享&nbsp;
+												{% endifequal %}
 												{% ifequal feed.type 'newsComment' %}
 												&nbsp;&nbsp;评论&nbsp;
 												{% endifequal %}

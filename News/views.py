@@ -102,58 +102,71 @@ def news(request):
     return HttpResponseRedirect('/news/All/hot/')
 
 @login_required(login_url='/log/') 
-def newsVote(request,small_part,news_id,upOrDown):
-    this_news = News.objects.get(id=news_id)
-    user = request.user
-    this_user_info = User_info.objects.get(user=user)
-    ups = this_news.ups
-    downs = this_news.downs
-    if upOrDown == '1':
-        user.money -= 1
-        user.save()
-        this_news.user.agree_num += 1
-        this_news.user.save()
-        ups += 1
-        if news_id in this_user_info.upVoted_news:
-            return render_to_response('404.html',locals(),
+def newsVote(request):
+    if request.is_ajax() and request.method == 'GET':
+        if 'news_id' in request.GET:
+            news_id = request.GET.get('news_id')
+            vote = request.GET.get('vote')
+            this_news = News.objects.get(id=news_id)
+            user = request.user
+            this_user_info = User_info.objects.get(user=user)
+            ups = this_news.ups
+            downs = this_news.downs
+            if vote == '1':   
+                if news_id in this_user_info.upVoted_news:
+                    response = HttpResponse('wrong')
+                    return response
+                else:
+                    user.money -= 1
+                    user.save()
+                    this_news.user.agree_num += 1
+                    this_news.user.save()
+                    ups += 1
+                    this_user_info.upVoted_news += '%s;' % news_id
+                    this_user_info.save()
+                    this_feed = Feeds_news(
+                        type = 'newsVoteUp',
+                        showText = True,
+                        owner = this_news.user,
+                        creator = user,
+                        news = this_news,
+                        gold_num = 0,
+                    )
+                    this_feed.save()
+                    this_feed.owner.message += 1
+                    this_feed.owner.save()
+            elif upOrDown == '0':
+                user.money -= 1
+                user.save()
+                downs += 1
+                if news_id in this_user_info.downVoted_news:
+                    response = HttpResponse('wrong')
+                    return response
+                else:
+                    this_user_info.downVoted_news += '%s' % news_id
+                    this_user_info.save()
+            else:
+                response = HttpResponse('wrong')
+                return response
+            
+            if 'CY' in this_news.newspart.part or (this_news.ups+this_news.downs) < 3:
+                num = 5
+                if 'CY' in this_news.newspart.part:
+                    num += 5
+                if (this_news.ups+this_news.downs) < 3:
+                    num += 3
+                user.money += num
+                user.save()
+                
+            this_news.ups = ups
+            this_news.downs = downs
+            this_news.score = ups-downs
+            this_news.hot = hot(ups, downs, this_news.time)
+            this_news.controversy = controversy(ups, downs)
+            this_news.save()
+            
+            return render_to_response('afterVote.html',locals(),
                 context_instance=RequestContext(request))
-        else:
-            this_user_info.upVoted_news += '%s;' % news_id
-            this_user_info.save()
-    elif upOrDown == '0':
-        user.money -= 1
-        user.save()
-        downs += 1
-        if news_id in this_user_info.downVoted_news:
-            return render_to_response('404.html',locals(),
-                context_instance=RequestContext(request))
-        else:
-            this_user_info.downVoted_news += '%s' % news_id
-            this_user_info.save()
-    else:
-        return render_to_response('404.html',locals(),
-            context_instance=RequestContext(request))
-    
-    if 'CY' in this_news.newspart.part or small_part == 'new':
-        num = 5
-        if 'CY' in this_news.newspart.part:
-            num += 5
-        if small_part == 'new':
-            num += 3
-        user.money += num
-        user.save()
-        
-    this_news.ups = ups
-    this_news.downs = downs
-    this_news.score = ups-downs
-    this_news.hot = hot(ups, downs, this_news.time)
-    this_news.controversy = controversy(ups, downs)
-    this_news.save()
-    try:
-        url = request.META['HTTP_REFERER']
-    except:
-        url = '/news/All/hot/showNews/%s/' % news_id
-    return HttpResponseRedirect(url)
     
 def which_news(request,news_part,small_part):
     user = request.user
@@ -213,7 +226,6 @@ def submit_news(request,news_part, news_type):
     top_newsParts = NewsPart.objects.all().order_by('-num','-user_num','part')[:19]
  
     if request.method == 'GET':
-
         if news_part == 'All':
             linkForm = LinkNewsForm()
             textForm = TextNewsForm()
@@ -393,6 +405,8 @@ def submit_news(request,news_part, news_type):
             news = this_news
         )
         this_feeds.save()
+        this_feeds.owner.message += 1
+        this_feeds.owner.save()
         if this_user_info.beWatched:
             beWatched_list = this_user_info.beWatched.split(';')[:-1]
             users = MyUser.objects.filter(id__in=beWatched_list)       
@@ -405,7 +419,8 @@ def submit_news(request,news_part, news_type):
                     news = this_news
                 )
                 this_feeds.save()
-        
+                this_feeds.owner.message += 1
+                this_feeds.owner.save()
         url = '/news/'+ news_part + '/new/'
         return HttpResponseRedirect(url)
        
@@ -604,6 +619,8 @@ def giveGold(request):
                     return response
                 else:
                     this_feed.save()
+                    this_feeds.owner.message += 1
+                    this_feeds.owner.save()
                     this_user_info = User_info.objects.get(user=this_object.user)
                     this_object.user.money += 5
                     this_object.user.save()
@@ -665,6 +682,8 @@ def comment(request):
                         comment = this_newComment
                     )
                     this_feed.save()
+                    this_feeds.owner.message += 1
+                    this_feeds.owner.save()
         if 'type' in request.GET:
             noSuojin = False
             this_type = request.GET.get('type')
@@ -700,6 +719,8 @@ def comment(request):
                         comment2 = this_newComment
                     )
                     this_feed.save()
+                    this_feeds.owner.message += 1
+                    this_feeds.owner.save()
             if this_type == 'newscomment2':
                 this_comments2 = NewsComment2.objects.get(id=id)
                 this_news = this_comments2.newscomment1.news
@@ -730,6 +751,8 @@ def comment(request):
                         comment3 = this_newComment
                     )
                     this_feed.save()
+                    this_feeds.owner.message += 1
+                    this_feeds.owner.save()
             if this_type == 'newscomment3':
                 this_comments3 = NewsComment3.objects.get(id=id)
                 this_news = this_comments3.newscomment2.newscomment1.news
@@ -760,6 +783,8 @@ def comment(request):
                         comment4 = this_newComment
                     )
                     this_feed.save()
+                    this_feeds.owner.message += 1
+                    this_feeds.owner.save()
         return render_to_response('comment.html',locals(),
                 context_instance=RequestContext(request))
 
@@ -857,6 +882,7 @@ def watch(request):
                 news_user_info.beWatched += '%s;' % user.id
                 this_user_info.save()
                 news_user_info.save()
+                
                 response = HttpResponse(news_user_info.when_beWatched)
                 return response
         if action == '-1':

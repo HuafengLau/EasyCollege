@@ -60,6 +60,7 @@
 		<hr class='MT_0px'/>
 		<div id='newsMainDiv' class='row'>
 			{% block topPartLi %}
+			{% if newsBase %}
 			<div id='leftDiv' class='hidden-xs col-md-2 MT_40px'>			
 				<ul class="side_nav">
 					<li id='partLi'>&nbsp;&nbsp;最活跃的社群</li>
@@ -71,6 +72,7 @@
 					{% endfor %}
 				</ul>
 			</div>
+			{% endif %}
 			{% endblock %}
 			<div id='mainDiv' class='col-xs-12 {% if newsBase %}col-md-6{%else%}col-md-8{% endif %}'>
 				{% block LeftDiv %}

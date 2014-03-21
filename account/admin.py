@@ -17,7 +17,7 @@ class UserCreationForm(forms.ModelForm):
     
     class Meta:
         model = MyUser
-        fields = ('stu_pwd', 'nic_name', 'email', 'money','agree_num','avatar')
+        fields = ('stu_pwd', 'nic_name', 'email', 'money','agree_num','message','avatar')
         
     def clean_password2(self):
         #Check that the two password entries match
@@ -44,7 +44,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = MyUser
-        fields = ['stu_pwd', 'nic_name', 'email', 'money','agree_num','avatar','is_active', 'is_admin']
+        fields = ['stu_pwd', 'nic_name', 'email', 'money','agree_num','message','avatar','is_active', 'is_admin']
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -61,17 +61,17 @@ class MyUserAdmin(UserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     
-    list_display = ('email','money','agree_num','nic_name', 'avatar','is_admin','is_active')
+    list_display = ('email','money','agree_num','message','nic_name', 'avatar','is_admin','is_active')
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('money','agree_num','nic_name','avatar')}),
+        ('Personal info', {'fields': ('money','agree_num','message','nic_name','avatar')}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'money','agree_num', 'nic_name','password1', 'password2')}
+            'fields': ('email', 'money','agree_num', 'message','nic_name','password1', 'password2')}
         ),
     )
     search_fields = ('email',)

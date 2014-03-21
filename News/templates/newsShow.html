@@ -55,7 +55,10 @@
 		</div>
 	</div>
 	<div class='clear_both'>
-		<div id='{{this_news.ups}};{{this_news.downs}};{{this_news.score}}' class='pull-left hand_over newsScoreInfo MR_16px' >
+		<div id='voteChange'>
+			<div id='{{this_news.ups}};{{this_news.downs}};{{this_news.score}}' class='pull-left hand_over newsScoreInfo MR_16px' >
+
+			{% if user.is_authenticated %}
 			{% for info in user.user_info_set.all %}
 				{% if info.upVoted_news %}
 					{% ifintInstr this_news.id info.upVoted_news %}	
@@ -83,6 +86,14 @@
 					<div id='' class='newsDownVoted hidden'></div>
 				{% endif %}
 			{% endfor %}
+			{% else %}
+				<div id='' class='newsUpVote'></div>
+				<div id='' style='display:none' class='newsUpVoted'></div>
+				<div class='{% newsScoreClass info this_news %}'>{{this_news.score}}</div>
+				<div id='' class='newsDownVote'></div>
+				<div id='' style='display:none' class='newsDownVoted'></div>
+			{% endif %}
+			</div>
 		</div>
 		<div id='newsShow_itslef' class='pull-left'>
 			<div>
@@ -129,7 +140,7 @@
 			</div>
 		</div>
 		<div class='clear_both MT_8px'>
-			{% ifequal this_news.text.type 'link' %}
+			{% ifequal this_news.type 'link' %}
 			<script type="text/javascript">
 			(function(){
 			var p = {
@@ -227,7 +238,6 @@
 			</script>
 			<script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
 			{% endifequal %}
-
         </div>
 		
 		{% if not need_money %}
@@ -257,11 +267,12 @@
 			</div>
 			{% endif %}
 			{% if need_vote %}
-				<p>&nbsp;</p>
-				<p class='text-center clear_both MT_8px'>为了避免分享的排序被少部分人“控制”，请投上宝贵的一票：）</p>
-				<div class='MT_40px'>
-					<p class='font-20 text-center hand_over'><a href='/news/vote/{{this_small_part}}/{{this_news.id}}/1/' class='underline'><b>顶，让更多人看见这个分享</b></a></p>
-					<p class='font-20 text-center hand_over'><a href='/news/vote/{{this_small_part}}/{{this_news.id}}/0/' class='underline'><b>沉，把它沉下去</b></a></p>
+				<div id='voteDiv'>
+					<p class='text-center clear_both MT_8px'>为了避免分享的排序被少部分人“控制”，请投上宝贵的一票：）</p>
+					<div class='MT_20px'>
+						<p class='font-20 text-center hand_over'><a id='{{this_news.id}};1' class='logVote underline font-link'><b>顶，让更多人看见这个分享</b></a></p>
+						<p class='font-20 text-center hand_over'><a id='{{this_news.id}};0' class='logVote underline font-link'><b>沉，把它沉下去</b></a></p>
+					</div>
 				</div>
 			{% endif %}
 			<div id='{{this_news.id}}' class='form-group clear_both'>

@@ -8,7 +8,7 @@ from django.utils import timezone
 
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, stu_pwd, nic_name, email, money,agree_num,avatar,**extra_fields):
+    def create_user(self, stu_pwd, nic_name, email, money,agree_num,message,avatar,**extra_fields):
         
         now = timezone.now()
         
@@ -18,7 +18,7 @@ class MyUserManager(BaseUserManager):
         email = MyUserManager.normalize_email(email)
         
         user = self.model(stu_pwd=stu_pwd, nic_name=nic_name,
-            email=email, money=money,agree_num=agree_num,last_login=now, avatar=avatar,**extra_fields)
+            email=email, money=money,agree_num=agree_num,message=message,last_login=now, avatar=avatar,**extra_fields)
                           
         user.set_password(stu_pwd)
         
@@ -27,11 +27,11 @@ class MyUserManager(BaseUserManager):
         return user
         
     
-    def create_superuser(self, stu_pwd, nic_name, email, money,agree_num,avatar,**extra_fields):
+    def create_superuser(self, stu_pwd, nic_name, email, money,agree_num,message,avatar,**extra_fields):
         
         now = timezone.now()
         
-        user = self.create_user(stu_pwd, nic_name, email, money,agree_num,avatar, **extra_fields)
+        user = self.create_user(stu_pwd, nic_name, email, money,agree_num,message,avatar, **extra_fields)
             
         user.is_acitve=True
         user.is_admin=True
@@ -47,6 +47,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name='email', unique=True)
     money = models.IntegerField(verbose_name=u'money')
     agree_num = models.IntegerField(default=0,blank=True,verbose_name=u'获赞')
+    message = models.IntegerField(default=0,blank=True,verbose_name=u'消息')
     #university_info_id = models.CharField(max_length=30,verbose_name='school_id')
     #first_value = models.IntegerField(verbose_name=u'honour')
     avatar = models.CharField(max_length=200,null=True,blank=True)
@@ -58,7 +59,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField('active', default=True)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['stu_pwd', 'nic_name', 'money','agree_num','avatar']
+    REQUIRED_FIELDS = ['stu_pwd', 'nic_name', 'money','agree_num','message','avatar']
     objects = MyUserManager()
     
     def get_full_name(self):

@@ -110,11 +110,7 @@ $(document).ready(function(){
 	$('.cardNeedLog').on('click', function(){
 		alert('登陆后才可以查看分享人信息哦：）');
 	});
-	
-	$('.logVote').on('click',function(){
-		alert("为了不让分享排序被少部分人'控制'，请登录后投上宝贵的一票：）");
-	});
-	
+
 	$("ul.side_nav li").on('mouseover', function() {
 		$(this).children("div")[0].style.display='block';
 	});
@@ -126,13 +122,28 @@ $(document).ready(function(){
 	// JS for newsSubmit.html
 	
 	// JS for newsShow.html
+	$('.logVote').on('click', function(){
+		var news_id = $(this).attr('id').split(';')[0]
+		var vote = $(this).attr('id').split(';')[1]
+		$.get('/news/vote/',{'news_id':news_id,'vote':vote},function(data){
+			if(data == 'wrong'){
+				alert('可能是由于外星人的干扰引发了未知错误，请联系管理员admin@funqiu.com');
+			}else{
+				$('#voteChange').html(data);
+				alert('感谢您的投票，您还可以对评论投票哦！');
+				$('#voteDiv').hide();
+			}
+		});
+	});
+	
+	
 	$('#newsShowCallLog').on('click', function(){
-       if ($( "#showNewslogForm").is(":hidden")){
-           $( "#showNewslogForm").show();
+       if ($("#showNewslogForm").is(":hidden")){
+           $("#showNewslogForm").show();
            $(this).html("&nbsp;&nbsp;收起");
        } 
        else{
-           $( "#showNewslogForm").hide();
+           $("#showNewslogForm").hide();
            $(this).html('&nbsp;&nbsp;立即登陆');
        }
     });

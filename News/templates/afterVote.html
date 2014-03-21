@@ -1,0 +1,30 @@
+{% load my_tags %}
+<div id='{{this_news.ups}};{{this_news.downs}};{{this_news.score}}' class='pull-left hand_over newsScoreInfo MR_16px' >
+    {% for info in user.user_info_set.all %}
+        {% if info.upVoted_news %}
+            {% ifintInstr this_news.id info.upVoted_news %}	
+                <div id='' class='newsUpVote hidden'></div>
+                <div id='' class='newsUpVoted'></div>
+            {% else %}
+                <div id='' class='newsUpVote'></div>
+                <div id='' class='newsUpVoted hidden'></div>
+            {% endifintInstr %}
+        {% else %}
+            <div id='' class='newsUpVote'></div>
+            <div id='' class='newsUpVoted hidden'></div>
+        {% endif %}
+        <div class='{% newsScoreClass info this_news %}'>{{this_news.score}}</div>
+        {% if info.downVoted_news %}
+            {% ifintInstr this_news.id info.downVoted_news %}
+                <div id='' class='newsDownVote hidden'></div>
+                <div id='' class='newsDownVoted'></div>
+            {% else %}
+                <div id='' class='newsDownVote'></div>
+                <div id='' class='newsDownVoted hidden'></div>
+            {% endifintInstr %}
+        {% else %}
+            <div id='' class='newsDownVote'></div>
+            <div id='' class='newsDownVoted hidden'></div>
+        {% endif %}
+    {% endfor %}
+</div>
