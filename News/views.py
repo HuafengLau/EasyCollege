@@ -135,7 +135,7 @@ def newsVote(request):
                     this_feed.save()
                     this_feed.owner.message += 1
                     this_feed.owner.save()
-            elif upOrDown == '0':
+            elif vote == '0':
                 user.money -= 1
                 user.save()
                 downs += 1
