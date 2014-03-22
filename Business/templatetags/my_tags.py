@@ -182,13 +182,13 @@ class RobotNode(template.Node):
         elif str(self.sequence) == 'partNews':
             s = ''
             for part in NewsPart.objects.filter(secret=False):
-                for small in ['hot','new','controversial','top','gilded']:
+                for small in ['hot','controversial','gilded']:
                     s += 'Allow: /news/%s/%s/\r\n' % (part.part, small)
             return s
         elif str(self.sequence) == 'news':
             s ='' 
             for news in News.objects.filter(secret=False):
-                for s1 in ['hot','new','controversial','top','gilded']:
+                for s1 in ['hot','controversial','gilded']:
                     s += 'Allow: /news/%s/%s/showNews/%s/\r\n' % (news.newspart.part,s1,news.id)
                     if not news.secret:
                         s += 'Allow: /news/All/%s/showNews/%s/\r\n' % (s1,news.id)
@@ -295,7 +295,7 @@ class SitemapNode(template.Node):
             today = '%s-%s-%s' % (now.year,month,day)
              
             for part in NewsPart.objects.filter(secret=False):
-                for small in ['hot','new','controversial','top','gilded']:
+                for small in ['hot','controversial','gilded']:
                     s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/news/%s/%s/</loc>\r\n' % (part.part, small)
                     s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % today
                     s_temp3 = '\r\n      <changefreq>always</changefreq>\r\n\r\n   </url>\r\n'
@@ -314,7 +314,7 @@ class SitemapNode(template.Node):
                 day = now.day
             today = '%s-%s-%s' % (now.year,month,day)
             for news in News.objects.filter(secret=False):
-                for s1 in ['hot','new','controversial','top','gilded']:
+                for s1 in ['hot','controversial','gilded']:
                     url = 'http://www.collegeyi.com/news/%s/%s/showNews/%s/' % (news.newspart.part,s1,news.id)
                     s_temp1 = '\r\n   <url>\r\n\r\n      <loc>%s</loc>\r\n' % url
                     s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % today
