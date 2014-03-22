@@ -451,6 +451,10 @@ div.transp { /* make the div translucent */
     padding-top: 2px;
 }
 
+.indexImgDiv{
+	height: 480px;
+	overflow: hidden;
+}
 
 .add_button_info{
     text-decoration: underline;
