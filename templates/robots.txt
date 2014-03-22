@@ -14,5 +14,4 @@ Disallow: /news/comment/vote/
 
 User-agent:  *
 Allow: /log/
-Allow: /business/TheRich/
 {% Robot partNews %}{% Robot news %}

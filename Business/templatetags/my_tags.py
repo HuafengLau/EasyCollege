@@ -239,7 +239,7 @@ class SitemapNode(template.Node):
                         lastmod = this_eot.last_modified
                 except:
                     lastmod = credit.add_date
-                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/eot/showcredit/%s/</loc>\r\n' % credit.id
+                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.funqiu.com/eot/showcredit/%s/</loc>\r\n' % credit.id
                 s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % lastmod
                 s_temp3 = '\r\n      <changefreq>weekly</changefreq>\r\n\r\n   </url>\r\n'
                 s += s_temp1 + s_temp2 + s_temp3
@@ -253,7 +253,7 @@ class SitemapNode(template.Node):
                 else:
                     eot.save()
                     lastmod = eot.last_modified
-                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/eot/showeot/%s/</loc>\r\n' % eot.id
+                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.funqiu.com/eot/showeot/%s/</loc>\r\n' % eot.id
                 s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % lastmod
                 s_temp3 = '\r\n      <changefreq>weekly</changefreq>\r\n\r\n   </url>\r\n'
                 s += s_temp1 + s_temp2 + s_temp3
@@ -267,7 +267,7 @@ class SitemapNode(template.Node):
                 else:
                     eotdata.save()
                     lastmod = eotdata.last_modified
-                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/eot/showcomment/%s/</loc>\r\n' % eotdata.id
+                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.funqiu.com/eot/showcomment/%s/</loc>\r\n' % eotdata.id
                 s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % lastmod
                 s_temp3 = '\r\n      <changefreq>weekly</changefreq>\r\n\r\n   </url>\r\n'
                 s += s_temp1 + s_temp2 + s_temp3
@@ -276,7 +276,7 @@ class SitemapNode(template.Node):
             s = ''
             school_time = '2014-02-24'
             for (k,v) in  code_school.items(): 
-                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/business/guide/getCreditFile/%s/</loc>\r\n' % k
+                s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.funqiu.com/business/guide/getCreditFile/%s/</loc>\r\n' % k
                 s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % school_time
                 s_temp3 = '\r\n      <changefreq>yearly</changefreq>\r\n\r\n   </url>\r\n'
                 s += s_temp1 + s_temp2 + s_temp3
@@ -296,7 +296,7 @@ class SitemapNode(template.Node):
              
             for part in NewsPart.objects.filter(secret=False):
                 for small in ['hot','controversial','gilded']:
-                    s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.collegeyi.com/news/%s/%s/</loc>\r\n' % (part.part, small)
+                    s_temp1 = '\r\n   <url>\r\n\r\n      <loc>http://www.funqiu.com/news/%s/%s/</loc>\r\n' % (part.part, small)
                     s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % today
                     s_temp3 = '\r\n      <changefreq>always</changefreq>\r\n\r\n   </url>\r\n'
                     s += s_temp1 + s_temp2 + s_temp3
@@ -315,13 +315,13 @@ class SitemapNode(template.Node):
             today = '%s-%s-%s' % (now.year,month,day)
             for news in News.objects.filter(secret=False):
                 for s1 in ['hot','controversial','gilded']:
-                    url = 'http://www.collegeyi.com/news/%s/%s/showNews/%s/' % (news.newspart.part,s1,news.id)
+                    url = 'http://www.funqiu.com/news/%s/%s/showNews/%s/' % (news.newspart.part,s1,news.id)
                     s_temp1 = '\r\n   <url>\r\n\r\n      <loc>%s</loc>\r\n' % url
                     s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % today
                     s_temp3 = '\r\n      <changefreq>always</changefreq>\r\n\r\n   </url>\r\n'
                     s += s_temp1 + s_temp2 + s_temp3              
                     if not news.secret:
-                        url = 'http://www.collegeyi.com/news/All/%s/showNews/%s/' % (s1,news.id)
+                        url = 'http://www.funqiu.com/news/All/%s/showNews/%s/' % (s1,news.id)
                         s_temp1 = '\r\n   <url>\r\n\r\n      <loc>%s</loc>\r\n' % url
                         s_temp2 = '\r\n      <lastmod>%s</lastmod>\r\n' % today
                         s_temp3 = '\r\n      <changefreq>always</changefreq>\r\n\r\n   </url>\r\n'
