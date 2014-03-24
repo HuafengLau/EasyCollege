@@ -227,7 +227,7 @@
 			<p class='text-center clear_both MT_8px'>为了避免评论和分享的排序被少部分人“控制”，请登陆后投上宝贵的一票：）
 				<a class='hand_over font-link font-20' id='newsShowCallLog'>&nbsp;&nbsp;立即登录（支持QQ登录）</a>
 			</p>
-			<div id='showNewslogForm' class='col-xs-6 col-md-5 col-md-offset-2 PA_0xp'>                       
+			<div id='showNewslogForm' class='col-xs-6 col-md-6 col-md-offset-3 PA_0xp'>                       
 				<div id='normalLogDiv' class='bcColorWhite'>                   
 					<form class='form-group' action='/log/' method='POST' autocomplete="on">
 						{% csrf_token %}
@@ -243,7 +243,7 @@
 						<div id='log_button' class='ML_23px'>
 							<button class="btn btn-info" id='' type="submit">立即登录</button>
 							<a href='/log/page_register/'>&nbsp;&nbsp;&nbsp;&nbsp;注册&nbsp;&nbsp;</a>
-							<span id="qqLoginBtn2"></span>
+							<a href='/account/QQlogin/' ><img src='{{STATIC_URL}}img/QQlog.png' /></a>
 						</div>
 					</form>
 				</div>

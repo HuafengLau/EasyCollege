@@ -7,7 +7,7 @@ from django.template import RequestContext
 from account.models import MyUser
 from News.views import which_news
 from django.http import HttpResponseRedirect, HttpResponse
-from Business.views import AuthorLog
+from Business.models import AuthorLog
 from django.contrib.auth import authenticate, login, logout
 
 

@@ -7,7 +7,7 @@ from Business.models import AuthorLog
 class AuthorLogAdmin(admin.ModelAdmin):
     """docstring for AuthorLogAdmin"""
     list_display = ('user', 'type', 'openid')
-    list_filter = ('type')
+    list_filter = ('type',)
     ordering = ('type','user' )
 
 
