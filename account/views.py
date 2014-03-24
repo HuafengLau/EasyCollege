@@ -9,6 +9,7 @@ from News.views import which_news
 from django.http import HttpResponseRedirect, HttpResponse
 from Business.models import AuthorLog
 from django.contrib.auth import authenticate, login, logout
+import json
 
 
 def _get_referer_url(request):
