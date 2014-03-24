@@ -139,16 +139,9 @@ def fangqiu(request):
 
         #username = '3F668C02ABF661C7306F9C4E6EB4053E@qq1.com'
         #password = '123'
-        username='you_xiang_123@sina.com'
-        password='lhf564495'
-        user = authenticate(username=username, password=password)
-        login(request, user)
-
-        next = '/news/All/hot/'
-        if 'state' in request.GET:
-            next = request.GET['state']
+        openid = '3F668C02ABF661C7306F9C4E6EB4053E'
          
-        return HttpResponseRedirect(next)
+        return testQQlog(request,openid)
 
 def testQQlog(request,openid):
     try:
