@@ -1,0 +1,22 @@
+{% for field in picForm %}                                 
+		{% if field.errors %}
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> 
+			{{field.errors}}
+		</div>
+		{% endif %}
+		<div class='form-group'>
+			{% ifnotequal forloop.counter 2 %}<label>{{field.label_tag}}</label>{% endifnotequal %}			
+			
+			{% ifnotequal part.part 'All' %}
+			<div class='clear_both'>
+				{{field}}
+				{% ifequal forloop.counter 1 %}
+					<div style="margin-left:8px;margin-top:8px;" class='pull-left'>想分享到其他社群？移步<a href='/news/All/submit/pic/'>All / 全部</a></div>
+				{% endifequal %}
+			</div>
+			{% else %}
+				<div class='clear_both'>{{field}}</div>
+			{% endifnotequal %}
+		</div>
+	{% endfor %}

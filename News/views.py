@@ -7,7 +7,7 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import PageNotAnInteger, Paginator, InvalidPage, EmptyPage
 from django.conf import settings
-from News.models import NewsPart,News,NewsComment1,NewsComment2,NewsComment3,NewsComment4
+from News.models import NewsPart,News,NewsPic,NewsComment1,NewsComment2,NewsComment3,NewsComment4
 from News.form import LinkNewsForm, TextNewsForm, PicNewsForm, mp3NewsForm
 from datetime import datetime
 import calendar
@@ -17,6 +17,12 @@ import pytz
 import json, os, time
 from account.models import MyUser
 from Index.models import Feeds_news,Feeds_comment,Feeds_followNews
+
+from django.core.urlresolvers import reverse
+from django.views import generic
+from django.views.decorators.http import require_POST
+from jfu.http import upload_receive, UploadResponse, JFUResponse
+
 
 def score(ups,downs):
     return ups - downs
@@ -102,6 +108,63 @@ def mySubscription(request):
 def news(request):
     return HttpResponseRedirect('/news/All/hot/')
 
+@csrf_exempt
+def submitPic(request):
+    if request.method == 'GET':
+        news_part = 'All'
+        if news_part == 'All':
+            picForm = PicNewsForm()
+        else:         
+            class this_PicNewsForm(PicNewsForm):
+                def __init__(self, *args, **kwargs):  
+                    super(this_PicNewsForm, self).__init__(*args, **kwargs)  
+                    self.fields['newspart'].choices = [('', line)] + [
+                        (part.id, '%s / %s' % (part.part,part.realPart)) ]
+                    
+            picForm = this_PicNewsForm()
+
+    return render_to_response('test2.html',locals(),
+        context_instance=RequestContext(request)) 
+    
+@require_POST
+def upload( request ):   
+    print request.POST
+    file = upload_receive( request )
+    this_news = News.objects.all()[0]
+    instance = NewsPic( 
+        pic = file,
+        news = this_news
+    )
+    instance.save()
+
+    basename = os.path.basename( instance.pic.path )
+
+    file_dict = {
+        'name' : basename,
+        'size' : file.size,
+
+        'url': settings.MEDIA_URL + 'news_pic/'+ basename,
+        'thumbnailUrl': settings.MEDIA_URL + 'news_pic/'+ basename,
+
+        'deleteUrl': reverse('jfu_delete', kwargs = { 'pk': instance.pk }),
+        'deleteType': 'POST',
+    }
+
+    return UploadResponse( request, file_dict )    
+    
+@require_POST
+def upload_delete( request, pk ):
+    success = True
+    try:
+        instance = NewsPic.objects.get( pk = pk )
+        os.unlink( instance.pic.path )
+        instance.delete()
+
+    except NewsPic.DoesNotExist:
+        success = False
+
+    return JFUResponse( request, success )
+    
 @login_required(login_url='/log/') 
 def newsVote(request):
     if request.is_ajax() and request.method == 'GET':

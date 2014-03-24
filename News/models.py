@@ -56,7 +56,18 @@ class News(models.Model):
         verbose_name = u'分享'
         verbose_name_plural = u'分享'
        
-        
+class NewsPic(models.Model):
+    pic = models.ImageField(upload_to='news_pic/',blank=True,verbose_name=u'图片')
+    news = models.ForeignKey(News, null=True,verbose_name=u'所属分享')
+    
+    def __unicode__(self):
+        return '%s' % (self.pic)
+    
+    class Meta:
+        ordering = ['news',]
+        verbose_name = u'分享图片'
+        verbose_name_plural = u'分享图片'
+    
 class NewsPartRule(models.Model):
     rule = models.TextField(null=True,verbose_name=u'社群公约')
     newspart = models.ForeignKey(NewsPart, null=True,verbose_name=u'社群')

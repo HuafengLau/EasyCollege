@@ -1,7 +1,7 @@
 #coding:utf-8
 
 from django.contrib import admin
-from News.models import News,NewsPart,NewsPartRule,NewsComment1,NewsComment2,NewsComment3,NewsComment4,PartAdmin
+from News.models import News,NewsPart,NewsPartRule,NewsComment1,NewsComment2,NewsComment3,NewsComment4,PartAdmin,NewsPic
 
 
 class NewsAdmin(admin.ModelAdmin):
@@ -10,6 +10,12 @@ class NewsAdmin(admin.ModelAdmin):
     list_filter = ('user', 'type')
     #ordering = ('user', )
 
+class NewsPicAdmin(admin.ModelAdmin):
+    """docstring for NewsPicAdmin"""
+    list_display = ('pic', 'news')
+    list_filter = ('news',)
+    ordering = ('news', )
+    
 class NewsPartAdmin(admin.ModelAdmin):
     """docstring for NewsPartAdmin"""
     list_display = ('part', 'realPart','num','user_num','can_link','can_text','can_pic','can_mp3','time')
@@ -60,3 +66,4 @@ admin.site.register(NewsComment2, NewsComment2Admin)
 admin.site.register(NewsComment3, NewsComment3Admin)
 admin.site.register(NewsComment4, NewsComment4Admin)
 admin.site.register(PartAdmin, PartAdminAdmin)
+admin.site.register(NewsPic, NewsPicAdmin)

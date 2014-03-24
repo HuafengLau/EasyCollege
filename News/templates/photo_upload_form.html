@@ -1,0 +1,28 @@
+{% extends 'jfu/upload_form.html' %}
+
+{% block CSS_BOOTSTRAP %}
+<link rel="stylesheet" href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css">
+<link href="{{STATIC_URL}}css/bodyFont.css" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block myForm %}
+	<p>&nbsp;</p>
+	<label>Title</label>
+	<input class='form-control' name='title' required='required'/>
+	<p>&nbsp;</p>
+{% endblock %}
+
+{% block moreCss %}
+<link rel="stylesheet" href="{{STATIC_URL}}css/uploadPic.css">
+{% endblock %}
+
+{% block JS_OPTS %}
+sequentialUploads: true,
+acceptFileTypes: /(\.|\/)(png|gif|jpe?g)$/i
+{% endblock %}
+
+
+
+{% block JS_BOOTSTRAP %}
+<script src="{{STATIC_URL}}bootstrap/js/bootstrap.min.js"></script>
+{% endblock %}
