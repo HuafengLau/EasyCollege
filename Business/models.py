@@ -4,7 +4,19 @@ from django.db import models
 from account.models import MyUser
 from University.models import University_info
 
+class AuthorLog(models.Model):
+    user = models.ForeignKey(MyUser, null=True,verbose_name=u'用户')
+    openid =  models.CharField(max_length=100,null=True,verbose_name=u'授权id')
+    type = models.CharField(max_length=20,null=True,verbose_name=u'授权类型')
 
+    def __unicode__(self):
+        return '%s' % self.openid
+        
+    class Meta:
+        #ordering = ['grade',]
+        verbose_name = u'授权登录'
+        verbose_name_plural = u'授权登录'
+    
 class Credit(models.Model):
     course_name = models.CharField(max_length=100,null=True,verbose_name=u'课程名')
     course_teacher = models.CharField(max_length=100,null=True, blank=True,verbose_name=u'任课老师')

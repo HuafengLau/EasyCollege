@@ -87,7 +87,7 @@ def baiduSearch(request):
 def baiduSearch2(request):
     return render_to_response('baidu_verify_e7gA3p0lSA.html',locals(),
         context_instance=RequestContext(request))
-
+        
 def TheRich(request):
     user = request.user
     

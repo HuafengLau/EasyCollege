@@ -103,6 +103,10 @@
 	margin-right:15px;
 }
 
+.font-30{
+	font-size: 30px;
+}
+
 .font-20{
 	font-size: 20px;
 }
@@ -122,8 +126,13 @@
 .MT_30px{
 	margin-top:30px;
 }
+
 .MT_20px{
 	margin-top:20px;
+}
+
+.MT_16px{
+	margin-top:16px;
 }
 
 .MT_8px{
@@ -1020,6 +1029,7 @@ ul li{
 }
 
 #showNewslogForm{
+	padding: 10px;
 	display:none;
 }
 

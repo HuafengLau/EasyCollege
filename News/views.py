@@ -295,9 +295,7 @@ def which_news(request,news_part,small_part):
         
     return render_to_response('newsBase.html',locals(),
         context_instance=RequestContext(request))
-
-def fangqiu(request):
-    return which_news(request,'All','hot')
+    
         
 @login_required(login_url='/log/')         
 def submit_news(request,news_part, news_type):

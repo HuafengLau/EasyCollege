@@ -7,7 +7,7 @@
 	{% block search %}
     <meta name="description" content="方遒社区，让最有价值的信息呈现。方遒社区是一个类reddit的分享平台，你可以这里分享你的生活、知识和见解。" />
     <meta name="keywords" content="方遒社区/方遒/方遒网" />
-	<meta property="qc:admins" content="245106101766561156375" />
+	<meta property="qc:admins" content="76304772361156375" />
     {% endblock %}
 	{% block meta %}
     {% endblock %}
@@ -73,8 +73,17 @@
               <ul class="nav navbar-nav navbar-right">
                 <li><a id='index_welcome' href="#">欢迎你，{% if user.is_authenticated %}{{ user.nic_name }}{% else %}游客{% endif %}</a></li>
                 <li>{% if user.is_authenticated %}<a id='logout_link' href='/log/logout/'>注销</a>
-					{% else %}<a target='_blank' class='hand_over' href='/log/'><span class='font-color-link'>注册/登陆</span></a>{% endif %}
+					{% else %}
+						<a target='_blank' class='hand_over' href='/log/'>
+							<span class='font-color-link'>注册/登陆</span>
+						</a>				
+					{% endif %}
 				</li>
+				{% if not user.is_authenticated %}
+				<li>
+					<a href='/account/QQlogin/' ><img src='{{STATIC_URL}}img/QQlog.png' /></a>			
+				</li>
+				{% endif %}
               </ul>
               {% endblock %}             
               <!-- /.navbar-collapse -->

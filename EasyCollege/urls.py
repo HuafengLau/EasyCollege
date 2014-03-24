@@ -1,7 +1,8 @@
 #coding:utf-8
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from News.views import fangqiu,upload,upload_delete
+from News.views import upload,upload_delete
+from account.views import fangqiu
 from log.views import verify
 from Business.views import googelSearch, baiduSearch,baiduSearch2,googelSearch2
 from django.conf import settings
@@ -26,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^log/', include('log.urls')),
     url(r'^index/', include('Index.urls')),
+    url(r'^account/', include('account.urls')),
     #url(r'^eot/', include('EOT.urls')),
     url(r'^center/', include('Center.urls')),
     url(r'^affair/', include('Affair.urls')),

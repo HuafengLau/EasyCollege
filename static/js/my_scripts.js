@@ -18,7 +18,6 @@ $(document).ready(function(){
 	  });
 	});
 	
-	
 	$('.ID_card').on('click', function(){
 		var id=$(this).attr('id');  
 		$.get('/index/get_idCard/', {'id':id}, function(data){
