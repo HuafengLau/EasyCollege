@@ -11,7 +11,7 @@ from Business.models import AuthorLog
 from django.contrib.auth import authenticate, login, logout
 import json
 import simplejson
-
+from Center.models import User_info
 
 def _get_referer_url(request):
     referer_url = request.META.get('HTTP_REFERER', '/')
