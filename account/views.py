@@ -89,6 +89,7 @@ def fangqiu(request):
         openid = get_user_openid(access_token)
         nicname = get_user_nicname(access_token,openid)["nickname"]
         
+        openid = '3F668C02ABF661C7306F9C4E6EB4053E'
         try:
             this_AuthorLog = AuthorLog.objects.get(
                 openid = openid,
@@ -133,16 +134,18 @@ def fangqiu(request):
                 type = 'QQ',
                 user = this_user
             )
-            this_AuthorLog.save()
-            
-        username = this_user.email
-        password = '123'
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        next = '/news/All/hot/'
-        if 'state' in request.GET:
-            next = request.GET['state']  
-        return HttpResponseRedirect(next)
+            this_AuthorLog.save()  
+
+    username = this_user.email
+    password = '123'
+    user = authenticate(username=username, password=password)
+    login(request, user)
+
+    next = '/news/All/hot/'
+    if 'state' in request.GET:
+        next = request.GET['state']
+     
+    return HttpResponseRedirect(next)
 
 def testQQlog(request,openid):
     try:
