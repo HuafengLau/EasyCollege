@@ -21,23 +21,22 @@ def _get_referer_url(request):
 
  
 def get_access_token(code):
-    auth_url = 'https://graph.qq.com/oauth2.0/token'
-    body = urllib.urlencode({
-                'code': code, # 授权码
+    auth_url = '%s?%s' %('https://graph.qq.com/oauth2.0/token',urllib.urlencode({
+                'grant_type': 'authorization_code',      
                 'client_id': '101046076',
                 'client_secret': 'de226ed1a4e71c8f773423575bf116eb',
-                'redirect_uri': 'funqiu.com',
-                'grant_type': 'authorization_code' # 必须是这个值
-                })
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    }
-    req = urllib2.Request(auth_url, body, headers)
+                'code': code, # 授权码
+                'redirect_uri': 'funqiu.com',  
+                }))
+
+    req = urllib2.Request(auth_url)
     resp = urllib2.urlopen(req)
      
-    data = json.loads(resp.read())
-     
-    return data['access_token']    
+    content = resp.read()
+
+    access_token = urllib2.urlparse.parse_qs(content).get('access_token', [''])[0]
+
+    return access_token     
 
 def get_user_openid(access_token):
     if access_token:
