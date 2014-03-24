@@ -87,7 +87,7 @@ def fangqiu(request):
         code = request.GET['code']
      
         access_token = get_access_token(code)
-        openid = get_user_openid(access_token)['openid']
+        openid = get_user_openid(access_token)
         nicname = get_user_nicname(access_token,openid)
         
         print 'openid:%s' % openid
