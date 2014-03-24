@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate, login, logout
 import json
 import simplejson
 from Center.models import User_info
+from log.views import activateUser
 
 def _get_referer_url(request):
     referer_url = request.META.get('HTTP_REFERER', '/')
@@ -80,21 +81,17 @@ def QQ_login(request):
     
 def fangqiu(request):
     if 'error' in request.GET or 'code' not in request.GET:
-        print '2222'
         return which_news(request,'All','hot')
     else:
-        print '1111'
         code = request.GET['code']
      
         access_token = get_access_token(code)
         openid = get_user_openid(access_token)
         nicname = get_user_nicname(access_token,openid)["nickname"]
         
-        print 'openid:%s' % openid
-        
         try:
             this_AuthorLog = AuthorLog.objects.get(
-                openid =  openid,
+                openid = openid,
                 type = 'QQ'
             )
             this_user = this_AuthorLog.user
@@ -136,11 +133,71 @@ def fangqiu(request):
                 type = 'QQ',
                 user = this_user
             )
-            this_AuthorLog.save()  
-        user = authenticate(username=this_user.email, password=this_user.stu_pwd)
+            this_AuthorLog.save()
+            
+        username = this_user.email
+        password = '123'
+        user = authenticate(username=username, password=password)
         login(request, user)
         next = '/news/All/hot/'
         if 'state' in request.GET:
-            next = request.GET['state']
-         
+            next = request.GET['state']  
         return HttpResponseRedirect(next)
+
+def testQQlog(request,openid):
+    try:
+        this_AuthorLog = AuthorLog.objects.get(
+            openid = openid,
+            type = 'QQ'
+        )
+        this_user = this_AuthorLog.user
+    except:
+        this_user = MyUser.objects.create_user(
+            stu_pwd = '123',
+            email = '%s@qq1.com' % openid,
+            nic_name = nicname,
+            money = 100,
+            avatar = 'img/avatar.png',
+            agree_num = 0,
+            message = 0
+        )
+        this_user.save()
+        
+        this_user_info = User_info(
+            user = this_user,
+            grade = u'公民',
+            subscription = 'ExplainCY;Funny;Home-news;Life;AskAnything;',
+            beWatched = '',
+            watching = '',
+            upVoted_news = '',
+            downVoted_news = '',
+            upVoted_comment1 = '',
+            upVoted_comment2 = '',
+            upVoted_comment3 = '',
+            upVoted_comment4 = '',
+            downVoted_comment1 = '',
+            downVoted_comment2 = '',
+            downVoted_comment3 = '',
+            downVoted_comment4 = '',
+            when_newsbeGold = u'你的支持是我分享的动力：）',
+            when_commentbeGold = u'下一次，我的评论将更有含金量：）',
+            when_beWatched = u'感谢关注：）'
+        )
+        this_user_info.save()
+        this_AuthorLog = AuthorLog(
+            openid =  openid,
+            type = 'QQ',
+            user = this_user
+        )
+        this_AuthorLog.save()  
+
+    username = this_user.email
+    password = '123'
+    user = authenticate(username=username, password=password)
+    login(request, user)
+
+    next = '/news/All/hot/'
+    if 'state' in request.GET:
+        next = request.GET['state']
+     
+    return HttpResponseRedirect(next)

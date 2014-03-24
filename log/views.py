@@ -186,18 +186,17 @@ def verify(request):
     ca.type = 'word'
     return ca.display()
     
-def activateUser(request, id):
+def activateUser(request, id,url):
     try:
         this_user = MyUser.objects.get(id=id)
-        this_user.money += 90
-        this_user.save()
         
         username = this_user.email
         password = this_user.stu_pwd
         user = authenticate(username=username, password=password)
+        print type(user)
         login(request, user)               
         
-        return HttpResponseRedirect('/news/All/hot/')
+        return HttpResponseRedirect(url)
     except:
         return render_to_response('404.html',locals(),
             context_instance=RequestContext(request))
