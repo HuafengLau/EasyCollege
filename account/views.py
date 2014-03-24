@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from Business.models import AuthorLog
 from django.contrib.auth import authenticate, login, logout
 import json
+import simplejson
 
 
 def _get_referer_url(request):
@@ -44,9 +45,12 @@ def get_user_openid(access_token):
         query_string = urllib.urlencode({'access_token': access_token})
          
         resp = urllib2.urlopen("%s?%s" % (userinfo_url, query_string))
-        data = json.loads(resp.read())
-        print 'hehehehheh'
-        return data    
+        content = resp.read()
+        content = content[content.find('(')+1:content.rfind(')')]
+
+        data = simplejson.loads(content)
+
+        return data.get('openid')    
    
 def get_user_nicname(access_token,openid):
     if access_token and openid:
