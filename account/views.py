@@ -83,6 +83,7 @@ def fangqiu(request):
     if 'error' in request.GET or 'code' not in request.GET:
         return which_news(request,'All','hot')
     else:
+        '''
         code = request.GET['code']
      
         access_token = get_access_token(code)
@@ -134,7 +135,7 @@ def fangqiu(request):
                 type = 'QQ',
                 user = this_user
             )
-            this_AuthorLog.save()  
+            this_AuthorLog.save()  '''
 
         #username = '3F668C02ABF661C7306F9C4E6EB4053E@qq1.com'
         #password = '123'
@@ -196,8 +197,8 @@ def testQQlog(request,openid):
         )
         this_AuthorLog.save()  
 
-    username = this_user.email
-    password = '123'
+    username='you_xiang_123@sina.com'
+    password='lhf564495'
     user = authenticate(username=username, password=password)
     login(request, user)
 
