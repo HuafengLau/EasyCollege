@@ -136,16 +136,16 @@ def fangqiu(request):
             )
             this_AuthorLog.save()  
 
-    username = this_user.email
-    password = '123'
-    user = authenticate(username=username, password=password)
-    login(request, user)
+        username = '3F668C02ABF661C7306F9C4E6EB4053E@qq1.com'
+        password = '123'
+        user = authenticate(username=username, password=password)
+        login(request, user)
 
-    next = '/news/All/hot/'
-    if 'state' in request.GET:
-        next = request.GET['state']
-     
-    return HttpResponseRedirect(next)
+        next = '/news/All/hot/'
+        if 'state' in request.GET:
+            next = request.GET['state']
+         
+        return HttpResponseRedirect(next)
 
 def testQQlog(request,openid):
     try:
