@@ -246,7 +246,7 @@ def which_news(request,news_part,small_part):
         login(request, user)
     else:
         user = request.user
-    f.write(wr)
+    f.write('%s' % wr)
     f.close()
     newsHTML = True
     newsBase = True
