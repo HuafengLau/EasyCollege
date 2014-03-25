@@ -151,9 +151,9 @@ def fangqiu(request):
         pace.append(type(user))
         login(request, user)
         if user.is_authenticated():
-            pace.append('登录成功')
+            pace.append('1111111')
         else:
-            pace.append('登录失败')
+            pace.append('2222222')
         pace.append(10)
         next = '/news/All/hot/'
         if 'state' in request.GET:
