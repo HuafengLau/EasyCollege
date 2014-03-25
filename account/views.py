@@ -159,6 +159,7 @@ def fangqiu(request):
         #if 'state' in request.GET:
         #    next = request.GET['state']
         #    pace.append(11)
+        pace.append(request.GET['state'])
         f.write('%s' % pace)
         f.close()
         return HttpResponseRedirect(next)
