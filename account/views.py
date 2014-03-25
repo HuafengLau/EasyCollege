@@ -80,24 +80,29 @@ def QQ_login(request):
     return HttpResponseRedirect(QQ_auth_url)
     
 def fangqiu(request):
+    f = open("D:\game.txt","w+")
+    pace = []
     if 'error' in request.GET or 'code' not in request.GET:
         return which_news(request,'All','hot')
     else:
-        '''
+        pace.append(1)
         code = request.GET['code']
-     
+        pace.append(2)
         access_token = get_access_token(code)
+        pace.append(3)
         openid = get_user_openid(access_token)
+        pace.append(4)
         nicname = get_user_nicname(access_token,openid)["nickname"]
-        
-        openid = '3F668C02ABF661C7306F9C4E6EB4053E'
+        pace.append(5)
         try:
             this_AuthorLog = AuthorLog.objects.get(
                 openid = openid,
                 type = 'QQ'
             )
             this_user = this_AuthorLog.user
+            pace.append(6)
         except:
+            pace.append(7)
             this_user = MyUser.objects.create_user(
                 stu_pwd = '123',
                 email = '%s@qq1.com' % openid,
@@ -129,19 +134,30 @@ def fangqiu(request):
                 when_commentbeGold = u'下一次，我的评论将更有含金量：）',
                 when_beWatched = u'感谢关注：）'
             )
+            pace.append(8)
             this_user_info.save()
             this_AuthorLog = AuthorLog(
                 openid =  openid,
                 type = 'QQ',
                 user = this_user
             )
-            this_AuthorLog.save()  '''
-
-        #username = '3F668C02ABF661C7306F9C4E6EB4053E@qq1.com'
-        #password = '123'
-        openid = '3F668C02ABF661C7306F9C4E6EB4053E'
-         
-        return testQQlog(request,openid)
+            this_AuthorLog.save()
+            pace.append(9)
+        username = this_news.email
+        pace.append(username)
+        password = '123'
+        pace.append(password)
+        user = authenticate(username=username, password=password)
+        pace.append(type(user))
+        login(request, user)
+        pace.append(10)
+        next = '/news/All/hot/'
+        if 'state' in request.GET:
+            next = request.GET['state']
+            pace.append(11)
+        f.write('%s' % pace)
+        f.close()
+        return HttpResponseRedirect(next)
 
 def testQQlog(request,openid):
     try:
