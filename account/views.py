@@ -148,7 +148,11 @@ def fangqiu(request):
         user = authenticate(username=username, password=password)
 
         login(request, user)
-        request.session['authid'] = user.id
+        request.session['authid'] = '%s' % user.id
+        authid = request.session.get('authid', False)
+        f = open("D:\game.txt",'w+')
+        f.write('first:%s' % authid)
+        f.close()
         next = '/news/All/hot/'
         if 'state' in request.GET:
             next = str(request.GET['state'])[21:]
