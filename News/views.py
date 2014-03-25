@@ -234,14 +234,20 @@ def newsVote(request):
     
 def which_news(request,news_part,small_part):
     authid = request.session.get('authid', False)
+    f = open("D:\game.txt",'w+')
+    wr = []
+    wr.append(authid)
     if authid:
         this_user = MyUser.objects.get(id=authid)
         username = str(this_user.email)
         password = '123'
-        user = authenticate(username=username, password=password)   
+        user = authenticate(username=username, password=password)
+        wr.append(type(user))
         login(request, user)
     else:
         user = request.user
+    f.write(wr)
+    f.close()
     newsHTML = True
     newsBase = True
     allNewsPart = NewsPart.objects.all()
