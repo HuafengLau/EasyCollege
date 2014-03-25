@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head lang='zh-CN'>
+    <meta charset="utf-8" />
+	<link rel='shortcut icon' href='{{STATIC_URL}}img/logo11.ico'>
+	<title>{% block title %}{% endblock %}</title>   
+	{% block search %}
+    <meta name="description" content="方遒社区，让最有价值的信息呈现。方遒社区是一个类reddit的分享平台，你可以这里分享你的生活、知识和见解。" />
+    <meta name="keywords" content="方遒社区/方遒/方遒网" />
+	<meta property="qc:admins" content="245106101766561156375" />
+    {% endblock %}
+	{% block meta %}
+    {% endblock %}
+	{% block moreLink %}
+	{% endblock %}
+    <!-- Bootstrap -->
+    <link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="{{STATIC_URL}}css/my_css.css" rel="stylesheet" media="screen">
+	{% block moreStyle %}
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	{% endblock %}
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <style>
+    body{font-family:"Microsoft YaHei","Microsoft YaHei UI","ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","WenQuanYi Micro Hei",sans-serif;}
+    h1, .h1, h2, .h2, h3, .h3, h4, .h4, .lead {font-family:"ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+    pre code { background: transparent; }
+    </style>	
+	{% block moreCSS %}
+	{% endblock %}
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.6.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+	<div class="navbar navbar-inverse" role="navigation">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class='container'>
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a id='base_brand' class="navbar-brand hand_over" data-toggle="modal" data-target="#version_info">方遒社区</a>
+              </div>
+			  
+          </div>
+    </div>
+	<div class='container'>
+		{% ifequal type 'pic' %}
+			<div class="alert alert-info">
+				<p>你正在为分享《{{this_news.title}}》上传图片，数量最好不多于6张</p>
+			</div>
+			<div class="alert alert-danger">
+				<p>请注意：</p>
+				<p><ul>
+					<li>上传完成后请点击【完成】</li>
+					<li>如果你删除了所有的上传的图片并点击【完成】，那么分享也将随之删除</li>
+					<li>你可以点击放弃来取消本次上传图片，如果你这样做，分享也将随之删除</li>
+				</p></ul>
+			</div>
+		{% endifequal %}
+		{% ifequal type 'mp3' %}
+			<div class="alert alert-info">
+				<p>你正在为分享《{{this_news.title}}》上传音乐文件，你只能上传一个mp3格式的文件</p>
+			</div>
+			<div class="alert alert-danger">
+				<p>请注意：</p>
+				<p><ul>
+					<li>上传完成后请点击【完成】</li>
+					<li>如果你删除了上传的mp3文件并点击【完成】，那么分享也将随之删除</li>
+					<li>你可以点击放弃来取消本次上传文件，如果你这样做，分享也将随之删除</li>
+				</p></ul>
+			</div>
+		{% endifequal %}
+		<div>
+		{% load jfutags %} 
+		{% jfu 'photo_upload_form.html' %} 
+		</div>
+		<div>
+			<a href='/news/finishUpload/{{id}}/'><button class='btn btn-success'>完成</button></a>
+			<a href='/news/giveupUpload/{{id}}/'><button class='btn btn-danger'>放弃</button></a>
+		</div>
+	</div>
+  </body>
+</html>

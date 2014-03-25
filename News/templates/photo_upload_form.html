@@ -5,11 +5,15 @@
 <link href="{{STATIC_URL}}css/bodyFont.css" rel="stylesheet" media="screen">
 {% endblock %}
 
-{% block myForm %}
-	<p>&nbsp;</p>
-	<label>Title</label>
-	<input class='form-control' name='title' required='required'/>
-	<p>&nbsp;</p>
+{% block myForm %}{% endblock %}
+
+{% block moreData %}
+{ name: "type", value: "{{type}}"},
+{ name: "id", value: "{{id}}"},
+{% endblock %}
+
+{% block moreDeleteData %}
+,"type":"{{type}}","id":"{{id}}"
 {% endblock %}
 
 {% block moreCss %}
@@ -17,8 +21,13 @@
 {% endblock %}
 
 {% block JS_OPTS %}
-sequentialUploads: true,
-acceptFileTypes: /(\.|\/)(png|gif|jpe?g)$/i
+	sequentialUploads: true,
+	{% ifequal type 'pic' %}
+	acceptFileTypes: /(\.|\/)(png|gif|jpe?g)$/i
+	{% endifequal %}
+	{% ifequal type 'mp3' %}
+	acceptFileTypes: /(\.|\/)(mp3)$/i
+	{% endifequal %}
 {% endblock %}
 
 

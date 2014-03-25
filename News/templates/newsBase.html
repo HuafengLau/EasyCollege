@@ -130,9 +130,13 @@
 							{% endif %}
 							</div>
 						{% ifequal news.type 'pic' %}
-							<div class='news_pic pull-left MT_6px newsImgDiv'>
-								<img width='50px' src='{{MEDIA_URL}}{{news.pic}}' />
-							</div>
+							{% for newspic in news.newspic_set.all %}
+								{% if forloop.first %} 
+								<div class='news_pic pull-left MT_6px newsImgDiv'>
+									<img width='50px' src='{{MEDIA_URL}}{{news.pic}}' />
+								</div>
+								{% endif %}
+							{% endfor %}
 						{% endifequal %}
 							<div class='pull-left MT_8px'>
 								<div>
@@ -386,8 +390,13 @@
 						{% ifnotequal part.part 'ExplainCY' %}
 							{% if part.can_link %}
 							<div id='linkBtnDiv' class='both_clear'>						
-								<a href='/news/{{part.part}}/submit/link/'><button type="button" class="btn btn-default font-link">&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></a>
+								<a href='/news/{{part.part}}/submit/link/'><button type="button" class="btn btn-default font-link">
+								{% ifequal part.part 'AskAnything' %}
+								&nbsp;&nbsp;&nbsp;以链接的形式提问&nbsp;&nbsp;&nbsp;
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								{% else %}
+								&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% endifequal %}</button></a>
 								
 							</div>
 							{% endif %}
@@ -397,7 +406,12 @@
 									{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									{% else %}
 										{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
-										{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										{% else %}
+											{% ifequal part.part 'AskAnything' %}
+											&nbsp;&nbsp;&nbsp;以文字的形式提问&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											{% else %}
+											&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											{% endifequal %}
 										{% endifequal %}
 									{% endifequal %}</button></a>
 								
@@ -405,8 +419,13 @@
 							{% endif %}
 							{% if part.can_pic %}
 							<div id='picBtnDiv' class='both_clear'>	
-								<a href='/news/{{part.part}}/submit/pic/'><button type="button" class="btn btn-default font-link">&nbsp;&nbsp;
-								分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></a>								
+								<a href='/news/{{part.part}}/submit/pic/'><button type="button" class="btn btn-default font-link">
+								{% ifequal part.part 'AskAnything' %}
+								&nbsp;&nbsp;
+								以图片的形式发问&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								{% else %}
+								&nbsp;&nbsp;
+								分享图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% endifequal %}</button></a>								
 							</div>
 							{% endif %}
 							{% if part.can_mp3 %}

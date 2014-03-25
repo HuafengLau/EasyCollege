@@ -650,9 +650,11 @@
 							
 									{% if feed.showText %}
 										{% ifequal feed.news.type 'pic' %}
+										{% for newspic in feed.news.newspic_set.all %}
 										<div class='indexImgDiv'>
-											<img src='{{MEDIA_URL}}{{feed.news.pic}}' width='56%' class="img-responsive" />
+											<img src='{{MEDIA_URL}}{{newspic.pic}}' width='56%' class="img-responsive" />
 										</div>
+										{% endfor %}
 										{% endifequal %}
 										{% ifequal feed.news.type 'text' %}
 										<div id=''>

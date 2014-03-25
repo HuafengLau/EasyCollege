@@ -58,7 +58,7 @@
 		</div>
 	{% endfor %}
 
-		<button id='link_submit' class="btn btn-default" type="submit">提交</button>
+		<button id='link_submit' class="btn btn-success" type="submit">提交</button>
 	</form>			
   </div>
   {% endif %}
@@ -91,14 +91,14 @@
 			{% endifnotequal %}
 		</div>
 	{% endfor %}
-		<button id='text_submit' class="btn btn-default" type="submit">提交</button>
+		<button id='text_submit' class="btn btn-success" type="submit">提交</button>
 	</form>		
   </div>
   {% endif %}
   {% if part.can_pic %}
   <div class="tab-pane {% ifequal type 'pic' %}in active{% endifequal %}" id="Pic">
 	<div class="alert alert-danger">
-		<P>你正在分享图片，一次成功的分享包括创意合理的标题和一张有趣的图片……</p>
+		<P>你正在分享图片，一次成功的分享包括创意合理的标题和有趣的图片……</p>
 	</div>
 	<form role="form" class='form-group' action='/news/{{part.part}}/submit/pic/' enctype="multipart/form-data" method='POST'> 
 	{% csrf_token %}
@@ -124,7 +124,10 @@
 			{% endifnotequal %}
 		</div>
 	{% endfor %}
-		<button id='pic_submit' class="btn btn-default" type="submit">提交</button>
+		<div class="alert alert-danger">
+			<p>请确认社群和标题，因为上传图片的时候无法更改这两项。</p>
+		</div>
+		<button id='pic_submit' class="btn btn-success" type="submit">去上传图片</button>
 	</form>
   </div>
   {% endif %}
@@ -157,7 +160,10 @@
 			{% endifnotequal %}
 		</div>
 	{% endfor %}
-		<button id='mp3_submit' class="btn btn-default" type="submit">提交</button>
+		<div class="alert alert-danger">
+			<p>请确认社群和标题，因为上传文件的时候无法更改这两项。</p>
+		</div>
+		<button id='mp3_submit' class="btn btn-success" type="submit">去上传文件</button>
 	</form>
   </div>
   {% endif %}

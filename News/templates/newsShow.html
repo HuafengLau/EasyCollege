@@ -102,7 +102,9 @@
 		{% endifequal %}
 		{% ifequal this_news.type 'pic' %}
 			<div class='clear_both' id='showNewsPic'>
-				<img src='{{MEDIA_URL}}{{this_news.pic}}' class="img-responsive" />
+				{% for newspic in this_news.newspic_set.all %}
+				<img src='{{MEDIA_URL}}{{newspic.pic}}' class="img-responsive" />
+				{% endfor %}
 			</div>
 		{% endifequal %}
 		{% ifequal this_news.type 'mp3' %}

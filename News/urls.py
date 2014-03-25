@@ -2,7 +2,9 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('News.views',
     url(r'^$', 'news', name='news_all_all'),
-    #url(r'^submitPic/$', 'submitPic', name='news_submitPic'),
+    url(r'^uploadFile/(?P<this_type>\w{3,5})/(?P<this_id>\d+)/$', 'uploadFile', name='news_uploadFile'),
+    url(r'^finishUpload/(?P<this_id>\d+)/$', 'finishUpload', name='news_finishUpload'),
+    url(r'^giveupUpload/(?P<this_id>\d+)/$', 'giveupUpload', name='news_giveupUpload'),
     url(r'^getTopPart/$','getTopPart',name='news_GetTopPart'),
     url(r'^giveGold/$', 'giveGold', name='news_giveGold'),
     url(r'^watch/$', 'watch', name='news_watch'),

@@ -108,36 +108,99 @@ def mySubscription(request):
 def news(request):
     return HttpResponseRedirect('/news/All/hot/')
 
+@login_required(login_url='/log/') 
 @csrf_exempt
-def submitPic(request):
+def uploadFile(request,this_type,this_id):
     if request.method == 'GET':
-        news_part = 'All'
-        if news_part == 'All':
-            picForm = PicNewsForm()
-        else:         
-            class this_PicNewsForm(PicNewsForm):
-                def __init__(self, *args, **kwargs):  
-                    super(this_PicNewsForm, self).__init__(*args, **kwargs)  
-                    self.fields['newspart'].choices = [('', line)] + [
-                        (part.id, '%s / %s' % (part.part,part.realPart)) ]
-                    
-            picForm = this_PicNewsForm()
-
-    return render_to_response('test2.html',locals(),
-        context_instance=RequestContext(request)) 
+        type  = this_type
+        id = this_id
+        this_news = News.objects.get(id=id)
+        return render_to_response('forUpload.html',locals(),
+            context_instance=RequestContext(request)) 
     
+@login_required(login_url='/log/')     
+def finishUpload(request,this_id):
+    this_news = News.objects.get(id=this_id)
+    if this_news.type == 'pic':
+        newspics = NewsPic.objects.filter(news=this_news)
+        if not newspics:
+            feeds = Feeds_followNews.objects.filter(news = this_news)
+            if feeds:
+                for feed in feeds:
+                    feed.owner.message -= 1
+                    feed.owner.save()
+            this_news.delete()
+            return HttpResponseRedirect('/news/All/hot/')
+        else:
+            url = '/news/%s/hot/showNews/%s/' % (this_news.newspart.part,this_news.id)
+            return HttpResponseRedirect(url)
+    elif this_news.type == 'mp3':
+        try:
+            mp3 = this_news.mp3
+            if not mp3:
+                feeds = Feeds_followNews.objects.filter(news = this_news)
+                if feeds:
+                    for feed in feeds:
+                        feed.owner.message -= 1
+                        feed.owner.save()
+                this_news.delete()
+                return HttpResponseRedirect('/news/All/hot/')
+            url = '/news/%s/hot/showNews/%s/' % (this_news.newspart.part,this_news.id)
+            return HttpResponseRedirect(url)
+        except:
+            this_news.delete()
+            return HttpResponseRedirect('/news/All/hot/')
+    else:
+        return render_to_response('404.html',locals(),
+            context_instance=RequestContext(request))
+
+@login_required(login_url='/log/')     
+def giveupUpload(request,this_id):
+    this_news = News.objects.get(id=this_id)
+    feeds = Feeds_followNews.objects.filter(news = this_news)
+    if feeds:
+        for feed in feeds:
+            feed.owner.message -= 1
+            feed.owner.save()
+    if this_news.type == 'pic':       
+        newspics = NewsPic.objects.filter(news=this_news)
+        if newspics:
+            for newspic in newspics:
+                os.unlink( newspic.pic.path )
+                newspic.delete()
+        this_news.delete()
+        return HttpResponseRedirect('/news/All/hot/')
+    elif this_news.type == 'mp3':
+        os.unlink( this_news.mp3.path )   
+        this_news.delete()
+        return HttpResponseRedirect('/news/All/hot/')
+    else:
+        return render_to_response('404.html',locals(),
+            context_instance=RequestContext(request))            
+ 
+    
+@login_required(login_url='/log/') 
 @require_POST
 def upload( request ):   
-    print request.POST
-    file = upload_receive( request )
-    this_news = News.objects.all()[0]
-    instance = NewsPic( 
-        pic = file,
-        news = this_news
-    )
-    instance.save()
+    type = request.POST.get('type')
+    id = request.POST.get('id')
 
-    basename = os.path.basename( instance.pic.path )
+    file = upload_receive( request )
+    this_news = News.objects.get(id=id)
+    if type == 'pic':
+        instance = NewsPic( 
+            pic = file,
+            news = this_news
+        )
+        instance.save()
+        basename = os.path.basename( instance.pic.path )
+    elif type == 'mp3':
+        this_news.mp3 = file
+        this_news.save()
+        instance = this_news
+        basename = os.path.basename( instance.mp3.path )
+    else:
+        pass
 
     file_dict = {
         'name' : basename,
@@ -151,18 +214,30 @@ def upload( request ):
     }
 
     return UploadResponse( request, file_dict )    
-    
+  
+@login_required(login_url='/log/')   
 @require_POST
 def upload_delete( request, pk ):
     success = True
-    try:
-        instance = NewsPic.objects.get( pk = pk )
-        os.unlink( instance.pic.path )
-        instance.delete()
-
-    except NewsPic.DoesNotExist:
+    type = request.POST.get('type')
+    id = request.POST.get('id')
+    if type == 'pic':
+        try:
+            instance = NewsPic.objects.get( pk = pk )
+            os.unlink( instance.pic.path )
+            instance.delete()            
+        except NewsPic.DoesNotExist:
+            success = False
+    elif type == 'mp3':
+        try:
+            instance = News.objects.get( pk = pk )   
+            os.unlink( instance.mp3.path )   
+            instance.mp3 = None
+            instance.save()
+        except NewsPic.DoesNotExist:
+            success = False
+    else:
         success = False
-
     return JFUResponse( request, success )
     
 @login_required(login_url='/log/') 
@@ -234,6 +309,18 @@ def newsVote(request):
     
 def which_news(request,news_part,small_part):
     user = request.user
+    for news in News.objects.filter(type='pic'):
+        newspics = NewsPic.objects.filter(news=news)
+        if not newspics:
+            try:
+                this_newspic = NewsPic(
+                    news = news,
+                    pic = news.pic
+                )
+                this_newspic.save()
+            except:
+                return render_to_response('404.html',locals(),
+                    context_instance=RequestContext(request))   
     newsHTML = True
     newsBase = True
     allNewsPart = NewsPart.objects.all()
@@ -425,7 +512,7 @@ def submit_news(request,news_part, news_type):
                     user = this_user,
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
-                    pic = form.cleaned_data['pic'],
+                    #pic = form.cleaned_data['pic'],
                     newspart = form.cleaned_data['newspart'], 
                     open = form.cleaned_data['newspart'].open,
                     secret=form.cleaned_data['newspart'].secret,
@@ -457,7 +544,7 @@ def submit_news(request,news_part, news_type):
                     user = this_user,
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
-                    mp3 = form.cleaned_data['mp3'],
+                    #mp3 = form.cleaned_data['mp3'],
                     newspart = form.cleaned_data['newspart'],
                     open = form.cleaned_data['newspart'].open,
                     secret=form.cleaned_data['newspart'].secret,
@@ -508,6 +595,10 @@ def submit_news(request,news_part, news_type):
                 this_feeds.save()
                 this_feeds.owner.message += 1
                 this_feeds.owner.save()
+        
+        if type == 'pic' or type == 'mp3':
+            url = '/news/uploadFile/%s/%s/' % (type,this_news.id)
+            return HttpResponseRedirect(url)
         url = '/news/'+ news_part + '/hot/'
         return HttpResponseRedirect(url)
        
@@ -529,6 +620,18 @@ def show_news(request,news_part,small_part,news_id):
     
     
     this_news = News.objects.get(id=news_id)
+    if this_news.type == 'pic':
+        newspics = NewsPic.objects.filter(news=this_news)
+        if not newspics:
+            try:
+                this_newspic = NewsPic(
+                    news = this_news,
+                    pic = this_news.pic
+                )
+                this_newspic.save()
+            except:
+                return render_to_response('404.html',locals(),
+                    context_instance=RequestContext(request))
     if (this_news.ups+this_news.downs) != 0:
         percent = float(this_news.ups) / abs(this_news.ups+this_news.downs)
         ratioLink = '%.0f%%' % (percent*100)
@@ -1044,7 +1147,7 @@ def ke_upload_view(request):
             return HttpResponse(json.dumps(
                 { 'error': 1, 'message': u'请选择要上传的文件' }
             ))
-        print file.name
+
         ext = file.name.split('.').pop()
         if ext not in ext_allowed:
             return HttpResponse(json.dumps(
@@ -1059,8 +1162,7 @@ def ke_upload_view(request):
         if not os.path.isdir(save_path):
             os.makedirs(save_path)
             print 'makedirs yes'
-        print save_path
-        print 'here yes'
+
         new_file = '%s.%s' % (int(time.time()), ext)
 
         destination = open(save_path+new_file, 'wb+')

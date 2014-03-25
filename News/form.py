@@ -172,18 +172,18 @@ class PicNewsForm(forms.ModelForm):
         }
     )
     
-    pic = forms.ImageField(
+    '''pic = forms.ImageField(
         required=True,
         widget=forms.FileInput(attrs={'class':'form-control','required':"required"}),
         label=u'图片',
         error_messages={
             'required': u'你没有上传图片！',
         }
-    )
+    )'''
     
     class Meta:
         model = News
-        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','text','comment_num','mp3','open','secret')  
+        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','text','comment_num','mp3','open','secret','pic')  
         
 class mp3NewsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):  
@@ -214,16 +214,16 @@ class mp3NewsForm(forms.ModelForm):
         }
     )
     
-    mp3 = forms.FileField(
+    '''mp3 = forms.FileField(
         required=True,
         widget=forms.FileInput(attrs={'class':'form-control','required':"required"}),
         label=u'MP3文件',
         error_messages={
             'required': u'你没有上传MP3！',
         }
-    )
+    )'''
     
     class Meta:
         model = News
-        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','text','comment_num','pic','open','secret') 
+        exclude = ('ups','downs','time','gold','score','controversy','hot','user','link','text','comment_num','pic','open','secret','mp3') 
         
