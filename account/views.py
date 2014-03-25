@@ -156,9 +156,9 @@ def fangqiu(request):
             pace.append('2222222')
         pace.append(10)
         next = '/news/All/hot/'
-        if 'state' in request.GET:
-            next = request.GET['state']
-            pace.append(11)
+        #if 'state' in request.GET:
+        #    next = request.GET['state']
+        #    pace.append(11)
         f.write('%s' % pace)
         f.close()
         return HttpResponseRedirect(next)
