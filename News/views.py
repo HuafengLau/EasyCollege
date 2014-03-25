@@ -233,7 +233,15 @@ def newsVote(request):
                 context_instance=RequestContext(request))
     
 def which_news(request,news_part,small_part):
-    user = request.user
+    authid = request.session.get('authid', False)
+    if authid:
+        this_user = MyUser.objects.get(id=authid)
+        username = str(this_user.email)
+        password = '123'
+        user = authenticate(username=username, password=password)   
+        login(request, user)
+    else:
+        user = request.user
     newsHTML = True
     newsBase = True
     allNewsPart = NewsPart.objects.all()

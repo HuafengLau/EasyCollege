@@ -80,27 +80,25 @@ def QQ_login(request):
     return HttpResponseRedirect(QQ_auth_url)
     
 def fangqiu(request):
-    f = open("D:\game.txt","w+")
-    pace = []
-    if 'error' in request.GET or 'code' not in request.GET:
+    if 'error' in request.GET or 'code' not in request.GET:      
         return which_news(request,'All','hot')
     else:
-        pace.append(1)
+
         code = request.GET['code']
-        pace.append(2)
+
         access_token = get_access_token(code)
-        pace.append(3)
+
         openid = get_user_openid(access_token)
-        pace.append(4)
+
         nicname = get_user_nicname(access_token,openid)["nickname"]
-        pace.append(5)
+
         try:
             this_AuthorLog = AuthorLog.objects.get(
                 openid = openid,
                 type = 'QQ'
             )
             this_user = this_AuthorLog.user
-            pace.append(6)
+
         except:
             pace.append(7)
             this_user = MyUser.objects.create_user(
@@ -144,24 +142,17 @@ def fangqiu(request):
             this_AuthorLog.save()
             pace.append(9)
         username = str(this_user.email)
-        pace.append(username)
+
         password = '123'
-        pace.append(password)
+
         user = authenticate(username=username, password=password)
-        pace.append(type(user))
+
         login(request, user)
-        if user.is_authenticated():
-            pace.append('1111111')
-        else:
-            pace.append('2222222')
-        pace.append(10)
+        request.session['authid'] = user.id
         next = '/news/All/hot/'
         if 'state' in request.GET:
             next = str(request.GET['state'])[21:]
-            pace.append(11)
 
-        f.write('%s' % pace)
-        f.close()
         return HttpResponseRedirect(next)
 
 def testQQlog(request,openid):
