@@ -120,7 +120,7 @@ def log(request):
         username = request.POST['email']
         password = request.POST['stu_pwd']
         user = authenticate(username=username, password=password)
-        print type(user)
+
         if user is not None:
             if user.is_active:
                 login(request, user)
