@@ -80,9 +80,13 @@
 		{% load jfutags %} 
 		{% jfu 'photo_upload_form.html' %} 
 		</div>
-		<div>
-			<a href='/news/finishUpload/{{id}}/'><button class='btn btn-success'>完成</button></a>
-			<a href='/news/giveupUpload/{{id}}/'><button class='btn btn-danger'>放弃</button></a>
+		<div class='row MB_50px'>
+			<div class='col-xs-4 col-md-2 col-md-offset-4 col-xs-offset-2'>
+			<a href='/news/finishUpload/{{id}}/'><button class='btn btn-success form-control'>完成</button></a>
+			</div>
+			<div  class='col-xs-4 col-md-2'>
+			<a href='/news/giveupUpload/{{id}}/'><button class='btn btn-danger form-control'>放弃</button></a>
+			</div>
 		</div>
 	</div>
   </body>
