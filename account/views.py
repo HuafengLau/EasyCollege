@@ -143,13 +143,17 @@ def fangqiu(request):
             )
             this_AuthorLog.save()
             pace.append(9)
-        username = this_user.email
+        username = str(this_user.email)
         pace.append(username)
         password = '123'
         pace.append(password)
         user = authenticate(username=username, password=password)
         pace.append(type(user))
         login(request, user)
+        if user.is_authenticated():
+            pace.append('登录成功')
+        else:
+            pace.append('登录失败')
         pace.append(10)
         next = '/news/All/hot/'
         if 'state' in request.GET:
