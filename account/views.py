@@ -143,7 +143,7 @@ def fangqiu(request):
             )
             this_AuthorLog.save()
             pace.append(9)
-        username = this_news.email
+        username = this_user.email
         pace.append(username)
         password = '123'
         pace.append(password)
