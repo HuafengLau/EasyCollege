@@ -473,7 +473,7 @@ def submit_news(request,news_part, news_type):
                     secret=form.cleaned_data['newspart'].secret,
                     ups = 0,
                     downs = 0, 
-                    read = 0,
+                    read = 1,
                     gold = 0,
                     score = 0,
                     controversy = controversy(0, 0),
@@ -481,7 +481,7 @@ def submit_news(request,news_part, news_type):
                     comment_num = 0
                 )
                 this_news.save()
-                this_news.hot = hot(0, 0, this_news.time)
+                this_news.hot = hot(0, 0, 1,this_news.time)
                 this_news.save()
                 add_part = form.cleaned_data['newspart']
                 add_part.num += 1
@@ -507,13 +507,14 @@ def submit_news(request,news_part, news_type):
                     ups = 0,
                     downs = 0,              
                     gold = 0,
+                    read = 1,
                     score = 0,
                     controversy = controversy(0, 0),
                     hot = 0,
                     comment_num = 0
                 )
                 this_news.save()
-                this_news.hot = hot(0, 0, this_news.time)
+                this_news.hot = hot(0, 0, 1,this_news.time)
                 this_news.save()
                 add_part = form.cleaned_data['newspart']
                 add_part.num += 1
@@ -540,12 +541,13 @@ def submit_news(request,news_part, news_type):
                     downs = 0,              
                     gold = 0,
                     score = 0,
+                    read = 1,
                     controversy = controversy(0, 0),
                     hot = 0,
                     comment_num = 0
                 )
                 this_news.save()
-                this_news.hot = hot(0, 0, this_news.time)
+                this_news.hot = hot(0, 0, 1,this_news.time)
                 this_news.save()
                 add_part = form.cleaned_data['newspart']
                 add_part.num += 1
@@ -572,12 +574,13 @@ def submit_news(request,news_part, news_type):
                     downs = 0,              
                     gold = 0,
                     score = 0,
+                    read = 1,
                     controversy = controversy(0, 0),
                     hot = 0,
                     comment_num = 0
                 )
                 this_news.save()
-                this_news.hot = hot(0, 0, this_news.time)
+                this_news.hot = hot(0, 0, 1,this_news.time)
                 this_news.save()
                 add_part = form.cleaned_data['newspart']
                 add_part.num += 1
