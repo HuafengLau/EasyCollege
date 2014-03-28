@@ -22,6 +22,8 @@ from Center.models import User_info
 import os
 import random
 import time
+from datetime import datetime
+import calendar
 import urllib2
 import urllib
 import chardet 
@@ -33,9 +35,30 @@ def index(request):
     user = request.user
     user.message = 0
     user.save()
-    Feeds1 = Feeds_followNews.objects.filter(owner=user)
-    Feeds2 = Feeds_news.objects.filter(owner=user)
-    Feeds3 = Feeds_comment.objects.filter(owner=user)
+    def cut(arr, indices):  
+        return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
+                
+    today = datetime.today()
+    year = today.year
+    month = today.month
+    day = today.day
+    _weekday,_lastday = calendar.monthrange(year,month)  
+    _sundays = [x for x in range(6-_weekday+1,_lastday+1,7)]  
+
+    weekList =  cut(range(1,_lastday+1),_sundays)
+
+    for index, item in enumerate(weekList):
+        if day in item:
+            this_week = item
+            break
+
+    start_date = datetime(year,month,this_week[0],0,0,0,0)
+    end_date = datetime.today()
+    
+    Feeds1 = Feeds_followNews.objects.filter(owner=user,time__range=(start_date, end_date))
+    Feeds2 = Feeds_news.objects.filter(owner=user,time__range=(start_date, end_date))
+    Feeds3 = Feeds_comment.objects.filter(owner=user,time__range=(start_date, end_date))
+    
     Feeds = sorted(list(Feeds1) + list(Feeds2) + list(Feeds3), key=lambda x: x.time,reverse = True)
     
     my_user_info = User_info.objects.get(user=user)
