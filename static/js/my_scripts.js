@@ -18,6 +18,8 @@ $(document).ready(function(){
 	  });
 	});
 	
+	$('.nailthumb-container').nailthumb();
+	
 	$('.ID_card').on('click', function(){
 		var id=$(this).attr('id');  
 		$.get('/index/get_idCard/', {'id':id}, function(data){
@@ -45,6 +47,35 @@ $(document).ready(function(){
     // JS for log.html
     
 	// JS for newsBase.html
+	$('.needInside').on('click', function(){
+		alert('分享的文字需要进入阅读界面才能投票哦');
+	});
+	
+	$('.baseVote').on('click', function(){
+		var news_id = $(this).attr('id').split(';')[0]
+		var vote = $(this).attr('id').split(';')[1]
+		$.get('/news/vote/',{'news_id':news_id,'vote':vote},function(data){
+			if(data == 'wrong'){
+				alert('可能是由于外星人的干扰引发了未知错误，请联系管理员admin@funqiu.com');
+			}else{
+				
+				$('.voteDiv'+news_id).html(data);
+				alert('感谢投票，您还可以对评论投票哦！');
+				$('.voteLi'+news_id).hide();
+			}
+		});
+	});
+	
+	$('.readNews').on('click', function(){
+		var id = $(this).attr('id');
+		$.get('/news/read/', {'id':id},function(data){
+			if(data =='wrong'){
+				alert('出了点小问题，可能是外星人造成的！请火速通知管理员');
+			}
+		});
+	});
+	
+	
 	$('.callTopPart').on('click',function(){
 		var partname = $(this).attr('id');
 		$.get('/news/getTopPart/',{'partname':partname},function(data){

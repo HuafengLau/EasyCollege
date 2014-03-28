@@ -6,8 +6,8 @@ from News.models import News,NewsPart,NewsPartRule,NewsComment1,NewsComment2,New
 
 class NewsAdmin(admin.ModelAdmin):
     """docstring for NewsAdmin"""
-    list_display = ('user', 'time','type','title', 'newspart','ups','downs','gold','score','controversy','hot')
-    list_filter = ('user', 'type')
+    list_display = ('user', 'time','type','title', 'newspart','ups','downs','read','gold','score','controversy','hot')
+    list_filter = ('newspart', 'type')
     #ordering = ('user', )
 
 class NewsPicAdmin(admin.ModelAdmin):

@@ -14,6 +14,8 @@
 	{% block moreLink %}
 	{% endblock %}
     <!-- Bootstrap -->
+	<link href="{{STATIC_URL}}css/lightbox.css" rel="stylesheet" />
+	<link href="{{STATIC_URL}}css/jquery.nailthumb.1.1.min.css" rel="stylesheet" />
     <link href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="{{STATIC_URL}}css/my_css.css" rel="stylesheet" media="screen">
 	{% block moreStyle %}
@@ -169,6 +171,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{STATIC_URL}}js/jquery.js"></script>
+	<script src="{{STATIC_URL}}js/jquery.nailthumb.1.1.min.js"></script>
+	<script src="{{STATIC_URL}}js/lightbox-2.6.min.js"></script>
     <script src="{{STATIC_URL}}bootstrap/js/bootstrap.min.js"></script>
 	<script src="{{STATIC_URL}}js/jquery.scrollUp.min.js"></script>
     <script src="{{STATIC_URL}}js/my_scripts.js"></script>

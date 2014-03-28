@@ -1,5 +1,31 @@
 /* CSS for all HTML */
 
+.index-square-thumb {
+	width: 150px;
+	height: 150px;
+}
+
+.newsbase-square-thumb {
+	width: 50px;
+	height: 70px;
+}
+
+.newsshow-square-thumb{
+	width: 200px;
+	height: 200px;
+}
+
+.bigAvatar-square-thumb{
+	width:100px;
+	height:160px;
+}
+
+.smallAvatar-square-thumb{
+	width:40px;
+	height:50px;
+}
+
+
 .hidden {
 	display:none;
 }
@@ -119,6 +145,10 @@
 	margin-top:80px;
 }
 
+.MT_45px{
+	margin-top:45px;
+}
+
 .MT_40px{
 	margin-top:40px;
 }
@@ -177,12 +207,21 @@
 
 }
 
+.ML_35px{
+	margin-left: 35px;
+
+}
+
 .MB_0px{
 	margin-bottom: 0px;
 }
 
 .MB_50px{
 	margin-bottom: 50px;
+}
+
+.MB_15px{
+	margin-bottom: 15px;
 }
 
 .MB_5px{
@@ -197,6 +236,9 @@
 	padding:0px;
 }
 
+.PB_0px{
+	padding-bottom:0xp;
+}
 
 .PT_10px{
 	padding-top:10px;
@@ -465,7 +507,6 @@ div.transp { /* make the div translucent */
 }
 
 .indexImgDiv{
-	height: 480px;
 	overflow: hidden;
 }
 
@@ -1059,10 +1100,6 @@ ul li{
 
 }
 
-#showNewsPic{
-	width:60%;
-	margin-left:15%;
-}
 
 #showNewsGold{
 	margin-top:7px;
@@ -1077,11 +1114,6 @@ ul li{
 }
 
 /* CSS for newBase.html */
-.newsImgDiv{
-	overflow:hidden;
-	height:60px;
-}
-
 
 .newsUpVote{
 	margin-left: 3px;
@@ -1311,13 +1343,12 @@ ul.side_nav li {
 
 ul.side_nav li a {
      width: 170px;
-	 border-top: 1px solid #3373a9;
-	 border-bottom: 1px solid #003867;
+	 border-top: 0px solid #F2F2F2;
+	 border-bottom: 1px solid #F2F2F2;
 	 padding: 10px 10px 10px 25px;
 	 display: block;
-	 color: #fff;
+	 color: #333333;
 	 text-decoration: none;
-	 background: #1B7DA0 url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
 	 position: relative;
 	 z-index: 2;
 }
@@ -1325,7 +1356,7 @@ ul.side_nav li a {
 #partLi{
 	 width: 170px;
 	 border-top: 1px solid #3373a9;
-	 border-bottom: 1px solid #003867;
+	 border-bottom: 1px solid #F2F2F2;
 	 padding: 10px 10px 10px 25px;
 	 display: block;
 	 color: #fff;
@@ -1444,4 +1475,44 @@ ul.side_nav li div {
 
 #topPartDiv{
 	padding-top: 6px;
+}
+
+#activeColor1,#activeColor6,#activeColor11,#activeColor16,#activeColor21{
+	background: #96CEB4 url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+}
+
+#activeColor2,#activeColor7,#activeColor12,#activeColor17,#activeColor22{
+	background: #FFEEAD url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+}
+
+#activeColor3,#activeColor8,#activeColor13,#activeColor18,#activeColor23{
+	background: #FF6F69 url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+}
+
+#activeColor4,#activeColor9,#activeColor14,#activeColor19,#activeColor24{
+	background: #FFCC5C url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+}
+
+#activeColor5,#activeColor10,#activeColor15,#activeColor20,#activeColor25{
+	background: #AAD8B0 url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+}
+
+#activeColor26,#activeColor31,#activeColor36,#activeColor41,#activeColor46{
+	background: #96CEB4 url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+}
+
+#activeColor27,#activeColor32,#activeColor37,#activeColor42,#activeColor47{
+	background: #FFEEAD url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+}
+
+#activeColor28,#activeColor33,#activeColor38,#activeColor43,#activeColor48{
+	background: #FF6F69 url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+}
+
+#activeColor29,#activeColor34,#activeColor39,#activeColor44,#activeColor49{
+	background: #FFCC5C url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
+}
+
+#activeColor30,#activeColor35,#activeColor40,#activeColor45,#activeColor50{
+	background: #AAD8B0 url(../img/sidenav_arrow.gif) no-repeat 10px 10px;
 }

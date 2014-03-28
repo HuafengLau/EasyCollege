@@ -12,7 +12,7 @@ from News.form import LinkNewsForm, TextNewsForm, PicNewsForm, mp3NewsForm
 from datetime import datetime
 import calendar
 from Center.models import User_info
-from math import sqrt, log10
+from math import sqrt, log10, log
 import pytz
 import json, os, time
 from account.models import MyUser
@@ -28,9 +28,10 @@ def score(ups,downs):
     return ups - downs
 
 # 当前为10倍票可保持原位
-def hot(ups, downs, time):
+def hot(ups, downs, read, time):
     s = score(ups, downs)
     order = log10(max(abs(s), 1))
+    read_score = log(read,500)
     if s > 0:
         sign = 1
     elif s < 0:
@@ -38,7 +39,7 @@ def hot(ups, downs, time):
     else:
         sign = 0
     seconds = (time-datetime(2014,2,11,10,46,0,0,pytz.utc)).total_seconds()
-    return round(sign * order + seconds / (24*3600), 7)
+    return round(sign * order + read_score + seconds / (24*3600), 7)
 
 def controversy(ups, downs):
     return float(ups + downs) / max(abs(score(ups, downs)), 1)
@@ -58,6 +59,22 @@ def confidence(ups, downs):
 
     return (left - right) / under
 
+def readNews(request):
+    if request.is_ajax() and request.method == 'GET':
+        this_id = request.GET.get('id')
+        this_news = News.objects.get(id=this_id)
+        read = this_news.read + 1
+        ups = this_news.ups
+        downs = this_news.downs
+        this_news.read = read
+        this_news.hot = hot(ups, downs, read, this_news.time)
+        this_news.save()
+        resposne = HttpReponse('yes')
+        return resposne
+    else:
+        response = HttpResponse('wrong')
+        return resposne
+    
 @login_required(login_url='/log/') 
 def mySubscription(request):
     if request.is_ajax() and request.method == 'GET':
@@ -177,7 +194,6 @@ def giveupUpload(request,this_id):
     else:
         return render_to_response('404.html',locals(),
             context_instance=RequestContext(request))            
- 
     
 @login_required(login_url='/log/') 
 @require_POST
@@ -296,11 +312,12 @@ def newsVote(request):
                     num += 3
                 user.money += num
                 user.save()
-                
+            
+            read = this_news.read
             this_news.ups = ups
             this_news.downs = downs
             this_news.score = ups-downs
-            this_news.hot = hot(ups, downs, this_news.time)
+            this_news.hot = hot(ups, downs, read, this_news.time)
             this_news.controversy = controversy(ups, downs)
             this_news.save()
             
@@ -331,8 +348,8 @@ def which_news(request,news_part,small_part):
    
     newsParts = allNewsPart.filter(open=True,secret=False).order_by('-num','-user_num','part')
     
-    top_newsParts = newsParts[:25]
-    more_newsParts = newsParts[25:]
+    top_newsParts = newsParts.exclude(part__in=['All','MySubs'])
+    #more_newsParts = newsParts[25:]
     if user.is_authenticated():
         this_user_info = User_info.objects.get(user=user)
         subscriptions = this_user_info.subscription.split(';')[:-1]
@@ -341,10 +358,13 @@ def which_news(request,news_part,small_part):
         defaultList = ['Funny','Life','Music','Home-news','SuggestCY','Gossip']
         mySubs = allNewsPart.filter(part__in=defaultList).order_by('part')
     
-    if news_part != 'All':
-        newses = News.objects.filter(newspart=part)
-    else:
+    if news_part == 'All':
         newses = News.objects.filter(open=True,secret=False)
+    elif news_part == 'MySubs':
+        newses = News.objects.filter(newspart__in=mySubs)
+    else:
+        newses = News.objects.filter(newspart=part)
+        
         
     def cut(arr, indices):  
         return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
@@ -382,8 +402,7 @@ def which_news(request,news_part,small_part):
         
     return render_to_response('newsBase.html',locals(),
         context_instance=RequestContext(request))
-    
-        
+            
 @login_required(login_url='/log/')         
 def submit_news(request,news_part, news_type):
     user = request.user
@@ -453,7 +472,8 @@ def submit_news(request,news_part, news_type):
                     open = form.cleaned_data['newspart'].open,
                     secret=form.cleaned_data['newspart'].secret,
                     ups = 0,
-                    downs = 0,              
+                    downs = 0, 
+                    read = 0,
                     gold = 0,
                     score = 0,
                     controversy = controversy(0, 0),
@@ -620,6 +640,14 @@ def show_news(request,news_part,small_part,news_id):
     
     
     this_news = News.objects.get(id=news_id)
+
+    read = this_news.read + 1
+    ups = this_news.ups
+    downs = this_news.downs
+    this_news.read = read
+    this_news.hot = hot(ups, downs, read, this_news.time)
+    this_news.save()
+
     if this_news.type == 'pic':
         newspics = NewsPic.objects.filter(news=this_news)
         if not newspics:
@@ -632,6 +660,32 @@ def show_news(request,news_part,small_part,news_id):
             except:
                 return render_to_response('404.html',locals(),
                     context_instance=RequestContext(request))
+    if this_news.type == 'pic':
+        newspics = NewsPic.objects.filter(news=this_news)
+        picnum = newspics.count()
+        if picnum > 12:
+            return render_to_response('404.html',locals(),
+                context_instance=RequestContext(request))
+        if picnum >9:
+            picnum10_12 = True
+            picnum7_9 = True
+            picnum4_6 = True            
+            picgroup1 = newspics[:3]
+            picgroup2 = newspics[3:6]
+            picgroup3 = newspics[6:9]
+            picgroup3 = newspics[9:12]
+        elif picnum > 6:
+            picnum7_9 = True
+            picnum4_6 = True
+            picgroup1 = newspics[:3]
+            picgroup2 = newspics[3:6]
+            picgroup3 = newspics[6:9]
+        elif picnum > 3:
+            picnum4_6 = True
+            picgroup1 = newspics[:3]
+            picgroup2 = newspics[3:6]
+        else:
+            picgroup1 = newspics[:3]
     if (this_news.ups+this_news.downs) != 0:
         percent = float(this_news.ups) / abs(this_news.ups+this_news.downs)
         ratioLink = '%.0f%%' % (percent*100)

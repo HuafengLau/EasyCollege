@@ -2,7 +2,7 @@
 {% load my_tags %}
 
 {% block title %}
-一个用户投票投出来的分享社区 - 方遒社区
+让最有价值的信息呈现 - 方遒社区
 {% endblock %}
 
 {% block moreCSS %}
@@ -15,8 +15,11 @@
 		<div class='hidden-xs'>
 		  <div class=''>
 		  <ul class='list-inline'>
-			<li>{% if user.is_authenticated %}<span>我的订阅：</span>{% else %}<span>默认订阅：</span>{% endif %}</li>
-			<li><a class="{% ifnotequal part.part 'All' %}{% else %}font-orange{% endifnotequal %}" href='/news/All/hot/'>全部</a></li>
+			<li>{% if user.is_authenticated %}<a href='/news/mySubscription/'><span class='font-333'>我的订阅：</span></a>{% else %}<span>默认订阅：</span>{% endif %}</li>
+			<li><a class="{% ifnotequal part.part 'All' %}{% else %}font-orange{% endifnotequal %}" href='/news/All/hot/'>全部集</a></li>
+			{% if user.is_authenticated %}
+			<li><a class="{% ifnotequal part.part 'MySubs' %}{% else %}font-orange{% endifnotequal %}" href='/news/MySubs/hot/'>订阅集</a></li>
+			{% endif %}
 			{% for sub in mySubs %}
 				<li><a class='{% ifnotequal part.part sub.part %}{% else %}font-orange{% endifnotequal %}' href='/news/{{sub.part}}/hot/'>{{ sub.realPart }}</a></li>
 			{% endfor %}
@@ -63,12 +66,12 @@
 		<div id='newsMainDiv' class='row'>
 			{% block topPartLi %}
 			{% if newsBase %}
-			<div id='leftDiv' class='hidden-xs col-md-2 MT_40px'>			
+			<div id='leftDiv' class='hidden-xs col-md-2 MT_45px'>			
 				<ul class="side_nav">
 					<li id='partLi'>&nbsp;&nbsp;最活跃的社群</li>
 					{% for part in top_newsParts %}
 					<li>
-						<a href='/news/{{part.part}}/hot/'>&nbsp;&nbsp;{{part.realPart}}</a>
+						<a id='activeColor{{forloop.counter}}' href='/news/{{part.part}}/hot/'>&nbsp;&nbsp;{{part.realPart}}</a>
 						<div style='display:none'><p>{{part.description}}</p></div>
 					</li>
 					{% endfor %}
@@ -92,6 +95,7 @@
 					{% if hot_newses %}
 						{% for news in hot_newses %}							
 							<div class='clear_both line_bottom ML_23px'>
+								<div class='voteDiv{{news.id}}'>
 								<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>
 								{% if user.is_authenticated %}
 								{% for info in user.user_info_set.all %}
@@ -129,19 +133,20 @@
 								<div id='' style='display:none' class='newsDownVoted'></div>
 							{% endif %}
 							</div>
+							</div>
 						{% ifequal news.type 'pic' %}
-							{% for newspic in news.newspic_set.all %}
-								{% if forloop.first %} 
-								<div class='news_pic pull-left MT_6px newsImgDiv'>
-									<img width='50px' src='{{MEDIA_URL}}{{news.pic}}' />
+							{% for newspic in news.newspic_set.all %}								 
+								<div id='{{news.id}}' class='readNews news_pic pull-left MT_6px nailthumb-container newsbase-square-thumb {% if not forloop.first %}hidden{% endif %}'>
+									<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-hot-{{news.id}}" title="{{news.title}}">
+										<img src='{{MEDIA_URL}}{{newspic.pic}}' />
+									</a>
 								</div>
-								{% endif %}
 							{% endfor %}
 						{% endifequal %}
 							<div class='pull-left MT_8px'>
 								<div>
 									{% ifequal news.type 'link' %}
-									<a class='news_title' target='_blank' href='{{news.link}}'>{{news.title|truncatechars:32}}</a>
+									<a id='{{news.id}}' class='readNews news_title' target='_blank' href='{{news.link}}'>{{news.title|truncatechars:32}}</a>
 									{% else %}
 									<a class='news_title' href='/news/{{part.part}}/hot/showNews/{{news.id}}/'>{{news.title|truncatechars:32}}</a>
 									{% endifequal %}
@@ -161,8 +166,25 @@
 										{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
 										</small>
 									</li>
-									<li><small class='font-grey'>镀金{{news.gold}}</small></li>
-									<li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
+									<li><small class='font-grey'>{% ifnotequal news.gold 0 %}{% ifnotequal news.gold 0 %}{{news.gold}}{% endifnotequal %}&nbsp;{% endifnotequal %}镀金</small></li>
+									<li><small class='font-grey'>{{news.read}}阅读</small></li>
+									<li class='font-grey'>
+										<i><small>
+											{% ifequal news.type 'pic' %}{{ news.newspic_set.all | length }}{% endifequal %}
+											{{news.type}}
+										</small></i>
+									</li>									
+									{% ifnotequal news.type 'text' %}
+										{% ifnotVoted news user %}
+											<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>顶</small></li>
+											<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>沉</small></li>
+										{% else %}{% endifnotVoted %}
+									{% else %}
+										{% ifnotVoted news user %}
+										<li><small class='needInside font-orange hand_over'>投票</small></li>
+										{% else %}{% endifnotVoted %}
+									{% endifnotequal %}
+									
 								</ul>
 							</div>
 							{% if news in top_newses %}
@@ -224,9 +246,13 @@
 							{% endif %}
 						</div>
 						{% ifequal news.type 'pic' %}
-							<div class='news_pic pull-left MT_6px newsImgDiv'>
-								<img width='50px' src='{{MEDIA_URL}}{{news.pic}}' />
-							</div>
+							{% for newspic in news.newspic_set.all %}								 
+								<div id='{{news.id}}' class='readNews news_pic pull-left MT_6px nailthumb-container newsbase-square-thumb {% if not forloop.first %}hidden{% endif %}'>
+									<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-controversial-{{news.id}}" title="{{news.title}}">
+										<img width='50px' src='{{MEDIA_URL}}{{newspic.pic}}' />
+									</a>
+								</div>
+							{% endfor %}
 						{% endifequal %}
 							<div class='pull-left MT_8px'>
 								<div>
@@ -249,8 +275,15 @@
 									<li><small><a class='font-grey' href='/news/{{part.part}}/controversial/showNews/{{news.id}}/'>
 									{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
 									</small></li>
-									<li><small class='font-grey'>镀金{{news.gold}}</small></li>
-									<li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
+									<li><small class='font-grey'>{% ifnotequal news.gold 0 %}{{news.gold}}{% endifnotequal %}镀金</small></li>
+									<li><small class='font-grey'>{{news.read}}阅读</small></li>	
+									<li class='font-grey'>
+										<i><small>
+											{% ifequal news.type 'pic' %}{{ news.newspic_set.all | length }}{% endifequal %}
+											{{news.type}}
+										</small></i>
+									</li>
+									
 								</ul>
 							</div>			
 						</div>
@@ -302,9 +335,13 @@
 							{% endif %}
 						</div>
 							{% ifequal news.type 'pic' %}
-							<div class='news_pic pull-left MT_6px newsImgDiv'>
-								<img width='50px' src='{{MEDIA_URL}}{{news.pic}}' />
-							</div>
+								{% for newspic in news.newspic_set.all %}								 
+									<div id='{{news.id}}' class='readNews news_pic pull-left MT_6px nailthumb-container newsbase-square-thumb {% if not forloop.first %}hidden{% endif %}'>
+										<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-controversial-{{news.id}}" title="{{news.title}}">
+											<img width='50px' src='{{MEDIA_URL}}{{newspic.pic}}' />
+										</a>
+									</div>
+								{% endfor %}
 							{% endifequal %}
 								<div class='pull-left MT_8px'>
 								<div>
@@ -313,7 +350,6 @@
 									{% else %}
 									<a class='news_title' href='/news/{{part.part}}/gilded/showNews/{{news.id}}/'>{{news.title|truncatechars:32}}</a>
 									{% endifequal %}
-									<!--<span>——gold{{news.gold}}</span>-->
 								</div>
 								<div>
 									<small>{% showNewsTime news %}前&nbsp;由&nbsp;&nbsp;
@@ -327,8 +363,14 @@
 									<li><small><a class='font-grey' href='/news/{{part.part}}/gilded/showNews/{{news.id}}/'>
 									{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
 									</small></li>
-									<li><small class='font-grey'>镀金{{news.gold}}</small></li>
-									<li class='font-grey'><i> <small>{{news.type}}</small></i></li> 
+									<li><small class='font-grey'>{% ifnotequal news.gold 0 %}{{news.gold}}{% endifnotequal %}镀金</small></li>
+									<li><small class='font-grey'>{{news.read}}阅读</small></li>	
+									<li class='font-grey'>
+										<i><small>
+											{% ifequal news.type 'pic' %}{{ news.newspic_set.all | length }}{% endifequal %}
+											{{news.type}}
+										</small></i>
+									</li> 
 								</ul>
 							</div>
 							
@@ -351,14 +393,16 @@
 						<p><a class='font-333' href='/news/{{part.part}}/hot/'><strong>{{part.part}} / {{part.realPart}}</strong></a></p>
 						<p>{% if not part.open%}（非公开的）{% endif %}{{part.description}}</p>
 						{% ifnotequal part.part 'All' %}
-						<p>{{part.user_num}}名读者&nbsp;&nbsp;&nbsp;
-						{% for info in user.user_info_set.all %}
-							{% if part.part in info.subscription %}
-								<a id='{{part.part}}' class='subscriptionClick hand_over'>已订阅（点击取消）</a>
-							{% else %}
-								<a id='{{part.part}}' class='subscriptionClick hand_over'>未订阅（点击订阅）</a>
-							{% endif %}
-						{% endfor %}</p>
+							{% ifnotequal part.part 'MySubs' %}
+								<p>{{part.user_num}}名读者&nbsp;&nbsp;&nbsp;
+								{% for info in user.user_info_set.all %}
+									{% if part.part in info.subscription %}
+										<a id='{{part.part}}' class='subscriptionClick hand_over'>已订阅（点击取消）</a>
+									{% else %}
+										<a id='{{part.part}}' class='subscriptionClick hand_over'>未订阅（点击订阅）</a>
+									{% endif %}
+								{% endfor %}</p>
+							{% endifnotequal %} 
 						{% endifnotequal %}
 					</div>
 					<hr/>
@@ -502,7 +546,6 @@
 							</div>
 						</div>
 					</div>
-					{% ifnotequal part.part 'All' %}
 					<hr/  class='hidden-xs'>
 					<div id='partSimilarDiv'  class='hidden-xs bcColorWhite'>				
 						<p><strong>相似的社群</strong></p>
@@ -510,7 +553,6 @@
 						<p>没有找到想要的社群？创建一个吧，只要不和现有板块完全重合，100%通过！移步 <a href='/news/SuggestCY'>SuggestCY / 建议</a></p>
 					</div>
 					<hr/>
-					{% endifnotequal %}
 					<div id='partAdminDiv'  class='hidden-xs bcColorWhite'>
 						<p><strong>社群管理员</strong></p>
 						<ul>
@@ -526,6 +568,7 @@
 				{% endblock %}
 			</div>
 		</div>
+		{% block visibleXS %}
 		<div class='row visible-xs clear_both MT_20px'>
 			{% if weekTopList %}
 				<div id='weekTopDiv' class='clear_both bcColorWhite col-xs-6 col-xs-offset-1'>
@@ -547,6 +590,7 @@
 					</ul>
 				</div>
 			{% endif %}
+
 			<div id='partInfoDiv' class='bcColorWhite col-xs-6 col-xs-offset-1'>
 				<p><a class='font-333' href='/news/{{part.part}}/hot/'><strong>{{part.part}} / {{part.realPart}}</strong></a></p>
 				<p>{% if not part.open%}（非公开的）{% endif %}{{part.description}}</p>
@@ -561,6 +605,7 @@
 				{% endfor %}</p>
 				{% endifnotequal %}
 			</div>
+
 			<div id='submitBtnDiv' class='col-xs-6 col-xs-offset-1'>
 				{% ifnotequal part.part 'ExplainCY' %}
 					{% if part.can_link %}
@@ -626,6 +671,7 @@
 				{% endifnotequal %}
 			</div>
 		</div>
+		{% endblock %}
 	</div>
 </div>
 <!-- Modal -->

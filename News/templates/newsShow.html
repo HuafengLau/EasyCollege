@@ -92,6 +92,7 @@
 			</div>
 			<ul class='list-inline list-unstyled'>
 				<li><small>{% ifnotequal this_news.comment_num 0 %}{{this_news.comment_num}}&nbsp;{% endifnotequal %}评论</small></li>
+				<li><small>{{this_news.read}}&nbsp;阅读</small></li>
 				<li><i> <small>{{this_news.type}}</small></i></li> 
 			</ul>
 		</div>
@@ -101,10 +102,59 @@
 			</div>
 		{% endifequal %}
 		{% ifequal this_news.type 'pic' %}
-			<div class='clear_both' id='showNewsPic'>
-				{% for newspic in this_news.newspic_set.all %}
-				<img src='{{MEDIA_URL}}{{newspic.pic}}' class="img-responsive" />
-				{% endfor %}
+			<div class='clear_both ML_35px'>
+				<table>
+					<tr>
+					{% for newspic in picgroup1 %}
+						<td>
+							<div class='nailthumb-container newsshow-square-thumb MB_0px'>
+								<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-newsshow-{{this_news.id}}" title="{{this_news.title}}">
+									<img src='{{MEDIA_URL}}{{newspic.pic}}' />
+								</a>
+							</div>
+						</td>
+					{% endfor %}
+					</tr>
+					{% if picnum4_6 %}
+					<tr>
+						{% for newspic in picgroup2 %}
+							<td>
+								<div class='nailthumb-container newsshow-square-thumb MB_0px'>
+									<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-newsshow-{{this_news.id}}" title="{{this_news.title}}">
+										<img src='{{MEDIA_URL}}{{newspic.pic}}' />
+									</a>
+								</div>
+							</td>
+						{% endfor %}
+					</tr>
+					{% endif %}
+					{% if picnum7_9 %}
+					<tr>
+						{% for newspic in picgroup3 %}
+							<td>
+								<div class='nailthumb-container newsshow-square-thumb MB_0px'>
+									<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-newsshow-{{this_news.id}}" title="{{this_news.title}}">
+										<img src='{{MEDIA_URL}}{{newspic.pic}}' />
+									</a>
+								</div>
+							</td>
+						{% endfor %}
+					</tr>
+					{% endif %}
+					{% if picnum10_12 %}
+					<tr>
+						{% for newspic in picgroup4 %}
+							<td>
+								<div class='nailthumb-container newsshow-square-thumb MB_0px'>
+									<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-newsshow-{{this_news.id}}" title="{{this_news.title}}">
+										<img src='{{MEDIA_URL}}{{newspic.pic}}' />
+									</a>
+								</div>
+							</td>
+						{% endfor %}
+					</tr>
+					{% endif %}
+				</table>
 			</div>
 		{% endifequal %}
 		{% ifequal this_news.type 'mp3' %}
@@ -261,9 +311,10 @@
 				</div>
 			{% endif %}
 			<div id='{{this_news.id}}' class='form-group clear_both'>
-				<label>评论</label>
+				<label>评论</label><small class='font-grey'>（提交后如果评论没有及时显现，刷新页面即可）</small></span>
 				<div><textarea name='newsComment1Textarea' id='newsComment1Textarea' cols='80' rows='5' placeholder='说点什么吧'></textarea></div>
 				<button id='{% if not need_log %}newsComment1Btn{% endif %}' class='button {% if need_log %}need_login{% endif %}'>提交</button>
+				<span>
 			</div>
 			<div id='commentDiv'>
 				{% if this_news.newscomment1_set.all %}

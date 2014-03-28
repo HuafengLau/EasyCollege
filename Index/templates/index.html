@@ -18,11 +18,13 @@
 			<table id='index_infoTable'>
 				<tr> 
 					<td id='avtar_td'>
+						<div class='nailthumb-container bigAvatar-square-thumb'>
 						{% ifequal user.avatar 'img/avatar.png'%}
-							 <img src='{{STATIC_URL}}img/avatar.png'  height="160" alt='用户头像'/>                         
+							 <img src='{{STATIC_URL}}img/avatar.png' alt='用户头像'/>                         
 						{% else %}
-							 <img src='{{MEDIA_URL}}{{user.avatar}}'  height="160" alt='用户头像'/>
+							 <img src='{{MEDIA_URL}}{{user.avatar}}' alt='用户头像'/>
 						{% endifequal %}
+						</div>
 					</td>
 					<td>
 						<table class='table'>
@@ -70,11 +72,11 @@
 							<div class='bcColorWhite feedsDiv'>
 								<div class='feedsDivTop'>
 									<div class='clear_both'>
-										<div class='pull-left feedsDivAvatar'>
+										<div class='pull-left feedsDivAvatar nailthumb-container smallAvatar-square-thumb'>
 											{% ifequal feed.creator.avatar 'img/avatar.png' %}									
-												<img src='{{STATIC_URL}}img/avatar.png/' width='32px' height='20px' class="img-responsive MB_5px" alt='用户头像'/>																			
+												<img src='{{STATIC_URL}}img/avatar.png/' class="img-responsive MB_5px" alt='用户头像'/>																			
 											{% else %}									
-												<img src='{{MEDIA_URL}}{{feed.creator.avatar}}' width='32px' height='20px' class="img-responsive MB_5px" alt='用户头像'/>										
+												<img src='{{MEDIA_URL}}{{feed.creator.avatar}}' class="img-responsive MB_5px" alt='用户头像'/>										
 											{% endifequal %}
 										</div>
 										<div class='pull-left feedsDivCreatorInfo'>
@@ -650,11 +652,13 @@
 							
 									{% if feed.showText %}
 										{% ifequal feed.news.type 'pic' %}
-										{% for newspic in feed.news.newspic_set.all %}
-										<div class='indexImgDiv'>
-											<img src='{{MEDIA_URL}}{{newspic.pic}}' width='56%' class="img-responsive" />
-										</div>
-										{% endfor %}
+											{% for newspic in feed.news.newspic_set.all %}
+											<div class="nailthumb-container index-square-thumb {% if not forloop.first %}ML_35px{% endif %}">
+												<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-feed-{{feed.id}}" title="{{news.title}}">
+													<img src='{{MEDIA_URL}}{{newspic.pic}}' />
+												</a>
+											</div>
+											{% endfor %}
 										{% endifequal %}
 										{% ifequal feed.news.type 'text' %}
 										<div id=''>

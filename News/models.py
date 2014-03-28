@@ -39,6 +39,7 @@ class News(models.Model):
      
      ups = models.IntegerField(default=0,null=True,verbose_name=u'顶')
      downs = models.IntegerField(default=0,null=True,verbose_name=u'沉')
+     read = models.IntegerField(default=1,null=True,verbose_name=u'阅读')
      
      time = models.DateTimeField(auto_now_add=True,verbose_name=u'发表时间')
      gold = models.IntegerField(default=0,null=True,verbose_name=u'赏金')
