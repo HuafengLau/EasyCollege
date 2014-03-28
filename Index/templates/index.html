@@ -179,7 +179,23 @@
 									<ul class='list-inline list-unstyled MB_0px'>
 										<li><a href='/news/{{feed.news.newspart.part}}/new/showNews/{{feed.news.id}}/'><small class='font-grey'>{% ifnotequal feed.news.comment_num 0 %}{{feed.news.comment_num}}&nbsp;{% endifnotequal %}评论</small></a></li>
 										<li><small class='font-grey'>镀金{{feed.news.gold}}</small></li>
-										<li><i><small class='font-grey'>{{feed.news.type}}</small></i></li> 
+										<li><small class='font-grey'>{{feed.news.read}}阅读</small></li>
+										<li class='font-grey'>
+											<i><small>
+												{% ifequal feed.news.type 'pic' %}{{ feed.news.newspic_set.all | length }}{% endifequal %}
+												{{feed.news.type}}
+											</small></i>
+										</li>									
+										{% ifnotequal feed.news.type 'text' %}
+											{% ifnotVoted feed.news user %}
+												<li class='voteLi{{feed.news.id}}'><small id='{{feed.news.id}};1' class='baseVote font-orange hand_over'>顶</small></li>
+												<li class='voteLi{{feed.news.id}}'><small id='{{feed.news.id}};0' class='baseVote font-orange hand_over'>沉</small></li>
+											{% else %}{% endifnotVoted %}
+										{% else %}
+											{% ifnotVoted feed.news user %}
+											<li><small class='needInside font-orange hand_over'>投票</small></li>
+											{% else %}{% endifnotVoted %}
+										{% endifnotequal %} 
 									</ul>
 									{% ifequal feed.type 'FComment1Reply' %}
 									<div class='clear_both'>

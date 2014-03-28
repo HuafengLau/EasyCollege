@@ -175,14 +175,18 @@
 										</small></i>
 									</li>									
 									{% ifnotequal news.type 'text' %}
-										{% ifnotVoted news user %}
-											<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>顶</small></li>
-											<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>沉</small></li>
-										{% else %}{% endifnotVoted %}
+										{% if user.is_authenticated %}
+											{% ifnotVoted news user %}
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>顶</small></li>
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>沉</small></li>
+											{% else %}{% endifnotVoted %}
+										{% endif %}
 									{% else %}
-										{% ifnotVoted news user %}
-										<li><small class='needInside font-orange hand_over'>投票</small></li>
-										{% else %}{% endifnotVoted %}
+										{% if user.is_authenticated %}
+											{% ifnotVoted news user %}
+											<li><small class='needInside font-orange hand_over'>投票</small></li>
+											{% else %}{% endifnotVoted %}
+										{% endif %}
 									{% endifnotequal %}
 									
 								</ul>
@@ -283,7 +287,20 @@
 											{{news.type}}
 										</small></i>
 									</li>
-									
+									{% ifnotequal news.type 'text' %}
+										{% if user.is_authenticated %}
+											{% ifnotVoted news user %}
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>顶</small></li>
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>沉</small></li>
+											{% else %}{% endifnotVoted %}
+										{% endif %}
+									{% else %}
+										{% if user.is_authenticated %}
+											{% ifnotVoted news user %}
+											<li><small class='needInside font-orange hand_over'>投票</small></li>
+											{% else %}{% endifnotVoted %}
+										{% endif %}
+									{% endifnotequal %}
 								</ul>
 							</div>			
 						</div>
@@ -370,7 +387,21 @@
 											{% ifequal news.type 'pic' %}{{ news.newspic_set.all | length }}{% endifequal %}
 											{{news.type}}
 										</small></i>
-									</li> 
+									</li>
+									{% ifnotequal news.type 'text' %}
+										{% if user.is_authenticated %}
+											{% ifnotVoted news user %}
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>顶</small></li>
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>沉</small></li>
+											{% else %}{% endifnotVoted %}
+										{% endif %}
+									{% else %}
+										{% if user.is_authenticated %}
+											{% ifnotVoted news user %}
+											<li><small class='needInside font-orange hand_over'>投票</small></li>
+											{% else %}{% endifnotVoted %}
+										{% endif %}
+									{% endifnotequal %}
 								</ul>
 							</div>
 							
