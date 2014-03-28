@@ -132,6 +132,7 @@
 									{% endif %}
 								</div>
 								<div class='clear_both feedsDivBottom'>
+									<div class='voteDiv{{feed.news.id}}'>
 									<div id='{{feed.news.ups}};{{feed.news.downs}};{{feed.news.score}}' class='pull-left hand_over newsScoreInfo MR_9px' >
 										{% for info in user.user_info_set.all %}
 											{% if info.upVoted_news %}
@@ -161,7 +162,7 @@
 											{% endif %}
 										{% endfor %}
 									</div>
-									
+									</div>
 									<div class='PT_8px'>
 										{% ifequal feed.news.type 'link' %}
 										<a class='news_title' target='_blank' href='{{feed.news.link}}'>{{feed.news.title}}</a>
@@ -669,7 +670,7 @@
 									{% if feed.showText %}
 										{% ifequal feed.news.type 'pic' %}
 											{% for newspic in feed.news.newspic_set.all %}
-											<div class="nailthumb-container index-square-thumb {% if not forloop.first %}ML_35px{% endif %}">
+											<div class="nailthumb-container index-square-thumb {% if not forloop.first %}ML_35px hidden{% endif %}">
 												<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-feed-{{feed.id}}" title="{{news.title}}">
 													<img src='{{MEDIA_URL}}{{newspic.pic}}' />
 												</a>

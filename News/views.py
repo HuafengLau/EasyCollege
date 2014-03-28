@@ -541,7 +541,7 @@ def submit_news(request,news_part, news_type):
                     downs = 0,              
                     gold = 0,
                     score = 0,
-                    read = 1,
+                    read = 0,
                     controversy = controversy(0, 0),
                     hot = 0,
                     comment_num = 0
@@ -574,7 +574,7 @@ def submit_news(request,news_part, news_type):
                     downs = 0,              
                     gold = 0,
                     score = 0,
-                    read = 1,
+                    read = 0,
                     controversy = controversy(0, 0),
                     hot = 0,
                     comment_num = 0

@@ -212,6 +212,7 @@
 				  {% if controversial_newses %}
 					{% for news in controversial_newses %}
 						<div class='clear_both line_bottom ML_13px'>
+							<div class='voteDiv{{news.id}}'>
 							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>
 							{% if user.is_authenticated %}
 								{% for info in user.user_info_set.all %}
@@ -248,6 +249,7 @@
 								<div id='' class='newsDownVote'></div>
 								<div id='' style='display:none' class='newsDownVoted'></div>
 							{% endif %}
+						</div>
 						</div>
 						{% ifequal news.type 'pic' %}
 							{% for newspic in news.newspic_set.all %}								 
@@ -314,6 +316,7 @@
 				  {% if gilded_newses %}
 					  {% for news in gilded_newses %}
 							<div class='clear_both line_bottom ML_13px'>
+							<div class='voteDiv{{news.id}}'>
 							<div id='{{news.ups}};{{news.downs}};{{news.score}}' class='pull-left hand_over newsScoreInfo MR_16px {% if not user.is_authenticated %}logVote{% endif %}'>
 							{% if user.is_authenticated %}
 								{% for info in user.user_info_set.all %}
@@ -350,6 +353,7 @@
 								<div id='' class='newsDownVote'></div>
 								<div id='' style='display:none' class='newsDownVoted'></div>
 							{% endif %}
+						</div>
 						</div>
 							{% ifequal news.type 'pic' %}
 								{% for newspic in news.newspic_set.all %}								 
