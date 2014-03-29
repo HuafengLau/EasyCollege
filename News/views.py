@@ -23,7 +23,6 @@ from django.views import generic
 from django.views.decorators.http import require_POST
 from jfu.http import upload_receive, UploadResponse, JFUResponse
 
-import traceback 
 
 def score(ups,downs):
     return ups - downs
@@ -202,57 +201,35 @@ def giveupUpload(request,this_id):
 @login_required(login_url='/log/') 
 @require_POST
 def upload( request ):   
-    problem = []
-    try:
-        type = request.POST.get('type')
-        problem.append(type)
-        id = request.POST.get('id')
-        problem.append(id)
-        file = upload_receive( request )
-        this_news = News.objects.get(id=id)
-        problem.append(3)
-        if type == 'pic':
-            problem.append(4)
-            instance = NewsPic( 
-                pic = file,
-                news = this_news
-            )
-            instance.save()
-            problem.append(5)
-            basename = os.path.basename( instance.pic.path )
-            problem.append(6)
-        elif type == 'mp3':
-            problem.append(7)
-            this_news.mp3 = file
-            this_news.save()
-            instance = this_news
-            basename = os.path.basename( instance.mp3.path )
-            problem.append(8)
-        else:
-            problem.append(9)
-            pass
+    type = request.POST.get('type')
+    id = request.POST.get('id')
+    file = upload_receive( request )
+    this_news = News.objects.get(id=id)
+    if type == 'pic':
+        instance = NewsPic( 
+            pic = file,
+            news = this_news
+        )
+        instance.save()
+        basename = os.path.basename( instance.pic.path )
+    elif type == 'mp3':
+        this_news.mp3 = file
+        this_news.save()
+        instance = this_news
+        basename = os.path.basename( instance.mp3.path )
+    else:
+        pass
+    file_dict = {
+        'name' : basename,
+        'size' : file.size,
+        'url': settings.MEDIA_URL + 'news_pic/'+ basename,
+        'thumbnailUrl': settings.MEDIA_URL + 'news_pic/'+ basename,
+        'deleteUrl': reverse('jfu_delete', kwargs = { 'pk': instance.pk }),
+        'deleteType': 'POST',
+    }
 
-        file_dict = {
-            'name' : basename,
-            'size' : file.size,
+    return UploadResponse( request, file_dict )    
 
-            'url': settings.MEDIA_URL + 'news_pic/'+ basename,
-            'thumbnailUrl': settings.MEDIA_URL + 'news_pic/'+ basename,
-
-            'deleteUrl': reverse('jfu_delete', kwargs = { 'pk': instance.pk }),
-            'deleteType': 'POST',
-        }
-
-        return UploadResponse( request, file_dict )    
-    except:
-        f=open("D:\log.txt",'a')   
-        traceback.print_exc(file=f)   
-        f.flush()   
-        f.close() 
-
-        f = open("D:\problem.txt","w")
-        f.write('%s' % problem)
-        f.close()
         
 @login_required(login_url='/log/')   
 @require_POST
