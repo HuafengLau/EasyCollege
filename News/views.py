@@ -183,7 +183,10 @@ def giveupUpload(request,this_id):
         newspics = NewsPic.objects.filter(news=this_news)
         if newspics:
             for newspic in newspics:
-                os.unlink( newspic.pic.path )
+                try:
+                    os.unlink( newspic.pic.path )
+                except:
+                    pass
                 newspic.delete()
         this_news.delete()
         return HttpResponseRedirect('/news/All/hot/')
