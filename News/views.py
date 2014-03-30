@@ -419,7 +419,7 @@ def submit_news(request,news_part, news_type):
     top_newsParts = NewsPart.objects.all().order_by('-num','-user_num','part')[:19]
  
     if request.method == 'GET':
-        if news_part == 'All':
+        if news_part == 'All' or news_part == 'MySubs':
             linkForm = LinkNewsForm()
             textForm = TextNewsForm()
             picForm = PicNewsForm()

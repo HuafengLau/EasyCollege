@@ -53,7 +53,7 @@ class LinkNewsForm(forms.ModelForm):
         super(LinkNewsForm, self).__init__(*args, **kwargs)  
         
         self.fields['newspart'].choices = [('', line)] + [
-            (part.id, '%s / %s' % (part.part,part.realPart)) for part in NewsPart.objects.filter(can_link=True).exclude(part='All').order_by('part')] 
+            (part.id, '%s / %s' % (part.part,part.realPart)) for part in NewsPart.objects.filter(can_link=True).exclude(part__in=['All','MySubs']).order_by('part')] 
         self.fields['newspart'].widget.attrs={'class':'form-control pull-left','required':"required"}
     
     type = forms.CharField(
@@ -107,7 +107,7 @@ class TextNewsForm(forms.ModelForm):
         super(TextNewsForm, self).__init__(*args, **kwargs)  
 
         self.fields['newspart'].choices = [('', line)] + [
-            (part.id, '%s / %s' % (part.part,part.realPart)) for part in NewsPart.objects.filter(can_text=True).exclude(part='All').order_by('part')] 
+            (part.id, '%s / %s' % (part.part,part.realPart)) for part in NewsPart.objects.filter(can_text=True).exclude(part__in=['All','MySubs']).order_by('part')] 
             
         self.fields['newspart'].widget.attrs={'class':'form-control pull-left','required':"required"}
     
@@ -147,7 +147,7 @@ class PicNewsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):  
         super(PicNewsForm, self).__init__(*args, **kwargs)  
         self.fields['newspart'].choices = [('', line)] + [
-            (part.id, '%s / %s' % (part.part,part.realPart)) for part in NewsPart.objects.filter(can_pic=True).exclude(part='All').order_by('part')] 
+            (part.id, '%s / %s' % (part.part,part.realPart)) for part in NewsPart.objects.filter(can_pic=True).exclude(part__in=['All','MySubs']).order_by('part')] 
         self.fields['newspart'].widget.attrs={'class':'form-control pull-left','required':"required"}
     
     type = forms.CharField(
@@ -189,7 +189,7 @@ class mp3NewsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):  
         super(mp3NewsForm, self).__init__(*args, **kwargs)  
         self.fields['newspart'].choices = [('', line)] + [
-            (part.id, '%s / %s' % (part.part,part.realPart)) for part in NewsPart.objects.filter(can_mp3=True).exclude(part='All') .order_by('part')] 
+            (part.id, '%s / %s' % (part.part,part.realPart)) for part in NewsPart.objects.filter(can_mp3=True).exclude(part__in=['All','MySubs']) .order_by('part')] 
         self.fields['newspart'].widget.attrs={'class':'form-control pull-left','required':"required"}
     
     type = forms.CharField(
