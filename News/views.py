@@ -23,6 +23,7 @@ from django.views import generic
 from django.views.decorators.http import require_POST
 from jfu.http import upload_receive, UploadResponse, JFUResponse
 
+import traceback
 
 def score(ups,downs):
     return ups - downs
@@ -931,39 +932,45 @@ def comment(request):
     if request.is_ajax() and request.method == 'GET':
         user = request.user
         if 'comment' in request.GET:    
-            if 'news_id' in request.GET:
-                this_news_id = request.GET.get('news_id')
-                this_news = News.objects.get(id=this_news_id)
-                this_comment = request.GET.get('comment')
-                type = 'newscomment1'
-                this_newComment = NewsComment1(
-                    user = user,
-                    ups = 0,
-                    downs = 0,
-                    score = 0,
-                    confidence = confidence(0, 0),
-                    news = this_news,
-                    gold = 0,
-                    words = this_comment
-                )
-                this_newComment.save()
-                if this_news.user != user:
-                    this_news.comment_num += 1
-                    this_news.save()
-                noSuojin = True
-                if this_news.user != user:
-                    this_feed = Feeds_news(
-                        type = 'newsComment',
-                        owner = this_news.user,
-                        creator = user,
-                        showText = True,
-                        news = this_news,             
-                        gold_num = 0,
-                        comment = this_newComment
+            try:
+                if 'news_id' in request.GET:
+                    this_news_id = request.GET.get('news_id')
+                    this_news = News.objects.get(id=this_news_id)
+                    this_comment = request.GET.get('comment')
+                    type = 'newscomment1'
+                    this_newComment = NewsComment1(
+                        user = user,
+                        ups = 0,
+                        downs = 0,
+                        score = 0,
+                        confidence = confidence(0, 0),
+                        news = this_news,
+                        gold = 0,
+                        words = this_comment
                     )
-                    this_feed.save()
-                    this_feeds.owner.message += 1
-                    this_feeds.owner.save()
+                    this_newComment.save()
+                    if this_news.user != user:
+                        this_news.comment_num += 1
+                        this_news.save()
+                    noSuojin = True
+                    if this_news.user != user:
+                        this_feed = Feeds_news(
+                            type = 'newsComment',
+                            owner = this_news.user,
+                            creator = user,
+                            showText = True,
+                            news = this_news,             
+                            gold_num = 0,
+                            comment = this_newComment
+                        )
+                        this_feed.save()
+                        this_feeds.owner.message += 1
+                        this_feeds.owner.save()
+            except:
+                f=open("D:\comment.txt",'a')   
+                traceback.print_exc(file=f)   
+                f.flush()   
+                f.close()
         if 'type' in request.GET:
             noSuojin = False
             this_type = request.GET.get('type')
