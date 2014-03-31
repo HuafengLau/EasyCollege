@@ -42,6 +42,8 @@ $(document).ready(function(){
         $(this).tooltip({container:'div'});
     });
 	
+	// JS for search.html
+	
     // JS for base.html   
     
     // JS for log.html

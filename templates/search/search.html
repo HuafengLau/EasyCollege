@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load highlight %}
+{% load my_tags %}
+
+{% block body %}
+<div class='container'>
+	<h2 class='text-center'>搜索<small class='font-15'>&nbsp;&nbsp;&nbsp;in 方遒社区</small></h2>
+	
+	<div class='row'>
+		<div class='col-md-8 col-xs-12 col-md-offset-3'>
+			<form role="form" class="form-inline" method="get" action=".">
+				<div class="form-group col-md-7 col-xs-7">
+					<input class="form-control" id="id_q" name="q" type="text" value="" />
+				</div>
+				<div class='col-md-5 col-xs-5'>
+					<input checked="checked" id="id_models_0" name="models" type="checkbox" value="News.news" /> 分享
+					<input checked="checked" id="id_models_1" name="models" type="checkbox" value="News.newspart" /> 社群&nbsp;&nbsp;
+					<input class='btn btn-success' type="submit" value="&nbsp;搜&nbsp;索&nbsp;">
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class='row'>
+        <div class='col-md-10 col-md-offset-1 col-xs-12'>
+		{% if query %}
+            <h3>以下为&nbsp;“{{query}}”&nbsp;的搜索结果</h3>
+			
+            {% for result in page.object_list %}
+                {% if result.object.part %}
+					<div class='font-16 MB_5px'>
+						<a target='_blank' href='/news/{{result.object.part}}/hot/'>{{result.object.part}} / {{result.object.realPart}}</a>
+					</div>
+					<div>{{ result.object.description }}</div>
+					<div><a target='_blank' class='font-green' href='/news/{{result.object.part}}/hot/'>
+						http://www.funqiu.com/news/{{result.object.part}}/hot/</a>
+					</div>
+					<hr class='MB_0px'/>
+				{% else %}			
+					<div class='font-16 MB_5px'>
+						{% ifequal result.object.type 'link' %}
+						<a class='' target='_blank' href='{{result.object.link}}'>{{result.object.title}}</a>
+						{% else %}
+						<a class='' target='_blank' href='/news/{{result.object.newspart.part}}/hot/showNews/{{result.object.id}}/'>{{result.object.title}}</a>
+						{% endifequal %}					
+					</div>
+					<div class='font-10 font-grey'>{{result.object.user.nic_name}}&nbsp;&nbsp;{% showDay result.object.time %}&nbsp;&nbsp;
+						<a target='_blank' href='/news/{{result.object.newspart.part}}/hot/' class='font-grey'>
+						{{result.object.newspart.part}}/{{result.object.newspart.realPart}}</a>&nbsp;&nbsp;
+						<i><span>{% ifequal result.object.type 'pic' %}{{ result.object.newspic_set.all | length }}{% endifequal %}{{result.object.type}}</span></i>
+					</div>
+					{% ifequal result.object.type 'text' %}
+						<div>{% highlight  result.object.text with query css_class "keyword" %} </div>
+					{% endifequal %}
+					{% ifequal result.object.type 'pic' %}
+						{% for newspic in result.object.newspic_set.all %}
+						<div class="nailthumb-container search-square-thumb {% if not forloop.first %}hidden{% endif %}">
+							<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-result-{{result.object.id}}" title="{{result.object.title}}">
+								<img src='{{MEDIA_URL}}{{newspic.pic}}' class='PB_0px'/>
+							</a>
+						</div>
+						{% endfor %}
+					{% endifequal %}
+					{% ifequal result.object.type 'mp3' %}
+					<div class='clear_both' id=''>
+						<audio src="{{MEDIA_URL}}{{result.object.mp3}}" controls="controls" loop="loop" preload="metadata">你的浏览器不支持音乐播放</audio>
+					</div>
+					{% endifequal %}
+					<div><a target='_blank' class='font-green' href='/news/{{result.object.newspart.part}}/hot/showNews/{{ result.object.id }}/'>
+						http://www.funqiu.com/news/{{result.object.newspart.part}}/hot/showNews/{{result.object.id }}/</a>
+					</div>
+					<hr class='MB_0px'/>
+				{% endif %}
+            {% empty %}
+                <p>没有结果</p>
+            {% endfor %}
+
+            {% if page.has_previous or page.has_next %}
+                <div>
+                    {% if page.has_previous %}<a target='_blank' href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; 上一页{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a target='_blank' href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}下一页 &raquo;{% if page.has_next %}</a>{% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            {# Show some example queries to run, maybe query syntax, something else? #}
+        {% endif %}
+	</div>
+</div>
+{% endblock %}

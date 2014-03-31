@@ -1,0 +1,5 @@
+{{ object.title }}
+{{ object.user.nic_name }}
+{{ object.newspart.part}}
+{{ object.newspart.realPart}}
+{{ object.text }}

@@ -67,6 +67,7 @@
 	<div class="alert alert-danger">
 		<P>你正在分享文字，一次成功的分享包括创意合理的标题和详略得当的文章……</p>
 	</div>
+	
 	<form role="form" class='form-group' action='/news/{{part.part}}/submit/text/' enctype="multipart/form-data" method='POST'> 
 	{% csrf_token %}
 	{% for field in textForm %}                                 
@@ -92,7 +93,8 @@
 		</div>
 	{% endfor %}
 		<button id='text_submit' class="btn btn-success" type="submit">提交</button>
-	</form>		
+	</form>	
+
   </div>
   {% endif %}
   {% if part.can_pic %}
@@ -177,3 +179,5 @@
 {% block Submit %}
 {% endblock %}
 
+{% block visibleXS %}
+{% endblock %}

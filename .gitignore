@@ -1,5 +1,6 @@
 appmedia/
 migrations/
+whoosh_index/
 
 settings.py
 settings_production.py

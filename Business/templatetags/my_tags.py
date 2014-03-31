@@ -443,7 +443,7 @@ class showDayNode(template.Node):
         elif (nowDay-thatDay) == 2:
             return '前天'
         else:
-            return '%s 天前' % (nowDay-thatDay)
+            return '%s-%s-%s' % (values.year,values.month,values.day)
             
 def showDay(parser, token):
     try:
