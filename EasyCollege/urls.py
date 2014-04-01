@@ -7,7 +7,7 @@ from log.views import verify
 from Business.views import googelSearch, baiduSearch,baiduSearch2,googelSearch2
 from django.conf import settings
 from django.views.generic import TemplateView
-#import haystack
+import haystack
 #from EOT.models import Eot
 
 # Uncomment the next two lines to enable the admin:
@@ -34,7 +34,7 @@ urlpatterns = patterns('',
     url(r'^affair/', include('Affair.urls')),
     url(r'^business/', include('Business.urls')),
     url(r'^news/', include('News.urls')),
-    #url(r'^search/', include('haystack.urls')),
+    url(r'^search/', include('haystack.urls')),
     url( r'upload/', upload, name = 'jfu_upload' ),  
     url( r'^delete/(?P<pk>\d+)/$', upload_delete, name = 'jfu_delete' ),
     (r'^$', fangqiu),
