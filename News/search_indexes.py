@@ -1,3 +1,5 @@
+#coding:utf-8
+
 import datetime
 from haystack import indexes
 from News.models import News, NewsPart
@@ -12,7 +14,7 @@ class NewsIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return News
         
-    def prepare_author(self, obj):
+    def prepare_user(self, obj):
         return u'%s' % obj.user.nic_name
         
     def prepare_newspart(self, obj):
