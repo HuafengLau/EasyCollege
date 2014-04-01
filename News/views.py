@@ -964,8 +964,8 @@ def comment(request):
                             comment = this_newComment
                         )
                         this_feed.save()
-                        this_feeds.owner.message += 1
-                        this_feeds.owner.save()
+                        this_feed.owner.message += 1
+                        this_feed.owner.save()
             except:
                 f=open("D:\comment.txt",'a')   
                 traceback.print_exc(file=f)   
@@ -1006,8 +1006,8 @@ def comment(request):
                         comment2 = this_newComment
                     )
                     this_feed.save()
-                    this_feeds.owner.message += 1
-                    this_feeds.owner.save()
+                    this_feed.owner.message += 1
+                    this_feed.owner.save()
             if this_type == 'newscomment2':
                 this_comments2 = NewsComment2.objects.get(id=id)
                 this_news = this_comments2.newscomment1.news
@@ -1038,8 +1038,8 @@ def comment(request):
                         comment3 = this_newComment
                     )
                     this_feed.save()
-                    this_feeds.owner.message += 1
-                    this_feeds.owner.save()
+                    this_feed.owner.message += 1
+                    this_feed.owner.save()
             if this_type == 'newscomment3':
                 this_comments3 = NewsComment3.objects.get(id=id)
                 this_news = this_comments3.newscomment2.newscomment1.news
@@ -1070,8 +1070,8 @@ def comment(request):
                         comment4 = this_newComment
                     )
                     this_feed.save()
-                    this_feeds.owner.message += 1
-                    this_feeds.owner.save()
+                    this_feed.owner.message += 1
+                    this_feed.owner.save()
         return render_to_response('comment.html',locals(),
                 context_instance=RequestContext(request))
 
