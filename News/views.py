@@ -651,19 +651,7 @@ def show_news(request,news_part,small_part,news_id):
     this_news.read = read
     this_news.hot = hot(ups, downs, read, this_news.time)
     this_news.save()
-
-    if this_news.type == 'pic':
-        newspics = NewsPic.objects.filter(news=this_news)
-        if not newspics:
-            try:
-                this_newspic = NewsPic(
-                    news = this_news,
-                    pic = this_news.pic
-                )
-                this_newspic.save()
-            except:
-                return render_to_response('404.html',locals(),
-                    context_instance=RequestContext(request))
+            
     if this_news.type == 'pic':
         newspics = NewsPic.objects.filter(news=this_news)
         picnum = newspics.count()
