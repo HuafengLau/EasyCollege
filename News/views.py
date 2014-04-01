@@ -326,19 +326,7 @@ def newsVote(request):
                 context_instance=RequestContext(request))
     
 def which_news(request,news_part,small_part):
-    user = request.user
-    for news in News.objects.filter(type='pic'):
-        newspics = NewsPic.objects.filter(news=news)
-        if not newspics:
-            try:
-                this_newspic = NewsPic(
-                    news = news,
-                    pic = news.pic
-                )
-                this_newspic.save()
-            except:
-                return render_to_response('404.html',locals(),
-                    context_instance=RequestContext(request))   
+    user = request.user   
     newsHTML = True
     newsBase = True
     allNewsPart = NewsPart.objects.all()
