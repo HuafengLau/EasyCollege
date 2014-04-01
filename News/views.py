@@ -655,9 +655,19 @@ def show_news(request,news_part,small_part,news_id):
     if this_news.type == 'pic':
         newspics = NewsPic.objects.filter(news=this_news)
         picnum = newspics.count()
-        if picnum > 12:
+        if picnum > 15:
             return render_to_response('404.html',locals(),
-                context_instance=RequestContext(request))
+                context_instance=RequestContext(request))     
+        if picnum >12:
+            picnum13_15 = True
+            picnum10_12 = True
+            picnum7_9 = True
+            picnum4_6 = True            
+            picgroup1 = newspics[:3]
+            picgroup2 = newspics[3:6]
+            picgroup3 = newspics[6:9]
+            picgroup4 = newspics[9:12]
+            picgroup5 = newspics[12:15]
         if picnum >9:
             picnum10_12 = True
             picnum7_9 = True
@@ -665,7 +675,7 @@ def show_news(request,news_part,small_part,news_id):
             picgroup1 = newspics[:3]
             picgroup2 = newspics[3:6]
             picgroup3 = newspics[6:9]
-            picgroup3 = newspics[9:12]
+            picgroup4 = newspics[9:12]
         elif picnum > 6:
             picnum7_9 = True
             picnum4_6 = True

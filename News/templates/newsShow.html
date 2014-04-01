@@ -154,6 +154,19 @@
 						{% endfor %}
 					</tr>
 					{% endif %}
+					{% if picnum13_15 %}
+					<tr>
+						{% for newspic in picgroup5 %}
+							<td>
+								<div class='nailthumb-container newsshow-square-thumb MB_0px'>
+									<a href="{{MEDIA_URL}}{{newspic.pic}}" data-lightbox="lightImg-newsshow-{{this_news.id}}" title="{{this_news.title}}">
+										<img src='{{MEDIA_URL}}{{newspic.pic}}' />
+									</a>
+								</div>
+							</td>
+						{% endfor %}
+					</tr>
+					{% endif %}
 				</table>
 			</div>
 		{% endifequal %}
