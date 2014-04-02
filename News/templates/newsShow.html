@@ -19,7 +19,7 @@
 		<div class='MT_7px MR_9px'>
 			<p>&nbsp;&nbsp;分享人：
 			<span id='{{this_news.user.id}}' class='hand_over font-link {% if user.is_authenticated %}ID_card{% else %}cardNeedLog{% endif %}'>{{this_news.user.nic_name}}</span>&nbsp;&nbsp;&nbsp;
-			累计获得&nbsp;{{this_news.user.agree_num}}&nbsp;个赞同&nbsp;&nbsp;&nbsp;
+			累计获得&nbsp;{{this_news.user.agree_num}}&nbsp;个赞同&nbsp;&nbsp;&nbsp;{% showBewatchedNum this_news.user %}
 			{% if need_log %}
 			{% else %}
 				{% ifnotequal this_news.user.id user.id %}
@@ -189,7 +189,16 @@
 				<span>&nbsp;&nbsp;&nbsp;感谢分享，赠予作者5易币,可无限叠加</span>
 			</div>
 		</div>
-		<div class='clear_both MT_8px ML_23px'>
+		<div class='clear_both ML_23px'>
+			<hr/>
+			{% if this_news.agree_man %}
+			<p>
+				<span class='font-link'>&nbsp;{% showNewsLikeMan this_news.agree_man %}</span>&nbsp;觉得很赞
+			</p>
+			<hr class='MB_0px'/>
+			{% endif %}
+		</div>
+		<div class='clear_both MT_8px ML_26px'>
 			{% ifequal this_news.type 'link' %}
 			<script type="text/javascript">
 			(function(){
@@ -321,10 +330,10 @@
 		{% endif %}
 		{% if need_vote %}
 			<div id='voteDiv'>
-				<p class='text-center clear_both MT_8px'>为了避免分享的排序被少部分人“控制”，请投上宝贵的一票：）</p>
+				<p class='text-center clear_both MT_8px'>你可以对分享和评论进行投票，投票将决定排序。价值，由你定义！</p>
 				<div class='MT_20px'>
-					<p class='font-20 text-center hand_over'><a id='{{this_news.id}};1' class='logVote underline font-link'><b>顶，让更多人看见这个分享</b></a></p>
-					<p class='font-20 text-center hand_over'><a id='{{this_news.id}};0' class='logVote underline font-link'><b>沉，把它沉下去</b></a></p>
+					<p class='font-20 text-center hand_over'><a id='{{this_news.id}};1' class='logVote underline font-link'><b>赞，让更多人看见这个分享</b></a></p>
+					<p class='font-20 text-center hand_over'><a id='{{this_news.id}};0' class='logVote underline font-link'><b>踩，把它沉下去</b></a></p>
 				</div>
 			</div>
 		{% endif %}

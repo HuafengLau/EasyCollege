@@ -181,6 +181,50 @@ def ShowCourse(parser, token):
     sequence = parser.compile_filter(text_name)    
     return ShowCourseNode(sequence)
 
+class showNewsLikeManNode(template.Node):
+    def __init__(self,sequence):
+        self.sequence = sequence
+
+    def render(self, context):
+        values = self.sequence.resolve(context, True) 
+        user_list = values.split(';')[:-1]
+        users = MyUser.objects.filter(id__in=user_list)
+        s = ''
+        for user in users:
+            s += u'%s、' % user.nic_name
+        return s[:-1]
+        
+def showNewsLikeMan(parser, token):
+    try:
+        tag_name, text_name= token.split_contents() 
+    except:
+        raise template.TemplateSyntaxError
+        
+    sequence = parser.compile_filter(text_name)    
+    return showNewsLikeManNode(sequence)  
+
+class showBewatchedNumNode(template.Node):
+    def __init__(self,sequence):
+        self.sequence = sequence
+
+    def render(self, context):
+        values = self.sequence.resolve(context, True) 
+        this_user_info = User_info.objects.get(user=values)
+        s = ''
+        if this_user_info.beWatched:
+            n = this_user_info.beWatched.split(';')
+            s += '%s人关注ta&nbsp;&nbsp;' % (len(n)-1)
+        return s
+        
+def showBewatchedNum(parser, token):
+    try:
+        tag_name, text_name= token.split_contents() 
+    except:
+        raise template.TemplateSyntaxError
+        
+    sequence = parser.compile_filter(text_name)    
+    return showBewatchedNumNode(sequence)     
+    
 class ShowSchoolNode(template.Node):
     def __init__(self,sequence):
         self.sequence = sequence
@@ -531,3 +575,5 @@ register.tag('showNewsTime', showNewsTime)
 register.tag('showDay', showDay)
 register.tag('newsScoreClass', newsScoreClass)
 register.tag('showTimeHM', showTimeHM)
+register.tag('showNewsLikeMan', showNewsLikeMan)
+register.tag('showBewatchedNum', showBewatchedNum)

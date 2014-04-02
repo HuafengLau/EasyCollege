@@ -291,6 +291,7 @@ def newsVote(request):
                     this_feed.save()
                     this_feed.owner.message += 1
                     this_feed.owner.save()
+                    this_news.agree_man += '%s;' % user.id
             elif vote == '0':
                 user.money -= 1
                 user.save()
@@ -299,7 +300,7 @@ def newsVote(request):
                     response = HttpResponse('wrong')
                     return response
                 else:
-                    this_user_info.downVoted_news += '%s' % news_id
+                    this_user_info.downVoted_news += '%s;' % news_id
                     this_user_info.save()
             else:
                 response = HttpResponse('wrong')

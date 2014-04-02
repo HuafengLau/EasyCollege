@@ -178,8 +178,8 @@
 									{% ifnotequal news.type 'text' %}
 										{% if user.is_authenticated %}
 											{% ifnotVoted news user %}
-												<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>顶</small></li>
-												<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>沉</small></li>
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>赞</small></li>
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>踩</small></li>
 											{% else %}{% endifnotVoted %}
 										{% endif %}
 									{% else %}
@@ -293,8 +293,8 @@
 									{% ifnotequal news.type 'text' %}
 										{% if user.is_authenticated %}
 											{% ifnotVoted news user %}
-												<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>顶</small></li>
-												<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>沉</small></li>
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>赞</small></li>
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>踩</small></li>
 											{% else %}{% endifnotVoted %}
 										{% endif %}
 									{% else %}
@@ -396,8 +396,8 @@
 									{% ifnotequal news.type 'text' %}
 										{% if user.is_authenticated %}
 											{% ifnotVoted news user %}
-												<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>顶</small></li>
-												<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>沉</small></li>
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>赞</small></li>
+												<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>踩</small></li>
 											{% else %}{% endifnotVoted %}
 										{% endif %}
 									{% else %}
