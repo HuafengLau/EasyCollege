@@ -79,6 +79,7 @@
 			</div>
 			{% endif %}
 			{% endblock %}
+			{% block mainNewsbase %}
 			<div id='mainDiv' class='col-xs-12 {% if newsBase %}col-md-6{%else%}col-md-8{% endif %}'>
 				{% block LeftDiv %}
 				<ul class="nav nav-tabs">
@@ -615,6 +616,7 @@
 					{% endblock %}
 				{% endblock %}
 			</div>
+			{% endblock %}
 		</div>
 		{% block visibleXS %}
 		<div class='row visible-xs clear_both MT_20px'>
