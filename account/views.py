@@ -100,7 +100,6 @@ def fangqiu(request):
             this_user = this_AuthorLog.user
 
         except:
-            pace.append(7)
             this_user = MyUser.objects.create_user(
                 stu_pwd = '123',
                 email = '%s@qq1.com' % openid,
@@ -133,7 +132,6 @@ def fangqiu(request):
                 when_commentbeGold = u'下一次，我的评论将更有含金量：）',
                 when_beWatched = u'感谢关注：）'
             )
-            pace.append(8)
             this_user_info.save()
             this_AuthorLog = AuthorLog(
                 openid =  openid,
@@ -141,7 +139,6 @@ def fangqiu(request):
                 user = this_user
             )
             this_AuthorLog.save()
-            pace.append(9)
         username = str(this_user.email)
 
         password = '123'
