@@ -58,7 +58,7 @@ def deal_register(request):
         this_user_info = User_info(
             user = new_user,
             grade = u'公民',
-            subscription = 'ExplainCY;Funny;Home-news;Life;AskAnything;',
+            subscription = 'ReportCY;Funny;Home-news;Life;AskAnything;',
             beWatched = '',
             watching = '',
             upVoted_news = '',

@@ -115,7 +115,7 @@ def fangqiu(request):
                 user = this_user,
                 grade = u'公民',
                 show_email = False,
-                subscription = 'ExplainCY;Funny;Home-news;Life;AskAnything;',
+                subscription = 'ReportCY;Funny;Home-news;Life;AskAnything;',
                 beWatched = '',
                 watching = '',
                 upVoted_news = '',
