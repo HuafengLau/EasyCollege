@@ -674,68 +674,39 @@
 			</div>
 
 			<div id='submitBtnDiv' class='col-xs-6 col-xs-offset-1'>
-				{% ifnotequal part.part 'ExplainCY' %}
-					{% if part.can_link %}
-					<div id='linkBtnDiv' class='both_clear'>						
-						<a href='/news/{{part.part}}/submit/link/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
-						
-					</div>
-					{% endif %}
-					{% if part.can_text %}
-					<div id='textBtnDiv' class='both_clear'>								
-						<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
-							{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							{% else %}
-								{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
-								{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								{% endifequal %}
-							{% endifequal %}</span></a>
-						
-					</div>
-					{% endif %}
-					{% if part.can_pic %}
-					<div id='picBtnDiv' class='both_clear'>	
-						<a href='/news/{{part.part}}/submit/pic/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
-						分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>								
-					</div>
-					{% endif %}
-					{% if part.can_mp3 %}
-					<div id='mp3BtnDiv' class='both_clear'>								
-						<a href='/news/{{part.part}}/submit/mp3/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
-						分享音乐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
-						
-					</div>
-					{% endif %}
-				{% else %}
-					{% ifequal user.email 'you_xiang_123@sina.com' %}
-						{% if part.can_link %}
-						<div id='linkBtnDiv' class='both_clear'>									
-							<a href='/news/{{part.part}}/submit/link/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>								
-						</div>
-						{% endif %}
-						{% if part.can_text %}
-						<div id='textBtnDiv' class='both_clear'>								
-							<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
-								{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								{% else %}
-									{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
-									{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									{% endifequal %}
-								{% endifequal %}</span></a>
-							
-						</div>
-						{% endif %}
-						{% if part.can_pic %}
-						<div id='picBtnDiv' class='both_clear'>								
-							<a href='/news/{{part.part}}/submit/pic/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
-							分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
-							
-						</div>
-						{% endif %}
-					{% endifequal %}
-				{% endifnotequal %}
+				{% if part.can_link %}
+				<div id='linkBtnDiv' class='both_clear'>						
+					<a href='/news/{{part.part}}/submit/link/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
+					
+				</div>
+				{% endif %}
+				{% if part.can_text %}
+				<div id='textBtnDiv' class='both_clear'>								
+					<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
+						{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						{% else %}
+							{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
+							{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							{% endifequal %}
+						{% endifequal %}</span></a>
+					
+				</div>
+				{% endif %}
+				{% if part.can_pic %}
+				<div id='picBtnDiv' class='both_clear'>	
+					<a href='/news/{{part.part}}/submit/pic/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
+					分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>								
+				</div>
+				{% endif %}
+				{% if part.can_mp3 %}
+				<div id='mp3BtnDiv' class='both_clear'>								
+					<a href='/news/{{part.part}}/submit/mp3/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
+					分享音乐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
+					
+				</div>
+				{% endif %}
+				
 			</div>
 		</div>
 		{% endblock %}
