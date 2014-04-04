@@ -92,7 +92,7 @@
 
 				<!-- Tab panes -->
 				<div class="tab-content bcColorWhite">
-				  <div class="tab-pane{% ifequal smallPart 'hot' %} in active{% endifequal %}" id="hot">
+				  <div class="tab-pane bcColorWhite{% ifequal smallPart 'hot' %} in active{% endifequal %}" id="hot">
 					{% if hot_newses %}
 						{% for news in hot_newses %}							
 							<div class='clear_both line_bottom ML_23px'>
@@ -188,8 +188,7 @@
 											<li><small class='needInside font-orange hand_over'>投票</small></li>
 											{% else %}{% endifnotVoted %}
 										{% endif %}
-									{% endifnotequal %}
-									
+									{% endifnotequal %}							
 								</ul>
 							</div>
 							{% if news in top_newses %}
@@ -205,6 +204,7 @@
 						</div>
 						
 					{% endfor %}
+					<div class='clear_both'></div>
 				  {% else %}
 					<p>这个社群还没有任何分享哦，成为第一个吧！</p>
 				  {% endif %}
@@ -308,6 +308,7 @@
 							</div>			
 						</div>
 					{% endfor %}
+					<div class='clear_both'></div>
 				  {% else %}
 					<p>这个社群还没有任何分享哦，成为第一个吧！</p>
 				  {% endif %}
@@ -412,6 +413,7 @@
 							
 							</div>
 						{% endfor %}
+						<div class='clear_both'></div>
 				  {% else %}
 					<p>这个社群还没有任何分享哦，成为第一个吧！</p>
 				  {% endif %}

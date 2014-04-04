@@ -16,6 +16,11 @@ from Center.models import Honour
 from account.models import MyUser
 #from django.views.generic import TemplateView
 
+def about(request):
+    user = request.user
+    return render_to_response('about.html', locals(),
+        context_instance=RequestContext(request))
+
 code_school = {'ecnu':u'华东师范大学','gnnu':u'赣南师范学院','imnu':u'内蒙古师范大学',
     'nwsuaf':u'西北农林科技大学','bistu':u'北京信息科技大学','jxufe':u'江西财经大学','xcc':u'西昌学院',
     'xhu':u'西华大学','dlmedu':u'大连医科大学','hbue':u'湖北经济学院','nenu':u'东北师范大学',

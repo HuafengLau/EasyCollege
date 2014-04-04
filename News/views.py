@@ -344,9 +344,11 @@ def which_news(request,news_part,small_part):
         this_user_info = User_info.objects.get(user=user)
         subscriptions = this_user_info.subscription.split(';')[:-1]
         mySubs = allNewsPart.filter(part__in=subscriptions).order_by('part')
+        otherParts = allNewsPart.exclude(part__in=subscriptions).order_by('part')
     else:
-        defaultList = ['Funny','Life','Music','Home-news','SuggestCY','Gossip']
+        defaultList = ['Funny','Life','Music','Home-news','ReportCY','Gossip']
         mySubs = allNewsPart.filter(part__in=defaultList).order_by('part')
+        otherParts = allNewsPart.exclude(part__in=defaultList).order_by('part')
     
     if news_part == 'All':
         newses = News.objects.filter(open=True,secret=False)
@@ -457,11 +459,12 @@ def submit_news(request,news_part, news_type):
                     user = this_user,
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
+                    agree_man = '%s;' % this_user.id,
                     link = form.cleaned_data['link'],
                     newspart = form.cleaned_data['newspart'],
                     open = form.cleaned_data['newspart'].open,
                     secret=form.cleaned_data['newspart'].secret,
-                    ups = 0,
+                    ups = 1,
                     downs = 0, 
                     read = 1,
                     gold = 0,
@@ -471,7 +474,7 @@ def submit_news(request,news_part, news_type):
                     comment_num = 0
                 )
                 this_news.save()
-                this_news.hot = hot(0, 0, 1,this_news.time)
+                this_news.hot = hot(1, 0, 1,this_news.time)
                 this_news.save()
                 add_part = form.cleaned_data['newspart']
                 add_part.num += 1
@@ -490,11 +493,12 @@ def submit_news(request,news_part, news_type):
                     user = this_user,
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
+                    agree_man = '%s;' % this_user.id,
                     text = form.cleaned_data['text'],
                     newspart = form.cleaned_data['newspart'],
                     open = form.cleaned_data['newspart'].open,
                     secret=form.cleaned_data['newspart'].secret,
-                    ups = 0,
+                    ups = 1,
                     downs = 0,              
                     gold = 0,
                     read = 1,
@@ -504,7 +508,7 @@ def submit_news(request,news_part, news_type):
                     comment_num = 0
                 )
                 this_news.save()
-                this_news.hot = hot(0, 0, 1,this_news.time)
+                this_news.hot = hot(1, 0, 1,this_news.time)
                 this_news.save()
                 add_part = form.cleaned_data['newspart']
                 add_part.num += 1
@@ -523,11 +527,12 @@ def submit_news(request,news_part, news_type):
                     user = this_user,
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
+                    agree_man = '%s;' % this_user.id,
                     #pic = form.cleaned_data['pic'],
                     newspart = form.cleaned_data['newspart'], 
                     open = form.cleaned_data['newspart'].open,
                     secret=form.cleaned_data['newspart'].secret,
-                    ups = 0,
+                    ups = 1,
                     downs = 0,              
                     gold = 0,
                     score = 0,
@@ -537,7 +542,7 @@ def submit_news(request,news_part, news_type):
                     comment_num = 0
                 )
                 this_news.save()
-                this_news.hot = hot(0, 0, 1,this_news.time)
+                this_news.hot = hot(1, 0, 1,this_news.time)
                 this_news.save()
                 add_part = form.cleaned_data['newspart']
                 add_part.num += 1
@@ -556,11 +561,12 @@ def submit_news(request,news_part, news_type):
                     user = this_user,
                     type = form.cleaned_data['type'],
                     title = form.cleaned_data['title'],
+                    agree_man = '%s;' % this_user.id,
                     #mp3 = form.cleaned_data['mp3'],
                     newspart = form.cleaned_data['newspart'],
                     open = form.cleaned_data['newspart'].open,
                     secret=form.cleaned_data['newspart'].secret,
-                    ups = 0,
+                    ups = 1,
                     downs = 0,              
                     gold = 0,
                     score = 0,
@@ -570,7 +576,7 @@ def submit_news(request,news_part, news_type):
                     comment_num = 0
                 )
                 this_news.save()
-                this_news.hot = hot(0, 0, 1,this_news.time)
+                this_news.hot = hot(1, 0, 1,this_news.time)
                 this_news.save()
                 add_part = form.cleaned_data['newspart']
                 add_part.num += 1
