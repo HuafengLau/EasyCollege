@@ -618,7 +618,7 @@ def submit_news(request,news_part, news_type):
         if type == 'pic' or type == 'mp3':
             url = '/news/uploadFile/%s/%s/' % (type,this_news.id)
             return HttpResponseRedirect(url)
-        url = '/news/'+ news_part + '/hot/'
+        url = '/news/'+ news_part + '/hot/showNews/%s/' % this_news.id
         return HttpResponseRedirect(url)
        
 def show_news(request,news_part,small_part,news_id):             
