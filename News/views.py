@@ -32,7 +32,7 @@ def score(ups,downs):
 def hot(ups, downs, read, time):
     s = score(ups, downs)
     order = log10(max(abs(s), 1))
-    read_score = log(read,500)
+    read_score = log(max(read, 1),500)
     if s > 0:
         sign = 1
     elif s < 0:
