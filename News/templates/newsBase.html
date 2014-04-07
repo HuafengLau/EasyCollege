@@ -500,7 +500,7 @@
 								<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
 									{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									{% else %}
-										{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
+										{% ifequal part.part 'ReportCY' %}任何的意见和建议（包括申请新的板块）
 										{% else %}
 											{% ifequal part.part 'AskAnything' %}
 											&nbsp;&nbsp;&nbsp;以文字的形式提问&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -543,7 +543,7 @@
 									<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
 										{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										{% else %}
-											{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
+											{% ifequal part.part 'ReportCY' %}任何的意见和建议（包括申请新的板块）
 											{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											{% endifequal %}
 										{% endifequal %}</span></a>
@@ -601,7 +601,7 @@
 					<div id='partSimilarDiv'  class='bcColorWhite'>				
 						<p><strong>相似的社群</strong></p>
 						{% include SimilarHtml %}
-						<p>没有找到想要的社群？创建一个吧，只要不和现有板块完全重合，100%通过！移步 <a href='/news/SuggestCY'>SuggestCY / 建议</a></p>
+						<p>没有找到想要的社群？创建一个吧，只要不和现有板块完全重合，100%通过！移步 <a href='/news/ReportCY'>ReportCY / 反馈建议</a></p>
 					</div>
 					<hr/>
 					<div id='partAdminDiv'  class='bcColorWhite'>
@@ -686,7 +686,7 @@
 					<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
 						{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						{% else %}
-							{% ifequal part.part 'SuggestCY' %}任何的意见和建议（包括申请新的板块）
+							{% ifequal part.part 'ReportCY' %}任何的意见和建议（包括申请新的板块）
 							{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							{% endifequal %}
 						{% endifequal %}</span></a>
