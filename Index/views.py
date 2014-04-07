@@ -22,7 +22,8 @@ from Center.models import User_info
 import os
 import random
 import time
-from datetime import datetime
+
+import datetime
 import calendar
 import urllib2
 import urllib
@@ -38,7 +39,7 @@ def index(request):
     def cut(arr, indices):  
         return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
                 
-    today = datetime.today()
+    today = datetime.datetime.today()
     year = today.year
     month = today.month
     day = today.day
@@ -52,8 +53,9 @@ def index(request):
             this_week = item
             break
 
-    start_date = datetime(year,month,this_week[0],0,0,0,0)
-    end_date = datetime.today()
+    start_date = datetime.datetime(year,month,this_week[0],0,0,0,0)+ datetime.timedelta(days=-1)
+
+    end_date = datetime.datetime.today()+ datetime.timedelta(days=1)
     
     Feeds1 = Feeds_followNews.objects.filter(owner=user,time__range=(start_date, end_date))
     Feeds2 = Feeds_news.objects.filter(owner=user,time__range=(start_date, end_date))
