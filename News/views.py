@@ -9,7 +9,7 @@ from django.core.paginator import PageNotAnInteger, Paginator, InvalidPage, Empt
 from django.conf import settings
 from News.models import NewsPart,News,NewsPic,NewsComment1,NewsComment2,NewsComment3,NewsComment4
 from News.form import LinkNewsForm, TextNewsForm, PicNewsForm, mp3NewsForm
-from datetime import datetime
+import datetime
 import calendar
 from Center.models import User_info
 from math import sqrt, log10, log
@@ -39,7 +39,7 @@ def hot(ups, downs, read, time):
         sign = -1
     else:
         sign = 0
-    seconds = (time-datetime(2014,2,11,10,46,0,0,pytz.utc)).total_seconds()
+    seconds = (time-datetime.datetime(2014,2,11,10,46,0,0,pytz.utc)).total_seconds()
     return round(sign * order + read_score + seconds / (24*3600), 7)
 
 def controversy(ups, downs):
@@ -361,7 +361,7 @@ def which_news(request,news_part,small_part):
     def cut(arr, indices):  
         return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
                 
-    today = datetime.today()
+    today = datetime.datetime.today()
     year = today.year
     month = today.month
     day = today.day
@@ -375,8 +375,8 @@ def which_news(request,news_part,small_part):
             this_week = item
             break
 
-    start_date = datetime(year,month,this_week[0],0,0,0,0)
-    end_date = datetime.today()
+    start_date = datetime.datetime(year,month,this_week[0],0,0,0,0)+ datetime.timedelta(days=-1)
+    end_date = datetime.datetime.today()+ datetime.timedelta(days=1)
     weekTopList = newses.filter(time__range=(start_date, end_date)).order_by('-score','-time')[:8]
         
     hot_newses = newses.order_by('-hot','-time')[:25]
@@ -385,7 +385,7 @@ def which_news(request,news_part,small_part):
     
     top_newses = newses.order_by('-score','-time')[:5]
     new_newses = newses.order_by('-time')[:20]
-    now = datetime.now(pytz.utc)
+    now = datetime.datetime.now(pytz.utc)
     new_newslist = []
 
     for news in new_newses: 
@@ -722,7 +722,7 @@ def show_news(request,news_part,small_part,news_id):
     def cut(arr, indices):  
         return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
                 
-    today = datetime.today()
+    today = datetime.datetime.today()
     year = today.year
     month = today.month
     day = today.day
@@ -736,8 +736,8 @@ def show_news(request,news_part,small_part,news_id):
             this_week = item
             break
 
-    start_date = datetime(year,month,this_week[0],0,0,0,0)
-    end_date = datetime.today()
+    start_date = datetime.datetime(year,month,this_week[0],0,0,0,0)
+    end_date = datetime.datetime.today()
     weekTopList = newses.filter(time__range=(start_date, end_date)).order_by('-score','-time')[:8]
     
     return render_to_response('newsShow.html',locals(),
@@ -763,7 +763,7 @@ def getTopPart(request):
             top_newses = newses.order_by('-score','-time')[:5]
             
             new_newses = newses.order_by('-time')[:20]
-            now = datetime.now(pytz.utc)
+            now = datetime.datetime.now(pytz.utc)
             new_newslist = []
 
             for news in new_newses: 
@@ -1191,7 +1191,7 @@ def ke_upload_view(request):
     print 'tttttttttttttttttttttt'
     ext_allowed = ['gif', 'jpg', 'jpeg', 'png','PNG','GIF','JPG','JPEG']
     max_size = 4194304 # 4M
-    today = datetime.today()
+    today = datetime.datetime.today()
     save_dir = '/news_TextPic/%d/%d/%d/' % (today.year, today.month, today.day)
     save_path = settings.MEDIA_ROOT+save_dir
     save_url = settings.MEDIA_URL+save_dir
