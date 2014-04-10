@@ -383,7 +383,7 @@ def which_news(request,news_part,small_part):
     gilded_newses = newses.order_by('-gold','-time')[:30]
     controversial_newses = newses.order_by('-controversy','-time')[:25]
     
-    top_newses = newses.order_by('-score','-time')[:5]
+    #top_newses = newses.order_by('-score','-time')[:5]
     new_newses = newses.order_by('-time')[:20]
     now = datetime.datetime.now(pytz.utc)
     new_newslist = []

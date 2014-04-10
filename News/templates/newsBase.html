@@ -191,7 +191,7 @@
 									{% endifnotequal %}							
 								</ul>
 							</div>
-							{% if news in top_newses %}
+							{% if news in weekTopList %}
 							<div class='pull-right'>
 								<img src='{{STATIC_URL}}img/hot.png' class="img-responsive" />
 							</div>
@@ -305,7 +305,17 @@
 										{% endif %}
 									{% endifnotequal %}
 								</ul>
-							</div>			
+							</div>
+							{% if news in weekTopList %}
+							<div class='pull-right'>
+								<img src='{{STATIC_URL}}img/hot.png' class="img-responsive" />
+							</div>
+							{% endif %}
+							{% if news in new_newslist %}
+							<div class='pull-right'>
+								<img src='{{STATIC_URL}}img/new.png' class="img-responsive" />
+							</div>
+							{% endif %}
 						</div>
 					{% endfor %}
 					<div class='clear_both'></div>
@@ -366,7 +376,7 @@
 									</div>
 								{% endfor %}
 							{% endifequal %}
-								<div class='pull-left MT_8px'>
+							<div class='pull-left MT_8px'>
 								<div>
 									{% ifequal news.type 'link' %}
 									<a class='news_title' target='_blank' href='{{news.link}}'>{{news.title|truncatechars:32}}</a>
@@ -410,7 +420,16 @@
 									{% endifnotequal %}
 								</ul>
 							</div>
-							
+							{% if news in weekTopList %}
+							<div class='pull-right'>
+								<img src='{{STATIC_URL}}img/hot.png' class="img-responsive" />
+							</div>
+							{% endif %}
+							{% if news in new_newslist %}
+							<div class='pull-right'>
+								<img src='{{STATIC_URL}}img/new.png' class="img-responsive" />
+							</div>
+							{% endif %}
 							</div>
 						{% endfor %}
 						<div class='clear_both'></div>
