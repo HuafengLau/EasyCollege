@@ -1414,6 +1414,17 @@ a.newcommentLink:hover{
 	color: #333;
 }
 
+.newcommentWordsDiv{
+	background-color:#D6EAED;
+	padding:10px;
+	margin:7px 15px 5px 5px;
+}
+
+.newscommentDiv2{
+	border-bottom:1px dashed #ccc;
+	padding:10px 0 7px;
+}
+
 #choosePartDiv{
 	margin-left: 4%;
 	border-style: outset;

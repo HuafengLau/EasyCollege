@@ -601,7 +601,7 @@
 	{% endif %}
 </div>
 <div class='col-md-offset-1 col-md-3 col-xs-12 hidden-xs MT_30px'>
-	<div id='searchDiv' class='ML_23px'>
+	<div id='searchDiv'>
 		<form role="form" class="form-inline" method="get" action="/search/">
 			<div class="form-group">
 				<input class="form-control" id="id_q" name="q" type="text" value="" />
@@ -614,27 +614,8 @@
 			<input class='btn btn-default' type="submit" value="&nbsp;搜&nbsp;索&nbsp;">
 		</form>
 	</div>
-	{% if weekTopList %}
-	<div id='weekTopDiv' class='clear_both bcColorWhite ML_23px'>
-		<p class='text-danger text-center'>本周最火</p>
-		<ul class='list-unstyled'>
-			{% for news in weekTopList %}
-				<li class='form-inline clear_both'>
-					<div class='pull-left MT_11px weekListFont'>
-						<b>{{news.score}}</b>
-					</div>
-					<div id='' class='newsUpVoted pull-left'></div>
-					<div class='pull-left MT_11px'><a href='/news/{{news.newspart.part}}/hot/showNews/{{news.id}}/' class='font-black'>
-						&nbsp;&nbsp;{{news.title|truncatechars:16}}</a>
-					</div>
-				</li>
-				<hr class='MT_0px MB_0px clear_both'/>
-			{% endfor %}
-			<li>&nbsp;</li>
-		</ul>
-	</div>
-	{% endif %}
-	<div id='partInfoDiv' class='bcColorWhite  ML_23px'>
+	
+	<div id='partInfoDiv' class='bcColorWhite'>
 		<p><a class='font-333' href='/news/{{part.part}}/hot/'><strong>{{part.part}} / {{part.realPart}}</strong></a></p>
 		<p>{% if not part.open%}（非公开的）{% endif %}{{part.description}}</p>
 		{% ifnotequal part.part 'All' %}
@@ -650,7 +631,51 @@
 			{% endifnotequal %} 
 		{% endifnotequal %}
 	</div>
-	<div id='submitBtnDiv' class='clear_both ML_23px'>
+	
+	{% if weekTopList %}
+	<div id='weekTopDiv' class='clear_both bcColorWhite'>
+		<p class='text-danger text-center'>本周最火</p>
+		<ul class='list-unstyled'>
+			{% for news in weekTopList %}
+				<li class='form-inline clear_both'>
+					<div class='pull-left MT_11px weekListFont'>
+						<b>{{news.score}}</b>
+					</div>
+					<div id='' class='newsUpVoted pull-left'></div>
+					<div class='pull-left MT_11px'><a href='/news/{{news.newspart.part}}/hot/showNews/{{news.id}}/' class='font-333'>
+						&nbsp;&nbsp;{{news.title|truncatechars:16}}</a>
+					</div>
+				</li>
+				<hr class='MT_0px MB_0px clear_both'/>
+			{% endfor %}
+			<li>&nbsp;</li>
+		</ul>
+	</div>
+	{% endif %}
+	<div id='newCommentDiv' class='clear_both bcColorWhite'>
+		<p class='text-danger text-center'>最新评论</p>
+		<ul class='list-unstyled'>
+			{% for comment in newComments %}
+				{% if comment.news %}
+				<a href='news/All/hot/showNews/{{comment.news.id}}/#newscomment1;{{comment.id}}' class='newcommentLink'>
+				{% else %}
+				<a href='news/All/hot/showNews/{{comment.newscomment1.news.id}}/#newscomment2;{{comment.id}}' class='newcommentLink'>
+				{% endif %}
+				<div class='newscommentDiv2'>
+					<div><small class='font-grey'>
+						{{comment.user.nic_name }}&nbsp;在{% if comment.news %}《{{ comment.news.title| truncatechars:15 }}》评论：
+						{% else %}《{{ comment.newscomment1.news.title| truncatechars:15 }}》评论：{% endif %}
+					</small></div>
+					<div class='newcommentWordsDiv'>
+						{% autoescape off %}{{comment.words}}{% endautoescape %}
+					</div>
+				</div>
+				</a>
+			{% endfor %}
+			<li>&nbsp;</li>
+		</ul>
+	</div>
+	<div id='submitBtnDiv' class='clear_both'>
 		{% ifnotequal part.part 'ExplainCY' %}
 			{% if part.can_link %}
 			<div id='linkBtnDiv' class='both_clear'>						
@@ -729,7 +754,6 @@
 			{% endifequal %}
 		{% endifnotequal %}
 	</div>
-	
 </div>
 <div>
 <script src="{{STATIC_URL}}kindeditor-4.1.10/kindeditor-min.js"></script>

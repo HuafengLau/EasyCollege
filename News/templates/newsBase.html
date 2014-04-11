@@ -492,7 +492,7 @@
 											<b>{{news.score}}</b>
 										</div>
 										<div id='' class='newsUpVoted pull-left'></div>
-										<div class='pull-left MT_11px'><a href='/news/{{news.newspart.part}}/hot/showNews/{{news.id}}/' class='font-black'>
+										<div class='pull-left MT_11px'><a href='/news/{{news.newspart.part}}/hot/showNews/{{news.id}}/' class='font-333'>
 											&nbsp;&nbsp;{{news.title|truncatechars:16}}</a>
 										</div>
 									</li>
@@ -514,16 +514,12 @@
 									{% else %}
 									<a href='news/All/hot/showNews/{{comment.newscomment1.news.id}}/#newscomment2;{{comment.id}}' class='newcommentLink'>
 									{% endif %}
-									<div style='border-bottom:1px dashed #ccc;padding:10px 0 7px;'>
-										<div><small>
-											{{comment.user.nic_name }}&nbsp;在
-											{% if comment.news %}
-												《{{ comment.news.title| truncatechars:17 }}》
-											{% else %}
-												《{{ comment.newscomment1.news.title| truncatechars:17 }}》
-											{% endif %}
+									<div class='newscommentDiv2'>
+										<div><small class='font-grey'>
+											{{comment.user.nic_name }}&nbsp;在{% if comment.news %}《{{ comment.news.title| truncatechars:15 }}》评论：
+											{% else %}《{{ comment.newscomment1.news.title| truncatechars:15 }}》评论：{% endif %}
 										</small></div>
-										<div style='background-color:#D6EAED;padding:10px;margin:7px 13px 5px 5px'>
+										<div class='newcommentWordsDiv'>
 											{% autoescape off %}{{comment.words}}{% endautoescape %}
 										</div>
 									</div>

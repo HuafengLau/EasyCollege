@@ -745,6 +745,11 @@ def show_news(request,news_part,small_part,news_id):
     end_date = datetime.datetime.today()
     weekTopList = newses.filter(time__range=(start_date, end_date)).order_by('-score','-time')[:8]
     
+    Comment1 = NewsComment1.objects.all()
+    Comment2 = NewsComment2.objects.all()
+    comments = sorted(list(Comment1) + list(Comment2), key=lambda x: x.time,reverse = True)
+    newComments = comments[:6]
+    
     return render_to_response('newsShow.html',locals(),
         context_instance=RequestContext(request))
 
