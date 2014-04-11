@@ -391,7 +391,12 @@ def which_news(request,news_part,small_part):
     for news in new_newses: 
         if (now - news.time).total_seconds() < 43200.0:
             new_newslist.append(news)
-        
+    
+    Comment1 = NewsComment1.objects.all()
+    Comment2 = NewsComment2.objects.all()
+    comments = sorted(list(Comment1) + list(Comment2), key=lambda x: x.time,reverse = True)
+    newComments = comments[:6]
+    
     return render_to_response('newsBase.html',locals(),
         context_instance=RequestContext(request))
             
@@ -598,8 +603,8 @@ def submit_news(request,news_part, news_type):
             news = this_news
         )
         this_feeds.save()
-        this_feeds.owner.message += 1
-        this_feeds.owner.save()
+        #this_feeds.owner.message += 1
+        #this_feeds.owner.save()
         if this_user_info.beWatched:
             beWatched_list = this_user_info.beWatched.split(';')[:-1]
             users = MyUser.objects.filter(id__in=beWatched_list)       

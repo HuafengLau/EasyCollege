@@ -1405,6 +1405,15 @@ ul.side_nav li div {
 	 width: 170px;
 }
 
+.newcommentLink{
+	color: #333;
+}
+
+a.newcommentLink:hover{
+
+	color: #333;
+}
+
 #choosePartDiv{
 	margin-left: 4%;
 	border-style: outset;
@@ -1448,6 +1457,14 @@ ul.side_nav li div {
 	padding-top: 8px;
 }
 
+#newCommentDiv{
+	border:1px solid #E0E0E0;
+	margin-bottom: 10px;
+	margin-right: 30px;
+	padding-left: 8px;
+	padding-top: 8px;
+}
+
 #submitBtnDiv{
 	
 	margin-bottom: 15%;
@@ -1461,7 +1478,7 @@ ul.side_nav li div {
 	margin-right: 40px;
 	padding:10px;
 	border:1px solid #E0E0E0;
-	margin-bottom: 8%;
+	margin-bottom: 10px;
 }
 
 #partRuleDiv{

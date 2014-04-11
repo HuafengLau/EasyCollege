@@ -9,6 +9,10 @@
 <link href="{{STATIC_URL}}css/bodyCss.css" rel="stylesheet" media="screen">
 {% endblock %}
 
+{% block moreLink %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.css" />
+{% endblock %}
+
 {% block mainbody %}
 <div id='fangqiu'>
 	<div style='padding: 0 15px;'>
@@ -475,12 +479,12 @@
 							{% endifnotequal %} 
 						{% endifnotequal %}
 					</div>
-					<hr/>
+					<hr class='MT_0px'/>
 					{% endblock %}
 					{% block weekHot %}
 						{% if weekTopList %}
 						<div id='weekTopDiv' class='clear_both bcColorWhite'>
-							<p class='text-danger text-center'>本周最火</p>
+							<p class='text-danger text-center'>本周推荐</p>
 							<ul class='list-unstyled'>
 								{% for news in weekTopList %}
 									<li class='form-inline clear_both'>
@@ -499,6 +503,37 @@
 						</div>
 						{% endif %}
 					{% endblock %}
+									
+					{% block newComment %}
+						<div id='newCommentDiv' class='clear_both bcColorWhite'>
+							<p class='text-danger text-center'>最新评论</p>
+							<ul class='list-unstyled'>
+								{% for comment in newComments %}
+									{% if comment.news %}
+									<a href='news/All/hot/showNews/{{comment.news.id}}/#newscomment1;{{comment.id}}' class='newcommentLink'>
+									{% else %}
+									<a href='news/All/hot/showNews/{{comment.newscomment1.news.id}}/#newscomment2;{{comment.id}}' class='newcommentLink'>
+									{% endif %}
+									<div style='border-bottom:1px dashed #ccc;padding:10px 0 7px;'>
+										<div><small>
+											{{comment.user.nic_name }}&nbsp;在
+											{% if comment.news %}
+												《{{ comment.news.title| truncatechars:17 }}》
+											{% else %}
+												《{{ comment.newscomment1.news.title| truncatechars:17 }}》
+											{% endif %}
+										</small></div>
+										<div style='background-color:#D6EAED;padding:10px;margin:7px 13px 5px 5px'>
+											{% autoescape off %}{{comment.words}}{% endautoescape %}
+										</div>
+									</div>
+									</a>
+								{% endfor %}
+								<li>&nbsp;</li>
+							</ul>
+						</div>
+					{% endblock %}
+					
 					{% block Submit %}
 					<div id='submitBtnDiv' class='clear_both'>
 						{% ifnotequal part.part 'ExplainCY' %}
@@ -730,6 +765,8 @@
 		</div>
 		{% endblock %}
 	</div>
+	<script src="{{STATIC_URL}}kindeditor-4.1.10/plugins/code/prettify.js"></script>
+	<script src="{{STATIC_URL}}js/prettyPrint.js"></script>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="ForbiddenWords_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
