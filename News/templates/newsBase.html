@@ -16,7 +16,7 @@
 {% block mainbody %}
 <div id='fangqiu'>
 	<div style='padding: 0 15px;'>
-		<div class='hidden-xs'>
+		<div style='margin-left:30px;' class='hidden-xs'>
 		  <div class=''>
 		  <ul class='list-inline'>
 			<li>{% if user.is_authenticated %}<a href='/news/mySubscription/'><span class='font-333'>我的订阅：</span></a>{% else %}<span>默认订阅：</span>{% endif %}</li>
@@ -70,16 +70,17 @@
 		<div id='newsMainDiv' class='row'>
 			{% block topPartLi %}
 			{% if newsBase %}
-			<div id='leftDiv' class='hidden-xs col-md-2 MT_45px'>			
-				<ul class="side_nav">
-					<li id='partLi'>&nbsp;&nbsp;最活跃的社群</li>
-					{% for part in top_newsParts %}
-					<li>
-						<a id='activeColor{{forloop.counter}}' href='/news/{{part.part}}/hot/'>&nbsp;&nbsp;{{part.realPart}}</a>
-						<div style='display:none'><p>{{part.description}}</p></div>
-					</li>
-					{% endfor %}
-				</ul>
+			<div id='leftDiv' class='hidden-xs col-md-2 MT_50px'>			
+				<div class='ML_40px'>
+					<ul class="side_nav">
+						{% for toppart in top_newsParts %}
+						<li>
+							<a class="oneColor {% ifnotequal part.part toppart.part %}font-333{% else %}font-orange{% endifnotequal %}" href='/news/{{toppart.part}}/hot/'>{{toppart.realPart}}</a>
+							<!--<div style='display:none'><p>{{part.description}}</p></div>-->
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
 			</div>
 			{% endif %}
 			{% endblock %}
@@ -88,7 +89,6 @@
 				{% block LeftDiv %}
 				<ul class="nav nav-tabs">
 				  <li>&nbsp;&nbsp;</li>
-				  <li id='smallPartLi'><b>{{ part.part }}</b></li>
 				  {% ifequal smallPart 'hot' %}<li class='active'>{% else %}<li>{% endifequal %}<a id='HotLi' href="#hot" data-toggle="tab">综合</a></li>
 				  {% ifequal smallPart 'controversial' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#controversial" data-toggle="tab">热议</a></li>
 				  {% ifequal smallPart 'gilded' %}<li class='active'>{% else %}<li>{% endifequal %}<a href="#gilded" data-toggle="tab">镀金的</a></li>
@@ -445,7 +445,8 @@
 				{% endblock %}
 			</div>
 			
-			<div id='RightDiv' class='hidden-xs col-md-3 col-md-offset-1'>
+			<div id='RightDiv' class='hidden-xs col-md-4'>
+				<div class='ML_50px'>
 				{% block RightDiv %}
 					{% block searchNews %}
 						<div id='searchDiv'>
@@ -493,7 +494,7 @@
 										</div>
 										<div id='' class='newsUpVoted pull-left'></div>
 										<div class='pull-left MT_11px'><a href='/news/{{news.newspart.part}}/hot/showNews/{{news.id}}/' class='font-333'>
-											&nbsp;&nbsp;{{news.title|truncatechars:16}}</a>
+											&nbsp;&nbsp;{{news.title|truncatechars:18}}</a>
 										</div>
 									</li>
 									<hr class='MT_0px MB_0px clear_both'/>
@@ -516,8 +517,8 @@
 									{% endif %}
 									<div class='newscommentDiv2'>
 										<div><small class='font-grey'>
-											{{comment.user.nic_name }}&nbsp;在{% if comment.news %}《{{ comment.news.title| truncatechars:15 }}》评论：
-											{% else %}《{{ comment.newscomment1.news.title| truncatechars:15 }}》评论：{% endif %}
+											{{comment.user.nic_name }}&nbsp;在{% if comment.news %}《{{ comment.news.title| truncatechars:18 }}》评论：
+											{% else %}《{{ comment.newscomment1.news.title| truncatechars:18 }}》评论：{% endif %}
 										</small></div>
 										<div class='newcommentWordsDiv'>
 											{% autoescape off %}{{comment.words}}{% endautoescape %}
@@ -669,6 +670,7 @@
 				{% endblock %}
 			</div>
 			{% endblock %}
+		  </div>
 		</div>
 		{% block visibleXS %}
 		<div class='row visible-xs clear_both MT_20px'>
