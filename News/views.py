@@ -952,9 +952,8 @@ def comment(request):
                         words = this_comment
                     )
                     this_newComment.save()
-                    if this_news.user != user:
-                        this_news.comment_num += 1
-                        this_news.save()
+                    this_news.comment_num += 1
+                    this_news.save()
                     noSuojin = True
                     if this_news.user != user:
                         this_feed = Feeds_news(
