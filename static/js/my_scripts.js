@@ -18,6 +18,7 @@ $(document).ready(function(){
 	  });
 	});
 	
+	
 	$('.nailthumb-container').nailthumb();
 	
 	$('.ID_card').on('click', function(){
@@ -142,14 +143,6 @@ $(document).ready(function(){
 	$('.cardNeedLog').on('click', function(){
 		alert('登陆后才可以查看分享人信息哦：）');
 	});
-
-	$("ul.side_nav li").on('mouseover', function() {
-		$(this).children("div")[0].style.display='block';
-	});
-	
-	$('ul.side_nav li').on('mouseout', function(){
-		$(this).children("div")[0].style.display='none';
-	});
 	
 	// JS for newsSubmit.html
 	
@@ -164,6 +157,8 @@ $(document).ready(function(){
 				$('#voteChange').html(data);
 				alert('感谢您的投票，您还可以对评论投票哦！');
 				$('#voteDiv').hide();
+				var name = $('#myName').text();
+				$('#likeMan').append("<span class='font-link'>、"+name+"</span>");
 			}
 		});
 	});
@@ -191,6 +186,8 @@ $(document).ready(function(){
 				}else{
 					alert('臭美，你不能给自己的回复镀金哦：）');
 				}
+			}else if(data == '-1'){
+				alert('你太穷啦，无法进行此操作');
 			}else{
 				var after_num = parseInt(num) + 5;
 				var id_name = '#'+type+'_goldNum_'+id;

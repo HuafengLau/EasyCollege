@@ -273,8 +273,6 @@ def newsVote(request):
                     response = HttpResponse('wrong')
                     return response
                 else:
-                    user.money -= 1
-                    user.save()
                     this_news.user.agree_num += 1
                     this_news.user.save()
                     ups += 1
@@ -293,8 +291,6 @@ def newsVote(request):
                     this_feed.owner.save()
                     this_news.agree_man += '%s;' % user.id
             elif vote == '0':
-                user.money -= 1
-                user.save()
                 downs += 1
                 if news_id in this_user_info.downVoted_news:
                     response = HttpResponse('wrong')
@@ -306,13 +302,10 @@ def newsVote(request):
                 response = HttpResponse('wrong')
                 return response
             
-            if 'CY' in this_news.newspart.part or (this_news.ups+this_news.downs) < 3:
-                num = 5
-                if 'CY' in this_news.newspart.part:
-                    num += 5
-                if (this_news.ups+this_news.downs) < 3:
-                    num += 3
-                user.money += num
+            now = datetime.datetime.now(pytz.utc)
+
+            if (now - this_news.time).total_seconds() < 43200.0:
+                user.money += 3
                 user.save()
             
             read = this_news.read
@@ -594,6 +587,9 @@ def submit_news(request,news_part, news_type):
                 return render_to_response('newsSubmit.html',locals(),
                     context_instance=RequestContext(request))
         
+        this_user_info.upVoted_news += '%s;' % this_news.id
+        this_user_info.save()
+        
         
         this_feeds = Feeds_followNews(
             type = 'followNews',
@@ -790,7 +786,6 @@ def giveGold(request):
             if request.user.money > 5:
                 this_id = request.GET.get('id')
                 this_type = request.GET.get('type')
-                
                 if this_type == 'news':
                     this_object = News.objects.get(id=this_id)
                     try:
@@ -903,8 +898,8 @@ def giveGold(request):
                     return response
                 else:
                     this_feed.save()
-                    this_feeds.owner.message += 1
-                    this_feeds.owner.save()
+                    this_feed.owner.message += 1
+                    this_feed.owner.save()
                     this_user_info = User_info.objects.get(user=this_object.user)
                     this_object.user.money += 5
                     this_object.user.save()
@@ -913,12 +908,14 @@ def giveGold(request):
                     request.user.money -= 5
                     request.user.save()
                     if this_type == 'news':
+                        print this_user_info.when_newsbeGold
                         response = HttpResponse(this_user_info.when_newsbeGold)
                     else:
+                        print this_user_info.when_commentbeGold
                         response = HttpResponse(this_user_info.when_commentbeGold)
                     return response 
             else:
-                response = HttpResponse('操作失败，你太穷啦！去看看那本致富秘籍吧：）')
+                response = HttpResponse('-1')
                 return response
 
 @login_required(login_url='/log/')                 
@@ -1075,7 +1072,7 @@ def comment(request):
                     this_feed.owner.message += 1
                     this_feed.owner.save()
         return render_to_response('comment.html',locals(),
-                context_instance=RequestContext(request))
+            context_instance=RequestContext(request))
 
 @login_required(login_url='/log/')                 
 def commentVote(request):

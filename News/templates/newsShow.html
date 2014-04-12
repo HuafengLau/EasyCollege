@@ -193,12 +193,56 @@
 			<hr/>
 			{% if this_news.agree_man %}
 			<p>
-				<span class='font-link'>&nbsp;{% showNewsLikeMan this_news.agree_man %}</span>&nbsp;觉得很赞
+				<span id='likeMan' class='font-link'>&nbsp;{% showNewsLikeMan this_news.agree_man %}</span>&nbsp;觉得很赞
 			</p>
 			<hr class='MB_0px'/>
 			{% endif %}
 		</div>
-		<div class='clear_both MT_8px ML_26px'>
+		
+	</div>
+	{% if not need_money %}	
+	<div>
+		{% if need_log %}
+		<p>&nbsp;</p>
+		<p class='text-center clear_both MT_8px'>登陆是美德，点赞好习惯 \^o^/
+			<a class='hand_over font-link font-20' id='newsShowCallLog'>&nbsp;&nbsp;立即登录（支持QQ登录）</a>
+		</p>
+		<div id='showNewslogForm' class='col-xs-6 col-md-6 col-md-offset-3 PA_0xp'>                       
+			<div id='normalLogDiv' class='bcColorWhite'>                   
+				<form class='form-group' action='/log/' method='POST' autocomplete="on">
+					{% csrf_token %}
+					<div class='form-group'>
+						<label>邮箱</label>
+						<input type="email"  class='form-control' id='' name='email' placeholder="邮箱" required autofocus>
+					</div>
+					<div id='log_pwd_div' class='form-group'>
+						<label>密码</label>
+						<input type="password"  class='form-control' id='' name='stu_pwd' placeholder="密码" required>
+					</div> 
+					<input type="hidden" value="{{ request.path }}" name="next">  
+					<div id='log_button' class='ML_23px'>
+						<button class="btn btn-info" id='' type="submit">立即登录</button>
+						<a href='/log/page_register/'>&nbsp;&nbsp;&nbsp;&nbsp;注册&nbsp;&nbsp;</a>
+						<a href='/account/QQlogin/' ><img src='{{STATIC_URL}}img/QQlog.png' /></a>
+					</div>
+				</form>
+			</div>
+		</div>
+		{% endif %}
+		{% if need_vote %}
+			<div id='voteDiv'>							
+				<div class='text-center'>
+					我觉得本次分享
+					<a id='{{this_news.id}};1' class='logVote btn btn-success'>很&nbsp;赞</a>
+					<a id='{{this_news.id}};0' class='logVote btn btn-warning'>一&nbsp;般</a>
+					<span class='hidden' id='myName'>{{user.nic_name}}</span>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+	{% endif %}
+	<!--
+	<div class='clear_both MT_8px ML_26px'>
 			{% ifequal this_news.type 'link' %}
 			<script type="text/javascript">
 			(function(){
@@ -297,59 +341,18 @@
 			</script>
 			<script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
 			{% endifequal %}
-        </div>
-	</div>
-	{% if not need_money %}	
-	<div>
-		{% if need_log %}
-		<p>&nbsp;</p>
-		<p class='text-center clear_both MT_8px'>登录后可对分享和评论进行投票，投票将决定排序。价值，由你定义！
-			<a class='hand_over font-link font-20' id='newsShowCallLog'>&nbsp;&nbsp;立即登录（支持QQ登录）</a>
-		</p>
-		<div id='showNewslogForm' class='col-xs-6 col-md-6 col-md-offset-3 PA_0xp'>                       
-			<div id='normalLogDiv' class='bcColorWhite'>                   
-				<form class='form-group' action='/log/' method='POST' autocomplete="on">
-					{% csrf_token %}
-					<div class='form-group'>
-						<label>邮箱</label>
-						<input type="email"  class='form-control' id='' name='email' placeholder="邮箱" required autofocus>
-					</div>
-					<div id='log_pwd_div' class='form-group'>
-						<label>密码</label>
-						<input type="password"  class='form-control' id='' name='stu_pwd' placeholder="密码" required>
-					</div> 
-					<input type="hidden" value="{{ request.path }}" name="next">  
-					<div id='log_button' class='ML_23px'>
-						<button class="btn btn-info" id='' type="submit">立即登录</button>
-						<a href='/log/page_register/'>&nbsp;&nbsp;&nbsp;&nbsp;注册&nbsp;&nbsp;</a>
-						<a href='/account/QQlogin/' ><img src='{{STATIC_URL}}img/QQlog.png' /></a>
-					</div>
-				</form>
-			</div>
-		</div>
-		{% endif %}
-		{% if need_vote %}
-			<div id='voteDiv'>
-				<p class='text-center clear_both MT_8px'>你可以对分享和评论进行投票，投票将决定排序。价值，由你定义！</p>
-				<div class='MT_20px'>
-					<p class='font-20 text-center hand_over'><a id='{{this_news.id}};1' class='logVote btn btn-success'><b>赞，让更多人看见这个分享</b></a></p>
-					<p class='font-20 text-center hand_over'><a id='{{this_news.id}};0' class='logVote btn btn-danger'><b>踩，把它沉下去</b></a></p>
-				</div>
-			</div>
-		{% endif %}
-	</div>
-	{% endif %}
-	
+        </div>-->
 </div>
 <hr/>
-<div class='col-md-7 col-md-offset-1 col-xs-12 hidden-xs MT_20px PL_0px PR_0px'>		
+<div class='col-md-7 col-md-offset-1 col-xs-12 MT_20px PL_0px PR_0px'>		
 	{% if not need_money %}
 		<label>评论</label>
 		<div id='commentDiv'>
 			{% if this_news.newscomment1_set.all %}
-				<div class='newscomment1WholeDiv bcColorWhite clear_both'>
+				<div class='newscomment1WholeDiv bcColorWhite clear_both' style='padding-top:4px;'>
 				{% for newscomment1 in this_news.newscomment1_set.all %}
-					<div class='left_line clear_both'>
+					<div class='left_line clear_both row'>
+					  <div class='col-md-2 col-xs-2' style='margin-right:-9%;'>
 						<div class='news_vote pull-left'>
 							{% for info in user.user_info_set.all %}
 								{% if info.upVoted_comment1 %}
@@ -378,33 +381,35 @@
 								{% endif %}
 							{% endfor %}
 						</div>
-						<div class='pull-left newsCommentAvatar'>
+						<div class="nailthumb-container commentAvatar-square-thumb pull-left MT_8px">							
 							{% ifequal newscomment1.user.avatar 'img/avatar.png' %}									
-								<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+								<a href="{{STATIC_URL}}img/avatar.png" data-lightbox='commentAvatar{{newscomment1.id}}' ><img src='{{STATIC_URL}}img/avatar.png'/></a>																	
 							{% else %}									
-								<img src='{{MEDIA_URL}}{{newscomment1.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+								<a href="{{MEDIA_URL}}{{newscomment1.user.avatar}}" data-lightbox='commentAvatar{{newscomment1.id}}' ><img src='{{MEDIA_URL}}{{newscomment1.user.avatar}}'/></a>									
 							{% endifequal %}
 						</div>
-						<div class='pull-left'>
-							<div class='font-grey'><small><span id='{{newscomment1.user.id}}' class='hand_over {% if not need_log  %}ID_card{% else %}need_login{% endif %}'>{{newscomment1.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment1Score_{{newscomment1.id}}' >{{newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment1 %}前</small></div>
-							<div class='wordsColor'>{% autoescape off %}{{ newscomment1.words}}{% endautoescape %}</div>
-							<div>
-								<ul class='list-inline list-unstyled'>
-									<li><a id='newscomment1;{{newscomment1.id}};{{newscomment1.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
-										<small>镀金<span id='newscomment1_goldNum_{{newscomment1.id}}'>{{newscomment1.gold}}</span></small>&nbsp;
-										</a>
-									</li>
-									<li><a id='newscomment1;{{newscomment1.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
-								</ul>
-							</div>
+					  </div>
+					  <div class='col-md-10 col-xs-10' style='margin-right:9%;'>
+						<div class='font-grey'><small><span id='{{newscomment1.user.id}}' class='hand_over {% if not need_log  %}ID_card{% else %}need_login{% endif %}'>{{newscomment1.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment1Score_{{newscomment1.id}}' >{{newscomment1.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment1 %}前</small></div>
+						<div class='wordsColor'>{% autoescape off %}{{ newscomment1.words}}{% endautoescape %}</div>
+						<div>
+							<ul class='list-inline list-unstyled'>
+								<li><a id='newscomment1;{{newscomment1.id}};{{newscomment1.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
+									<small>镀金<span id='newscomment1_goldNum_{{newscomment1.id}}'>{{newscomment1.gold}}</span></small>&nbsp;
+									</a>
+								</li>
+								<li><a id='newscomment1;{{newscomment1.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
+							</ul>
 						</div>
-						<div id='newscomment1_{{newscomment1.id}}_reply'></div>
+					  </div>				  
+					  <div id='newscomment1_{{newscomment1.id}}_reply'></div>
 					</div>
 					<hr class='clear_both comment_hr'/>
 					{% if newscomment1.newscomment2_set.all %}
 						<div class='newscomment2WholeDiv clear_both'>
 						{% for newscomment2 in newscomment1.newscomment2_set.all %}
-							<div class='clear_both left_line'>
+							<div class='clear_both left_line row'>
+							  <div class='col-md-2 col-xs-2' style='margin-right:-9%;'>
 								<div class='news_vote pull-left'>
 									{% for info in user.user_info_set.all %}
 										{% if info.upVoted_comment2 %}
@@ -433,14 +438,15 @@
 										{% endif %}
 									{% endfor %}
 								</div>
-								<div class='pull-left newsCommentAvatar'>
+								<div class="nailthumb-container commentAvatar-square-thumb pull-left MT_8px">							
 									{% ifequal newscomment2.user.avatar 'img/avatar.png' %}									
-										<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+										<a href="{{STATIC_URL}}img/avatar.png" data-lightbox='commentAvatar{{newscomment2.id}}' ><img src='{{STATIC_URL}}img/avatar.png'/></a>																	
 									{% else %}									
-										<img src='{{MEDIA_URL}}{{newscomment2.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+										<a href="{{MEDIA_URL}}{{newscomment2.user.avatar}}" data-lightbox='commentAvatar{{newscomment2.id}}' ><img src='{{MEDIA_URL}}{{newscomment2.user.avatar}}'/></a>									
 									{% endifequal %}
 								</div>
-								<div class='pull-left'>
+							  </div>
+							  <div class='col-md-10 col-xs-10' style='margin-right:9%;'>
 									<div class='font-grey'><small><span id='{{newscomment2.user.id}}' class='hand_over {% if not need_log  %}ID_card{% else %}need_login{% endif %}'>{{newscomment2.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment2Score_{{newscomment2.id}}' >{{newscomment2.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment2 %}前</small></div>
 									<div class='wordsColor'>{% autoescape off %}{{ newscomment2.words}}{% endautoescape %}</div>
 									<div>
@@ -453,13 +459,14 @@
 										</ul>
 									</div>
 								</div>
-								<div id='newscomment2_{{newscomment2.id}}_reply'></div>
+							  <div id='newscomment2_{{newscomment2.id}}_reply'></div>
 							</div>
 							<hr class='clear_both comment_hr'/>
 							{% if newscomment2.newscomment3_set.all %}
 								<div class='newscomment3WholeDiv clear_both'>
 								{% for newscomment3 in newscomment2.newscomment3_set.all %}
-									<div class='clear_both left_line'>
+									<div class='clear_both left_line row'>
+									  <div class='col-md-2 col-xs-2' style='margin-right:-9%;'>
 										<div class='news_vote pull-left'>
 											{% for info in user.user_info_set.all %}
 												{% if info.upVoted_comment3 %}
@@ -488,14 +495,15 @@
 												{% endif %}
 											{% endfor %}
 										</div>
-										<div class='pull-left newsCommentAvatar'>
+										<div class="nailthumb-container commentAvatar-square-thumb pull-left MT_8px">							
 											{% ifequal newscomment3.user.avatar 'img/avatar.png' %}									
-												<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+												<a href="{{STATIC_URL}}img/avatar.png" data-lightbox='commentAvatar{{newscomment3.id}}' ><img src='{{STATIC_URL}}img/avatar.png'/></a>																	
 											{% else %}									
-												<img src='{{MEDIA_URL}}{{newscomment3.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+												<a href="{{MEDIA_URL}}{{newscomment3.user.avatar}}" data-lightbox='commentAvatar{{newscomment3.id}}' ><img src='{{MEDIA_URL}}{{newscomment3.user.avatar}}'/></a>									
 											{% endifequal %}
 										</div>
-										<div class='pull-left'>
+									  </div>
+										<div class='col-md-10 col-xs-10' style='margin-right:9%;'>
 											<div class='font-grey'><small><span id='{{newscomment3.user.id}}' class='hand_over {% if not need_log  %}ID_card{% else %}need_login{% endif %}'>{{newscomment3.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment3Score_{{newscomment3.id}}' >{{newscomment3.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment3 %}前</small></div>
 											<div class='wordsColor'>{% autoescape off %}{{ newscomment3.words}}{% endautoescape %}</div>
 											<div>
@@ -514,7 +522,8 @@
 									{% if newscomment3.newscomment4_set.all %}
 										<div class='newscomment4WholeDiv clear_both'>
 										{% for newscomment4 in newscomment3.newscomment4_set.all %}
-											<div class='clear_both left_line'>
+											<div class='clear_both left_line row'>
+											  <div class='col-md-2 col-xs-2' style='margin-right:-9%;'>
 												<div class='news_vote pull-left'>
 													{% for info in user.user_info_set.all %}
 														{% if info.upVoted_comment4 %}
@@ -543,14 +552,15 @@
 														{% endif %}
 													{% endfor %}
 												</div>
-												<div class='pull-left newsCommentAvatar'>
+												<div class="nailthumb-container commentAvatar-square-thumb pull-left MT_8px">							
 													{% ifequal newscomment4.user.avatar 'img/avatar.png' %}									
-														<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+														<a href="{{STATIC_URL}}img/avatar.png" data-lightbox='commentAvatar{{newscomment4.id}}' ><img src='{{STATIC_URL}}img/avatar.png'/></a>																	
 													{% else %}									
-														<img src='{{MEDIA_URL}}{{newscomment4.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+														<a href="{{MEDIA_URL}}{{newscomment4.user.avatar}}" data-lightbox='commentAvatar{{newscomment4.id}}' ><img src='{{MEDIA_URL}}{{newscomment4.user.avatar}}'/></a>									
 													{% endifequal %}
 												</div>
-												<div class='pull-left'>
+											  </div>
+												<div class='col-md-10 col-xs-10' style='margin-right:9%;'>
 													<div class='font-grey'><small><span id='{{newscomment4.user.id}}' class='hand_over {% if not need_log  %}ID_card{% else %}need_login{% endif %}'>{{newscomment4.user.nic_name}}</span>&nbsp;&nbsp;<span id='newscomment4Score_{{newscomment4.id}}' >{{newscomment4.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime newscomment4 %}前</small></div>
 													<div class='wordsColor'>{% autoescape off %}{{ newscomment4.words}}{% endautoescape %}</div>
 													<div>
@@ -582,7 +592,7 @@
 			{% endif %}
 		</div>
 		<div id='{{this_news.id}}' class='form-group clear_both MT_20px'>
-			<small class='font-grey'>（提交后如果评论没有及时显现，刷新页面即可）</small></span>
+			<!--<small class='font-grey'>（提交后如果评论没有及时显现，刷新页面即可）</small></span>-->
 			<div><textarea name='newsComment1Textarea' id='newsComment1Textarea' cols='80' rows='5' placeholder='说点什么吧'></textarea></div>
 			<button id='{% if not need_log %}newsComment1Btn{% endif %}' class='button {% if need_log %}need_login{% endif %}'>提交</button>
 			<span>
@@ -601,21 +611,7 @@
 	{% endif %}
 </div>
 <div class='col-md-offset-1 col-md-3 col-xs-12 hidden-xs MT_30px'>
-	<div id='searchDiv'>
-		<form role="form" class="form-inline" method="get" action="/search/">
-			<div class="form-group">
-				<input class="form-control" id="id_q" name="q" type="text" value="" />
-			</div>
-			<div class='hidden'>
-				<input checked="checked" id="id_models_0" name="models" type="checkbox" value="News.news" /> 分享
-				<input checked="checked" id="id_models_1" name="models" type="checkbox" value="News.newspart" /> 社群&nbsp;&nbsp;
-				
-			</div>
-			<input class='btn btn-default' type="submit" value="&nbsp;搜&nbsp;索&nbsp;">
-		</form>
-	</div>
-	
-	<div id='partInfoDiv' class='bcColorWhite'>
+	<div id='partInfoDiv2' class='bcColorWhite'>
 		<p><a class='font-333' href='/news/{{part.part}}/hot/'><strong>{{part.part}} / {{part.realPart}}</strong></a></p>
 		<p>{% if not part.open%}（非公开的）{% endif %}{{part.description}}</p>
 		{% ifnotequal part.part 'All' %}
@@ -791,6 +787,7 @@
 		prettyPrint();
 	});
 	KindEditor.options.cssData = 'body { font: 14px "Microsoft YaHei","Microsoft YaHei UI";}';
+	 
 </script>
 
 {% endblock %}

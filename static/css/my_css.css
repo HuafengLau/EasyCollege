@@ -29,6 +29,11 @@
 	height:50px;
 }
 
+.commentAvatar-square-thumb{
+	width:30px;
+	height:40px;
+}
+
 .search-square-thumb{
 	width:60px;
 	height:60px;
@@ -53,6 +58,7 @@
 .margin-top-6px{
 	margin-top: 6px;
 }
+
 
 .font-red{
     color: red;
@@ -234,6 +240,11 @@
 
 .ML_35px{
 	margin-left: 35px;
+
+}
+
+.ML_32px{
+	margin-left: 32px;
 
 }
 
@@ -999,7 +1010,7 @@ ul li{
     margin-top: 8%;
 }
 
-/* CSS for newShow.html */
+/* CSS for newsShow.html */
 .commentUpVote{
 	height: 0;
     width: 0;
@@ -1116,8 +1127,9 @@ ul li{
 	margin-left: 26px;
 }
 
-.newsCommentAvatar{
-	margin-right:3px;
+.news_vote{
+	margin-left:2px;
+	margin-right:2px;
 }
 
 #showNewslogForm{
@@ -1355,9 +1367,6 @@ ul li{
 	font-size: 15px;
 }
 
-.news_vote{
-	margin-right: 7px;
-}
 
 .news_info{
 	margin-top: 3px;
@@ -1479,6 +1488,7 @@ a.newcommentLink:hover{
 	margin-right: 50px;
 	padding-left: 8px;
 	padding-top: 8px;
+	padding-bottom: 2px;
 }
 
 #newCommentDiv{
@@ -1500,6 +1510,13 @@ a.newcommentLink:hover{
 
 #partInfoDiv{
 	margin-right: 110px;
+	padding:10px;
+	border:1px solid #E0E0E0;
+	margin-bottom: 10px;
+}
+
+#partInfoDiv2{
+	margin-right: 50px;
 	padding:10px;
 	border:1px solid #E0E0E0;
 	margin-bottom: 10px;

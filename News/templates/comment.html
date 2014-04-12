@@ -1,19 +1,24 @@
 {% load my_tags %}
-<div class='clear_both' {% if noSuojin %}{% else %}style='margin-left: 32px;{% endif %}'>
+{% block moreCSS %}
+<link href="{{STATIC_URL}}css/lightbox.css" rel="stylesheet"/>
+{% endblock %}
+<div class='clear_both row bcColorWhite {% if noSuojin %}{% else %}ML_32px{% endif %}'>
+  <div class='col-md-2 col-xs-2' style='margin-right:-9%;'>
 	<div class='news_vote pull-left'>
 		<div id='{{type}};{{this_newComment.id}}' class='commentUpVote hand_over'></div>
 		<div id='{{type}};{{this_newComment.id}}' style='display:none' class='commentUpVoted hand_over'></div>
 		<div id='{{type}};{{this_newComment.id}}' class='commentDownVote hand_over'></div>
 		<div id='{{type}};{{this_newComment.id}}' style='display:none' class='commentDownVoted hand_over'></div>
 	</div>
-	<div class='pull-left newsCommentAvatar'>
+	<div class="pull-left MT_8px">							
 		{% ifequal this_newComment.user.avatar 'img/avatar.png' %}									
-			<img src='{{STATIC_URL}}img/avatar.png/' width='40px' height='30px' class="img-responsive" alt='用户头像' />																			
+			<img width='30' height='40' src='{{STATIC_URL}}img/avatar.png'/>																	
 		{% else %}									
-			<img src='{{MEDIA_URL}}{{this_newComment.user.avatar}}' width='40px' height='30px' class="img-responsive" alt='用户头像'/>										
+			<img width='30' height='40' src='{{MEDIA_URL}}{{this_newComment.user.avatar}}'/>									
 		{% endifequal %}
 	</div>
-	<div class='pull-left'>
+  </div>
+	<div class='col-md-10 col-xs-10' style='margin-right:9%;'>
 		<div><small>{{this_newComment.user.nic_name}}&nbsp;&nbsp;<span id='{{type}}Score_{{this_newComment.id}}' >{{this_newComment.score}}</span>赞同&nbsp;&nbsp;{% showNewsTime this_newComment %}</small></div>
 		<div class='wordsColor'>{% autoescape off %}{{this_newComment.words}}{% endautoescape %}</div>
 		<div><ul class='list-inline list-unstyled'>
@@ -104,3 +109,5 @@
 		});
 	});
 </script>
+<script src="{{STATIC_URL}}js/jquery.js"></script>
+<script src="{{STATIC_URL}}js/lightbox-2.6.min.js"></script>
