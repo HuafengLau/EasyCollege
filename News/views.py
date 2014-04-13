@@ -1075,11 +1075,11 @@ def comment(request):
 @login_required(login_url='/log/')                 
 def commentVote(request):
     if request.is_ajax() and request.method == 'GET':
-        if 'nowVote' in request.GET:
+        if 'vote' in request.GET:
             user = request.user
             type = request.GET.get('type')
             id = request.GET.get('id')
-            nowVote = request.GET.get('nowVote')
+            vote = request.GET.get('vote')
             this_user_info = User_info.objects.get(user=user)
             s = '%s;' % id
             if  type == 'newscomment1':
@@ -1099,44 +1099,36 @@ def commentVote(request):
                 upVoted = 'upVoted_comment4'
                 downVoted = 'downVoted_comment4'
                 
-            if nowVote == 'upVote':
-                ups = this_object.ups + 1
-                if user != this_object.user:
-                    this_object.user.agree_num += 1
-                    this_object.user.save()
-                downs = this_object.downs
-                setattr(this_user_info,upVoted, (getattr(this_user_info,upVoted)+s))
-                if getattr(this_user_info,downVoted):
-                    if str(this_object.id) in getattr(this_user_info,downVoted):
-                        setattr(this_user_info,downVoted,(getattr(this_user_info,downVoted).replace(s, '')))
-                        downs = this_object.downs - 1
-                this_user_info.save()
+            if vote == '1':
+                if user == this_object.user:
+                    response = HttpResponse('wrong')
+                    return response
+                else:
+                    ups = this_object.ups + 1            
+                    downs = this_object.downs
+                    setattr(this_user_info,upVoted, (getattr(this_user_info,upVoted)+s))
+                    if getattr(this_user_info,downVoted):
+                        if str(this_object.id) in getattr(this_user_info,downVoted):
+                            response = HttpResponse('wrong')
+                            return response
+                    this_user_info.save()
                 
-            elif nowVote == 'downVote':
-                downs = this_object.downs + 1
-                ups = this_object.ups
-                setattr(this_user_info,downVoted, (getattr(this_user_info,downVoted)+s))
-                if getattr(this_user_info,upVoted):
-                    if str(this_object.id) in getattr(this_user_info,upVoted):
-                        setattr(this_user_info,upVoted,(getattr(this_user_info,upVoted).replace(s, '')))
-                        ups = this_object.ups - 1
-                        if user != this_object.user:
-                            this_object.user.agree_num -= 1
-                            this_object.user.save()
-                this_user_info.save()
-            elif nowVote == 'upVoted':
-                ups = this_object.ups - 1
-                if user != this_object.user:
-                    this_object.user.agree_num -= 1
-                    this_object.user.save()
-                downs = this_object.downs 
-                setattr(this_user_info,upVoted,(getattr(this_user_info,upVoted).replace(s, '')))
-                this_user_info.save()
+            elif vote == '0':
+                if user == this_object.user:
+                    response = HttpResponse('wrong')
+                    return response
+                else:
+                    downs = this_object.downs + 1
+                    ups = this_object.ups
+                    setattr(this_user_info,downVoted, (getattr(this_user_info,downVoted)+s))
+                    if getattr(this_user_info,upVoted):
+                        if str(this_object.id) in getattr(this_user_info,upVoted):
+                            response = HttpResponse('wrong')
+                            return response
+                    this_user_info.save()
             else:
-                downs = this_object.downs - 1
-                ups = this_object.ups
-                setattr(this_user_info,downVoted,(getattr(this_user_info,downVoted).replace(s, '')))
-                this_user_info.save()
+                response = HttpResponse('wrong')
+                return response
                 
             score = ups - downs
             this_object.ups = ups
@@ -1144,8 +1136,9 @@ def commentVote(request):
             this_object.score = score
             this_object.confidence = confidence(ups, downs)
             this_object.save()
-            response = HttpResponse(score)
-            return response
+            
+            return render_to_response('commentAfterVote.html',locals(),
+                context_instance=RequestContext(request))
 
 @login_required(login_url='/log/') 
 def watch(request):

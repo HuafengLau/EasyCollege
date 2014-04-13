@@ -28,3 +28,13 @@
         {% endif %}
     {% endfor %}
 </div>
+<script type="text/javascript">
+$('.newsScoreInfo').on('click', function(){
+	var list = $(this).attr('id').split(';');
+	var ups = list[0];
+	var downs = list[1];
+	var score = list[2];
+	var s = '得分   顶   沉\r'+'  '+score+'      '+ups+'    '+downs
+	alert(s)
+});
+</script>

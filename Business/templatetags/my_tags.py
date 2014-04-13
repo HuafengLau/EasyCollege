@@ -110,7 +110,90 @@ class IfVotedNode(template.Node):
         if (self.negate and not judge) or (not self.negate and judge): 
             return self.nodelist_true.render(context) 
         return self.nodelist_false.render(context)         
-        
+ 
+@register.tag 
+def ifCommentVoted(parser, token): 
+    return do_ifCommentVoted(parser, token, False) 
+ 
+@register.tag 
+def ifnotCommentVoted(parser, token): 
+    return do_ifCommentVoted(parser, token, True) 
+ 
+ 
+def do_ifCommentVoted(parser, token, negate): 
+    bits = list(token.split_contents()) 
+    if len(bits) != 3: 
+        raise TemplateSyntaxError("%r takes two arguments" % bits[0]) 
+    end_tag = 'end' + bits[0] 
+    nodelist_true = parser.parse(('else', end_tag)) 
+    token = parser.next_token() 
+    if token.contents == 'else': 
+        nodelist_false = parser.parse((end_tag,)) 
+        parser.delete_first_token() 
+    else: 
+        nodelist_false = NodeList() 
+    val1 = parser.compile_filter(bits[1]) 
+    val2 = parser.compile_filter(bits[2]) 
+    return IfCommentVotedNode(val1, val2, nodelist_true, nodelist_false, negate) 
+ 
+ 
+class IfCommentVotedNode(template.Node): 
+    child_nodelists = ('nodelist_true', 'nodelist_false') 
+ 
+    def __init__(self, var1, var2, nodelist_true, nodelist_false, negate): 
+        self.var1, self.var2 = var1, var2 
+        self.nodelist_true, self.nodelist_false = nodelist_true, nodelist_false 
+        self.negate = negate 
+ 
+    def __repr__(self): 
+        return "<IfEqualNode>" 
+ 
+    def render(self, context): 
+        val1 = self.var1.resolve(context, True) 
+        val2 = self.var2.resolve(context, True)
+        this_user_info = User_info.objects.get(user=val2)
+        judge = False
+        try:
+            news = val1.news
+            if this_user_info.upVoted_comment1 and str(val1.id) in this_user_info.upVoted_comment1:
+                judge = True
+            if this_user_info.downVoted_comment1 and str(val1.id) in this_user_info.downVoted_comment1:
+                judge = True 
+            if val1.user == val2:
+                judge = True
+        except:
+            try:
+                newscomment1 = val1.newscomment1
+                if this_user_info.upVoted_comment2 and str(val1.id) in this_user_info.upVoted_comment2:
+                    judge = True
+                if this_user_info.downVoted_comment2 and str(val1.id) in this_user_info.downVoted_comment2:
+                    judge = True 
+                if val1.user == val2:
+                    judge = True
+            except:
+                try:
+                    newscomment2 = val1.newscomment2
+                    if this_user_info.upVoted_comment3 and str(val1.id) in this_user_info.upVoted_comment3:
+                        judge = True
+                    if this_user_info.downVoted_comment3 and str(val1.id) in this_user_info.downVoted_comment3:
+                        judge = True 
+                    if val1.user == val2:
+                        judge = True
+                except:
+                    try:
+                        newscomment3 = val1.newscomment3
+                        if this_user_info.upVoted_comment4 and str(val1.id) in this_user_info.upVoted_comment4:
+                            judge = True
+                        if this_user_info.downVoted_comment4 and str(val1.id) in this_user_info.downVoted_comment4:
+                            judge = True 
+                        if val1.user == val2:
+                            judge = True
+                    except:
+                        judge = False
+        if (self.negate and not judge) or (not self.negate and judge): 
+            return self.nodelist_true.render(context) 
+        return self.nodelist_false.render(context)  
+ 
 @register.tag 
 def judgeStudent(parser, token): 
     return do_judgeStudent(parser, token, False) 

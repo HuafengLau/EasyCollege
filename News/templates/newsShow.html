@@ -352,7 +352,8 @@
 				{% for newscomment1 in this_news.newscomment1_set.all %}
 					<div class='left_line clear_both row'>
 					  <div class='col-md-2 col-xs-2' style='margin-right:-9%;'>
-						<div class='news_vote pull-left'>
+						<div id='newscomment1voteDiv{{newscomment1.id}}' class='news_vote pull-left'>
+						<div id='{{newscomment1.ups}};{{newscomment1.downs}};{{newscomment1.score}}' class='newsScoreInfo hand_over'>
 							{% for info in user.user_info_set.all %}
 								{% if info.upVoted_comment1 %}
 									{% ifintInstr newscomment1.id info.upVoted_comment1 %}	
@@ -379,7 +380,7 @@
 									<div id='newscomment1;{{newscomment1.id}}' style='display:none' class='commentDownVoted hand_over'></div>
 								{% endif %}
 							{% endfor %}
-						</div>
+						</div></div>
 						<div class="nailthumb-container commentAvatar-square-thumb pull-left MT_8px">							
 							{% ifequal newscomment1.user.avatar 'img/avatar.png' %}									
 								<a href="{{STATIC_URL}}img/avatar.png" data-lightbox='commentAvatar{{newscomment1.id}}' ><img src='{{STATIC_URL}}img/avatar.png'/></a>																	
@@ -398,6 +399,12 @@
 									</a>
 								</li>
 								<li><a id='newscomment1;{{newscomment1.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
+								{% if user.is_authenticated %}
+									{% ifnotCommentVoted newscomment1 user %}
+										<li class='newscomment1voteLi{{newscomment1.id}}'><small id='newscomment1;{{newscomment1.id}};1' class='commentVote font-orange hand_over'>赞</small></li>
+										<li class='newscomment1voteLi{{newscomment1.id}}'><small id='newscomment1;{{newscomment1.id}};0' class='commentVote font-orange hand_over'>踩</small></li>
+									{% else %}{% endifnotCommentVoted %}
+								{% endif %}
 							</ul>
 						</div>
 					  </div>				  
@@ -409,7 +416,8 @@
 						{% for newscomment2 in newscomment1.newscomment2_set.all %}
 							<div class='clear_both left_line row'>
 							  <div class='col-md-2 col-xs-2' style='margin-right:-9%;'>
-								<div class='news_vote pull-left'>
+								<div id='newscomment2voteDiv{{newscomment2.id}}' class='news_vote pull-left'>
+								<div id='{{newscomment2.ups}};{{newscomment2.downs}};{{newscomment2.score}}' class='newsScoreInfo hand_over'>
 									{% for info in user.user_info_set.all %}
 										{% if info.upVoted_comment2 %}
 											{% ifintInstr newscomment2.id info.upVoted_comment2 %}	
@@ -436,7 +444,7 @@
 											<div id='newscomment2;{{newscomment2.id}}' style='display:none' class='commentDownVoted hand_over'></div>
 										{% endif %}
 									{% endfor %}
-								</div>
+								</div></div>
 								<div class="nailthumb-container commentAvatar-square-thumb pull-left MT_8px">							
 									{% ifequal newscomment2.user.avatar 'img/avatar.png' %}									
 										<a href="{{STATIC_URL}}img/avatar.png" data-lightbox='commentAvatar{{newscomment2.id}}' ><img src='{{STATIC_URL}}img/avatar.png'/></a>																	
@@ -454,7 +462,13 @@
 												<small><span id='newscomment2_goldNum_{{newscomment2.id}}'>{% ifnotequal newscomment2.gold 0 %}{{newscomment2.gold}}{% endifnotequal %}</span>镀金</small>&nbsp;
 												</a>
 											</li>
-											<li><a id='newscomment2;{{newscomment2.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
+											<li><a id='newscomment2;{{newscomment2.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>										
+											{% if user.is_authenticated %}
+												{% ifnotCommentVoted newscomment2 user %}
+													<li class='newscomment2voteLi{{newscomment2.id}}'><small id='newscomment2;{{newscomment2.id}};1' class='commentVote font-orange hand_over'>赞</small></li>
+													<li class='newscomment2voteLi{{newscomment2.id}}'><small id='newscomment2;{{newscomment2.id}};0' class='commentVote font-orange hand_over'>踩</small></li>
+												{% else %}{% endifnotCommentVoted %}
+											{% endif %}
 										</ul>
 									</div>
 								</div>
@@ -466,7 +480,8 @@
 								{% for newscomment3 in newscomment2.newscomment3_set.all %}
 									<div class='clear_both left_line row'>
 									  <div class='col-md-2 col-xs-2' style='margin-right:-9%;'>
-										<div class='news_vote pull-left'>
+										<div id='newscomment3voteDiv{{newscomment3.id}}' class='news_vote pull-left'>
+										<div id='{{newscomment3.ups}};{{newscomment3.downs}};{{newscomment3.score}}' class='newsScoreInfo hand_over'>
 											{% for info in user.user_info_set.all %}
 												{% if info.upVoted_comment3 %}
 													{% ifintInstr newscomment3.id info.upVoted_comment3 %}	
@@ -493,7 +508,7 @@
 													<div id='newscomment3;{{newscomment3.id}}' style='display:none' class='commentDownVoted hand_over'></div>
 												{% endif %}
 											{% endfor %}
-										</div>
+										</div></div>
 										<div class="nailthumb-container commentAvatar-square-thumb pull-left MT_8px">							
 											{% ifequal newscomment3.user.avatar 'img/avatar.png' %}									
 												<a href="{{STATIC_URL}}img/avatar.png" data-lightbox='commentAvatar{{newscomment3.id}}' ><img src='{{STATIC_URL}}img/avatar.png'/></a>																	
@@ -512,6 +527,12 @@
 														</a>
 													</li>
 													<li><a id='newscomment3;{{newscomment3.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
+													{% if user.is_authenticated %}
+														{% ifnotCommentVoted newscomment3 user %}
+															<li class='newscomment3oteLi{{newscomment3.id}}'><small id='newscomment3;{{newscomment3.id}};1' class='commentVote font-orange hand_over'>赞</small></li>
+															<li class='newscomment3voteLi{{newscomment3.id}}'><small id='newscomment3;{{newscomment3.id}};0' class='commentVote font-orange hand_over'>踩</small></li>
+														{% else %}{% endifnotCommentVoted %}
+													{% endif %}
 												</ul>
 											</div>
 										</div>
@@ -523,7 +544,8 @@
 										{% for newscomment4 in newscomment3.newscomment4_set.all %}
 											<div class='clear_both left_line row'>
 											  <div class='col-md-2 col-xs-2' style='margin-right:-9%;'>
-												<div class='news_vote pull-left'>
+												<div id='newscomment4voteDiv{{newscomment4.id}}' class='news_vote pull-left'>
+												<div id='{{newscomment4.ups}};{{newscomment4.downs}};{{newscomment4.score}}' class='newsScoreInfo hand_over'>
 													{% for info in user.user_info_set.all %}
 														{% if info.upVoted_comment4 %}
 															{% ifintInstr newscomment4.id info.upVoted_comment4 %}	
@@ -550,7 +572,7 @@
 															<div id='newscomment4;{{newscomment4.id}}' style='display:none' class='commentDownVoted hand_over'></div>
 														{% endif %}
 													{% endfor %}
-												</div>
+												</div></div>
 												<div class="nailthumb-container commentAvatar-square-thumb pull-left MT_8px">							
 													{% ifequal newscomment4.user.avatar 'img/avatar.png' %}									
 														<a href="{{STATIC_URL}}img/avatar.png" data-lightbox='commentAvatar{{newscomment4.id}}' ><img src='{{STATIC_URL}}img/avatar.png'/></a>																	
@@ -568,7 +590,12 @@
 																<small><span id='newscomment4_goldNum_{{newscomment4.id}}'>{% ifnotequal newscomment4.gold 0 %}{{newscomment4.gold}}{% endifnotequal %}</span>镀金</small>&nbsp;
 																</a>
 															</li>
-															
+															{% if user.is_authenticated %}
+																{% ifnotCommentVoted newscomment4 user %}
+																	<li class='newscomment4voteLi{{newscomment4.id}}'><small id='newscomment4;{{newscomment4.id}};1' class='commentVote font-orange hand_over'>赞</small></li>
+																	<li class='newscomment4voteLi{{newscomment4.id}}'><small id='newscomment4;{{newscomment4.id}};0' class='commentVote font-orange hand_over'>踩</small></li>
+																{% else %}{% endifnotCommentVoted %}
+															{% endif %}
 														</ul>
 													</div>
 												</div>

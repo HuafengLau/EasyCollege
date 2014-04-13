@@ -147,6 +147,21 @@ $(document).ready(function(){
 	// JS for newsSubmit.html
 	
 	// JS for newsShow.html
+	$('.commentVote').on('click', function(){
+		var type = $(this).attr('id').split(';')[0]
+		var id = $(this).attr('id').split(';')[1]
+		var vote = $(this).attr('id').split(';')[2]
+		$.get('/news/comment/vote/',{'type':type,'id':id,'vote':vote},function(data){
+			if(data == 'wrong'){
+				alert('可能是由于外星人的干扰引发了未知错误，请联系管理员admin@funqiu.com');
+			}else{
+				
+				$('#'+type+'voteDiv'+id).html(data);
+				$('.'+type+'voteLi'+id).hide();
+			}
+		});
+	});
+	
 	$('.logVote').on('click', function(){
 		var news_id = $(this).attr('id').split(';')[0]
 		var vote = $(this).attr('id').split(';')[1]
@@ -227,6 +242,8 @@ $(document).ready(function(){
 		}	
 	});
 	
+	// JS for comment vote
+	/*
 	$('.commentUpVote,.commentUpVote2').on('click', function(){
 		var id = $(this).attr('id').split(';')[1];
 		var type = $(this).attr('id').split(';')[0]
@@ -275,6 +292,8 @@ $(document).ready(function(){
 		});
 	});
 
+	*/
+	
 	$('.watchClick').on('click', function(){
 		var text = $(this).text();
 		var id = $(this).attr('id');

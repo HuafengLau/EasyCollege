@@ -1,0 +1,133 @@
+{% load my_tags %}
+
+{% ifequal type 'newscomment1' %}
+<div id='{{this_object.ups}};{{this_object.downs}};{{this_object.score}}' class='newsScoreInfo hand_over'>
+	{% for info in user.user_info_set.all %}
+		{% if info.upVoted_comment1 %}
+			{% ifintInstr this_object.id info.upVoted_comment1 %}	
+				<div id='newscomment1;{{this_object.id}}' style='display:none' class='commentUpVote hand_over'></div>
+				<div id='newscomment1;{{this_object.id}}' class='commentUpVoted hand_over'></div>
+			{% else %}
+				<div id='newscomment1;{{this_object.id}}' class='commentUpVote hand_over'></div>
+				<div id='newscomment1;{{this_object.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+			{% endifintInstr %}
+		{% else %}
+			<div id='newscomment1;{{this_object.id}}' class='commentUpVote hand_over'></div>
+			<div id='newscomment1;{{this_object.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+		{% endif %}
+		{% if info.downVoted_comment1 %}
+			{% ifintInstr this_object.id info.downVoted_comment1 %}
+				<div id='newscomment1;{{this_object.id}}' style='display:none' class='commentDownVote hand_over'></div>
+				<div id='newscomment1;{{this_object.id}}' class='commentDownVoted hand_over'></div>
+			{% else %}
+				<div id='newscomment1;{{this_object.id}}' class='commentDownVote hand_over'></div>
+				<div id='newscomment1;{{this_object.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+			{% endifintInstr %}
+		{% else %}
+			<div id='newscomment1;{{this_object.id}}' class='commentDownVote hand_over'></div>
+			<div id='newscomment1;{{this_object.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endifequal %}
+{% ifequal type 'newscomment2' %}
+<div id='{{this_object.ups}};{{this_object.downs}};{{this_object.score}}' class='newsScoreInfo hand_over'>
+	{% for info in user.user_info_set.all %}
+		{% if info.upVoted_comment2 %}
+			{% ifintInstr this_object.id info.upVoted_comment2 %}	
+				<div id='newscomment2;{{this_object.id}}' style='display:none' class='commentUpVote hand_over'></div>
+				<div id='newscomment2;{{this_object.id}}' class='commentUpVoted hand_over'></div>
+			{% else %}
+				<div id='newscomment2;{{this_object.id}}' class='commentUpVote hand_over'></div>
+				<div id='newscomment2;{{this_object.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+			{% endifintInstr %}
+		{% else %}
+			<div id='newscomment2;{{this_object.id}}' class='commentUpVote hand_over'></div>
+			<div id='newscomment2;{{this_object.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+		{% endif %}
+		{% if info.downVoted_comment2 %}
+			{% ifintInstr this_object.id info.downVoted_comment2 %}
+				<div id='newscomment2;{{this_object.id}}' style='display:none' class='commentDownVote hand_over'></div>
+				<div id='newscomment2;{{this_object.id}}' class='commentDownVoted hand_over'></div>
+			{% else %}
+				<div id='newscomment2;{{this_object.id}}' class='commentDownVote hand_over'></div>
+				<div id='newscomment2;{{this_object.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+			{% endifintInstr %}
+		{% else %}
+			<div id='newscomment2;{{this_object.id}}' class='commentDownVote hand_over'></div>
+			<div id='newscomment2;{{this_object.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endifequal %}
+{% ifequal type 'newscomment3' %}
+<div id='{{this_object.ups}};{{this_object.downs}};{{this_object.score}}' class='newsScoreInfo hand_over'>
+	{% for info in user.user_info_set.all %}
+		{% if info.upVoted_comment3 %}
+			{% ifintInstr this_object.id info.upVoted_comment3 %}	
+				<div id='newscomment3;{{this_object.id}}' style='display:none' class='commentUpVote hand_over'></div>
+				<div id='newscomment3;{{this_object.id}}' class='commentUpVoted hand_over'></div>
+			{% else %}
+				<div id='newscomment3;{{this_object.id}}' class='commentUpVote hand_over'></div>
+				<div id='newscomment3;{{this_object.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+			{% endifintInstr %}
+		{% else %}
+			<div id='newscomment3;{{this_object.id}}' class='commentUpVote hand_over'></div>
+			<div id='newscomment3;{{this_object.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+		{% endif %}
+		{% if info.downVoted_comment3 %}
+			{% ifintInstr this_object.id info.downVoted_comment3 %}
+				<div id='newscomment3;{{this_object.id}}' style='display:none' class='commentDownVote hand_over'></div>
+				<div id='newscomment3;{{this_object.id}}' class='commentDownVoted hand_over'></div>
+			{% else %}
+				<div id='newscomment3;{{this_object.id}}' class='commentDownVote hand_over'></div>
+				<div id='newscomment3;{{this_object.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+			{% endifintInstr %}
+		{% else %}
+			<div id='newscomment3;{{this_object.id}}' class='commentDownVote hand_over'></div>
+			<div id='newscomment3;{{this_object.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endifequal %}
+{% ifequal type 'newscomment4' %}
+<div id='{{this_object.ups}};{{this_object.downs}};{{this_object.score}}' class='newsScoreInfo hand_over'>
+	{% for info in user.user_info_set.all %}
+		{% if info.upVoted_comment4 %}
+			{% ifintInstr this_object.id info.upVoted_comment4 %}	
+				<div id='newscomment4;{{this_object.id}}' style='display:none' class='commentUpVote hand_over'></div>
+				<div id='newscomment4;{{this_object.id}}' class='commentUpVoted hand_over'></div>
+			{% else %}
+				<div id='newscomment4;{{this_object.id}}' class='commentUpVote hand_over'></div>
+				<div id='newscomment4;{{this_object.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+			{% endifintInstr %}
+		{% else %}
+			<div id='newscomment4;{{this_object.id}}' class='commentUpVote hand_over'></div>
+			<div id='newscomment4;{{this_object.id}}' style='display:none' class='commentUpVoted hand_over'></div>
+		{% endif %}
+		{% if info.downVoted_comment4 %}
+			{% ifintInstr this_object.id info.downVoted_comment4 %}
+				<div id='newscomment4;{{this_object.id}}' style='display:none' class='commentDownVote hand_over'></div>
+				<div id='newscomment4;{{this_object.id}}' class='commentDownVoted hand_over'></div>
+			{% else %}
+				<div id='newscomment4;{{this_object.id}}' class='commentDownVote hand_over'></div>
+				<div id='newscomment4;{{this_object.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+			{% endifintInstr %}
+		{% else %}
+			<div id='newscomment4;{{this_object.id}}' class='commentDownVote hand_over'></div>
+			<div id='newscomment4;{{this_object.id}}' style='display:none' class='commentDownVoted hand_over'></div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endifequal %}
+
+<script type="text/javascript">
+$('.newsScoreInfo').on('click', function(){
+	var list = $(this).attr('id').split(';');
+	var ups = list[0];
+	var downs = list[1];
+	var score = list[2];
+	var s = '得分   顶   沉\r'+'  '+score+'      '+ups+'    '+downs
+	alert(s)
+});
+</script>
