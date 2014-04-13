@@ -908,10 +908,8 @@ def giveGold(request):
                     request.user.money -= 5
                     request.user.save()
                     if this_type == 'news':
-                        print this_user_info.when_newsbeGold
                         response = HttpResponse(this_user_info.when_newsbeGold)
                     else:
-                        print this_user_info.when_commentbeGold
                         response = HttpResponse(this_user_info.when_commentbeGold)
                     return response 
             else:
@@ -1194,7 +1192,7 @@ def ke_upload_view(request):
     # 100MB 104857600
     # 250MB - 214958080
     # 500MB - 429916160
-    print 'tttttttttttttttttttttt'
+
     ext_allowed = ['gif', 'jpg', 'jpeg', 'png','PNG','GIF','JPG','JPEG']
     max_size = 4194304 # 4M
     today = datetime.datetime.today()
@@ -1224,7 +1222,7 @@ def ke_upload_view(request):
 
         if not os.path.isdir(save_path):
             os.makedirs(save_path)
-            print 'makedirs yes'
+
 
         new_file = '%s.%s' % (int(time.time()), ext)
 
