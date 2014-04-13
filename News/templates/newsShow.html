@@ -248,7 +248,7 @@
 			var p = {
 			url:location.href,
 			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
-			desc:'我在方遒网发现了很赞的分享！',/*默认分享理由(可选)*/
+			desc:'',/*默认分享理由(可选)*/
 			summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
 			title:'{{this_news.title}}',/*分享标题(可选)*/
 			site:'方遒网',/*分享来源 如：腾讯网(可选)*/
@@ -272,7 +272,7 @@
 			var p = {
 			url:location.href,
 			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
-			desc:'我在方遒网发现了很赞的文章！',/*默认分享理由(可选)*/
+			desc:'',/*默认分享理由(可选)*/
 			summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
 			title:'{{this_news.title}}',/*分享标题(可选)*/
 			site:'方遒网',/*分享来源 如：腾讯网(可选)*/
@@ -297,7 +297,7 @@
 			var p = {
 			url:location.href,
 			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
-			desc:'我在方遒网发现了很赞的图片！',/*默认分享理由(可选)*/
+			desc:'',/*默认分享理由(可选)*/
 			summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
 			title:'{{this_news.title}}',/*分享标题(可选)*/
 			site:'方遒网',/*分享来源 如：腾讯网(可选)*/
@@ -322,7 +322,7 @@
 			var p = {
 			url:location.href,
 			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
-			desc:'我在方遒网发现了很赞的音乐！',/*默认分享理由(可选)*/
+			desc:'',/*默认分享理由(可选)*/
 			summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
 			title:'{{this_news.title}}',/*分享标题(可选)*/
 			site:'方遒网',/*分享来源 如：腾讯网(可选)*/
@@ -394,7 +394,7 @@
 						<div>
 							<ul class='list-inline list-unstyled'>
 								<li><a id='newscomment1;{{newscomment1.id}};{{newscomment1.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
-									<small>镀金<span id='newscomment1_goldNum_{{newscomment1.id}}'>{{newscomment1.gold}}</span></small>&nbsp;
+									<small><span id='newscomment1_goldNum_{{newscomment1.id}}'>{% ifnotequal newscomment1.gold 0 %}{{newscomment1.gold}}{% endifnotequal %}</span>镀金</small>&nbsp;
 									</a>
 								</li>
 								<li><a id='newscomment1;{{newscomment1.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
@@ -451,7 +451,7 @@
 									<div>
 										<ul class='list-inline list-unstyled'>
 											<li><a id='newscomment2;{{newscomment2.id}};{{newscomment2.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
-												<small>镀金<span id='newscomment2_goldNum_{{newscomment2.id}}'>{{newscomment2.gold}}</span></small>&nbsp;
+												<small><span id='newscomment2_goldNum_{{newscomment2.id}}'>{% ifnotequal newscomment2.gold 0 %}{{newscomment2.gold}}{% endifnotequal %}</span>镀金</small>&nbsp;
 												</a>
 											</li>
 											<li><a id='newscomment2;{{newscomment2.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
@@ -508,7 +508,7 @@
 											<div>
 												<ul class='list-inline list-unstyled'>
 													<li><a id='newscomment3;{{newscomment3.id}};{{newscomment3.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
-														<small>镀金<span id='newscomment3_goldNum_{{newscomment3.id}}'>{{newscomment3.gold}}</span></small>&nbsp;
+														<small><span id='newscomment3_goldNum_{{newscomment3.id}}'>{% ifnotequal newscomment3.gold 0 %}{{newscomment3.gold}}{% endifnotequal %}</span>镀金</small>&nbsp;
 														</a>
 													</li>
 													<li><a id='newscomment3;{{newscomment3.id}}' class='{% if user.is_authenticated %}callReplyBtn{% else %}need_login{% endif %} font-grey hand_over'><small>回复</small></a></li>
@@ -565,7 +565,7 @@
 													<div>
 														<ul class='list-inline list-unstyled'>
 															<li><a id='newscomment4;{{newscomment4.id}};{{newscomment4.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-grey hand_over'>
-																<small>镀金<span id='newscomment4_goldNum_{{newscomment4.id}}'>{{newscomment4.gold}}</span></small>&nbsp;
+																<small><span id='newscomment4_goldNum_{{newscomment4.id}}'>{% ifnotequal newscomment4.gold 0 %}{{newscomment4.gold}}{% endifnotequal %}</span>镀金</small>&nbsp;
 																</a>
 															</li>
 															

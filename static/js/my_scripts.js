@@ -176,9 +176,11 @@ $(document).ready(function(){
     });
 	
 	$('.giveGold').on('click', function(){
-		var type = $(this).attr('id').split(';')[0];
-		var id = $(this).attr('id').split(';')[1];
-		var num = $(this).attr('id').split(';')[2];
+		var oldid = $(this).attr('id');
+		var type = oldid.split(';')[0];
+		var id = oldid.split(';')[1];
+		var num = oldid.split(';')[2];
+		var self = this;
 		$.get('/news/giveGold/', {'type':type,'id':id}, function(data){
 			if(data == '0'){
 				if(type == 'news'){
@@ -187,11 +189,13 @@ $(document).ready(function(){
 					alert('臭美，你不能给自己的回复镀金哦：）');
 				}
 			}else if(data == '-1'){
-				alert('你太穷啦，无法进行此操作');
+				alert('你太穷啦无法镀金，去个人中心看看怎么赚钱吧！');
 			}else{
 				var after_num = parseInt(num) + 5;
 				var id_name = '#'+type+'_goldNum_'+id;
 				$(id_name).html(after_num);
+				var newid = type+';'+id+';'+ after_num;
+				$(self).attr('id', newid);
 				alert(data);
 			}
 		});
