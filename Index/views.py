@@ -35,27 +35,10 @@ import bs4
 def index(request):
     user = request.user
     user.message = 0
-    user.save()
-    def cut(arr, indices):  
-        return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
-                
-    today = datetime.datetime.today()
-    year = today.year
-    month = today.month
-    day = today.day
-    _weekday,_lastday = calendar.monthrange(year,month)  
-    _sundays = [x for x in range(6-_weekday+1,_lastday+1,7)]  
-
-    weekList =  cut(range(1,_lastday+1),_sundays)
-
-    for index, item in enumerate(weekList):
-        if day in item:
-            this_week = item
-            break
-
-    start_date = datetime.datetime(year,month,this_week[0],0,0,0,0)+ datetime.timedelta(days=-1)
+    user.save()  
 
     end_date = datetime.datetime.today()+ datetime.timedelta(days=1)
+    start_date = end_date+ datetime.timedelta(days=-8)
     
     Feeds1 = Feeds_followNews.objects.filter(owner=user,time__range=(start_date, end_date))
     Feeds2 = Feeds_news.objects.filter(owner=user,time__range=(start_date, end_date))

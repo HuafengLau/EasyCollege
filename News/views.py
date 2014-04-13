@@ -353,7 +353,8 @@ def which_news(request,news_part,small_part):
         
     def cut(arr, indices):  
         return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
-                
+    
+    '''    
     today = datetime.datetime.today()
     year = today.year
     month = today.month
@@ -367,9 +368,10 @@ def which_news(request,news_part,small_part):
         if day in item:
             this_week = item
             break
-
-    start_date = datetime.datetime(year,month,this_week[0],0,0,0,0)+ datetime.timedelta(days=-1)
+    '''
     end_date = datetime.datetime.today()+ datetime.timedelta(days=1)
+    start_date = end_date+ datetime.timedelta(days=-8)
+    
     weekTopList = newses.filter(time__range=(start_date, end_date)).order_by('-score','-time')[:8]
         
     hot_newses = newses.order_by('-hot','-time')[:25]
