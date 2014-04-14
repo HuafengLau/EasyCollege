@@ -7,7 +7,7 @@
 
 {% block LeftDiv %}
 <ul class="nav nav-tabs">
-  <li id='smallPartLi'><b>分享到 {{part.part}}</b></li>
+  <li class='MT_8px'><b>分享到 {{part.part}}</b></li>
   {% if part.can_link %}
 	{% ifequal type 'link' %}<li class='active'>{% else %}<li>{% endifequal %}<a id='HotLi' href="#Link" data-toggle="tab">链接</a></li>
   {% endif %}
@@ -57,7 +57,10 @@
 			{% endifnotequal %}
 		</div>
 	{% endfor %}
-
+		<div class='form-group'>
+			<input type='radio' name='original' value='True'><label>原创</label>
+			<input type='radio' name='original' value='False' checked><label>非原创</label>
+		</div>
 		<button id='link_submit' class="btn btn-success" type="submit">提交</button>
 	</form>			
   </div>
@@ -92,6 +95,10 @@
 			{% endifnotequal %}
 		</div>
 	{% endfor %}
+		<div class='form-group'>
+			<input type='radio' name='original' value='True'><label>原创</label>
+			<input type='radio' name='original' value='False' checked><label>非原创</label>
+		</div>
 		<button id='text_submit' class="btn btn-success" type="submit">提交</button>
 	</form>	
 
@@ -125,7 +132,11 @@
 				<div class='clear_both'>{{field}}</div>
 			{% endifnotequal %}
 		</div>
-	{% endfor %}
+	{% endfor %}	
+		<div class='form-group'>
+			<input type='radio' name='original' value='True'><label>原创</label>
+			<input type='radio' name='original' value='False' checked><label>非原创</label>
+		</div>
 		<div class="alert alert-danger">
 			<p>请确认社群和标题，因为上传图片的时候无法更改这两项。</p>
 		</div>
@@ -161,7 +172,11 @@
 				<div class='clear_both'>{{field}}</div>
 			{% endifnotequal %}
 		</div>
-	{% endfor %}
+	{% endfor %}		
+		<div class='form-group'>
+			<input type='radio' name='original' value='True'><label>原创</label>
+			<input type='radio' name='original' value='False' checked><label>非原创</label>
+		</div>
 		<div class="alert alert-danger">
 			<p>请确认社群和标题，因为上传文件的时候无法更改这两项。</p>
 		</div>

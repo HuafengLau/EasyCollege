@@ -195,12 +195,17 @@
 											<li class='voteLi{{news.id}}'><small id='{{news.id}};1' class='baseVote font-orange hand_over'>赞</small></li>
 											<li class='voteLi{{news.id}}'><small id='{{news.id}};0' class='baseVote font-orange hand_over'>踩</small></li>
 										{% else %}{% endifnotVoted %}
-									{% endif %}						
+									{% endif %}
 								</ul>
 							</div>
+							{% if news.original %}
+							<div class='pull-right'>
+								<img src='{{STATIC_URL}}img/my.png' class="img-responsive" />
+							</div>
+							{% endif %}
 							{% if news in weekTopList %}
 							<div class='pull-right'>
-								<img src='{{STATIC_URL}}img/hot.png' class="img-responsive" />
+								<img src='{{STATIC_URL}}img/hot2.png' class="img-responsive" />
 							</div>
 							{% endif %}
 							{% if news in new_newslist %}
@@ -208,6 +213,7 @@
 								<img src='{{STATIC_URL}}img/new.png' class="img-responsive" />
 							</div>
 							{% endif %}
+							
 						</div>
 						
 					{% endfor %}

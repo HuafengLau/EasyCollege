@@ -95,6 +95,9 @@
 				<li><small>{% ifnotequal this_news.comment_num 0 %}{{this_news.comment_num}}&nbsp;{% endifnotequal %}评论</small></li>
 				<li><small>{{this_news.read}}&nbsp;阅读</small></li>
 				<li><i> <small>{{this_news.type}}</small></i></li> 
+				{% if this_news.original %}
+				<li><i> <small>原创</small></i></li> 
+				{% endif %}
 			</ul>
 		</div>
 		<div class='both_clear'>

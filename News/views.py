@@ -452,6 +452,10 @@ def submit_news(request,news_part, news_type):
     if request.method == 'POST':
         this_user = request.user
         type = request.POST.get('type')
+        if request.POST.get('original') == 'True':
+            if_original = True
+        if request.POST.get('original') == 'False':
+            if_original = False
         if type == 'link':
             form = LinkNewsForm(request.POST,request.FILES)
             if form.is_valid():
@@ -471,7 +475,8 @@ def submit_news(request,news_part, news_type):
                     score = 1,
                     controversy = controversy(0, 0),
                     hot = 0,
-                    comment_num = 0
+                    comment_num = 0,
+                    original = if_original
                 )
                 this_news.save()
                 this_news.hot = hot(1, 0, 0,this_news.time)
@@ -505,7 +510,8 @@ def submit_news(request,news_part, news_type):
                     score = 1,
                     controversy = controversy(0, 0),
                     hot = 0,
-                    comment_num = 0
+                    comment_num = 0,
+                    original = if_original
                 )
                 this_news.save()
                 this_news.hot = hot(1, 0, 0,this_news.time)
@@ -539,7 +545,8 @@ def submit_news(request,news_part, news_type):
                     read = 0,
                     controversy = controversy(0, 0),
                     hot = 0,
-                    comment_num = 0
+                    comment_num = 0,
+                    original = if_original
                 )
                 this_news.save()
                 this_news.hot = hot(1, 0, 0,this_news.time)
@@ -573,7 +580,8 @@ def submit_news(request,news_part, news_type):
                     read = 0,
                     controversy = controversy(0, 0),
                     hot = 0,
-                    comment_num = 0
+                    comment_num = 0,
+                    original = if_original
                 )
                 this_news.save()
                 this_news.hot = hot(1, 0, 0,this_news.time)
