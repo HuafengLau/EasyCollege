@@ -231,20 +231,21 @@
 			<div id='voteDiv' class='pull-left'>							
 				<a id='{{this_news.id}};1' class='logVote font-orange hand_over'>赞</a>
 				<a id='{{this_news.id}};0' class='logVote font-orange hand_over'>&nbsp;踩</a>
+				&nbsp;|&nbsp;
 				<span class='hidden' id='myName'>{{user.nic_name}}</span>
 			</div>
 			{% else %}
 			<div id='' class='pull-left'>							
-				已评价
+				已评价&nbsp;|&nbsp;
 			</div>
 			{% endif %}
 		{% endif %}
 		
 		{% if user.is_authenticated %}
 			{% ifnotCollected user this_news %}
-			<div id='callCollectDiv' class='callCollect pull-left MR_9px hand_over'>&nbsp;|&nbsp;收藏</div>
+			<div id='callCollectDiv' class='callCollect pull-left MR_9px hand_over'>收藏</div>
 			{% else %}
-			<div id='' class='pull-left MR_9px'>&nbsp;|&nbsp;已收藏</div>
+			<div id='' class='pull-left MR_9px'>已收藏</div>
 			{% endifnotCollected %}
 		{% else %}
 			<div id='' class='pull-left MR_9px hand_over need_log'>|&nbsp;收藏</div>
