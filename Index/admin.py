@@ -4,7 +4,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from account.models import MyUser
-from Index.models import Avatar,Feeds_news,Feeds_comment,Feeds_followNews
+from Index.models import Avatar,Feeds_news,Feeds_comment,Feeds_followNews,Folder,Collect,WatchFolder
 
         
 class AvatarAdmin(admin.ModelAdmin):
@@ -31,6 +31,7 @@ class Feeds_commentAdmin(admin.ModelAdmin):
     list_filter = ('owner','owner','creator')
     ordering = ('time','owner')
     
+
     
 admin.site.register(Avatar, AvatarAdmin)
 admin.site.register(Feeds_followNews, Feeds_followNewsAdmin)

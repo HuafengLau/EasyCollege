@@ -12,6 +12,7 @@ from News.models import NewsPart,News
 from account.models import MyUser
 from University.models import University_info
 from Center.models import User_info
+from Index.models import Folder, Collect
 
 register = template.Library()
 
@@ -110,6 +111,65 @@ class IfVotedNode(template.Node):
         if (self.negate and not judge) or (not self.negate and judge): 
             return self.nodelist_true.render(context) 
         return self.nodelist_false.render(context)         
+ 
+@register.tag 
+def ifCollected(parser, token): 
+    return do_ifCollected(parser, token, False) 
+ 
+@register.tag 
+def ifnotCollected(parser, token): 
+    return do_ifCollected(parser, token, True) 
+ 
+ 
+def do_ifCollected(parser, token, negate): 
+    bits = list(token.split_contents()) 
+    if len(bits) != 3: 
+        raise TemplateSyntaxError("%r takes two arguments" % bits[0]) 
+    end_tag = 'end' + bits[0] 
+    nodelist_true = parser.parse(('else', end_tag)) 
+    token = parser.next_token() 
+    if token.contents == 'else': 
+        nodelist_false = parser.parse((end_tag,)) 
+        parser.delete_first_token() 
+    else: 
+        nodelist_false = NodeList() 
+    val1 = parser.compile_filter(bits[1]) 
+    val2 = parser.compile_filter(bits[2]) 
+    return ifCollectedNode(val1, val2, nodelist_true, nodelist_false, negate) 
+ 
+ 
+class ifCollectedNode(template.Node): 
+    child_nodelists = ('nodelist_true', 'nodelist_false') 
+ 
+    def __init__(self, var1, var2, nodelist_true, nodelist_false, negate): 
+        self.var1, self.var2 = var1, var2 
+        self.nodelist_true, self.nodelist_false = nodelist_true, nodelist_false 
+        self.negate = negate 
+ 
+    def __repr__(self): 
+        return "<IfEqualNode>" 
+ 
+    def render(self, context): 
+        val1 = self.var1.resolve(context, True) 
+        val2 = self.var2.resolve(context, True)
+
+        judge = False
+        folders = Folder.objects.filter(owner=val1)
+        if folders:
+            for folder in folders:
+                try:
+                    this_collect = Collect.objects.get(
+                        folder = folder,
+                        news = val2
+                    )
+                    judge = True
+                    break
+                except:
+                    continue
+                    
+        if (self.negate and not judge) or (not self.negate and judge): 
+            return self.nodelist_true.render(context) 
+        return self.nodelist_false.render(context)  
  
 @register.tag 
 def ifCommentVoted(parser, token): 

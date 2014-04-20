@@ -10,7 +10,7 @@ from django.template import RequestContext
 #from University.models import University_info
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import PageNotAnInteger, Paginator, InvalidPage, EmptyPage
-from Index.form import AvatarForm
+from Index.form import AvatarForm,FolderForm
 from Index.models import Feeds_news,Feeds_comment,Feeds_followNews
 from django.conf import settings
 from account.models import MyUser
@@ -75,7 +75,7 @@ def get_idCard(request):
             this_user_info = User_info.objects.get(user=this_user)
             return render_to_response('idCard.html',locals(),
                 context_instance=RequestContext(request))            
-        
+      
 '''        
 def display(request,user,message,HTML):                  
     credits = Credit.objects.filter(user=user)

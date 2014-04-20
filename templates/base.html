@@ -66,8 +66,9 @@
 							&nbsp;<span class="badge" style='background-color:red'>{{user.message}}</span>
 							{% endifnotequal %}
 						{% endif %}
-						</a></li>
-                    {% if centerHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/center/'>设置</a></li>
+						</a></li>                    
+                    {% if folderHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/folder/'>收藏夹</a></li>
+					{% if centerHTML %}<li class='active'>{% else %}<li>{% endif %}<a href='/folder/'>设置</a></li>
                 </ul>
               {% endblock %}
               

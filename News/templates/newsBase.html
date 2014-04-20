@@ -184,6 +184,9 @@
 									</li>
 									<li><small class='font-grey'>{% ifnotequal news.gold 0 %}{% ifnotequal news.gold 0 %}{{news.gold}}{% endifnotequal %}&nbsp;{% endifnotequal %}镀金</small></li>
 									<li><small class='font-grey'>{{news.read}}阅读</small></li>
+									{% ifnotequal news.collectNum 0 %}
+									<li><small class='font-grey'>{{news.collectNum}}收藏</small></li>
+									{% endifnotequal %}
 									<li class='font-grey'>
 										<i><small>
 											{% ifequal news.type 'pic' %}{{ news.newspic_set.all | length }}{% endifequal %}
@@ -296,7 +299,10 @@
 									{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
 									</small></li>
 									<li><small class='font-grey'>{% ifnotequal news.gold 0 %}{{news.gold}}{% endifnotequal %}镀金</small></li>
-									<li><small class='font-grey'>{{news.read}}阅读</small></li>	
+									<li><small class='font-grey'>{{news.read}}阅读</small></li>
+									{% ifnotequal news.collectNum 0 %}
+									<li><small class='font-grey'>{{news.collectNum}}收藏</small></li>
+									{% endifnotequal %}									
 									<li class='font-grey'>
 										<i><small>
 											{% ifequal news.type 'pic' %}{{ news.newspic_set.all | length }}{% endifequal %}
@@ -402,7 +408,10 @@
 									{% ifnotequal news.comment_num 0 %}{{news.comment_num}}&nbsp;{% endifnotequal %}评论</a>
 									</small></li>
 									<li><small class='font-grey'>{% ifnotequal news.gold 0 %}{{news.gold}}{% endifnotequal %}镀金</small></li>
-									<li><small class='font-grey'>{{news.read}}阅读</small></li>	
+									<li><small class='font-grey'>{{news.read}}阅读</small></li>
+									{% ifnotequal news.collectNum 0 %}
+									<li><small class='font-grey'>{{news.collectNum}}收藏</small></li>
+									{% endifnotequal %}
 									<li class='font-grey'>
 										<i><small>
 											{% ifequal news.type 'pic' %}{{ news.newspic_set.all | length }}{% endifequal %}

@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block mainNewsbase %}
-<div class='col-md-9 col-md-offset-1 col-xs-12 bcColorWhite HasBorder'>
+<div class='col-md-9 col-md-offset-1 col-xs-12 bcColorWhite HasBorder clear_both'>
 	<div id='' class='clear_both'>	
 		<div class='MT_7px MR_9px'>
 			<p>&nbsp;&nbsp;分享人：
@@ -182,18 +182,8 @@
 			<audio src="{{MEDIA_URL}}{{this_news.mp3}}" controls="controls" loop="loop" preload="metadata">你的浏览器不支持音乐播放</audio>
 		</div>
 		{% endifequal %}
-		<div class='clear_both' id='showNewsGold'>
-			<div id='showNewsGoldwords' class='pull-left'>
-				<a id='news;{{this_news.id}};{{this_news.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} font-jin hand_over'>
-				镀金&nbsp;<span id='news_goldNum_{{this_news.id}}'>{{this_news.gold}}</span>
-				</a>
-			</div>
-			<div style='display:none;' class='pull-left'>
-				<span>&nbsp;&nbsp;&nbsp;感谢分享，赠予作者5易币,可无限叠加</span>
-			</div>
-		</div>
+
 		<div class='clear_both ML_23px'>
-			<hr/>
 			{% if this_news.agree_man %}
 			<p>
 				<span id='likeMan' class='font-link'>&nbsp;{% showNewsLikeMan this_news.agree_man %}</span>&nbsp;觉得很赞
@@ -232,120 +222,176 @@
 			</div>
 		</div>
 		{% endif %}
-		{% if need_vote %}
-			<div id='voteDiv'>							
-				<div class='text-center'>
-					我觉得本次分享
-					<a id='{{this_news.id}};1' class='logVote btn btn-success'>很&nbsp;赞</a>
-					<a id='{{this_news.id}};0' class='logVote btn btn-warning'>一&nbsp;般</a>
-					<span class='hidden' id='myName'>{{user.nic_name}}</span>
-				</div>
-			</div>
-		{% endif %}
 	</div>
 	{% endif %}
+	
 	<div class='clear_both MT_8px ML_26px'>
+		{% if not need_log and not need_money %}
+			{% if need_vote %} 
+			<div id='voteDiv' class='pull-left'>							
+				<a id='{{this_news.id}};1' class='logVote font-orange hand_over'>赞</a>
+				<a id='{{this_news.id}};0' class='logVote font-orange hand_over'>&nbsp;踩</a>
+				<span class='hidden' id='myName'>{{user.nic_name}}</span>
+			</div>
+			{% else %}
+			<div id='' class='pull-left'>							
+				已评价
+			</div>
+			{% endif %}
+		{% endif %}
+		
+		{% if user.is_authenticated %}
+			{% ifnotCollected user this_news %}
+			<div id='callCollectDiv' class='callCollect pull-left MR_9px hand_over'>&nbsp;|&nbsp;收藏</div>
+			{% else %}
+			<div id='' class='pull-left MR_9px'>&nbsp;|&nbsp;已收藏</div>
+			{% endifnotCollected %}
+		{% else %}
+			<div id='' class='pull-left MR_9px hand_over need_log'>|&nbsp;收藏</div>
+		{% endif %}
+		
+		<div id='showNewsGold' class='pull-left'>
+			|&nbsp;<a id='news;{{this_news.id}};{{this_news.gold}}' class='{% if user.is_authenticated %}giveGold{% else %}need_login{% endif %} hand_over font-333'>
+			镀金&nbsp;<span id='news_goldNum_{{this_news.id}}'>{{this_news.gold}}</span>
+			</a>
+		</div>			
+		
+		<div class='pull-left MR_9px'>&nbsp;|&nbsp;分享到</div>
+		<div class='pull-left'>
 			{% ifequal this_news.type 'link' %}
 			<script type="text/javascript">
-			(function(){
-			var p = {
-			url:location.href,
-			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
-			desc:'',/*默认分享理由(可选)*/
-			summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
-			title:'{{this_news.title}}',/*分享标题(可选)*/
-			site:'方遒网',/*分享来源 如：腾讯网(可选)*/
-			pics:'{{STATIC_URL}}img/funqiu.png', /*分享图片的路径(可选)*/
-			style:'101',
-			width:199,
-			height:30
-			};
-			var s = [];
-			for(var i in p){
-			s.push(i + '=' + encodeURIComponent(p[i]||''));
-			}
-			document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
-			})();
+				(function(){
+				var p = {
+				url:location.href,
+				showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
+				desc:'',/*默认分享理由(可选)*/
+				summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
+				title:'{{this_news.title}}',/*分享标题(可选)*/
+				site:'方遒网',/*分享来源 如：腾讯网(可选)*/
+				pics:'{{STATIC_URL}}img/funqiu.png', /*分享图片的路径(可选)*/
+				style:'202',
+				width:105,
+				height:31
+				};
+				var s = [];
+				for(var i in p){
+				s.push(i + '=' + encodeURIComponent(p[i]||''));
+				}
+				document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
+				})();
 			</script>
 			<script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
 			{% endifequal %}
 			{% ifequal this_news.type 'text' %}
 			<script type="text/javascript">
-			(function(){
-			var p = {
-			url:location.href,
-			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
-			desc:'',/*默认分享理由(可选)*/
-			summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
-			title:'{{this_news.title}}',/*分享标题(可选)*/
-			site:'方遒网',/*分享来源 如：腾讯网(可选)*/
-			pics:'{{STATIC_URL}}img/funqiu.png', /*分享图片的路径(可选)*/
-			style:'101',
-			width:199,
-			height:30
-			};
-			var s = [];
-			for(var i in p){
-			s.push(i + '=' + encodeURIComponent(p[i]||''));
-			}
-			document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
-			})();
+				(function(){
+				var p = {
+				url:location.href,
+				showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
+				desc:'',/*默认分享理由(可选)*/
+				summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
+				title:'{{this_news.title}}',/*分享标题(可选)*/
+				site:'方遒网',/*分享来源 如：腾讯网(可选)*/
+				pics:'{{STATIC_URL}}img/funqiu.png', /*分享图片的路径(可选)*/
+				style:'202',
+				width:105,
+				height:31
+				};
+				var s = [];
+				for(var i in p){
+				s.push(i + '=' + encodeURIComponent(p[i]||''));
+				}
+				document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
+				})();
 			</script>
 			<script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
 			{% endifequal %}
 
 			{% ifequal this_news.type 'pic' %}
 			<script type="text/javascript">
-			(function(){
-			var p = {
-			url:location.href,
-			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
-			desc:'',/*默认分享理由(可选)*/
-			summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
-			title:'{{this_news.title}}',/*分享标题(可选)*/
-			site:'方遒网',/*分享来源 如：腾讯网(可选)*/
-			pics:'{{MEDIA_URL}}{{this_news.pic}}', /*分享图片的路径(可选)*/
-			style:'101',
-			width:199,
-			height:30
-			};
-			var s = [];
-			for(var i in p){
-			s.push(i + '=' + encodeURIComponent(p[i]||''));
-			}
-			document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
-			})();
+				(function(){
+				var p = {
+				url:location.href,
+				showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
+				desc:'',/*默认分享理由(可选)*/
+				summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
+				title:'{{this_news.title}}',/*分享标题(可选)*/
+				site:'方遒网',/*分享来源 如：腾讯网(可选)*/
+				pics:'{{MEDIA_URL}}{{this_news.pic}}', /*分享图片的路径(可选)*/
+				style:'202',
+				width:105,
+				height:31
+				};
+				var s = [];
+				for(var i in p){
+				s.push(i + '=' + encodeURIComponent(p[i]||''));
+				}
+				document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
+				})();
 			</script>
 			<script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
 			{% endifequal %}
-
 			{% ifequal this_news.type 'mp3' %}
 			<script type="text/javascript">
-			(function(){
-			var p = {
-			url:location.href,
-			showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
-			desc:'',/*默认分享理由(可选)*/
-			summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
-			title:'{{this_news.title}}',/*分享标题(可选)*/
-			site:'方遒网',/*分享来源 如：腾讯网(可选)*/
-			pics:'{{STATIC_URL}}img/funqiu.png', /*分享图片的路径(可选)*/
-			style:'101',
-			width:199,
-			height:30
-			};
-			var s = [];
-			for(var i in p){
-			s.push(i + '=' + encodeURIComponent(p[i]||''));
-			}
-			document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
-			})();
+				(function(){
+				var p = {
+				url:location.href,
+				showcount:'1',/*是否显示分享总数,显示：'1'，不显示：'0' */
+				desc:'',/*默认分享理由(可选)*/
+				summary:'由{{this_news.user.nic_name}}分享到方遒网【{{part.part}} / {{part.realPart}}】，{{part.description}}',/*分享摘要(可选)*/
+				title:'{{this_news.title}}',/*分享标题(可选)*/
+				site:'方遒网',/*分享来源 如：腾讯网(可选)*/
+				pics:'{{STATIC_URL}}img/funqiu.png', /*分享图片的路径(可选)*/
+				style:'202',
+				width:105,
+				height:31
+				};
+				var s = [];
+				for(var i in p){
+				s.push(i + '=' + encodeURIComponent(p[i]||''));
+				}
+				document.write(['<a version="1.0" class="qzOpenerDiv" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?',s.join('&'),'" target="_blank">分享</a>'].join(''));
+				})();
 			</script>
 			<script src="http://qzonestyle.gtimg.cn/qzone/app/qzlike/qzopensl.js#jsdate=20111201" charset="utf-8"></script>
 			{% endifequal %}
-        </div>
+		</div>
+		<div id='explainGiveGold' class='pull-left hidden'>
+		<span class='font-orange'>&nbsp;&nbsp;&nbsp;感谢分享，赠予作者5易币,可无限叠加</span>
+	</div>
+	</div>
+	
+	<div id='collectDiv' class='clear_both MT_8px ML_26px hidden'>
+		<hr class='MT_0px MB_0px'/>
+		{% if user.folder_set.all %}
+		<p>收藏到：&nbsp;&nbsp;{% for folder in user.folder_set.all %}
+		<span id='{{this_news.id}};{{folder.id}}' class='hand_over font-link collect'>{{ folder.name }}&nbsp;&nbsp;</span><span>|</span>
+		{% endfor %}
+		</p>
+		<p>或者：</p>
+		{% endif %}
+		<div class='ML_23px form-group hasLeftBorder PL_5px'>
+			<div class='form-inline form-group'>
+				<label>收藏夹名称</label>
+				<input id='name_input' type='text' class='form-control width_20' autofocus/>
+			</div>
+			<div class='form-inline form-group'>
+				<label>描述收藏夹</label>
+				<input id='desc_input' type='text' class='form-control width_50'/>
+			</div>
+			<button id='{{this_news.id}}' class='buildAndCollect'>新建并收藏本文</button>
+		</div>
+	</div>
 </div>
-<hr/>
+<div class='col-md-2 clear_both'></div>
+<div class='row'>
+	<div class='col-md-9 col-xs-12 col-md-offset-1 MT_7px'>
+		<span class='pull-left underline'><a href='{{referer_url}}' class='font-333'><<返回</a></span>
+		<span class='pull-right underline'><a href='/news/{{part.part}}/hot/' class='font-333'>更多相似分享>></a></span>
+	</div>
+	<div class='col-md-2 clear_both'></div>
+</div>
+<hr class='MB_0px'/>
 <div class='col-md-7 col-md-offset-1 col-xs-12 MT_20px PL_0px PR_0px'>		
 	{% if not need_money %}
 		<label>评论</label>

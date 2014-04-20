@@ -33,6 +33,7 @@ class News(models.Model):
      title = models.CharField(max_length=100,null=True,verbose_name=u'标题')
      agree_man = models.CharField(max_length=100,default='',blank=True,verbose_name=u'赞同的人')
      original = models.BooleanField(default=False,verbose_name=u'是否原创')
+     collectNum = models.IntegerField(default=0,verbose_name=u'收藏次数')
      
      link = models.URLField(null=True,blank=True,verbose_name=u'链接')
      text = models.TextField(null=True,blank=True,verbose_name=u'文本')

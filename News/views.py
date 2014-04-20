@@ -230,8 +230,7 @@ def upload( request ):
     }
 
     return UploadResponse( request, file_dict )    
-
-        
+      
 @login_required(login_url='/log/')   
 @require_POST
 def upload_delete( request, pk ):
@@ -633,6 +632,13 @@ def submit_news(request,news_part, news_type):
         return HttpResponseRedirect(url)
        
 def show_news(request,news_part,small_part,news_id):             
+    #print request.META['HTTP_REFERER']
+    referer_url = request.META.get('HTTP_REFERER', '/')
+    if referer_url != '/':
+        referer_url = referer_url.replace('http://www.funqiu.com', '').replace('http://127.0.0.1:8000','')
+    else:
+        referer_url = '/news/All/hot/'
+
     user = request.user
     newsHTML = True
     this_small_part = small_part

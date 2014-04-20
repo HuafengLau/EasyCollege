@@ -43,6 +43,45 @@ $(document).ready(function(){
         $(this).tooltip({container:'div'});
     });
 	
+	// JS for folder.html
+	$('#callFolderForm').on('click', function(){
+		if($('#folderFormDiv').hasClass('hidden')){
+			$('#folderFormDiv').removeClass('hidden');
+		}
+	});
+	
+	$('#removeFolderForm').on('click', function(){
+		if(!$('#folderFormDiv').hasClass('hidden')){
+			$('#folderFormDiv').addClass('hidden');
+		}
+	});
+	
+	$('.unfold').on('click', function(){
+		var id = $(this).attr('id');
+		var realid = '#'+id+'content';
+		if($(realid).hasClass('hidden')){
+			$(realid).removeClass('hidden');
+			$(this).html("<span class='glyphicon glyphicon-chevron-up'></span>");
+		}else{
+			$(realid).addClass('hidden');
+			$(this).html("<span class='glyphicon glyphicon-chevron-down'></span>");
+		}
+	});
+	
+	$('.watch').on('click', function(){
+		var id = $(this).attr('id');
+		var self = this;
+		$.post('/folder/watch/', {'folder_id':id}, function(data){
+			if(data=='watch'){
+				alert('关注成功');
+				this.html("<small>&nbsp;&nbsp;已关注</small>");
+				this.removeClass('hand_over');
+				this.unbind('click');
+			}else if(data=='wrong'){
+				alert('可能是由于外星人的干扰引发了未知错误，请联系管理员admin@funqiu.com');
+			}
+		});	
+	});
 	// JS for search.html
 	
     // JS for base.html   
@@ -95,11 +134,15 @@ $(document).ready(function(){
 	});
 	
 	$('#showNewsGold').on('mouseover', function(){
-		$(this).children("div")[1].style.display='block';
+		if($('#explainGiveGold').hasClass('hidden')){
+			$('#explainGiveGold').removeClass('hidden');
+		}
 	});
 	
 	$('#showNewsGold').on('mouseout', function(){
-		$(this).children("div")[1].style.display='none';
+		if(!$('#explainGiveGold').hasClass('hidden')){
+			$('#explainGiveGold').addClass('hidden');
+		}
 	});
 
 	$('.newsScoreInfo').on('click', function(){
@@ -147,6 +190,69 @@ $(document).ready(function(){
 	// JS for newsSubmit.html
 	
 	// JS for newsShow.html
+	$('.callCollect').on('click', function(){
+		if($('#collectDiv').hasClass('hidden')){
+			$('#collectDiv').removeClass('hidden');
+			$(this).text('↑收起');
+		}else{
+			$('#collectDiv').addClass('hidden');
+			$(this).text('收藏');
+		}
+	});
+	
+	$('.buildAndCollect').on('click', function(){
+		var name = $('#name_input').val();
+		var desc = $('#desc_input').val();
+		var id = $(this).attr('id');
+		if(name=='' || desc ==''){
+			if(name==''){
+				alert('收藏夹名不能为空');
+			}else{
+				alert('描述不能为空');
+			}
+		}else{
+			if(name.length > 20 || desc.length > 50){
+				if(name.length > 20){
+					alert('收藏夹名字不能超过20个字');
+				}else{
+					alert('描述不能超过50个字');
+				}
+			}else{
+				$.post('/folder/newBuild/', {'name':name,'desc':desc,'news_id':id}, function(data){
+					if(data == 'buildAndCollect'){
+						alert('收藏成功~');
+						$('#collectDiv').addClass('hidden');
+						$('#callCollectDiv').removeClass('callCollect');
+						$('#callCollectDiv').removeClass('hand_over');
+						$('#callCollectDiv').unbind("click");
+						$('#callCollectDiv').text('已收藏');
+					}else{
+						alert('可能是由于外星人的干扰引发了未知错误，请联系管理员admin@funqiu');
+					}
+				});
+				
+			}
+		}
+	});
+	
+	$('.collect').on('click', function(){
+		var id = $(this).attr('id');
+		var news_id = id.split(';')[0];
+		var folder_id = id.split(';')[1];
+		$.post('/folder/collect/', {'news_id':news_id,'folder_id':folder_id}, function(data){
+			if(data=='collect'){
+				alert('收藏成功~');
+				$('#collectDiv').addClass('hidden');
+				$('#callCollectDiv').removeClass('callCollect');
+				$('#callCollectDiv').removeClass('hand_over');
+				$('#callCollectDiv').unbind("click");
+				$('#callCollectDiv').text('已收藏');
+			}else{
+				alert('可能是由于外星人的干扰引发了未知错误，请联系管理员admin@funqiu');
+			}
+		});
+	});
+	
 	$('.commentVote').on('click', function(){
 		var type = $(this).attr('id').split(';')[0]
 		var id = $(this).attr('id').split(';')[1]
@@ -170,8 +276,8 @@ $(document).ready(function(){
 				alert('可能是由于外星人的干扰引发了未知错误，请联系管理员admin@funqiu.com');
 			}else{
 				$('#voteChange').html(data);
-				alert('感谢您的投票，您还可以对评论投票哦！');
-				$('#voteDiv').hide();
+				alert('感谢您的评价，您还可以对评论投票哦！');
+				$('#voteDiv').html('已评价');
 				var name = $('#myName').text();
 				$('#likeMan').append("<span class='font-link'>、"+name+"</span>");
 			}

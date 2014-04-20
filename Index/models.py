@@ -73,3 +73,40 @@ class Feeds_followNews(models.Model):
         ordering = ['time',]
         verbose_name = u'关注动态'
         verbose_name_plural = u'关注动态'
+        
+class Folder(models.Model):
+    name = models.CharField(max_length=20,blank=True,null=True,verbose_name=u'收藏夹名')
+    description = models.CharField(max_length=50,blank=True,null=True,verbose_name=u'收藏描述')
+    owner = models.ForeignKey(MyUser,blank=True,null=True,verbose_name=u'收藏夹作者')
+    
+    def __unicode__(self):
+        return u'%s' % self.name
+        
+    class Meta:
+        ordering = ['owner',]
+        verbose_name = u'收藏夹'
+        verbose_name_plural = u'收藏夹'
+        
+class Collect(models.Model):
+    folder = models.ForeignKey(Folder,blank=True,null=True,verbose_name=u'收藏夹')
+    news = models.ForeignKey(News,blank=True,null=True,verbose_name=u'相关分享')
+    
+    def __unicode__(self):
+        return u'%s_%s' % (self.folder, self.id)
+        
+    class Meta:
+        ordering = ['folder',]
+        verbose_name = u'收藏'
+        verbose_name_plural = u'收藏'
+        
+class WatchFolder(models.Model):
+    folder = models.ForeignKey(Folder,blank=True,null=True,verbose_name=u'收藏夹')
+    user =  models.ForeignKey(MyUser,blank=True,null=True,verbose_name=u'关注者')
+    
+    def __unicode__(self):
+        return u'%s_%s' % (self.folder, self.id)
+        
+    class Meta:
+        ordering = ['folder',]
+        verbose_name = u'关注收藏'
+        verbose_name_plural = u'关注收藏'

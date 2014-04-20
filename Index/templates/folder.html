@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block title %}
+收藏夹 - 方遒网
+{% endblock %}
+	
+{% block moreCSS %}
+<link href="{{STATIC_URL}}css/bodyCss.css" rel="stylesheet" media="screen">
+{% endblock %}	
+	
+{% block mainbody %}
+<div class='container'>
+	<div class='row'>
+		<div class='col-md-6 col-xs-12'>
+			{% if user.is_authenticated %}
+				<h4><b>我的收藏夹</b>&nbsp;&nbsp;&nbsp;<small><span id='callFolderForm' class='hand_over font-333'>新建</span></small></h4>
+				<div id='folderFormDiv' class='hidden bcColorWhite HasBorder'>
+					<form role='form' class='form-group' action='/folder/newBuild/' method='POST'>
+						{% csrf_token %}
+						{{ folderform.as_table }}
+						<button class='MT_16px' type='submit'>提交</button>
+						<button id='removeFolderForm' class='MT_16px'>取消</button>
+					</form>
+				</div>
+				{% if user.folder_set.all %}
+					{% for folder in user.folder_set.all %}
+						<div class='bcColorWhite HasBorder folderDiv'>					
+							<div>
+								<span>{{folder.name}}</span>
+								<span id='{{folder.name}}' class='unfold pull-right hand_over'>
+								{%ifnotequal forloop.counter 1 %}<span class='glyphicon glyphicon-chevron-down'></span>{% else %}
+								<span class='glyphicon glyphicon-chevron-up'></span>{% endifnotequal %}
+								</span>
+								<span><small class='font-grey'>&nbsp;&nbsp;{{folder.description}}</small></span>
+								<hr class='MB_0px'/>
+							</div>
+							<div class='{%ifnotequal forloop.counter 1 %}hidden{% endifnotequal %}' id='{{folder.name}}content'>
+								{% if folder.collect_set.all %}
+									<ul class='list-unstyled'>
+										{% for collect in folder.collect_set.all %}
+											<p><a target='_blank' href='/news/All/hot/showNews/{{collect.news.id}}/'>
+												《{{collect.news.title}}》
+											</a>
+											<span class='font-grey'><i><small>&nbsp;&nbsp;{{collect.news.type}}</small></i></span>
+											{% if collect.news.original %}
+											<span class='font-grey'><i><small>&nbsp;&nbsp;原创</small></i></span>
+											{% endif %}
+											</p>
+										{% endfor %}
+									</ul>
+								{% else %}
+									<p class='text-center'>这个收藏夹暂时还没有收藏任何分享</p>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<p class='text-danger'>你还没有建立任何收藏夹，马上建一个吧，把值得反复阅读的分享收藏起来</p>
+				{% endif %}
+				<hr/>
+				<h4><b>我关注的收藏夹</b></h4>
+				{% if user.watchfolder_set.all %}
+					{% for watchfolder in user.watchfolder_set.all %}
+						<div class='bcColorWhite HasBorder folderDiv'>					
+							<div>
+								<span>{{watchfolder.folder.name}}</span>
+								<span id='{{folder.name}}' class='unfold pull-right hand_over'>								
+								<span class='glyphicon glyphicon-chevron-up'></span>
+								</span>
+								<span><small class='font-grey'>&nbsp;&nbsp;{{watchfolder.folder.description}}</small></span>
+								<hr class='MB_0px'/>
+							</div>
+							<div class='' id='{{folder.name}}content'>
+								{% if watchfolder.folder.collect_set.all %}
+									<ul class='list-unstyled'>
+										{% for collect in watchfolder.folder.collect_set.all %}
+											<p><a target='_blank' href='/news/All/hot/showNews/{{collect.news.id}}/'>
+												《{{collect.news.title}}》
+											</a>
+											<span class='font-grey'><i><small>&nbsp;&nbsp;{{collect.news.type}}</small></i></span>
+											{% if collect.news.original %}
+											<span class='font-grey'><i><small>&nbsp;&nbsp;原创</small></i></span>
+											{% endif %}
+											</p>
+										{% endfor %}
+									</ul>
+								{% else %}
+									<p class='text-center'>这个收藏夹暂时还没有收藏任何分享</p>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<p class='text-danger'>你还没有关注任何收藏夹</p>
+				{% endif %}
+			{% endif %}
+				<hr/>
+				<h4><b>热门收藏夹</b></h4>
+				{% if sorted_folders %}
+					{% for folder in sorted_folders %}
+						<div class='bcColorWhite HasBorder folderDiv'>					
+							<div>
+								<span>{{folder.name}}</span>
+								<span id='{{folder.name}}' class='unfold pull-right hand_over'>								
+								<span class='glyphicon glyphicon-chevron-up'></span>
+								</span>
+								<span><small class='font-grey'>&nbsp;&nbsp;{{folder.description}}</small></span>
+								{% if user.is_authenticated %}
+								<span id='{{folder.id}}' class='watch hand_over'><small>&nbsp;&nbsp;关注</small></span>
+								{% endif %}
+								<hr class='MB_0px'/>
+							</div>
+							<div class='' id='{{folder.name}}content'>
+								{% if folder.collect_set.all %}
+									<ul class='list-unstyled'>
+										{% for collect in folder.collect_set.all %}
+											<p><a target='_blank' href='/news/All/hot/showNews/{{collect.news.id}}/'>
+												《{{collect.news.title}}》
+											</a>
+											<span class='font-grey'><i><small>&nbsp;&nbsp;{{collect.news.type}}</small></i></span>
+											{% if collect.news.original %}
+											<span class='font-grey'><i><small>&nbsp;&nbsp;原创</small></i></span>
+											{% endif %}
+											</p>
+										{% endfor %}
+									</ul>
+								{% else %}
+									<p class='text-center'>这个收藏夹暂时还没有收藏任何分享</p>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+				{% else %}
+					<p>暂无收藏夹</p>
+				{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
