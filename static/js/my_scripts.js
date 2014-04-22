@@ -277,7 +277,7 @@ $(document).ready(function(){
 			}else{
 				$('#voteChange').html(data);
 				alert('感谢您的评价，您还可以对评论投票哦！');
-				$('#voteDiv').html('已评价');
+				$('#voteDiv').html('已评价&nbsp;|&nbsp;');
 				var name = $('#myName').text();
 				$('#likeMan').append("<span class='font-link'>、"+name+"</span>");
 			}
