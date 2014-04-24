@@ -25,7 +25,10 @@
 				<li><a class="{% ifnotequal part.part 'MySubs' %}{% else %}font-orange{% endifnotequal %}" href='/news/MySubs/hot/'>订阅集</a></li>
 				{% endif %}
 				{% for sub in mySubs %}
-					<li><a class='{% ifnotequal part.part sub.part %}{% else %}font-orange{% endifnotequal %}' href='/news/{{sub.part}}/hot/'>{{ sub.realPart }}</a></li>
+					<li><a class='{% ifnotequal part.part sub.part %}{% else %}font-orange{% endifnotequal %}' href='/news/{{sub.part}}/hot/'>
+					{{ sub.realPart }}
+						</a>
+					</li>
 				{% endfor %}			
 			  </ul></div>
 		  </div>
@@ -86,7 +89,9 @@
 					<ul class="side_nav">
 						{% for toppart in top_newsParts %}
 						<li>
-							<a class="oneColor {% ifnotequal part.part toppart.part %}font-333{% else %}font-orange{% endifnotequal %}" href='/news/{{toppart.part}}/hot/'>{{toppart.realPart}}</a>
+							<a class="oneColor {% ifnotequal part.part toppart.part %}font-333{% else %}font-orange{% endifnotequal %}" href='/news/{{toppart.part}}/hot/'>
+							{{toppart.realPart}}</a>
+							
 							<!--<div style='display:none'><p>{{part.description}}</p></div>-->
 						</li>
 						{% endfor %}
@@ -453,7 +458,7 @@
 					{% block partInfo %}
 					<div id='partInfoDiv' class='bcColorWhite'>
 						<p><a class='font-333' href='/news/{{part.part}}/hot/'><strong>{{part.part}} / {{part.realPart}}</strong></a></p>
-						<p>{% if not part.open%}（非公开的）{% endif %}{{part.description}}</p>
+						<p>{% if not part.open%}（个人社群）{% endif %}{{part.description}}</p>
 						{% ifnotequal part.part 'All' %}
 							{% ifnotequal part.part 'MySubs' %}
 								<p>{{part.user_num}}名读者&nbsp;&nbsp;&nbsp;
@@ -469,6 +474,61 @@
 					</div>
 
 					{% endblock %}
+					{% if part.secret %}
+						{% for partadmin in part.partadmin_set.all %}
+							{% ifequal partadmin.user request.user %}
+								<div id='submitBtnDiv' class='clear_both MB_15px'>
+										{% if part.can_link %}
+										<div id='linkBtnDiv' class='both_clear'>						
+											<a href='/news/{{part.part}}/submit/link/' class='btn btn-default'><span class='font-link'>
+											{% ifequal part.part 'AskAnything' %}
+											&nbsp;&nbsp;&nbsp;以链接的形式提问&nbsp;&nbsp;&nbsp;
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											{% else %}
+											&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% endifequal %}</span></a>
+											
+										</div>
+										{% endif %}
+										{% if part.can_text %}
+										<div id='textBtnDiv' class='both_clear'>								
+											<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
+												{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												{% else %}
+													{% ifequal part.part 'ReportCY' %}任何的意见和建议（包括申请新的板块）
+													{% else %}
+														{% ifequal part.part 'AskAnything' %}
+														&nbsp;&nbsp;&nbsp;以文字的形式提问&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+														{% else %}
+														&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+														{% endifequal %}
+													{% endifequal %}
+												{% endifequal %}</span></a>
+											
+										</div>
+										{% endif %}
+										{% if part.can_pic %}
+										<div id='picBtnDiv' class='both_clear'>	
+											<a href='/news/{{part.part}}/submit/pic/' class='btn btn-default'><span class='font-link'>
+											{% ifequal part.part 'AskAnything' %}
+											&nbsp;&nbsp;
+											以图片的形式发问&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											{% else %}
+											&nbsp;&nbsp;
+											分享图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% endifequal %}</span></a>								
+										</div>
+										{% endif %}
+										{% if part.can_mp3 %}
+										<div id='mp3BtnDiv' class='both_clear'>								
+											<a href='/news/{{part.part}}/submit/mp3/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
+											分享音乐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
+											
+										</div>
+										{% endif %}
+								</div>
+							{% endifequal %}
+						{% endfor %}
+					{% endif %}
 					{% block weekHot %}
 						{% if weekTopList %}
 						<div id='weekTopDiv' class='clear_both bcColorWhite'>
@@ -518,7 +578,8 @@
 					{% endblock %}
 					
 					{% block Submit %}
-					<div id='submitBtnDiv' class='clear_both'>
+					{% if not part.secret %}
+					<div id='submitBtnDiv' class='clear_both MB_15px'>
 						{% ifnotequal part.part 'ExplainCY' %}
 							{% if part.can_link %}
 							<div id='linkBtnDiv' class='both_clear'>						
@@ -596,8 +657,17 @@
 								{% endif %}
 							{% endifequal %}
 						{% endifnotequal %}
-					</div>
+					</div>					
+					{% endif %}
 					{% endblock %}
+					
+					{% if part.secret %}
+						<div>
+							<div id='partSimilarDiv'  class='bcColorWhite'>				
+								<p>分享你的经历和所思所想，快去建立属于你自己的社群吧！</p>
+							</div>
+						</div>
+					{% endif %}
 					
 					{% block Rule %}
 					<div id='partRuleDiv' class='bcColorWhite'>
@@ -616,15 +686,12 @@
 						<div class='RuleDiv'>
 							<p class='hand_over RuleP'><b>Ⅱ. 分享公约</b></p>
 							<div style='display:none;'>
+								{% if part.secret %}
+								<p>此社群为个人社群，仅限于社群所有者在这里分享</p>
+								{% endif %}
 								{% for rule in part.newspartrule_set.all %}
 								<p>{% autoescape off %}{{rule.rule}}{% endautoescape %}</p>
 								{% endfor %}
-							</div>
-						</div>
-						<div class='RuleDiv'>
-							<p class='hand_over RuleP'><b>Ⅱ. 回复公约</b></p>
-							<div style='display:none;'>
-								<p>①遵守<b>方遒公约</b>即可</p>
 							</div>
 						</div>
 						<div class='RuleDiv'>
@@ -634,13 +701,17 @@
 							</div>
 						</div>
 					</div>
-					<hr/  class='hidden-xs'>
+					<hr class='hidden-xs MB_0px'/>
+					{% if not part.secret %}
 					<div id='partSimilarDiv'  class='bcColorWhite'>				
 						<p><strong>相似的社群</strong></p>
 						{% include SimilarHtml %}
 						<p>没有找到想要的社群？创建一个吧，只要不和现有板块完全重合，100%通过！移步 <a href='/news/ReportCY'>ReportCY / 反馈建议</a></p>
 					</div>
-					<hr/>
+					<hr class='MB_0px'/>
+					{% endif %}
+					
+					
 					<div id='partAdminDiv'  class='bcColorWhite'>
 						<p><strong>社群管理员</strong></p>
 						<ul>
@@ -698,7 +769,7 @@
 
 			<div id='partInfoDiv' class='bcColorWhite col-xs-6 col-xs-offset-1'>
 				<p><a class='font-333' href='/news/{{part.part}}/hot/'><strong>{{part.part}} / {{part.realPart}}</strong></a></p>
-				<p>{% if not part.open%}（非公开的）{% endif %}{{part.description}}</p>
+				<p>{% if part.secret %}（个人社群）{% endif %}{{part.description}}</p>
 				{% ifnotequal part.part 'All' %}
 				<p>{{part.user_num}}名读者&nbsp;&nbsp;&nbsp;
 				{% for info in user.user_info_set.all %}
@@ -710,42 +781,81 @@
 				{% endfor %}</p>
 				{% endifnotequal %}
 			</div>
-
-			<div id='submitBtnDiv' class='col-xs-6 col-xs-offset-1'>
-				{% if part.can_link %}
-				<div id='linkBtnDiv' class='both_clear'>						
-					<a href='/news/{{part.part}}/submit/link/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
-					
+			{% if not part.secret %}			
+				<div id='submitBtnDiv' class='col-xs-6 col-xs-offset-1 MB_15px'>
+					{% if part.can_link %}
+					<div id='linkBtnDiv' class='both_clear'>						
+						<a href='/news/{{part.part}}/submit/link/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
+						
+					</div>
+					{% endif %}
+					{% if part.can_text %}
+					<div id='textBtnDiv' class='both_clear'>								
+						<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
+							{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							{% else %}
+								{% ifequal part.part 'ReportCY' %}任何的意见和建议（包括申请新的板块）
+								{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								{% endifequal %}
+							{% endifequal %}</span></a>
+						
+					</div>
+					{% endif %}
+					{% if part.can_pic %}
+					<div id='picBtnDiv' class='both_clear'>	
+						<a href='/news/{{part.part}}/submit/pic/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
+						分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>								
+					</div>
+					{% endif %}
+					{% if part.can_mp3 %}
+					<div id='mp3BtnDiv' class='both_clear'>								
+						<a href='/news/{{part.part}}/submit/mp3/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
+						分享音乐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
+						
+					</div>
+					{% endif %}			
 				</div>
-				{% endif %}
-				{% if part.can_text %}
-				<div id='textBtnDiv' class='both_clear'>								
-					<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
-						{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						{% else %}
-							{% ifequal part.part 'ReportCY' %}任何的意见和建议（包括申请新的板块）
-							{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							{% endifequal %}
-						{% endifequal %}</span></a>
-					
-				</div>
-				{% endif %}
-				{% if part.can_pic %}
-				<div id='picBtnDiv' class='both_clear'>	
-					<a href='/news/{{part.part}}/submit/pic/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
-					分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>								
-				</div>
-				{% endif %}
-				{% if part.can_mp3 %}
-				<div id='mp3BtnDiv' class='both_clear'>								
-					<a href='/news/{{part.part}}/submit/mp3/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
-					分享音乐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
-					
-				</div>
-				{% endif %}
-				
-			</div>
+			{% else %}
+				{% for partadmin in part.partadmin_set.all %}
+					{% ifequal partadmin.user request.user %}
+						<div id='submitBtnDiv' class='col-xs-6 col-xs-offset-1 MB_15px'>
+							{% if part.can_link %}
+							<div id='linkBtnDiv' class='both_clear'>						
+								<a href='/news/{{part.part}}/submit/link/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;&nbsp;分享一个新链接&nbsp;&nbsp;&nbsp;
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
+								
+							</div>
+							{% endif %}
+							{% if part.can_text %}
+							<div id='textBtnDiv' class='both_clear'>								
+								<a href='/news/{{part.part}}/submit/text/' class='btn btn-default'><span class='font-link'>
+									{% ifequal part.part 'ReportCY' %}&nbsp;&nbsp;&nbsp;举报或者反馈bug&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									{% else %}
+										{% ifequal part.part 'ReportCY' %}任何的意见和建议（包括申请新的板块）
+										{% else %}&nbsp;&nbsp;&nbsp;分享一篇文章/日志&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										{% endifequal %}
+									{% endifequal %}</span></a>
+								
+							</div>
+							{% endif %}
+							{% if part.can_pic %}
+							<div id='picBtnDiv' class='both_clear'>	
+								<a href='/news/{{part.part}}/submit/pic/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
+								分享一张图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>								
+							</div>
+							{% endif %}
+							{% if part.can_mp3 %}
+							<div id='mp3BtnDiv' class='both_clear'>								
+								<a href='/news/{{part.part}}/submit/mp3/' class='btn btn-default'><span class='font-link'>&nbsp;&nbsp;
+								分享音乐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
+								
+							</div>
+							{% endif %}			
+						</div>
+					{% endifequal %}
+				{% endfor %}
+			{% endif %}
 		</div>
 		{% endblock %}
 	</div>

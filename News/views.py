@@ -328,7 +328,7 @@ def which_news(request,news_part,small_part):
     SimilarHtml = 'Similar' + news_part + '.html'
     smallParts = [u'热门',u'最新',u'热议',u'得分',u'镀金']
    
-    newsParts = allNewsPart.filter(open=True,secret=False).order_by('-num','-user_num','part')
+    newsParts = allNewsPart.filter(open=True).order_by('-num','-user_num','part')
     
     top_newsParts = newsParts.exclude(part__in=['All','MySubs'])
     #more_newsParts = newsParts[25:]
@@ -343,7 +343,7 @@ def which_news(request,news_part,small_part):
         otherParts = allNewsPart.exclude(part__in=defaultList).order_by('part')
     
     if news_part == 'All':
-        newses = News.objects.filter(open=True,secret=False)
+        newses = News.objects.filter(open=True)
     elif news_part == 'MySubs':
         newses = News.objects.filter(newspart__in=mySubs)
     else:
@@ -643,7 +643,7 @@ def show_news(request,news_part,small_part,news_id):
     newsHTML = True
     this_small_part = small_part
     allNewsPart = NewsPart.objects.all()
-    newsParts = allNewsPart.filter(open=True,secret=False).order_by('-num','-user_num','part')   
+    newsParts = allNewsPart.filter(open=True).order_by('-num','-user_num','part')   
     top_newsParts = newsParts[:18]
     more_newsParts = newsParts[18:]
     if user.is_authenticated():
@@ -734,7 +734,7 @@ def show_news(request,news_part,small_part,news_id):
     if news_part != 'All':
         newses = News.objects.filter(newspart=part)
     else:
-        newses = News.objects.filter(open=True,secret=False)
+        newses = News.objects.filter(open=True)
     
     def cut(arr, indices):  
         return [arr[i:j] for i, j in zip([0]+indices, indices+[None])]  
@@ -776,7 +776,7 @@ def getTopPart(request):
             if partname != 'All':
                 newses = News.objects.filter(newspart=part)
             else:
-                newses = News.objects.filter(open=True,secret=False)
+                newses = News.objects.filter(open=True)
         
             hot_newses = newses.order_by('-hot','-time')[:25]
             controversial_newses = newses.order_by('-controversy','-time')[:25]

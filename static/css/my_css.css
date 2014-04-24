@@ -1521,11 +1521,6 @@ a.newcommentLink:hover{
 	padding-top: 8px;
 }
 
-#submitBtnDiv{
-	
-	margin-bottom: 15%;
-}
-
 #searchDiv{
 	margin-bottom: 8%;
 }
@@ -1546,7 +1541,6 @@ a.newcommentLink:hover{
 
 #partRuleDiv{
 	margin-right: 50px;
-	margin-bottom: 9%;
 	border:1px solid #E0E0E0;
 	padding:7px;
 }
